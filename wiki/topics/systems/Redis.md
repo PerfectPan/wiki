@@ -1,7 +1,7 @@
 ---
 title: Redis
 type: topic
-category: tooling
+category: systems
 status: seed
 created: 2026-04-12
 updated: 2026-04-12

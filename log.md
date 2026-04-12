@@ -150,3 +150,18 @@
   - `wiki/topics/*`
   - `raw/sources/*`
 - 备注：本轮优先纠正高置信度错误，例如将算法页从 `ai/frontend` 挪回 `algorithms`，将工具页从 `languages` 挪回 `tooling`，并移除明显不应进入 `wiki/topics` 的时间范围页与模板页。
+
+## 2026-04-12
+
+- 摘要：对 `tooling` 再做一轮精修，把明显属于系统、语言、算法、前端、认证的页面挪出，并将过薄的占位页降回 raw。
+- 页面：
+  - [[index]]
+  - `wiki/topics/tooling/*`
+  - `wiki/topics/systems/*`
+  - `wiki/topics/languages/*`
+  - `wiki/topics/algorithms/*`
+  - `wiki/topics/frontend/*`
+  - `wiki/topics/architecture/*`
+- 来源：
+  - `wiki/topics/tooling/*`
+- 备注：这一轮重点修正 `tooling` 的边界，让它更接近“工程工具与基础设施”而不是杂项兜底分类。

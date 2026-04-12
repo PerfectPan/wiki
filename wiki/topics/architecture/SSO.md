@@ -1,7 +1,7 @@
 ---
 title: SSO
 type: topic
-category: tooling
+category: architecture
 status: seed
 created: 2026-04-12
 updated: 2026-04-12

@@ -9,6 +9,8 @@
 3. 每个页面都应当在 Obsidian 中单独打开时仍然容易理解。
 4. 优先通过页面链接建立关系，而不是在不同页面中重复解释同一件事。
 5. 任何包含结论、建议或判断的页面，都应附带来源指针。
+6. 新页面应带一个英文 `category` 字段，并按分类子目录存放。
+7. `tags` 用来表达细粒度主题，不用来替代一级分类。
 
 ## 建议使用的 frontmatter
 
@@ -18,6 +20,7 @@
 ---
 title: 页面标题
 type: topic
+category: frontend
 status: seed
 created: 2026-04-12
 updated: 2026-04-12
@@ -29,14 +32,28 @@ source_refs: []
 字段约定：
 
 - `type`：`topic`、`synthesis` 或 `comparison`
+- `category`：英文一级分类，例如 `frontend`、`ai`、`systems`
 - `status`：`seed`、`active` 或 `evergreen`
+- `tags`：细粒度英文主题，推荐 1 到 5 个
 - `source_refs`：支持本页内容的相对路径、页面名或 URL
+
+分类与 tag 的分工：
+
+- `category` 解决“这页放哪儿”
+- `tags` 解决“这页还和哪些主题相关”
+- 目录只保留一个主分类，交叉语义通过 `tags` 和页面链接表达
+
+分类治理：
+
+1. 当前一级分类默认冻结，不随迁移过程随意扩张。
+2. 更细粒度主题优先放进 `tags`，例如 `react`、`rsc`、`mcp`、`typescript`。
+3. 只有当一个主题持续形成稳定页面簇，并且放进现有分类明显别扭时，才考虑升级为新的一级分类。
 
 ## 页面类型
 
 ### 1. 主题页面
 
-路径：`wiki/topics/`
+路径：`wiki/topics/<category>/`
 
 用于稳定主题页，既包括概念，也包括具体对象。主题页回答“这是什么？”，并且应该可以长期持续演化。
 
@@ -72,7 +89,7 @@ source_refs: []
 
 ### 2. 综合页面
 
-路径：`wiki/syntheses/`
+路径：`wiki/syntheses/<category>/`
 
 用于把多份笔记或多份资料整合为更高层次的理解。综合页面回答“目前综合后的理解是什么？”
 
@@ -109,7 +126,7 @@ source_refs: []
 
 ### 3. 对比页面
 
-路径：`wiki/comparisons/`
+路径：`wiki/comparisons/<category>/`
 
 用于记录选择、取舍和决策。对比页面回答“应该怎么选？”
 
@@ -159,3 +176,4 @@ source_refs: []
 - 多来源整合出的结论，提升到 `wiki/syntheses/`
 - 选型、对比、决策类内容，提升到 `wiki/comparisons/`
 - 暂时不成形的残留内容，留在 `raw/sources/`
+- 页面落库时必须选择一个英文一级分类，并进入对应的分类子目录

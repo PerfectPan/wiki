@@ -20,7 +20,13 @@ assert_contains() {
 }
 
 [[ -f "$CLI_TS" ]] || fail "expected TypeScript CLI at $CLI_TS"
-[[ ! -e "$ROOT/.codex/skills/wiki-migrate/SKILL.md" ]] || fail "wiki-migrate skill should not exist"
+[[ ! -d "$ROOT/.codex/skills" ]] || fail "project-local skills should not exist"
+
+agents_text="$(cat "$ROOT/AGENTS.md")"
+assert_contains "$agents_text" "bin/wiki ingest <source>"
+assert_contains "$agents_text" "bin/wiki query <question>"
+assert_contains "$agents_text" "bin/wiki lint"
+assert_contains "$agents_text" "bin/wiki migrate <logseq-page>"
 
 help_output="$("$CLI" help)"
 assert_contains "$help_output" "ingest"

@@ -1,0 +1,10 @@
+- 代码大体逻辑（架构图）？ // 方便贡献
+- 主进程启动以后会设置好所有的 handler，等待渲染进程调用
+- 渲染进程一开始调用 core.cljs 里的 init 方法，然后调用 handler.cljs 的 start 方法，传入 render function
+- [[Rum]] 构建 dom 树（[[React]]）在 clojure 的 binding，并且提供一些额外的能力
+- reitit 路由库 routes.cljs 那个文件定义了所有的路由 #Reitit
+- 一开始设置好路由以后调用 current-page 去渲染
+- [[Rum]] 里的 cursor 就是把一个大的 state 拆成小的方便按需观察更新
+- 鼠标按下的时候换成一个 textarea 去编辑，编辑组件都叫 editor
+- 核心组件都在 components/block.cljs 里（纯展示）
+-

@@ -8,7 +8,13 @@
 
 ## 主题页
 
-- 稳定主题页放在 `wiki/topics/`
+- `architecture`
+  - [[wiki/topics/architecture/Software Design|Software Design]]
+  - [[wiki/topics/architecture/技术方案|技术方案]]
+- `ai`
+  - [[wiki/topics/ai/MCP|MCP]]
+- `product`
+  - [[wiki/topics/product/Logseq|Logseq]]
 
 ## 综合页
 
@@ -20,5 +26,9 @@
 
 ## 原始资料
 
-- 原始资料放在 `raw/sources/`
+- [[raw/sources/RAG|RAG]]
+- [[raw/sources/Software Design|Software Design]]
+- [[raw/sources/技术方案|技术方案]]
+- [[raw/sources/Logseq|Logseq]]
+- [[raw/sources/MCP|MCP]]
 - 附件放在 `raw/assets/`

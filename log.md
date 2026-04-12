@@ -58,3 +58,20 @@
   - [[AGENTS]]
   - [[SCHEMA]]
 - 备注：后续迁移优先用 `tags` 表达细粒度主题，避免 taxonomy 膨胀。
+
+## 2026-04-12
+
+- 摘要：完成第一批迁移，优先落地成熟 topic 页面，并为迁移页面保留 raw 来源副本。
+- 页面：
+  - [[wiki/topics/architecture/Software Design|Software Design]]
+  - [[wiki/topics/architecture/技术方案|技术方案]]
+  - [[wiki/topics/ai/MCP|MCP]]
+  - [[wiki/topics/product/Logseq|Logseq]]
+  - [[raw/sources/RAG|RAG]]
+- 来源：
+  - `raw/sources/Software Design.md`
+  - `raw/sources/技术方案.md`
+  - `raw/sources/MCP.md`
+  - `raw/sources/Logseq.md`
+  - `raw/sources/RAG.md`
+- 备注：这一批遵循轻改原则，正文尽量保持原样；`RAG` 暂时仍保留在 raw 层，后续再决定是否提升为 wiki 页面。

@@ -1,0 +1,3 @@
+- tell different 的时候总会忽略我讲了什么，然后继续自顾自的讲，感觉像 Bug
+- ccusage 可以统计 Token 消耗，用 qwen 好贵啊
+-

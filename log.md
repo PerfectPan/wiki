@@ -124,3 +124,17 @@
   - `raw/sources/Code Agent.md`
   - `raw/sources/GPT.md`
 - 备注：这批仍然遵循轻改原则，正文尽量保持原样，只补目录、frontmatter 和来源指针。
+
+## 2026-04-12
+
+- 摘要：完成旧 Logseq `pages/` 的全量迁移，所有页面都已进入 `wiki/topics/`，并保留 raw 来源副本。
+- 页面：
+  - `wiki/topics/*`
+  - `raw/sources/*`
+  - `raw/assets/*`
+  - [[index]]
+  - [[log]]
+- 来源：
+  - `raw/sources/`
+  - `raw/assets/`
+- 备注：本次全量迁移覆盖 `192/192` 个旧 `pages`；`journals/` 仍按既定规则未整体迁入。

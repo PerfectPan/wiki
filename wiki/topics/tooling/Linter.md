@@ -1,0 +1,25 @@
+---
+title: Linter
+type: topic
+category: tooling
+status: seed
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - linter
+source_refs:
+  - raw/sources/Linter.md
+---
+# Linter
+
+- https://github.com/typescript-eslint/typescript-eslint/discussions/11568
+	- [[ESLint]] 的 parser 接口 / rule 执行流程假设每个文件是独立的（stateless），这导致类型信息／跨文件依赖图／模块解析等功能被插件包在外部做或以某种方式在每个 parser 实例里重复做。
+	- 并行模式下，每个 worker thread 开销（启动、初始化 parser、加载配置、建立类型桥接／type-checker 等）不小。如果每个线程做这些初始化开销，反而浪费。
+	- 要优化这些，就需要改 ESLint 的内部架构，让 parser 能感知执行上下文／并发设置；让插件／parser 能共享某些类型信息或依赖图；让跨文件规则／import 插件／typescript-eslint 的 type checker 部分能以一种共享或分片的方式运行，而不是每个文件每个线程都完整跑一次。
+	- 这些改动风险高、影响面大，而且会牵扯到向后兼容、配置兼容性、插件生态等问题。
+-
+
+## Source Pointers
+
+- `raw/sources/Linter.md`
+

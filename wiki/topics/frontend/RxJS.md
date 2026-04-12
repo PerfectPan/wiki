@@ -1,0 +1,31 @@
+---
+title: RxJS
+type: topic
+category: frontend
+status: seed
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - rxjs
+source_refs:
+  - raw/sources/RxJS.md
+---
+# RxJS
+
+- https://rxjs.dev/
+- Observables are lazy Push collections of multiple values.
+- Push 和 Pull 是两种不同的描述数据生产者如何与数据消费者沟通的协议
+	- Pull 系统下数据消费者决定何时接收 data，数据生产者对数据何时消费无概念(produce data when requested)，类比 Function，函数自己是数据的生产者，函数的调用就是消费者
+	- Push 系统下生产者决定何时发送数据给消费者，消费者不感知何时接收数据（有点类似 EventEmitter / Promise）
+- rxjs 教程：
+	- https://gist.github.com/staltz/868e7e9bc2a7b8c1f754
+	- http://reactivex.io/learnrx/
+- 使用 rxjs 的项目：
+	- https://github.com/teambition/teambition-sdk
+- https://cycle.js.org/getting-started.html
+-
+
+## Source Pointers
+
+- `raw/sources/RxJS.md`
+

@@ -1,0 +1,24 @@
+- [[Cairo]] 1.0
+	- 高级语言
+	- 语法类似 Rust
+	- 安全的中间表达式 Sierra
+	- 程序失败，仍可生成证明
+- 为什么选择 [[StarkNet]]
+	- 无需重新执行即可保证计算完整性
+	- 验证证明比潜在计算更便宜
+	- 压缩计算
+	- 扩展，而非隐私
+	- 基于 Stark 零知识证明
+	- 抗量子攻击
+- https://vitalik.eth.limo/general/2021/01/05/rollup.html
+- 证明系统
+	- Proof 证明
+	- Argument 证明
+		- 非交互式
+			- 简洁性
+				- 零知识 ZK
+					- {{video https://www.bilibili.com/video/BV1fg4y1F7yY/?spm_id_from=333.788.recommend_more_video.-1&vd_source=39823ec627764c2c2c700a6f3ef739d2}}
+				- 非零知识
+			- 非简洁性
+		- 交互式
+-

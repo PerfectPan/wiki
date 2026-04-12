@@ -1,0 +1,3 @@
+- https://crypto.stanford.edu/~blynn/haskell/drawtree.html
+- http://blog.sigfpe.com/2007/04/trivial-monad.html?m=1
+-

@@ -1,0 +1,7 @@
+- AOT Engine:
+	- https://github.com/CanadaHonk/porffor
+- 短路运算：
+	- A && B
+		- 如果 `A` 是 **假值**（false、0、''、null、undefined、NaN），返回 `A`（注意不是返回布尔值）
+		- 如果 `A` 是 **真值**，返回 `B`
+-

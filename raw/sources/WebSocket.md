@@ -1,0 +1,2 @@
+- https://www.rfc-editor.org/rfc/rfc6455#section-7.4.1
+- https://stackoverflow.com/questions/19304157/getting-the-reason-why-websockets-closed-with-close-code-1006

@@ -165,3 +165,14 @@
 - 来源：
   - `wiki/topics/tooling/*`
 - 备注：这一轮重点修正 `tooling` 的边界，让它更接近“工程工具与基础设施”而不是杂项兜底分类。
+
+## 2026-04-12
+
+- 摘要：更新 `tooling` 的定义，并将 `@opensumi%2Fdi` 调整到 `architecture`。
+- 页面：
+  - [[AGENTS]]
+  - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi%2Fdi]]
+  - [[index]]
+- 来源：
+  - `raw/sources/@opensumi%2Fdi.md`
+- 备注：`tooling` 采用更宽泛的工具定义，但依赖注入容器实现细节仍归为 `architecture`。

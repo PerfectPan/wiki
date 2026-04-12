@@ -38,6 +38,7 @@
   - [[wiki/topics/frontend/Web Component|Web Component]]
   - [[wiki/topics/frontend/zustand|zustand]]
 - `architecture`
+  - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi%2Fdi]]
   - [[wiki/topics/architecture/技术方案|技术方案]]
   - [[wiki/topics/architecture/Auth|Auth]]
   - [[wiki/topics/architecture/Backend|Backend]]
@@ -69,7 +70,6 @@
   - [[wiki/topics/product/RSS|RSS]]
   - [[wiki/topics/product/UX|UX]]
 - `tooling`
-  - [[wiki/topics/tooling/@opensumi%2Fdi|@opensumi%2Fdi]]
   - [[wiki/topics/tooling/Bundle|Bundle]]
   - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
   - [[wiki/topics/tooling/CTF|CTF]]

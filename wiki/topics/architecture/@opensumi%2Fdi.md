@@ -1,7 +1,7 @@
 ---
 title: @opensumi%2Fdi
 type: topic
-category: tooling
+category: architecture
 status: seed
 created: 2026-04-12
 updated: 2026-04-12
@@ -155,4 +155,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/@opensumi%2Fdi.md`
-

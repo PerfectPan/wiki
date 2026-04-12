@@ -1,7 +1,7 @@
 ---
 title: Two Pointer
 type: topic
-category: ai
+category: algorithms
 status: seed
 created: 2026-04-12
 updated: 2026-04-12

@@ -1,7 +1,7 @@
 ---
 title: Probability
 type: topic
-category: frontend
+category: algorithms
 status: seed
 created: 2026-04-12
 updated: 2026-04-12

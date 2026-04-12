@@ -1,7 +1,7 @@
 ---
 title: Algebraic Effects
 type: topic
-category: ai
+category: languages
 status: seed
 created: 2026-04-12
 updated: 2026-04-12

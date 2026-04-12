@@ -138,3 +138,15 @@
   - `raw/sources/`
   - `raw/assets/`
 - 备注：本次全量迁移覆盖 `192/192` 个旧 `pages`；`journals/` 仍按既定规则未整体迁入。
+
+## 2026-04-12
+
+- 摘要：完成一轮整体分类纠偏，修正明显错分类页面，并将模板/周计划/链接堆等非稳定主题页降回 raw。
+- 页面：
+  - [[index]]
+  - `wiki/topics/*`
+  - `raw/sources/*`
+- 来源：
+  - `wiki/topics/*`
+  - `raw/sources/*`
+- 备注：本轮优先纠正高置信度错误，例如将算法页从 `ai/frontend` 挪回 `algorithms`，将工具页从 `languages` 挪回 `tooling`，并移除明显不应进入 `wiki/topics` 的时间范围页与模板页。

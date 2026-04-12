@@ -1,7 +1,7 @@
 ---
 title: Color and Perception
 type: topic
-category: systems
+category: product
 status: seed
 created: 2026-04-12
 updated: 2026-04-12

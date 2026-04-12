@@ -1,0 +1,50 @@
+---
+title: Dependency Injection
+type: topic
+category: architecture
+status: seed
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - dependency-injection
+  - di
+  - container
+source_refs:
+  - raw/sources/Dependency Injection.md
+---
+# Dependency Injection
+
+- Dependency injection, in its essence, is about parametrizing **services** that were previously hardcoded in **clients**, so that we can control these **clients** to a greater extent
+- https://inversify.io/
+- #DI
+- https://www.amazon.com.br/Dependency-Injection-NET-Second-Seemann/dp/161729473X
+- [[@opensumi/di]]
+- https://blog.codeminer42.com/dependency-injection-in-js-ts-part-1/
+	- 剥离的依赖是服务，使用服务的是容器
+	- 方便测试
+	- 写代码可以从上往下，先确定我要什么服务，然后一步步细化写，另一种方案就是从叶子结点开始构造我要的东西，慢慢把系统垒起来
+	- 一些确定是否把依赖剥离的 hint
+		- Even though we do not have some simple rule that tells us which things should or should not be extracted as dependencies, we do have some **heuristics** to help us.
+		- In general, we might want to extract:
+			- Configuration values
+			- Services from other units/modules
+			- Global variables
+			- Services that have a non-deterministic behavior (like random number generators, uuid generators)
+			- Services that interface directly or indirectly with things that are outside your program’s memory space (APIs, databases, file systems, console/stdin/stdout)
+			- Services that rely on the specificities of some environment (like code that relies on browser/node-specific variables, e.g. window, __dirname)
+			- Services that have side-effects
+			- Services that already have or are expected to have multiple implementations, including implementations that only exist for testing or temporary purposes
+		- Things we might **not** want to extract:
+			- Services that live on the same module/unit (though there might be occasions where this is useful)
+			- Primitive language constructs (arithmetical/logical operators, conditionals)
+		- Let me reiterate, these are **guidelines/heuristics**, **not rules written in stone**.
+	- DI 更好的方案是用一个中心化的容器去管理服务的依赖，服务的实例化，然后我们的代码就分为容器初始化 + 正式跑代码两步，第一步会来检查一些信息
+		- The boot phase is like a **“runtime build”** phase, where we **assemble** our application by creating all the services and plugging them together.
+		- Then, at the run phase, we start the application using the services from the container.
+		- Going back to the PC analogy, it’s as if each service was a PC part that was manufactured in isolation, and then there’s an **assembly line** (which corresponds to the composition root) where we assemble all the individual parts into a PC.
+		- It’s only when all parts are composed together, we can **turn on the PC**.
+		- So, when our container is ready to be used, we must call it in the application’s **entry point**.
+
+## Source Pointers
+
+- `raw/sources/Dependency Injection.md`

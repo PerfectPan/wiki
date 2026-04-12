@@ -105,3 +105,22 @@
   - `raw/sources/React Devtools.md`
   - `raw/sources/React Render Optimization.md`
 - 备注：正文保持轻改；`React Render Optimization` 当前仍为空页，只保留 raw 副本，未提升到 `wiki/`。
+
+## 2026-04-12
+
+- 摘要：继续迁移 `architecture` 与 `ai/product` 的成熟页面，补充设计、依赖注入、DDD、Agent、GPT、Code Agent 等主题。
+- 页面：
+  - [[wiki/topics/architecture/DDD|DDD]]
+  - [[wiki/topics/architecture/Dependency Injection|Dependency Injection]]
+  - [[wiki/topics/product/Design|Design]]
+  - [[wiki/topics/ai/Agent|Agent]]
+  - [[wiki/topics/ai/Code Agent|Code Agent]]
+  - [[wiki/topics/ai/GPT|GPT]]
+- 来源：
+  - `raw/sources/DDD.md`
+  - `raw/sources/Dependency Injection.md`
+  - `raw/sources/Design.md`
+  - `raw/sources/Agent.md`
+  - `raw/sources/Code Agent.md`
+  - `raw/sources/GPT.md`
+- 备注：这批仍然遵循轻改原则，正文尽量保持原样，只补目录、frontmatter 和来源指针。

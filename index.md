@@ -21,11 +21,17 @@
   - [[wiki/topics/frontend/Web Component|Web Component]]
   - [[wiki/topics/frontend/React Devtools|React Devtools]]
 - `architecture`
+  - [[wiki/topics/architecture/DDD|DDD]]
+  - [[wiki/topics/architecture/Dependency Injection|Dependency Injection]]
   - [[wiki/topics/architecture/Software Design|Software Design]]
   - [[wiki/topics/architecture/技术方案|技术方案]]
 - `ai`
+  - [[wiki/topics/ai/Agent|Agent]]
+  - [[wiki/topics/ai/Code Agent|Code Agent]]
+  - [[wiki/topics/ai/GPT|GPT]]
   - [[wiki/topics/ai/MCP|MCP]]
 - `product`
+  - [[wiki/topics/product/Design|Design]]
   - [[wiki/topics/product/Logseq|Logseq]]
 
 ## 综合页
@@ -51,6 +57,12 @@
 - [[raw/sources/Web Component|Web Component]]
 - [[raw/sources/React Devtools|React Devtools]]
 - [[raw/sources/React Render Optimization|React Render Optimization]]
+- [[raw/sources/DDD|DDD]]
+- [[raw/sources/Dependency Injection|Dependency Injection]]
+- [[raw/sources/Design|Design]]
+- [[raw/sources/Agent|Agent]]
+- [[raw/sources/GPT|GPT]]
+- [[raw/sources/Code Agent|Code Agent]]
 - [[raw/sources/Software Design|Software Design]]
 - [[raw/sources/技术方案|技术方案]]
 - [[raw/sources/Logseq|Logseq]]

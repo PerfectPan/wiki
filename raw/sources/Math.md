@@ -1,0 +1,3 @@
+- TODO https://kewth.github.io/2020/05/06/%E9%9B%86%E5%90%88%E5%B9%82%E7%BA%A7%E6%95%B0/
+- [[Probability]]
+-

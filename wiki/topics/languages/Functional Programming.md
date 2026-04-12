@@ -1,0 +1,27 @@
+---
+title: Functional Programming
+type: topic
+category: languages
+status: seed
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - functional
+  - programming
+source_refs:
+  - raw/sources/Functional Programming.md
+---
+# Functional Programming
+
+- Optics: 提供一种优雅的方式来修改深层嵌套的结构，而无需手动复制和更新整个对象。Optics 主要包括 **Lens（透镜）、Prism（棱镜）、Iso（同构）、Traversal（遍历）** 等概念
+	- **Lens 用于访问和更新数据结构的一个字段**。
+	- **Prism 适用于访问可能不存在的字段，比如 `Optional` 或 `Union` 类型的数据**。
+	- **Iso（同构）是一种双向变换，可以在等价的两种表示之间转换**。
+	- **Traversal 允许同时访问和更新多个字段**。
+- [[Algebraic Effects]]
+-
+
+## Source Pointers
+
+- `raw/sources/Functional Programming.md`
+

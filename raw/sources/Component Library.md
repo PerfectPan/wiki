@@ -1,0 +1,5 @@
+- https://github.com/ant-design/pro-editor #AI
+- https://ui.shadcn.com/
+- https://headlessui.com/react/switch#switch
+- https://www.fancycomponents.dev/docs/introduction
+-

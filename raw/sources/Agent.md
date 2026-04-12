@@ -1,0 +1,7 @@
+- https://github.com/Aider-AI/aider
+	- terminal 里运行的 AI 编程助手
+- 框架：
+	- https://github.com/agno-agi/agno
+- [[Claude Code CLI]]
+- [[Code Agent]]
+-

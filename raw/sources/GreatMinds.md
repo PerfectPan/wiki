@@ -1,0 +1,3 @@
+- https://www.davidbauer.ch/
+	- https://labs.davidbauer.ch/how-i-use-ai/
+-

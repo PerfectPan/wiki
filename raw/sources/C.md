@@ -1,0 +1,2 @@
+- 编码规范：https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard
+-

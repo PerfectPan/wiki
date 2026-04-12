@@ -1,0 +1,3 @@
+- https://github.com/fhammerschmidt/awesome-rescript#readme
+- DONE 如何决定 ReScript 编译产物的目录位置
+	- https://forum.rescript-lang.org/t/how-to-config-the-output-js-file-position-in-rescript/3947

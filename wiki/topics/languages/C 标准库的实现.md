@@ -1,0 +1,37 @@
+---
+title: C 标准库的实现
+type: topic
+category: languages
+status: seed
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - c
+source_refs:
+  - raw/sources/C 标准库的实现.md
+---
+# C 标准库的实现
+
+- 在系统调用之上构建程序能够普遍受惠的标准库
+- 标准库封装系统调用和纯粹的计算
+- 标准库只对标准库内部数据的线程安全性负责 - printf 的 buffer
+- 封装文件描述符 stdio.h
+- 封装更多的进程/操作系统功能
+- malloc 设计
+	- 设置两套系统
+		- fast path
+			- 性能极好，并行度极高，覆盖大部分情况
+			- 但有小概率会失败
+		- slow path
+			- 不在乎那么快
+			- 但把困难的事情做好
+- TODO malloc 理解
+- libc -> C++ 编译器 -> C++ 标准库 -> ...
+- 如何在系统调用之上构建程序能够普遍受惠的标准库？
+- libc
+	- 性能优化中的 fast / slow path
+
+## Source Pointers
+
+- `raw/sources/C 标准库的实现.md`
+

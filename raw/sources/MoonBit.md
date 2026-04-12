@@ -1,0 +1,3 @@
+- https://www.moonbitlang.cn/
+- https://taolun.moonbitlang.cn/latest
+- https://github.com/pku-dppl/TAPL-in-MoonBit/?tab=readme-ov-file

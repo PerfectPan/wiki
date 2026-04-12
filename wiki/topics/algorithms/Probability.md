@@ -1,0 +1,25 @@
+---
+title: Probability
+type: topic
+category: algorithms
+status: seed
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - probability
+source_refs:
+  - raw/sources/Probability.md
+---
+# Probability
+
+- https://www.facebook.com/codingcompetitions/hacker-cup/2024/round-1/problems/C
+	- 求出下降 1kg 的期望天数 E，下降到 G 的总期望天数就是 (W-G) * E，因为每下降 1kg 的期望都是一样的
+	- 定义 E(X) 表示允许上涨 X kg 的期望天数，答案就是 (W - G) * E(L)
+	- E(X) = 1/2 * (1) + 1/2 * (1 + E(x - 1) + E(x))，后面 1/2 表示上涨了 1kg，这个时候用 E(x-1) 的期望天数下降回 0 (到体重 W 的时候上限就变成了 W + L，这里就只能最多上涨 x - 1)，然后再用 E(x) 下降 1kg
+	- 最后求出等式为 E(x) = 2 * x + 1
+-
+
+## Source Pointers
+
+- `raw/sources/Probability.md`
+

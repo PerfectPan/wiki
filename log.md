@@ -58,3 +58,121 @@
   - [[AGENTS]]
   - [[SCHEMA]]
 - 备注：后续迁移优先用 `tags` 表达细粒度主题，避免 taxonomy 膨胀。
+
+## 2026-04-12
+
+- 摘要：完成第一批迁移，优先落地成熟 topic 页面，并为迁移页面保留 raw 来源副本。
+- 页面：
+  - [[wiki/topics/architecture/Software Design|Software Design]]
+  - [[wiki/topics/architecture/技术方案|技术方案]]
+  - [[wiki/topics/ai/MCP|MCP]]
+  - [[wiki/topics/product/Logseq|Logseq]]
+  - [[raw/sources/RAG|RAG]]
+- 来源：
+  - `raw/sources/Software Design.md`
+  - `raw/sources/技术方案.md`
+  - `raw/sources/MCP.md`
+  - `raw/sources/Logseq.md`
+  - `raw/sources/RAG.md`
+- 备注：这一批遵循轻改原则，正文尽量保持原样；`RAG` 暂时仍保留在 raw 层，后续再决定是否提升为 wiki 页面。
+
+## 2026-04-12
+
+- 摘要：补充迁移 `frontend` 第一组成熟页面，并将 `Ref`、`RSC` 相关图片一并纳入仓库。
+- 页面：
+  - [[wiki/topics/frontend/React|React]]
+  - [[wiki/topics/frontend/RSC|RSC]]
+  - [[wiki/topics/frontend/Ref|Ref]]
+  - [[wiki/topics/frontend/useRef|useRef]]
+  - [[wiki/topics/frontend/State Management|State Management]]
+  - [[wiki/topics/frontend/zustand|zustand]]
+  - [[wiki/topics/frontend/CSS|CSS]]
+  - [[wiki/topics/frontend/SVG|SVG]]
+  - [[wiki/topics/frontend/Component Library|Component Library]]
+  - [[wiki/topics/frontend/Web Component|Web Component]]
+  - [[wiki/topics/frontend/React Devtools|React Devtools]]
+- 来源：
+  - `raw/sources/React.md`
+  - `raw/sources/RSC.md`
+  - `raw/sources/Ref.md`
+  - `raw/sources/useRef.md`
+  - `raw/sources/State Management.md`
+  - `raw/sources/zustand.md`
+  - `raw/sources/CSS.md`
+  - `raw/sources/SVG.md`
+  - `raw/sources/Component Library.md`
+  - `raw/sources/Web Component.md`
+  - `raw/sources/React Devtools.md`
+  - `raw/sources/React Render Optimization.md`
+- 备注：正文保持轻改；`React Render Optimization` 当前仍为空页，只保留 raw 副本，未提升到 `wiki/`。
+
+## 2026-04-12
+
+- 摘要：继续迁移 `architecture` 与 `ai/product` 的成熟页面，补充设计、依赖注入、DDD、Agent、GPT、Code Agent 等主题。
+- 页面：
+  - [[wiki/topics/architecture/DDD|DDD]]
+  - [[wiki/topics/architecture/Dependency Injection|Dependency Injection]]
+  - [[wiki/topics/product/Design|Design]]
+  - [[wiki/topics/ai/Agent|Agent]]
+  - [[wiki/topics/ai/Code Agent|Code Agent]]
+  - [[wiki/topics/ai/GPT|GPT]]
+- 来源：
+  - `raw/sources/DDD.md`
+  - `raw/sources/Dependency Injection.md`
+  - `raw/sources/Design.md`
+  - `raw/sources/Agent.md`
+  - `raw/sources/Code Agent.md`
+  - `raw/sources/GPT.md`
+- 备注：这批仍然遵循轻改原则，正文尽量保持原样，只补目录、frontmatter 和来源指针。
+
+## 2026-04-12
+
+- 摘要：完成旧 Logseq `pages/` 的全量迁移，所有页面都已进入 `wiki/topics/`，并保留 raw 来源副本。
+- 页面：
+  - `wiki/topics/*`
+  - `raw/sources/*`
+  - `raw/assets/*`
+  - [[index]]
+  - [[log]]
+- 来源：
+  - `raw/sources/`
+  - `raw/assets/`
+- 备注：本次全量迁移覆盖 `192/192` 个旧 `pages`；`journals/` 仍按既定规则未整体迁入。
+
+## 2026-04-12
+
+- 摘要：完成一轮整体分类纠偏，修正明显错分类页面，并将模板/周计划/链接堆等非稳定主题页降回 raw。
+- 页面：
+  - [[index]]
+  - `wiki/topics/*`
+  - `raw/sources/*`
+- 来源：
+  - `wiki/topics/*`
+  - `raw/sources/*`
+- 备注：本轮优先纠正高置信度错误，例如将算法页从 `ai/frontend` 挪回 `algorithms`，将工具页从 `languages` 挪回 `tooling`，并移除明显不应进入 `wiki/topics` 的时间范围页与模板页。
+
+## 2026-04-12
+
+- 摘要：对 `tooling` 再做一轮精修，把明显属于系统、语言、算法、前端、认证的页面挪出，并将过薄的占位页降回 raw。
+- 页面：
+  - [[index]]
+  - `wiki/topics/tooling/*`
+  - `wiki/topics/systems/*`
+  - `wiki/topics/languages/*`
+  - `wiki/topics/algorithms/*`
+  - `wiki/topics/frontend/*`
+  - `wiki/topics/architecture/*`
+- 来源：
+  - `wiki/topics/tooling/*`
+- 备注：这一轮重点修正 `tooling` 的边界，让它更接近“工程工具与基础设施”而不是杂项兜底分类。
+
+## 2026-04-12
+
+- 摘要：更新 `tooling` 的定义，并将 `@opensumi%2Fdi` 调整到 `architecture`。
+- 页面：
+  - [[AGENTS]]
+  - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi%2Fdi]]
+  - [[index]]
+- 来源：
+  - `raw/sources/@opensumi%2Fdi.md`
+- 备注：`tooling` 采用更宽泛的工具定义，但依赖注入容器实现细节仍归为 `architecture`。

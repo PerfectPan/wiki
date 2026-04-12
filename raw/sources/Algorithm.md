@@ -1,0 +1,15 @@
+- [[Dynamic Programming]]
+- [[Greedy]]
+- [[Graph Theory]]
+- [[Constructive Algorithm]]
+- [[解题思路]]
+- [[Binary Lifting]]
+- [[Two Pointer]]
+- [[Math]]
+- [[Data Structure]]
+- [[String]]
+- [[AdHoc]]
+- Is my problem new? https://codeforces.com/blog/entry/122385
+	- https://github.com/fjzzq2002/is-my-problem-new
+- [[Binary Search]]
+- https://github.com/yosupo06/library-checker-problems/tree/master

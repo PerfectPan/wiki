@@ -1,0 +1,3 @@
+- [[Github Sponsor]]
+- [[Stripe]] 作为收款账号：https://dashboard.stripe.com/balance/overview
+-

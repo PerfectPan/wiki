@@ -1,0 +1,6 @@
+- Shell Wrapper：
+	- https://github.com/sindresorhus/execa
+		- 基于 node 的 child_process 包裹，很轻量，也支持 streaming 等需求，使用起来会比直接用 child_process 更方便
+- 鉴权方案：
+	- https://authjs.dev/
+-

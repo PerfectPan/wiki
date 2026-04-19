@@ -57,6 +57,30 @@
   - `raw/sources/*`
 - 备注：本轮以轻改和高置信度降级为主；`raw/` 保持 append-only，不清理其中对已降级 topic 的历史链接。
 
+## 2026-04-19
+
+- 摘要：补充第一批真正的 synthesis / comparison 页面，把 agent 工作流、RSC 心智模型、状态管理选型维度与渲染策略对比沉淀进 `wiki/`。
+- 页面：
+  - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+  - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]
+  - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
+  - [[wiki/comparisons/frontend/SSR vs SSG vs RSC|SSR vs SSG vs RSC]]
+  - [[index]]
+- 来源：
+  - `AGENTS.md`
+  - `SCHEMA.md`
+  - `deep-research-report.md`
+  - `wiki/topics/ai/*`
+  - `wiki/topics/frontend/*`
+  - `raw/sources/2023.04.24-2023.05.07.md`
+  - `raw/sources/RSC.md`
+  - `raw/sources/SSR.md`
+  - `raw/sources/SSG.md`
+  - `raw/sources/State Management.md`
+  - `raw/sources/React.md`
+  - `raw/sources/Waku.md`
+- 备注：这批页面以现有仓库材料为主，没有回写 `raw/`；dated raw 残留只在确有长期价值时作为来源指针被抽取。
+
 ## 2026-04-12
 
 - 摘要：初始化适用于 Obsidian + agent + PR 审阅工作流的治理与 schema 文件。

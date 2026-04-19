@@ -145,10 +145,17 @@
 ## 综合页
 
 - 综合理解页放在 `wiki/syntheses/`
+- `ai`
+  - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+- `frontend`
+  - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]
+  - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
 
 ## 对比页
 
 - 对比与取舍页放在 `wiki/comparisons/`
+- `frontend`
+  - [[wiki/comparisons/frontend/SSR vs SSG vs RSC|SSR vs SSG vs RSC]]
 - `product`
   - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
 

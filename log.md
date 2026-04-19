@@ -15,6 +15,28 @@
 - 备注：
 ```
 
+## 2026-04-19
+
+- 摘要：精修 `product` 簇，移除一批过薄或草稿态 topic，新增 `Obsidian vs Logseq` 对比页，并将 `Color and Perception` 调整到 `frontend`。
+- 页面：
+  - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
+  - [[wiki/topics/product/Logseq|Logseq]]
+  - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
+  - [[index]]
+- 来源：
+  - [[deep-research-report]]
+  - `raw/sources/Logseq.md`
+  - `raw/sources/Color and Perception.md`
+  - `raw/sources/BlockSuite.md`
+  - `raw/sources/Cross Platform.md`
+  - `raw/sources/Design.md`
+  - `raw/sources/GreatMinds.md`
+  - `raw/sources/Prototype.md`
+  - `raw/sources/RSS.md`
+  - `raw/sources/UX.md`
+  - `raw/sources/未来工作方向.md`
+- 备注：本轮遵循轻改原则，保留 raw 原件不动；`journals/` 仍未在当前仓库中整体迁入。
+
 ## 2026-04-12
 
 - 摘要：初始化适用于 Obsidian + agent + PR 审阅工作流的治理与 schema 文件。

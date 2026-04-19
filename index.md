@@ -12,6 +12,7 @@
   - [[wiki/topics/frontend/路由器|路由器]]
   - [[wiki/topics/frontend/响应式|响应式]]
   - [[wiki/topics/frontend/颜色|颜色]]
+  - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
   - [[wiki/topics/frontend/状态管理|状态管理]]
   - [[wiki/topics/frontend/Component Library|Component Library]]
   - [[wiki/topics/frontend/CSS|CSS]]
@@ -59,16 +60,7 @@
   - [[wiki/topics/ai/MCP|MCP]]
   - [[wiki/topics/ai/Prompt|Prompt]]
 - `product`
-  - [[wiki/topics/product/未来工作方向|未来工作方向]]
-  - [[wiki/topics/product/BlockSuite|BlockSuite]]
-  - [[wiki/topics/product/Color and Perception|Color and Perception]]
-  - [[wiki/topics/product/Cross Platform|Cross Platform]]
-  - [[wiki/topics/product/Design|Design]]
-  - [[wiki/topics/product/GreatMinds|GreatMinds]]
   - [[wiki/topics/product/Logseq|Logseq]]
-  - [[wiki/topics/product/Prototype|Prototype]]
-  - [[wiki/topics/product/RSS|RSS]]
-  - [[wiki/topics/product/UX|UX]]
 - `tooling`
   - [[wiki/topics/tooling/Bundle|Bundle]]
   - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
@@ -204,6 +196,8 @@
 ## 对比页
 
 - 对比与取舍页放在 `wiki/comparisons/`
+- `product`
+  - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
 
 ## 原始资料
 

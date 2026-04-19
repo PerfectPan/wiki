@@ -4,13 +4,14 @@ type: topic
 category: systems
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
-  - a
   - fork
-  - in
+  - execve
+  - process
 source_refs:
   - raw/sources/A fork() in the road.md
+  - https://www.microsoft.com/en-us/research/uploads/prod/2019/04/fork-hotos19.pdf
 ---
 # A fork() in the road
 
@@ -65,9 +66,8 @@ source_refs:
 	- 备份和容错，有些 bug 可能调整一下环境就消失了
 - 从操作系统的角度，fork 可能不是 API 的最佳选择，因为后来的操作系统增加了很多新的东西：信号，进程组，线程，进程间通信的对象等
 - https://www.microsoft.com/en-us/research/uploads/prod/2019/04/fork-hotos19.pdf
--
 
 ## Source Pointers
 
 - `raw/sources/A fork() in the road.md`
-
+- https://www.microsoft.com/en-us/research/uploads/prod/2019/04/fork-hotos19.pdf

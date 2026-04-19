@@ -4,7 +4,7 @@ type: topic
 category: algorithms
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - algorithm
 source_refs:
@@ -17,9 +17,7 @@ source_refs:
 - [[Graph Theory]]
 - [[Constructive Algorithm]]
 - [[解题思路]]
-- [[Binary Lifting]]
 - [[Two Pointer]]
-- [[Math]]
 - [[Data Structure]]
 - [[String]]
 - [[AdHoc]]
@@ -31,4 +29,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Algorithm.md`
-

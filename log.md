@@ -37,6 +37,26 @@
   - `raw/sources/未来工作方向.md`
 - 备注：本轮遵循轻改原则，保留 raw 原件不动；`journals/` 仍未在当前仓库中整体迁入。
 
+## 2026-04-19
+
+- 摘要：并行精修其余分类，删除一批空壳、链接堆和明显时效性 topic，并将 `富文本编辑器` 从 `systems` 调整到 `tooling`。
+- 页面：
+  - [[index]]
+  - [[log]]
+  - `wiki/topics/frontend/*`
+  - `wiki/topics/tooling/*`
+  - `wiki/topics/systems/*`
+  - `wiki/topics/architecture/*`
+  - `wiki/topics/ai/*`
+  - `wiki/topics/languages/*`
+  - `wiki/topics/algorithms/*`
+  - `wiki/topics/career/*`
+  - `wiki/topics/life/*`
+- 来源：
+  - `wiki/topics/*`
+  - `raw/sources/*`
+- 备注：本轮以轻改和高置信度降级为主；`raw/` 保持 append-only，不清理其中对已降级 topic 的历史链接。
+
 ## 2026-04-12
 
 - 摘要：初始化适用于 Obsidian + agent + PR 审阅工作流的治理与 schema 文件。

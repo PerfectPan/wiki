@@ -4,9 +4,11 @@ type: topic
 category: systems
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
+  - filesystem
   - api
+  - storage
 source_refs:
   - raw/sources/文件系统 API.md
 ---
@@ -43,4 +45,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/文件系统 API.md`
-

@@ -4,9 +4,9 @@ type: topic
 category: algorithms
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
-  - include
+  - hash
 source_refs:
   - raw/sources/Hash.md
 ---
@@ -65,4 +65,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Hash.md`
-

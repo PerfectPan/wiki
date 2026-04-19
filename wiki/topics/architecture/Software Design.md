@@ -4,11 +4,11 @@ type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - software-design
   - dependency-injection
-  - design-pattern
+  - modularity
 source_refs:
   - raw/sources/Software Design.md
 ---
@@ -29,7 +29,7 @@ source_refs:
 - 原则：单向依赖原则
 - 稳定与不稳定：
 	- 稳定程度是 核心业务逻辑 < 通用业务模块 < 工具类
-- 创建对象和对象使用应该分开，使用对象不应该关心对象是如何被创建出来的（使用依赖注入分离） #[[Dependency Injection]]
+- 创建对象和对象使用应该分开，使用对象不应该关心对象是如何被创建出来的（使用依赖注入分离） [[Dependency Injection]]
 	- 依赖注入的思路是引入一个容器类，让容器去统一管理对象的创建。容器会自动解析类与类之间的依赖映射关系，并将这些映射关系存放在容器内部。在消费者需要的时候，容器再按需动态创建相应的对象提供给消费者使用。
 	- 在线文档需要更强大的依赖注入
 		- 支持异步模块依赖

@@ -4,11 +4,14 @@ type: topic
 category: ai
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - prompt
+  - prompt-engineering
+  - workflow
 source_refs:
   - raw/sources/Prompt.md
+  - https://github.com/anthropics/prompt-eng-interactive-tutorial
 ---
 # Prompt
 
@@ -86,9 +89,8 @@ source_refs:
   * Testing suggestions to validate correctness.
   ```
 - https://github.com/anthropics/prompt-eng-interactive-tutorial Anthropics 的教程，需要 api key
--
 
 ## Source Pointers
 
 - `raw/sources/Prompt.md`
-
+- https://github.com/anthropics/prompt-eng-interactive-tutorial

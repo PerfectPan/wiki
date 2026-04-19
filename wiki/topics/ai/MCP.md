@@ -4,14 +4,18 @@ type: topic
 category: ai
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - mcp
   - agent
   - oauth
   - protocol
+  - security
 source_refs:
   - raw/sources/MCP.md
+  - https://github.com/ComposioHQ/composio
+  - https://talks.ayaka.io/nekoayaka/2025-04-13-what-is-mcp-and-how-it-helps/#/1
+  - https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&mid=2247516461&idx=1&sn=ce4917a4ab56c2c136290e20c5ba79f5&poc_token=HEU_vWijo0oCrhmjt2qVAlM4teQ4khEUbS98qphk
 ---
 # MCP
 
@@ -34,3 +38,6 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/MCP.md`
+- https://github.com/ComposioHQ/composio
+- https://talks.ayaka.io/nekoayaka/2025-04-13-what-is-mcp-and-how-it-helps/#/1
+- https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&mid=2247516461&idx=1&sn=ce4917a4ab56c2c136290e20c5ba79f5&poc_token=HEU_vWijo0oCrhmjt2qVAlM4teQ4khEUbS98qphk

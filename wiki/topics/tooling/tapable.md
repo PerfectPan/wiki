@@ -12,7 +12,7 @@ source_refs:
 ---
 # tapable
 
-- #[[Front End]]
+- #frontend
 - https://github.com/webpack/tapable/tree/master
 - 动态生成函数的一些依据：https://mrale.ph/blog/2015/01/11/whats-up-with-monomorphism.html
 - https://github.com/webpack/tapable/issues/62
@@ -94,4 +94,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/tapable.md`
-

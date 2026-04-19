@@ -4,11 +4,14 @@ type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - oauth
+  - auth
+  - authorization
 source_refs:
   - raw/sources/OAuth.md
+  - https://www.ruanyifeng.com/blog/2019/04/oauth_design.html
 ---
 # OAuth
 
@@ -18,9 +21,8 @@ source_refs:
 - 第三方应用会向系统携带 client id，告诉系统是谁在请求，用户授权以后会 redirect 到第三方应用的网址，携带授权码，然后请求业务后端，业务后端用 client id 和 secret 加授权码去请求系统的令牌，再跳回到前端（可以是裸的令牌，可以是和业务绑定后的 token），然后前端就可以用这个令牌（以用户的身份）去请求用户在系统的信息了
 - 看着向 Github 注册的 **Homepage URL** 和 **Authorization callback URL** 不会校验端口，只会校验域名和 callback 的 path
 - TODO 如何结合这个进一步设计登录态？
--
 
 ## Source Pointers
 
 - `raw/sources/OAuth.md`
-
+- https://www.ruanyifeng.com/blog/2019/04/oauth_design.html

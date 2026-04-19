@@ -4,9 +4,11 @@ type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - sso
+  - auth
+  - cas
 source_refs:
   - raw/sources/SSO.md
 ---
@@ -31,9 +33,7 @@ source_refs:
 		- APP2 拿到 ST，服务端访问 SSO，验证 ST 是否有效
 		- 验证成功后，APP2 将登录状态写入 Session，并在 APP2 域下写入 Cookie
 	- SSO，APP1 和 APP2 在不同的域下，它们之间的 Session 不应该是的共享的，这样可以更加保证用户信息安全
--
 
 ## Source Pointers
 
 - `raw/sources/SSO.md`
-

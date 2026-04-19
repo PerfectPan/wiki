@@ -4,7 +4,7 @@ type: topic
 category: languages
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - starknet
   - workshop
@@ -13,7 +13,7 @@ source_refs:
 ---
 # StarkNet Workshop
 
-- [[Cairo]] 1.0
+- Cairo 1.0
 	- 高级语言
 	- 语法类似 Rust
 	- 安全的中间表达式 Sierra
@@ -32,13 +32,11 @@ source_refs:
 		- 非交互式
 			- 简洁性
 				- 零知识 ZK
-					- {{video https://www.bilibili.com/video/BV1fg4y1F7yY/?spm_id_from=333.788.recommend_more_video.-1&vd_source=39823ec627764c2c2c700a6f3ef739d2}}
+					- https://www.bilibili.com/video/BV1fg4y1F7yY/?spm_id_from=333.788.recommend_more_video.-1&vd_source=39823ec627764c2c2c700a6f3ef739d2
 				- 非零知识
 			- 非简洁性
 		- 交互式
--
 
 ## Source Pointers
 
 - `raw/sources/StarkNet Workshop.md`
-

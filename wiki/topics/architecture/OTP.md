@@ -4,9 +4,11 @@ type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - otp
+  - auth
+  - authentication
 source_refs:
   - raw/sources/OTP.md
 ---
@@ -17,9 +19,7 @@ source_refs:
 	- 手机（短信验证码）
 	- 安全令牌
 	- 认证器
--
 
 ## Source Pointers
 
 - `raw/sources/OTP.md`
-

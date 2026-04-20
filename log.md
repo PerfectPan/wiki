@@ -81,6 +81,17 @@
   - `raw/sources/Waku.md`
 - 备注：这批页面以现有仓库材料为主，没有回写 `raw/`；dated raw 残留只在确有长期价值时作为来源指针被抽取。
 
+## 2026-04-20
+
+- 摘要：补做一条 `journals` 抽取，把 dated raw 残留里关于 FLIP 布局动画的长期结论沉淀为 frontend synthesis。
+- 页面：
+  - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2023.05.08-2023.05.21.md`
+  - `raw/sources/Front End.md`
+- 备注：没有迁入日记原文，只抽取 pages 未覆盖、且具有长期复用价值的技术结论。
+
 ## 2026-04-12
 
 - 摘要：初始化适用于 Obsidian + agent + PR 审阅工作流的治理与 schema 文件。

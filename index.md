@@ -148,6 +148,7 @@
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
 - `frontend`
+  - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
   - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]
   - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
 

@@ -4,12 +4,14 @@ type: topic
 category: tooling
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - chrome
   - devtools
 source_refs:
   - raw/sources/Chrome DevTools.md
+  - https://chromedevtools.github.io/devtools-protocol/
+  - https://developer.chrome.com/docs/extensions/mv3/devtools/#overview
 ---
 # Chrome DevTools
 
@@ -39,4 +41,5 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Chrome DevTools.md`
-
+- https://chromedevtools.github.io/devtools-protocol/
+- https://developer.chrome.com/docs/extensions/mv3/devtools/#overview

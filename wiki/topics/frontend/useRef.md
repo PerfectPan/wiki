@@ -4,13 +4,14 @@ type: topic
 category: frontend
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - react
   - useref
   - hooks
 source_refs:
   - raw/sources/useRef.md
+  - https://beta.reactjs.org/reference/react/useRef#returns
 ---
 # useRef
 
@@ -20,3 +21,4 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/useRef.md`
+- https://beta.reactjs.org/reference/react/useRef#returns

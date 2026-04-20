@@ -4,9 +4,9 @@ type: topic
 category: languages
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
-  - include
+  - cpp
 source_refs:
   - raw/sources/C++.md
 ---
@@ -25,9 +25,7 @@ source_refs:
   ios::sync_with_stdio(false);
   cin.tie(0); cout.tie(0);
   ```
--
 
 ## Source Pointers
 
 - `raw/sources/C++.md`
-

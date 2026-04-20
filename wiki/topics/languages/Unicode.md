@@ -4,7 +4,7 @@ type: topic
 category: languages
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - unicode
 source_refs:
@@ -73,7 +73,6 @@ source_refs:
 		- ![CleanShot 2023-11-08 at 18.05.03.png](../../../raw/assets/CleanShot_2023-11-08_at_18.05.03_1699437914227_0.png)
 		- **An Extended Grapheme Cluster is a sequence of one or more Unicode code points that must be treated as a single, unbreakable character.**
 	- 更离谱的是长的一样的字符可能是由不同的 unicode 组合而成的
-	  id:: 654b5d98-ccbf-4aa9-b866-a16c9acf8fab
 		- ```js
 		  "Å" === "Å"
 		  "Å" === "Å"
@@ -112,7 +111,7 @@ source_refs:
 			  // ['1f40e', '1f471', '2764']
 
 			  ```
-	- 上面提到的 ((654b5d98-ccbf-4aa9-b866-a16c9acf8fab)) JavaScript 也提供了规范化的 API
+	- 上面提到的规范化问题，JavaScript 也提供了对应的 API
 		- https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/normalize
 		- ```js
 		  const name1 = '\u0041\u006d\u00e9\u006c\u0069\u0065';
@@ -141,4 +140,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Unicode.md`
-

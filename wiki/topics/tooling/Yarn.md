@@ -4,21 +4,20 @@ type: topic
 category: tooling
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
-  - thinking
+  - yarn
   - node
+  - package-manager
 source_refs:
   - raw/sources/Yarn.md
 ---
 # Yarn
 
-- 判断是不是 scripts 里安装的可以用 yarn 注入的环境变量 https://yarnpkg.com/advanced/lifecycle-scripts#environment-variables ，找寻解决问题的时候也可以看看有没有类似的环境变量可以解决 #Thinking
-- 强制 node 版本，补齐了 yarn v3 版本没支持的能力（但 npm 支持）：https://github.com/devoto13/yarn-plugin-engines #Node
-- 才意识到 yarn 的 plugiin 可以让我自定义很多事情，比如上面的一条的强制 node 版本 #Thinking
--
+- 判断是不是 scripts 里安装的可以用 yarn 注入的环境变量 https://yarnpkg.com/advanced/lifecycle-scripts#environment-variables，找寻解决问题的时候也可以看看有没有类似的环境变量可以解决
+- 强制 node 版本，补齐了 yarn v3 版本没支持的能力（但 npm 支持）：https://github.com/devoto13/yarn-plugin-engines
+- 才意识到 yarn 的 plugin 可以让我自定义很多事情，比如上面的一条的强制 node 版本
 
 ## Source Pointers
 
 - `raw/sources/Yarn.md`
-

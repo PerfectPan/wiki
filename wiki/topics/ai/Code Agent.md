@@ -4,11 +4,12 @@ type: topic
 category: ai
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - code-agent
   - agent
   - agents-md
+  - workflow
 source_refs:
   - raw/sources/Code Agent.md
 ---

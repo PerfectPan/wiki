@@ -15,6 +15,83 @@
 - 备注：
 ```
 
+## 2026-04-19
+
+- 摘要：精修 `product` 簇，移除一批过薄或草稿态 topic，新增 `Obsidian vs Logseq` 对比页，并将 `Color and Perception` 调整到 `frontend`。
+- 页面：
+  - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
+  - [[wiki/topics/product/Logseq|Logseq]]
+  - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
+  - [[index]]
+- 来源：
+  - [[deep-research-report]]
+  - `raw/sources/Logseq.md`
+  - `raw/sources/Color and Perception.md`
+  - `raw/sources/BlockSuite.md`
+  - `raw/sources/Cross Platform.md`
+  - `raw/sources/Design.md`
+  - `raw/sources/GreatMinds.md`
+  - `raw/sources/Prototype.md`
+  - `raw/sources/RSS.md`
+  - `raw/sources/UX.md`
+  - `raw/sources/未来工作方向.md`
+- 备注：本轮遵循轻改原则，保留 raw 原件不动；`journals/` 仍未在当前仓库中整体迁入。
+
+## 2026-04-19
+
+- 摘要：并行精修其余分类，删除一批空壳、链接堆和明显时效性 topic，并将 `富文本编辑器` 从 `systems` 调整到 `tooling`。
+- 页面：
+  - [[index]]
+  - [[log]]
+  - `wiki/topics/frontend/*`
+  - `wiki/topics/tooling/*`
+  - `wiki/topics/systems/*`
+  - `wiki/topics/architecture/*`
+  - `wiki/topics/ai/*`
+  - `wiki/topics/languages/*`
+  - `wiki/topics/algorithms/*`
+  - `wiki/topics/career/*`
+  - `wiki/topics/life/*`
+- 来源：
+  - `wiki/topics/*`
+  - `raw/sources/*`
+- 备注：本轮以轻改和高置信度降级为主；`raw/` 保持 append-only，不清理其中对已降级 topic 的历史链接。
+
+## 2026-04-19
+
+- 摘要：补充第一批真正的 synthesis / comparison 页面，把 agent 工作流、RSC 心智模型、状态管理选型维度与渲染策略对比沉淀进 `wiki/`。
+- 页面：
+  - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+  - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]
+  - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
+  - [[wiki/comparisons/frontend/SSR vs SSG vs RSC|SSR vs SSG vs RSC]]
+  - [[index]]
+- 来源：
+  - `AGENTS.md`
+  - `SCHEMA.md`
+  - `deep-research-report.md`
+  - `wiki/topics/ai/*`
+  - `wiki/topics/frontend/*`
+  - `raw/sources/2023.04.24-2023.05.07.md`
+  - `raw/sources/RSC.md`
+  - `raw/sources/SSR.md`
+  - `raw/sources/SSG.md`
+  - `raw/sources/State Management.md`
+  - `raw/sources/React.md`
+  - `raw/sources/Waku.md`
+- 备注：这批页面以现有仓库材料为主，没有回写 `raw/`；dated raw 残留只在确有长期价值时作为来源指针被抽取。
+
+## 2026-04-20
+
+- 摘要：补做一条 `journals` 抽取，把 dated raw 残留里关于 FLIP 布局动画的长期结论沉淀为 frontend synthesis。
+- 页面：
+  - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2023.05.08-2023.05.21.md`
+  - `raw/sources/Front End.md`
+- 备注：没有迁入日记原文，只抽取 pages 未覆盖、且具有长期复用价值的技术结论。
+
 ## 2026-04-12
 
 - 摘要：初始化适用于 Obsidian + agent + PR 审阅工作流的治理与 schema 文件。

@@ -4,12 +4,13 @@ type: topic
 category: product
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - logseq
+  - pkm
+  - outliner
+  - note-taking
   - clojurescript
-  - rum
-  - react
 source_refs:
   - raw/sources/Logseq.md
 ---

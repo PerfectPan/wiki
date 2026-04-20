@@ -4,21 +4,23 @@ type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - dependency-injection
   - di
   - container
 source_refs:
   - raw/sources/Dependency Injection.md
+  - https://inversify.io/
+  - https://blog.codeminer42.com/dependency-injection-in-js-ts-part-1/
 ---
 # Dependency Injection
 
 - Dependency injection, in its essence, is about parametrizing **services** that were previously hardcoded in **clients**, so that we can control these **clients** to a greater extent
 - https://inversify.io/
-- #DI
+- DI
 - https://www.amazon.com.br/Dependency-Injection-NET-Second-Seemann/dp/161729473X
-- [[@opensumi/di]]
+- [[@opensumi%2Fdi|@opensumi/di]]
 - https://blog.codeminer42.com/dependency-injection-in-js-ts-part-1/
 	- 剥离的依赖是服务，使用服务的是容器
 	- 方便测试
@@ -48,3 +50,5 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Dependency Injection.md`
+- https://inversify.io/
+- https://blog.codeminer42.com/dependency-injection-in-js-ts-part-1/

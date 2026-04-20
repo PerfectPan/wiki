@@ -1,16 +1,21 @@
 ---
 title: Color and Perception
 type: topic
-category: product
+category: frontend
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
   - color
-  - and
   - perception
+  - color-science
+  - rgb
+  - cmyk
 source_refs:
   - raw/sources/Color and Perception.md
+  - https://zhuanlan.zhihu.com/p/24214731
+  - https://zhuanlan.zhihu.com/p/24281841
+  - https://medium.com/hipster-color-science/a-beginners-guide-to-colorimetry-401f1830b65a
 ---
 # Color and Perception
 
@@ -62,11 +67,10 @@ source_refs:
 	- 只吸收红色，反射出其他所有颜色；只吸收绿色，反射出其他所有颜色；只吸收蓝色，反射出其他所有颜色
 - RGB 是在发光体的世界中来做三色混合，做的是加法，亮度提升，颜色越来越浅。是色彩模型，不是色彩空间
 - CMYK 反光体的世界中来做三色混合，做的是减法，亮度下降，颜色越来越深。是色彩模型，不是色彩空间
-- https://zhuanlan.zhihu.com/p/24214731
-- https://zhuanlan.zhihu.com/p/24281841
-- https://medium.com/hipster-color-science/a-beginners-guide-to-colorimetry-401f1830b65a 讲了那个马蹄图是怎么画出来的
 
 ## Source Pointers
 
 - `raw/sources/Color and Perception.md`
-
+- https://zhuanlan.zhihu.com/p/24214731
+- https://zhuanlan.zhihu.com/p/24281841
+- https://medium.com/hipster-color-science/a-beginners-guide-to-colorimetry-401f1830b65a

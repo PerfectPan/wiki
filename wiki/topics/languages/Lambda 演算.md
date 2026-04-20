@@ -4,9 +4,9 @@ type: topic
 category: languages
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
-  - reading
+  - lambda-calculus
 source_refs:
   - raw/sources/Lambda 演算.md
 ---
@@ -52,9 +52,7 @@ source_refs:
 - $YF$ 也被称作 $F$ 的不动点
 - 接上文乘法就被定义为 $(\times)=YF$
 - https://www.cs.cornell.edu/courses/cs3110/2008fa/recitations/rec26.html
--
 
 ## Source Pointers
 
 - `raw/sources/Lambda 演算.md`
-

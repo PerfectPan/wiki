@@ -1,19 +1,21 @@
 ---
-title: @opensumi%2Fdi
+title: @opensumi/di
 type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-19
 tags:
+  - dependency-injection
+  - ioc
   - typescript
 source_refs:
   - raw/sources/@opensumi%2Fdi.md
 ---
-# @opensumi%2Fdi
+# @opensumi/di
 
 - 整个框架会严重依赖 reflect-metadata 这个基础库
-- Injectable 只是一个调用 [[Reflect]] 注册类的 metadata 的元信息
+- Injectable 只是一个调用 Reflect 注册类的 metadata 的元信息
 - AutoWired 懒实例化，不用这个的话就是在构造器里用 @Inject() 去注册，这样在创建这个对象的时候会直接实例化
 - 在你 import reflect-metadata 且使用 decorator 的时候 #TypeScript 会默认调用 Reflect.metadata 注册元信息，目的就是运行时注册类型信息：
 	- ```ts
@@ -150,7 +152,6 @@ source_refs:
 - 还支持面向切面编程（AOP）的装饰器，这个跟 DI 关系应该不是很大（？），就是类似函数的执行前，执行后，报错等时期的执行的函数，以后再研究
 - TODO 输出 dependency graph
 - TODO 为什么要再写一个 DI 框架？
--
 
 ## Source Pointers
 

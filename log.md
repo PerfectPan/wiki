@@ -15,6 +15,18 @@
 - 备注：
 ```
 
+## 2026-04-22
+
+- 摘要：新增一页关于“对话内容何时值得沉淀进 Wiki”的 synthesis，用来明确日常协作中聊天内容的入库阈值，并同步更新导航。
+- 页面：
+  - [[wiki/syntheses/ai/对话内容何时值得沉淀进 Wiki|对话内容何时值得沉淀进 Wiki]]
+  - [[index]]
+- 来源：
+  - `AGENTS.md`
+  - `SCHEMA.md`
+  - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+- 备注：本页聚焦“哪些对话值得沉淀”为长期知识，而不是记录具体聊天内容。
+
 ## 2026-04-19
 
 - 摘要：精修 `product` 簇，移除一批过薄或草稿态 topic，新增 `Obsidian vs Logseq` 对比页，并将 `Color and Perception` 调整到 `frontend`。

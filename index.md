@@ -147,6 +147,7 @@
 - 综合理解页放在 `wiki/syntheses/`
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+  - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
 - `frontend`
   - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
   - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]

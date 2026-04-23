@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-04-23
+
+- 摘要：基于一条关于 Git、GitButler 与 agent 协作的长帖整理出一页 AI synthesis，沉淀 Git 在 agent 时代的摩擦点与可能演进方向。
+- 页面：
+  - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
+  - [[index]]
+- 来源：
+  - `https://x.com/saitowu/status/2046829706692202686`
+  - `memory/2026-04-23.md`
+- 备注：这次更新的知识主体是 X 长文内容本身，而不是读取过程中的 browser-use 排障细节。
+
 ## 2026-04-19
 
 - 摘要：精修 `product` 簇，移除一批过薄或草稿态 topic，新增 `Obsidian vs Logseq` 对比页，并将 `Color and Perception` 调整到 `frontend`。

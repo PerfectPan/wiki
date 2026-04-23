@@ -22,9 +22,10 @@
   - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
   - [[index]]
 - 来源：
+  - `raw/sources/2026-04-23-saitowu-git-agent-thread.md`
   - `https://x.com/saitowu/status/2046829706692202686`
   - `memory/2026-04-23.md`
-- 备注：这次更新的知识主体是 X 长文内容本身，而不是读取过程中的 browser-use 排障细节。
+- 备注：这次更新同时保留 raw 摘录与 synthesis，知识主体是 X 长文内容本身，而不是读取过程中的 browser-use 排障细节。
 
 ## 2026-04-19
 

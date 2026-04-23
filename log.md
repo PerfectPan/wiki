@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-04-23
+
+- 摘要：新增一页关于 `browser-use` / 本地 CDP / 系统代理污染的 AI synthesis，沉淀一次可复用的排障结论。
+- 页面：
+  - [[wiki/syntheses/ai/browser-use 本地 CDP 连接为什么会被系统代理劫持|browser-use 本地 CDP 连接为什么会被系统代理劫持]]
+  - [[index]]
+- 来源：
+  - `memory/2026-04-23.md`
+  - `https://github.com/PerfectPan/wiki/pull/3`
+- 备注：这次结论来自真实排障过程，核心不是工具安装本身，而是系统代理误接管 localhost CDP websocket。
+
 ## 2026-04-19
 
 - 摘要：精修 `product` 簇，移除一批过薄或草稿态 topic，新增 `Obsidian vs Logseq` 对比页，并将 `Color and Perception` 调整到 `frontend`。

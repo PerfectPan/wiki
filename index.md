@@ -147,6 +147,7 @@
 - 综合理解页放在 `wiki/syntheses/`
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+  - [[wiki/syntheses/ai/browser-use 本地 CDP 连接为什么会被系统代理劫持|browser-use 本地 CDP 连接为什么会被系统代理劫持]]
 - `frontend`
   - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
   - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]

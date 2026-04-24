@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-04-24
+
+- 摘要：基于 Anthropic 对 Claude Code 质量退化事故的官方复盘，沉淀一页关于 AI Agent 产品中默认推理强度、上下文连续性、prompt 约束与发布治理的工程教训总结。
+- 页面：
+  - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
+  - [[index]]
+- 来源：
+  - `https://www.anthropic.com/engineering/april-23-postmortem`
+  - `memory/2026-04-23.md`
+- 备注：这页以官方 postmortem 为主，强调对 Agent 产品设计和工程发布的可迁移经验，不重复复述全部事故细节。
+
 ## 2026-04-23
 
 - 摘要：基于一条关于 Git、GitButler 与 agent 协作的长帖整理出一页 AI synthesis，沉淀 Git 在 agent 时代的摩擦点与可能演进方向。

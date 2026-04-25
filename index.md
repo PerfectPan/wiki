@@ -176,6 +176,7 @@
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
   - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
   - [[wiki/syntheses/ai/RAG 问答管线|RAG 问答管线]]
+  - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]

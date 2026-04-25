@@ -23,4 +23,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Prettier.md`
-

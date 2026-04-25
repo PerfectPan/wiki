@@ -37,4 +37,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Base64.md`
-

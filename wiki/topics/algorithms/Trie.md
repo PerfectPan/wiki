@@ -30,4 +30,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Trie.md`
-

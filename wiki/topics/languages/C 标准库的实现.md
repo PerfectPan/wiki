@@ -34,4 +34,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/C 标准库的实现.md`
-

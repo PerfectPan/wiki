@@ -21,6 +21,7 @@ source_refs:
 - [[Data Structure]]
 - [[String]]
 - [[AdHoc]]
+- [[Dependency Resolution]]
 - Is my problem new? https://codeforces.com/blog/entry/122385
 	- https://github.com/fjzzq2002/is-my-problem-new
 - [[Binary Search]]

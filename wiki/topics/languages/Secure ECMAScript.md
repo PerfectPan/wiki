@@ -40,4 +40,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Secure ECMAScript.md`
-

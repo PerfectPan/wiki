@@ -4,7 +4,7 @@ type: topic
 category: algorithms
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-25
 tags:
   - graph
   - theory
@@ -59,6 +59,7 @@ source_refs:
 - https://leetcode.cn/problems/collect-coins-in-a-tree/description/
 	- 可以用类拓扑排序的方法把所有不合法的叶子节点删掉，把度数为 1 的丢进队列里，然后删
 - [[基环树]]
+- 对有向图来说，`n` 个点、`n` 条边不一定只对应一个环，也可能是若干个互不连通的环
 - [[Shortest Path]]
 - 一棵树的最小高度树的根节点为树的直径上的中点，树的直径的中点，可以在 DFS 的时候记录每个节点的父节点，然后不断的跳父节点，找到中点即可
 -
@@ -66,4 +67,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Graph Theory.md`
-

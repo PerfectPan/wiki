@@ -21,4 +21,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Data Structure.md`
-

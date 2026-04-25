@@ -51,7 +51,7 @@ source_refs:
 ## 未决问题
 
 - 当前仓库虽然有 `bin/wiki ingest/query/lint`，但还没有把 lint 输出稳定收敛成一套长期 backlog 视图。
-- `journals/` 仍未接入当前仓库，因此“从日记里抽长期结论”的流程还没有真正跑顺。
+- 当前仓库还没有一套稳定的“从零散历史记录里抽长期结论”的工作流。
 - 后续如果 `syntheses/` 和 `comparisons/` 继续增长，可能需要更明确的索引结构，而不只是把它们挂到 `index.md` 的尾部。
 
 ## 来源指针

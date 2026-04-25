@@ -131,4 +131,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Sqrt Tree.md`
-

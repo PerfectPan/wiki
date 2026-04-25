@@ -54,4 +54,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/useEffect.md`
-

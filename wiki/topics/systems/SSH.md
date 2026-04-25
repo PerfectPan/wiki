@@ -36,4 +36,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/SSH.md`
-

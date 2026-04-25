@@ -18,4 +18,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/EcmaScript.md`
-

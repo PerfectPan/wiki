@@ -59,4 +59,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/AdHoc.md`
-

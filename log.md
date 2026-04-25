@@ -47,7 +47,6 @@
   - `raw/sources/RSS.md`
   - `raw/sources/UX.md`
   - `raw/sources/未来工作方向.md`
-- 备注：本轮遵循轻改原则，保留 raw 原件不动；`journals/` 仍未在当前仓库中整体迁入。
 
 ## 2026-04-19
 
@@ -95,7 +94,7 @@
 
 ## 2026-04-20
 
-- 摘要：补做一条 `journals` 抽取，把 dated raw 残留里关于 FLIP 布局动画的长期结论沉淀为 frontend synthesis。
+- 摘要：补做一条长期结论整理，把 dated raw 残留里关于 FLIP 布局动画的长期结论沉淀为 frontend synthesis。
 - 页面：
   - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
   - [[index]]
@@ -103,6 +102,171 @@
   - `raw/sources/2023.05.08-2023.05.21.md`
   - `raw/sources/Front End.md`
 - 备注：没有迁入日记原文，只抽取 pages 未覆盖、且具有长期复用价值的技术结论。
+
+## 2026-04-22
+
+- 摘要：补做一条长期结论整理，把关于依赖解析与 SAT 规约的内容沉淀为 tooling topic。
+- 页面：
+  - [[wiki/topics/tooling/Dependency Resolution|Dependency Resolution]]
+  - [[wiki/topics/algorithms/Algorithm|Algorithm]]
+  - [[index]]
+- 来源：
+  - `https://borretti.me/article/dependency-resolution-made-simple`
+  - `https://github.com/dart-lang/pub/blob/master/doc/solver.md`
+
+## 2026-04-25
+
+- 摘要：继续补充带总结的长期内容，补充依赖管理与 npm 包发布两篇 tooling synthesis。
+- 页面：
+  - [[wiki/syntheses/tooling/npm 包发布与发布链路实践|npm 包发布与发布链路实践]]
+  - [[wiki/syntheses/tooling/前端依赖管理策略|前端依赖管理策略]]
+  - [[index]]
+- 来源：
+  - [[wiki/topics/tooling/Dependency Resolution|Dependency Resolution]]
+
+## 2026-04-25
+
+- 摘要：继续补充 frontend 与 ai 的高价值总结，补充 React 18 streaming / hydration、Next.js middleware 鉴权绕过与 MCP SSE 多实例路由策略。
+- 页面：
+  - [[wiki/syntheses/frontend/React 18 流式 SSR 与渐进式 hydration|React 18 流式 SSR 与渐进式 hydration]]
+  - [[wiki/topics/frontend/Next.js Middleware Auth Bypass|Next.js Middleware Auth Bypass]]
+  - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
+  - [[index]]
+- 来源：
+  - `wiki/topics/frontend/SSR.md`
+  - `wiki/topics/frontend/RSC.md`
+  - `wiki/topics/ai/MCP.md`
+
+## 2026-04-25
+
+- 摘要：继续补充剩余的高价值实现与工程策略，补充 `mcp-remote`、`npm Trusted Publishers` 与应用层通信可靠性边界。
+- 页面：
+  - [[wiki/topics/ai/mcp-remote|mcp-remote]]
+  - [[wiki/topics/tooling/npm Trusted Publishers|npm Trusted Publishers]]
+  - [[wiki/syntheses/frontend/应用层通信的可靠性边界|应用层通信的可靠性边界]]
+  - [[index]]
+- 来源：
+
+## 2026-04-25
+
+- 摘要：继续补充 frontend 的高价值结论，补充 ES Module / Import Maps、shadcn registry 分发模式与 JSBridge 鉴权漏洞。
+- 页面：
+  - [[wiki/syntheses/frontend/ES Module 加载与 Import Maps|ES Module 加载与 Import Maps]]
+  - [[wiki/syntheses/frontend/shadcn Registry 组件分发模式|shadcn Registry 组件分发模式]]
+  - [[wiki/topics/frontend/JSBridge 鉴权漏洞|JSBridge 鉴权漏洞]]
+  - [[index]]
+- 来源：
+  - `http://myjsapi.alipay.com/jsapi/native/trade-pay.html`
+
+## 2026-04-25
+
+- 摘要：继续补做剩余的高置信度通用结论，新增事件循环、Fetch streaming、GET body 语义与 Electron Deep Link，并把 `.d.ts` 规则补进 `TypeScript` 页面。
+- 页面：
+  - [[wiki/syntheses/frontend/事件循环与 Microtask 检查点|事件循环与 Microtask 检查点]]
+  - [[wiki/syntheses/frontend/浏览器 Fetch Streaming 的读取边界|浏览器 Fetch Streaming 的读取边界]]
+  - [[wiki/topics/systems/GET 请求的 body 语义|GET 请求的 body 语义]]
+  - [[wiki/topics/systems/Electron Deep Link|Electron Deep Link]]
+  - [[wiki/topics/languages/TypeScript|TypeScript]]
+  - [[index]]
+- 来源：
+- 备注：这批继续只抽“已经形成可复用结论”的通用技术条目，不把题解、单链收藏或 TODO 强行提升为 wiki 页面。
+
+- 摘要：继续补做剩余的系统与前端通用结论，补充 SSL/TLS、Electron 更新排障、强制 reflow 与 React Context 颗粒度问题。
+- 页面：
+  - [[wiki/topics/systems/SSL 与 TLS 握手|SSL 与 TLS 握手]]
+  - [[wiki/topics/systems/Electron Auto Update 排障|Electron Auto Update 排障]]
+  - [[wiki/syntheses/frontend/强制 reflow 的工程边界|强制 reflow 的工程边界]]
+  - [[wiki/syntheses/frontend/React Context 颗粒度与 Selector 路径|React Context 颗粒度与 Selector 路径]]
+  - [[index]]
+- 来源：
+- 备注：这批继续只提升已有明确判断的通用结论；剩余的大头仍是题解、单链收藏或产品观察，我会继续筛，但不会硬迁。 
+
+- 摘要：继续补做前端渲染与校验相关条目，补充 React 重渲染优化、Zod vs Valibot 与模板克隆渲染路径。
+- 页面：
+  - [[wiki/topics/frontend/React Render Optimization|React Render Optimization]]
+  - [[wiki/comparisons/frontend/Zod vs Valibot|Zod vs Valibot]]
+  - [[wiki/syntheses/frontend/模板克隆与 DOM 渲染路径|模板克隆与 DOM 渲染路径]]
+  - [[index]]
+- 来源：
+  - `raw/sources/React.md`
+- 备注：这批继续只抽可以独立复用的结论，不把零散链接和单篇题解强行提升到 wiki 层。
+
+- 摘要：继续补做系统性更强的产品、AI 与协作基础设施内容，补充 Logseq 架构演进、RAG 问答管线与 CRDT 数据压缩策略。
+- 页面：
+  - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
+  - [[wiki/syntheses/ai/RAG 问答管线|RAG 问答管线]]
+  - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]
+  - [[index]]
+- 来源：
+  - `wiki/topics/product/Logseq.md`
+- 备注：这批继续优先提升能独立成页的系统性结论，而不是把相关链接简单堆回 topic。
+
+- 摘要：继续补做剩余的系统调试与前端长期心智条目，补充前端框架演化、Provisional headers 调试路径与 JavaScript 优化启发。
+- 页面：
+  - [[wiki/syntheses/frontend/前端框架的四个时代|前端框架的四个时代]]
+  - [[wiki/topics/systems/Provisional headers 调试路径|Provisional headers 调试路径]]
+  - [[wiki/syntheses/frontend/JavaScript 优化启发|JavaScript 优化启发]]
+  - [[index]]
+- 来源：
+
+- 摘要：继续补做 TypeScript 和 SSR 相关长期条目，补充类型收窄 / IIMT、reflect-metadata 与服务端客户端视图一致性。
+- 页面：
+  - [[wiki/syntheses/languages/TypeScript 类型收窄与 IIMT|TypeScript 类型收窄与 IIMT]]
+  - [[wiki/topics/languages/reflect-metadata|reflect-metadata]]
+  - [[wiki/syntheses/frontend/服务端与客户端视图一致性|服务端与客户端视图一致性]]
+  - [[index]]
+- 来源：
+  - `wiki/topics/architecture/@opensumi%2Fdi.md`
+  - `wiki/topics/frontend/SSR.md`
+  - `wiki/topics/frontend/useEffect.md`
+- 备注：这批继续优先提升能独立复用的概念与约束；不会把单篇收藏和细碎观察硬转成 wiki 页面。
+
+- 摘要：继续补做系统与运行时实践条目，补充小程序运行时架构、Windows 文件锁重试、Node ESM 下的 `__dirname` 与 flex 自动最小尺寸陷阱。
+- 页面：
+  - [[wiki/syntheses/frontend/小程序运行时架构思路|小程序运行时架构思路]]
+  - [[wiki/topics/systems/Windows 文件锁与 fs.rename 重试|Windows 文件锁与 fs.rename 重试]]
+  - [[wiki/topics/systems/Node|Node]]
+  - [[wiki/topics/frontend/CSS|CSS]]
+  - [[index]]
+- 来源：
+- 备注：这批仍然以“已有明确总结的工程经验”为准，不把零散收藏和未成形观察硬拉进 wiki。
+
+- 摘要：继续并行补充多簇高价值条目，补充 ai / frontend / career / systems / tooling 的第二批页面与对比页。
+- 页面：
+  - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
+  - [[wiki/topics/ai/MCP Client|MCP Client]]
+  - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
+  - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
+  - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
+  - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]
+  - [[wiki/syntheses/frontend/RSC 与 CSS-in-JS 的兼容性约束|RSC 与 CSS-in-JS 的兼容性约束]]
+  - [[wiki/syntheses/frontend/Web Components 的服务端渲染路径|Web Components 的服务端渲染路径]]
+  - [[wiki/syntheses/frontend/html2canvas 的渲染局限与打印替代方案|html2canvas 的渲染局限与打印替代方案]]
+  - [[wiki/comparisons/systems/线程级隔离 vs 进程级隔离|线程级隔离 vs 进程级隔离]]
+  - [[wiki/comparisons/tooling/文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf|文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf]]
+  - [[index]]
+- 来源：
+
+- 摘要：为避免高价值内容遗漏，补做一轮全量核对，并继续按“有明确总结的条目优先抽取”的原则沉淀到 `wiki/`。
+- 页面：
+  - [[index]]
+- 来源：
+
+- 摘要：继续补做剩余的高置信度通用结论，新增事件循环、Fetch streaming、GET body 语义与 Electron Deep Link，并把 `.d.ts` 规则补进 `TypeScript` 页面。
+- 页面：
+  - [[wiki/syntheses/frontend/事件循环与 Microtask 检查点|事件循环与 Microtask 检查点]]
+  - [[wiki/syntheses/frontend/浏览器 Fetch Streaming 的读取边界|浏览器 Fetch Streaming 的读取边界]]
+  - [[wiki/topics/systems/GET 请求的 body 语义|GET 请求的 body 语义]]
+  - [[wiki/topics/systems/Electron Deep Link|Electron Deep Link]]
+  - [[wiki/topics/languages/TypeScript|TypeScript]]
+  - [[index]]
+- 来源：
+- 备注：这批继续只抽“已经形成可复用结论”的通用技术条目，不把题解、单链收藏或 TODO 强行提升为 wiki 页面。
+
+- 摘要：为避免高价值内容遗漏，再补一轮全量核对，并继续把高置信度结论抽取为 wiki 页面。
+- 页面：
+  - [[index]]
+- 来源：
 
 ## 2026-04-12
 
@@ -226,7 +390,6 @@
 - 来源：
   - `raw/sources/`
   - `raw/assets/`
-- 备注：本次全量迁移覆盖 `192/192` 个旧 `pages`；`journals/` 仍按既定规则未整体迁入。
 
 ## 2026-04-12
 
@@ -265,3 +428,75 @@
 - 来源：
   - `raw/sources/@opensumi%2Fdi.md`
 - 备注：`tooling` 采用更宽泛的工具定义，但依赖注入容器实现细节仍归为 `architecture`。
+
+## 2026-04-25
+
+- 摘要：继续补做语言层面的剩余通用概念，补充 `Pkl`、`UTF-8 Overlong Encoding`，并把内置类型继承坑补进 `TypeScript`。
+- 页面：
+  - [[wiki/topics/languages/Pkl|Pkl]]
+  - [[wiki/topics/languages/UTF-8 Overlong Encoding|UTF-8 Overlong Encoding]]
+  - [[wiki/topics/languages/TypeScript|TypeScript]]
+  - [[index]]
+- 来源：
+- 备注：这批继续优先提升可长期复用的语言概念，不把只面向单一场景的零散观察硬转成独立页面。
+
+- 摘要：继续补做产品与基础设施层面的剩余结论，补充短链服务价值、状态页定位与 Serverless 分层隔离。
+- 页面：
+  - [[wiki/topics/product/Status Page|Status Page]]
+  - [[wiki/syntheses/product/短链服务的产品价值|短链服务的产品价值]]
+  - [[wiki/syntheses/systems/Serverless 应用分层与隔离|Serverless 应用分层与隔离]]
+  - [[index]]
+- 来源：
+- 备注：这批继续只提升已经形成明确产品/系统判断的条目，不把泛产品收藏和杂项观察一股脑迁入 wiki。
+
+- 摘要：继续补做剩余的语言与 React 机制条目，补充 `Civet` 与 `React Hooks API` 的最小实现心智。
+- 页面：
+  - [[wiki/topics/languages/Civet|Civet]]
+  - [[wiki/syntheses/frontend/React Hooks API 模拟实现|React Hooks API 模拟实现]]
+  - [[index]]
+- 来源：
+
+- 摘要：继续补做剩余的前端实现经验，补充小程序架构演进与 Ant Design 异步默认值渲染。
+- 页面：
+  - [[wiki/topics/frontend/小程序架构演进|小程序架构演进]]
+  - [[wiki/topics/frontend/Ant Design 异步默认值渲染|Ant Design 异步默认值渲染]]
+  - [[index]]
+- 来源：
+- 备注：这批仍然只提升已有明确工程结论的实现经验，不把细碎 UI 收藏或未成形观察继续硬迁。
+
+- 摘要：继续补做交互规范层的高价值条目，补充交互式 UI 的可访问性基线。
+- 页面：
+  - [[wiki/syntheses/frontend/交互式 UI 的可访问性基线|交互式 UI 的可访问性基线]]
+  - [[index]]
+- 来源：
+- 备注：这页提炼的是一组长期适用的交互约束，不是某个单一组件或单篇文章的摘要。
+
+- 摘要：继续补做剩余的前端工具与隔离实现条目，补充 `CVA` 与 `whyframe`。
+- 页面：
+  - [[wiki/topics/frontend/CVA|CVA]]
+  - [[wiki/topics/frontend/whyframe|whyframe]]
+  - [[index]]
+- 来源：
+- 备注：这批继续只提升已经有明确实现心智的工具页，不把单纯组件库收藏扩展成空洞 topic。
+
+- 摘要：继续补做剩余的产品观察与语言细节修正，补充 `AI Cover`、`Teable`，并把 TypeScript 内置类型继承的边界补强。
+- 页面：
+  - [[wiki/topics/product/AI Cover|AI Cover]]
+  - [[wiki/topics/product/Teable|Teable]]
+  - [[wiki/topics/languages/TypeScript|TypeScript]]
+  - [[index]]
+- 来源：
+
+- 摘要：继续补做剩余的隔离与容器基础设施条目，补充同源 iframe 沙箱设计与 OCI 标准。
+- 页面：
+  - [[wiki/syntheses/frontend/同源 iframe 沙箱设计|同源 iframe 沙箱设计]]
+  - [[wiki/topics/systems/Open Container Initiative|Open Container Initiative]]
+  - [[index]]
+- 来源：
+- 备注：这批继续优先提升系统性抽象，不把具体业务实现细节整页搬进 wiki。
+
+- 摘要：继续补做前端基础概念，补充 `Polyfill` 与 `shim` 的关系。
+- 页面：
+  - [[wiki/topics/frontend/Polyfill|Polyfill]]
+  - [[index]]
+- 来源：

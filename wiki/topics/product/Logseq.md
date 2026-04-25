@@ -25,6 +25,9 @@ source_refs:
 - [[Rum]] 里的 cursor 就是把一个大的 state 拆成小的方便按需观察更新
 - 鼠标按下的时候换成一个 textarea 去编辑，编辑组件都叫 editor
 - 核心组件都在 components/block.cljs 里（纯展示）
+- Logseq 后来明显往 “全局 Block Tree + 插件化 + 多入口编译” 的架构方向演进了
+	- 这说明它已经不只是单纯的 markdown/outliner 应用，而是一个围绕块模型、扩展能力和多运行环境组织起来的系统
+	- `shadow-cljs` 里分别编译 app / electron 等目标这件事，也说明它的前端和桌面运行时已经是显式分层的
 
 ## Source Pointers
 

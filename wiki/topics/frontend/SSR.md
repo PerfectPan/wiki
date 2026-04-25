@@ -71,4 +71,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/SSR.md`
-

@@ -35,4 +35,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/GDB.md`
-

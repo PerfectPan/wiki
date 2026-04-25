@@ -11,7 +11,6 @@ tags:
   - auth
   - payment
 source_refs:
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_05_06.md
   - http://myjsapi.alipay.com/jsapi/native/trade-pay.html
 ---
 # JSBridge 鉴权漏洞
@@ -22,7 +21,7 @@ source_refs:
 
 ## 关键点
 
-- journal 里的记录指出，这类问题的核心不在“有没有 JSBridge”，而在“谁可以调用哪些 JSAPI”。
+- 这类问题的核心不在“有没有 JSBridge”，而在“谁可以调用哪些 JSAPI”。
 - 如果桥接层只暴露了能力，却没有把调用来源、安全域名和业务上下文校验收紧，跳转到三方页面后仍可能触发原本只应在受信任场景里调用的 API。
 - 这类问题在支付场景下尤其危险，因为桥接接口一旦直接影响订单状态、收货状态或支付确认，就不只是普通前端漏洞，而是业务安全漏洞。
 - 这条记录给出的最实用结论是：高权限 JSAPI 不该只靠前端流程“默认可信”，而应该有明确的调用边界，例如白名单域名、上下文校验和更细的权限隔离。
@@ -34,5 +33,4 @@ source_refs:
 
 ## 来源指针
 
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_05_06.md`
 - [tradePay JSAPI](http://myjsapi.alipay.com/jsapi/native/trade-pay.html)

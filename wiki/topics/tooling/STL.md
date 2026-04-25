@@ -24,4 +24,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/STL.md`
-

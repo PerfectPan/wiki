@@ -10,8 +10,7 @@ tags:
   - react
   - async-data
   - form
-source_refs:
-  - legacy-logseq-journals/2022_11_01.md
+source_refs: []
 ---
 # Ant Design 异步默认值渲染
 
@@ -21,7 +20,7 @@ source_refs:
 
 ## 关键点
 
-- journal 里的总结保留了两个非常实用的处理方式：
+- 有两个非常实用的处理方式：
   - 等数据加载完，再渲染真实组件；
   - 或者通过改变组件 `key`，强制让 React 把它当成新组件重新初始化。
 - 这说明默认值问题的本质是组件初始化时机，而不是单纯的受控 / 非受控 API 选择。
@@ -29,7 +28,3 @@ source_refs:
 ## 相关页面
 
 - [[React]]
-
-## 来源指针
-
-- `legacy-logseq-journals/2022_11_01.md`

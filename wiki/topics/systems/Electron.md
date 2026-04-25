@@ -9,8 +9,6 @@ tags:
   - electron
 source_refs:
   - raw/sources/Electron.md
-  - legacy-logseq-journals/2023_01_31.md
-  - legacy-logseq-journals/2023_06_21.md
 ---
 # Electron
 
@@ -32,5 +30,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Electron.md`
-- `legacy-logseq-journals/2023_01_31.md`
-- `legacy-logseq-journals/2023_06_21.md`

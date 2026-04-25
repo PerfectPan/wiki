@@ -11,7 +11,6 @@ tags:
   - supply-chain
   - publishing
 source_refs:
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_09_07.md
   - https://docs.npmjs.com/trusted-publishers
 ---
 # npm Trusted Publishers
@@ -22,7 +21,7 @@ source_refs:
 
 ## 关键点
 
-- journal 里的总结指出，它的核心不是“又一个 token”，而是把发布权限和 CI 平台身份绑定起来。
+- 它的核心不是“又一个 token”，而是把发布权限和 CI 平台身份绑定起来。
 - 这意味着 token 不再需要长期存放在本地或 CI secrets 中，而是临时换取、短期使用、用完即过期。
 - 这种方案的价值主要在供应链安全与可审计性：
   - 减少长期 token 泄漏风险；
@@ -36,5 +35,4 @@ source_refs:
 
 ## 来源指针
 
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_09_07.md`
 - [npm Trusted Publishers](https://docs.npmjs.com/trusted-publishers)

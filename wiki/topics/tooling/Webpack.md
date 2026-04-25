@@ -9,7 +9,6 @@ tags:
   - sourcemap
 source_refs:
   - raw/sources/Webpack.md
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_09_06.md
 ---
 # Webpack
 
@@ -71,4 +70,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Webpack.md`
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_09_06.md`

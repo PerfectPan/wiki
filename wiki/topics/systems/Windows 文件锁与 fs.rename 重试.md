@@ -10,8 +10,7 @@ tags:
   - filesystem
   - node
   - retry
-source_refs:
-  - legacy-logseq-journals/2022_08_05.md
+source_refs: []
 ---
 # Windows 文件锁与 fs.rename 重试
 
@@ -21,7 +20,7 @@ Windows 上的杀毒软件或其他进程可能会短时间锁住新创建文件
 
 ## 关键点
 
-- journal 里的代码片段说明，这类失败常常不是永久错误，而是竞争性锁文件造成的暂时失败。
+- 这类失败常常不是永久错误，而是竞争性锁文件造成的暂时失败。
 - 更稳的重试策略通常包含：
   - 仅对特定错误码重试；
   - 限定最大重试时间；
@@ -32,7 +31,3 @@ Windows 上的杀毒软件或其他进程可能会短时间锁住新创建文件
 
 - [[Node]]
 - [[文件系统 API]]
-
-## 来源指针
-
-- `legacy-logseq-journals/2022_08_05.md`

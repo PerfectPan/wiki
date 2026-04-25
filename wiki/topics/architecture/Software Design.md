@@ -11,7 +11,6 @@ tags:
   - modularity
 source_refs:
   - raw/sources/Software Design.md
-  - legacy-logseq-journals/2025_04_18.md
 ---
 # Software Design
 
@@ -83,4 +82,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Software Design.md`
-- `legacy-logseq-journals/2025_04_18.md`

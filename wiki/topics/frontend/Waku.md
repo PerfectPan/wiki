@@ -74,4 +74,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Waku.md`
-

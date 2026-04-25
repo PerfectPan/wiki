@@ -9,7 +9,6 @@ tags:
   - hash
 source_refs:
   - raw/sources/Hash.md
-  - legacy-logseq-journals/2024_02_18.md
 ---
 # Hash
 
@@ -68,4 +67,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Hash.md`
-- `legacy-logseq-journals/2024_02_18.md`

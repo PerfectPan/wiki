@@ -11,7 +11,6 @@ tags:
   - metadata
   - reflection
 source_refs:
-  - legacy-logseq-journals/2023_07_15.md
   - wiki/topics/architecture/@opensumi%2Fdi.md
 ---
 # reflect-metadata
@@ -22,7 +21,7 @@ source_refs:
 
 ## 关键点
 
-- journal 里的核心判断是：
+- 核心判断是：
   - 这套方案最早和旧装饰器提案绑定；
   - 后续提案方向变化后，它并没有成为语言标准本身；
   - 但 TypeScript 生态里很多库仍沿用它来读取运行时 metadata。
@@ -36,5 +35,4 @@ source_refs:
 
 ## 来源指针
 
-- `legacy-logseq-journals/2023_07_15.md`
 - `wiki/topics/architecture/@opensumi%2Fdi.md`

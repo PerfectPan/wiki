@@ -12,8 +12,6 @@ tags:
   - proxy
 source_refs:
   - raw/sources/Computer Network.md
-  - legacy-logseq-journals/2023_11_08.md
-  - legacy-logseq-journals/2022_10_30.md
 ---
 # Computer Network
 
@@ -30,5 +28,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Computer Network.md`
-- `legacy-logseq-journals/2023_11_08.md`
-- `legacy-logseq-journals/2022_10_30.md`

@@ -13,7 +13,6 @@ tags:
   - suspense
 source_refs:
   - raw/sources/React.md
-  - legacy-logseq-journals/2024_10_25.md
 ---
 # React
 

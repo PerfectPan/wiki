@@ -12,7 +12,6 @@ tags:
   - lit
   - web-components
 source_refs:
-  - legacy-logseq-journals/2023_12_16.md
   - wiki/topics/frontend/Lit.md
 ---
 # 模板克隆与 DOM 渲染路径
@@ -27,12 +26,12 @@ source_refs:
 
 ## 综合结论
 
-- journal 里的观察抓住了模板型渲染路线的关键：模板可以只创建一次，后续通过 `cloneNode` 反复复用。
+- 模板型渲染路线的关键在于：模板可以只创建一次，后续通过 `cloneNode` 反复复用。
 - 这意味着渲染系统实际上做了两层工作：
   - 静态部分：预先固化成模板；
   - 动态部分：在克隆后的结果里填充“洞”。
 - 这条路线最重要的收益不是“代码看起来更优雅”，而是它减少了重复解析和重复创建静态 DOM 的成本。
-- journal 里还指出了几个真实边界：
+- 这里还有几个真实边界：
   - 如果占位符本身是 DOM 树，而不是简单文本，更新路径会更复杂；
   - 长列表和大规模重排仍然需要额外策略；
   - Lit 一类实现并不是简单复制模板，而是在“模板 + 动态洞”之间做了更细的运行时组织。
@@ -45,5 +44,4 @@ source_refs:
 
 ## 来源指针
 
-- `legacy-logseq-journals/2023_12_16.md`
 - `wiki/topics/frontend/Lit.md`

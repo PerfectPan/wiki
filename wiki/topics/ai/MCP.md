@@ -13,7 +13,6 @@ tags:
   - security
 source_refs:
   - raw/sources/MCP.md
-  - legacy-logseq-journals/2025_03_29.md
   - https://github.com/ComposioHQ/composio
   - https://talks.ayaka.io/nekoayaka/2025-04-13-what-is-mcp-and-how-it-helps/#/1
   - https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&mid=2247516461&idx=1&sn=ce4917a4ab56c2c136290e20c5ba79f5&poc_token=HEU_vWijo0oCrhmjt2qVAlM4teQ4khEUbS98qphk
@@ -35,13 +34,12 @@ source_refs:
 			- **授权前二次确认**作为第一道防线，主动防范钓鱼攻击。
 			- **令牌身份隔离**作为核心举措，极大限制了风险半径，防止危害横向扩散。
 			- **API 级别权限管控**遵循最小权限原则，为潜在的未知风险提供了最终的安全保障。
-- 作为实现侧补充，2025-03-29 的 journal 提醒了一个很实用的点：MCP client 不一定非要依赖模型原生 function calling；只要模型能稳定产出可解析的结构化协议，client 仍然可以把 tool 调用链跑起来。
+- 作为实现侧补充，2025-03-29 的提醒了一个很实用的点：MCP client 不一定非要依赖模型原生 function calling；只要模型能稳定产出可解析的结构化协议，client 仍然可以把 tool 调用链跑起来。
 - 这也说明 MCP 的关键不仅是 server 端的工具暴露，还包括 client 端如何把模型输出安全地翻译成执行动作。见 [[MCP Client]]。
 
 ## Source Pointers
 
 - `raw/sources/MCP.md`
-- `legacy-logseq-journals/2025_03_29.md`
 - https://github.com/ComposioHQ/composio
 - https://talks.ayaka.io/nekoayaka/2025-04-13-what-is-mcp-and-how-it-helps/#/1
 - https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&mid=2247516461&idx=1&sn=ce4917a4ab56c2c136290e20c5ba79f5&poc_token=HEU_vWijo0oCrhmjt2qVAlM4teQ4khEUbS98qphk

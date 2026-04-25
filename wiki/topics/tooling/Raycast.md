@@ -28,4 +28,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Raycast.md`
-

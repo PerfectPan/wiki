@@ -12,8 +12,6 @@ tags:
   - workflow
 source_refs:
   - raw/sources/Code Agent.md
-  - legacy-logseq-journals/2025_03_01.md
-  - legacy-logseq-journals/2025_09_14.md
 ---
 # Code Agent
 
@@ -25,7 +23,7 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 
 - `AGENTS.md` 这类仓库内指令文件的价值，不是补充一点风格说明，而是把 agent 的权限边界、输出语言、改动方式和 Git 流程变成机器可遵守的局部协议。
 - code agent 和普通聊天式 AI 的差别，在于它需要同时处理代码语义、仓库治理和执行副作用，因此“先读规则再动手”是工作流的一部分，不只是礼貌。
-- 2025-03-01 的 journal 记录了一个很实用的经验：AI 在改代码时容易顺手删注释、擅自重构。对 code agent 来说，这意味着需要更强的范围控制、最小 diff 和显式意图确认。
+- 2025-03-01 的一条经验是一个很实用的经验：AI 在改代码时容易顺手删注释、擅自重构。对 code agent 来说，这意味着需要更强的范围控制、最小 diff 和显式意图确认。
 - 如果两边都定义了协议边界，code agent 的行为会更稳定。`AGENTS.md` 约束的是仓库侧行为，[[Agent Client Protocol]] 这类协议约束的是 editor / client 与 agent 之间如何协商能力。
 
 ## 典型约束
@@ -44,5 +42,3 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 ## 来源指针
 
 - `raw/sources/Code Agent.md`
-- `legacy-logseq-journals/2025_03_01.md`
-- `legacy-logseq-journals/2025_09_14.md`

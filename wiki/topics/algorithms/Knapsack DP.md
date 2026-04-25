@@ -127,4 +127,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Knapsack DP.md`
-

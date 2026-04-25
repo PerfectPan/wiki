@@ -9,11 +9,6 @@ tags:
   - typescript
 source_refs:
   - raw/sources/TypeScript.md
-  - legacy-logseq-journals/2023_04_15.md
-  - legacy-logseq-journals/2023_06_22.md
-  - legacy-logseq-journals/2023_10_09.md
-  - legacy-logseq-journals/2024_01_01.md
-  - legacy-logseq-journals/2024_04_02.md
 ---
 # TypeScript
 
@@ -62,8 +57,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/TypeScript.md`
-- `legacy-logseq-journals/2023_04_15.md`
-- `legacy-logseq-journals/2023_06_22.md`
-- `legacy-logseq-journals/2023_10_09.md`
-- `legacy-logseq-journals/2024_01_01.md`
-- `legacy-logseq-journals/2024_04_02.md`

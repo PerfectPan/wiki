@@ -234,6 +234,4 @@
 ## 原始资料
 
 - 所有旧 Logseq `pages/` 原始副本保留在 `raw/sources/`
-- 旧 Logseq `journals/` 不直接入库；仅在 `log.md` 和页面来源指针中保留旧仓库位置说明
 - 所有引用附件保留在 `raw/assets/`
-- `journals/` 按当前规则未整体迁入

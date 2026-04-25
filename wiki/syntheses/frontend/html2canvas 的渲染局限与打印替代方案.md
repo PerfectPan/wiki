@@ -11,7 +11,6 @@ tags:
   - canvas
   - rendering
 source_refs:
-  - legacy-logseq-journals/2025_01_23.md
   - wiki/topics/frontend/CSS.md
   - wiki/topics/frontend/SVG.md
 ---
@@ -27,7 +26,7 @@ source_refs:
 
 ## 综合结论
 
-- journal 里的总结很明确：`html2canvas` 的核心不是调用浏览器现成的渲染结果，而是自己走一遍“克隆 DOM -> 读取 computed style -> 用 Canvas API 重绘”的模拟流程。
+- 关键点很明确：`html2canvas` 的核心不是调用浏览器现成的渲染结果，而是自己走一遍“克隆 DOM -> 读取 computed style -> 用 Canvas API 重绘”的模拟流程。
 - 这条路线天然有几个还原边界：
   - 字体渲染依赖浏览器的字体回退和排版系统，canvas 只能在自己的绘制能力内尽量模仿；
   - 图像要自己处理 DPR、缩放和坐标换算，容易出现模糊和失真；
@@ -37,7 +36,7 @@ source_refs:
 - 因此更合理的判断标准是：
   - 如果目标只是“导出一个大致长得像页面的图片”，`html2canvas` 可以接受；
   - 如果目标是“打印、导出 PDF、保留浏览器级排版精度”，优先让浏览器自己打印，而不是用 canvas 重新实现一遍渲染引擎。
-- journal 里给出的替代方向也很实用：把目标内容克隆进 iframe，配合专用 `@media print` / `@page` 样式做打印输出。这种方式仍然依赖浏览器原生排版能力，所以通常比 canvas 模拟更稳。
+- 另一个实用的替代方向是：把目标内容克隆进 iframe，配合专用 `@media print` / `@page` 样式做打印输出。这种方式仍然依赖浏览器原生排版能力，所以通常比 canvas 模拟更稳。
 
 ## 未决问题
 
@@ -46,6 +45,5 @@ source_refs:
 
 ## 来源指针
 
-- `legacy-logseq-journals/2025_01_23.md`
 - [[wiki/topics/frontend/CSS|CSS]]
 - [[wiki/topics/frontend/SVG|SVG]]

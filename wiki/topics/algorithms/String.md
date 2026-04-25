@@ -9,8 +9,6 @@ tags:
   - string
 source_refs:
   - raw/sources/String.md
-  - legacy-logseq-journals/2024_02_11.md
-  - legacy-logseq-journals/2024_02_18.md
 ---
 # String
 
@@ -45,5 +43,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/String.md`
-- `legacy-logseq-journals/2024_02_11.md`
-- `legacy-logseq-journals/2024_02_18.md`

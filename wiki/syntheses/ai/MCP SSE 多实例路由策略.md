@@ -12,7 +12,6 @@ tags:
   - routing
   - distributed-system
 source_refs:
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_04_22.md
   - wiki/topics/ai/MCP.md
 ---
 # MCP SSE 多实例路由策略
@@ -27,12 +26,12 @@ source_refs:
 
 ## 综合结论
 
-- journal 里的总结把这个问题拆得很清楚：MCP 的 SSE transport 不是简单“一条 SSE 把所有东西都收完”，而是长连接负责接收，后续发送往往仍走 HTTP 请求。
+- 这个问题可以拆成两层：MCP 的 SSE transport 不是简单“一条 SSE 把所有东西都收完”，而是长连接负责接收，后续发送往往仍走 HTTP 请求。
 - 一旦服务端是多实例，两个问题马上出现：
   - 建立 SSE 长连接的实例，未必是后续 POST 请求命中的实例；
   - 某个实例重启、扩缩容或下线时，会话状态如何接管。
 - 这类问题本质上是在处理“有状态连接如何在分布式环境里被定位和续接”。
-- journal 里给了两类稳定思路：
+- 这里可以落成两类稳定思路：
   - 方式 1：尽量让实例无状态，或者让客户端自行和更多实例建立可恢复连接；
   - 方式 2：把 session -> instance 的映射状态中心化存储，再由网关或代理层把请求转发给正确实例。
 - 以文中记录的 Higress 思路为例，就是把 session 关系放到中心化位置，再在发现目标 session 不在本机时转发到对应实例。
@@ -45,5 +44,4 @@ source_refs:
 
 ## 来源指针
 
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_04_22.md`
 - `wiki/topics/ai/MCP.md`

@@ -19,4 +19,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Shortest Path.md`
-

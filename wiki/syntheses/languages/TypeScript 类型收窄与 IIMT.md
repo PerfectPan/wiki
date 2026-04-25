@@ -11,7 +11,6 @@ tags:
   - mapped-types
   - type-system
 source_refs:
-  - legacy-logseq-journals/2024_01_01.md
   - wiki/topics/languages/TypeScript.md
 ---
 # TypeScript 类型收窄与 IIMT
@@ -26,9 +25,9 @@ TypeScript 在控制流里的类型收窄和 IIMT 这类技巧，分别解决什
 
 ## 综合结论
 
-- journal 里提到的 `Type Narrowing` 说明了一个重要事实：TypeScript 并不是只看显式注解，还会利用控制流来缩小值集合。
+- `Type Narrowing` 说明了一个重要事实：TypeScript 并不是只看显式注解，还会利用控制流来缩小值集合。
 - 这让 `discriminated union` 成为很稳定的建模方式，因为它把运行时分支和类型推理绑在了一起。
-- 同一份 journal 里提到的 IIMT（Immediately Indexed Mapped Type）则属于另一类技巧：
+- 同一份记录里提到的 IIMT（Immediately Indexed Mapped Type）则属于另一类技巧：
   - 先对联合类型做映射；
   - 再立即索引回联合结果；
   - 用来把“联合里的每一个成员”映射成一套新结构。
@@ -44,5 +43,4 @@ TypeScript 在控制流里的类型收窄和 IIMT 这类技巧，分别解决什
 
 ## 来源指针
 
-- `legacy-logseq-journals/2024_01_01.md`
 - `wiki/topics/languages/TypeScript.md`

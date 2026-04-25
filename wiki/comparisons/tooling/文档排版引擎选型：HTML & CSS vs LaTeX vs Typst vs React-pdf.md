@@ -11,8 +11,7 @@ tags:
   - latex
   - typst
   - react-pdf
-source_refs:
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_12_24.md
+source_refs: []
 ---
 # 文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf
 
@@ -38,7 +37,7 @@ source_refs:
 
 ## 推荐理由
 
-- 这条 journal 已经不是简单收藏，而是把几个候选排版引擎按统一标准做了取舍，标准包括：
+- 这条记录 已经不是简单收藏，而是把几个候选排版引擎按统一标准做了取舍，标准包括：
   - 换行算法质量；
   - CJK 排版；
   - 分页能力；
@@ -46,7 +45,3 @@ source_refs:
 - 把这些标准放在一起看，LaTeX 的优势很集中，尤其适合“排版质量优先”的场景。
 - 但如果团队本身就是前端团队，且文档需要频繁交互预览或和现有 React 代码复用，HTML & CSS 或 React-pdf 会更务实。
 - Typst 更像一个值得持续观察的中间路线：它试图保留排版系统的能力，同时降低 LaTeX 的上手成本，但目前还不够稳到能在所有 CJK 场景里直接取代 LaTeX。
-
-## 来源指针
-
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_12_24.md`

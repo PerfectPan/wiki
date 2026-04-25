@@ -12,7 +12,6 @@ tags:
   - utf8
   - browser
 source_refs:
-  - legacy-logseq-journals/2023_11_23.md
   - wiki/syntheses/frontend/React 18 流式 SSR 与渐进式 hydration.md
 ---
 # 浏览器 Fetch Streaming 的读取边界
@@ -27,12 +26,12 @@ source_refs:
 
 ## 综合结论
 
-- journal 里的观察非常关键：浏览器侧不是“只有服务端 streaming 才能流式处理”，而是 `fetch` 本身就给了你底层流接口。
+- 一个非常关键的观察是：浏览器侧不是“只有服务端 streaming 才能流式处理”，而是 `fetch` 本身就给了你底层流接口。
 - 真正的区别在于你用哪一层 API：
   - `.json()` / `.text()` / `.arrayBuffer()` 更像一次性读完后的语法糖；
   - 直接读 `Response.body`，才会看到浏览器分块接收字节流的真实过程。
 - 这也解释了为什么 streaming UI、RSC payload 和聊天式增量输出都依赖底层流，而不是建立在 `.json()` 之上。
-- journal 里关于 UTF-8 字节的实验也很有价值：浏览器收到的是字节块，而不是“天然已经分好字符的字符串”。
+- 关于 UTF-8 字节的实验也很有价值：浏览器收到的是字节块，而不是“天然已经分好字符的字符串”。
 - 因此更稳的心智模型是：
   - HTTP 报文按字节流到达；
   - 浏览器可把这些字节暴露为可读流；
@@ -45,5 +44,4 @@ source_refs:
 
 ## 来源指针
 
-- `legacy-logseq-journals/2023_11_23.md`
 - `wiki/syntheses/frontend/React 18 流式 SSR 与渐进式 hydration.md`

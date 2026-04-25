@@ -10,8 +10,7 @@ tags:
   - performance
   - optimization
   - engine
-source_refs:
-  - legacy-logseq-journals/2024_03_29.md
+source_refs: []
 ---
 # JavaScript 优化启发
 
@@ -25,7 +24,7 @@ JavaScript 性能优化里，哪些启发是值得长期记住的，而不是只
 
 ## 综合结论
 
-- 这条 journal 汇总的最大价值，在于它把很多零散的 JS 性能建议压缩成几类通用原则：
+- 这条记录 汇总的最大价值，在于它把很多零散的 JS 性能建议压缩成几类通用原则：
   - 避免工作；
   - 避免不必要的字符串比较；
   - 避免对象形状频繁变化；
@@ -42,7 +41,3 @@ JavaScript 性能优化里，哪些启发是值得长期记住的，而不是只
 
 - 当前仓库还没有把对象形状、隐藏类、JIT 假设和数据结构选择拆成更细的主题页。
 - 如果后续继续积累 JS runtime 内容，可以把这页再拆成一组更具体的 topic / comparison。
-
-## 来源指针
-
-- `legacy-logseq-journals/2024_03_29.md`

@@ -10,8 +10,7 @@ tags:
   - hooks
   - implementation
   - state
-source_refs:
-  - legacy-logseq-journals/2025_03_21.md
+source_refs: []
 ---
 # React Hooks API 模拟实现
 
@@ -25,7 +24,7 @@ source_refs:
 
 ## 综合结论
 
-- journal 里的总结抓住了 Hooks 的最小心智：
+- Hooks 的最小心智是：
   - 外部维护一组状态槽；
   - render 时用计数器按调用顺序取槽；
   - 下一次 render 仍按相同顺序回到同一个槽位。
@@ -36,7 +35,3 @@ source_refs:
 
 - 当前仓库还没有把 Hooks 调度、effect 阶段和 concurrent rendering 下的行为系统展开。
 - 如果后续继续沉淀 React 运行机制，这页可以进一步连接到 `useEffect`、`React Render Optimization` 和 `RSC`。
-
-## 来源指针
-
-- `legacy-logseq-journals/2025_03_21.md`

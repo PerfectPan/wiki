@@ -44,4 +44,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Two Pointer.md`
-

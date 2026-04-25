@@ -10,8 +10,7 @@ tags:
   - network
   - debugging
   - headers
-source_refs:
-  - legacy-logseq-journals/2023_06_25.md
+source_refs: []
 ---
 # Provisional headers 调试路径
 
@@ -21,7 +20,7 @@ Chrome DevTools 里看到 `Provisional headers are shown` 时，不要只盯 hea
 
 ## 关键点
 
-- journal 里的排查路径很朴素但有效：
+- 一个朴素但有效的排查路径是：
   - 用 `chrome://net-export/` 录制浏览器网络行为；
   - 再用 `lsof -i:{port}` 看本地 TCP 建连情况。
 - 这说明这类问题的重点并不是“某个 header 看起来不对”，而是：
@@ -34,7 +33,3 @@ Chrome DevTools 里看到 `Provisional headers are shown` 时，不要只盯 hea
 
 - [[Chrome DevTools]]
 - [[Computer Network]]
-
-## 来源指针
-
-- `legacy-logseq-journals/2023_06_25.md`

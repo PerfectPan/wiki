@@ -11,7 +11,6 @@ tags:
   - ssr
 source_refs:
   - raw/sources/RSC.md
-  - legacy-logseq-journals/2024_03_05.md
 ---
 # RSC
 
@@ -71,9 +70,8 @@ source_refs:
 - 一条很稳的理解是：RSC 的价值不只是“减少 bundle”，还在于它把服务器和客户端的优势拆开用了
 	- 服务端组件可以直接访问服务端资源、减少客户端下载体积
 	- 客户端组件则保留交互能力
-	- 但 journal 里的补充也提醒了一个边界：RSC 仍然不能自动消灭 hydration 和客户端下载，很多场景只是把“所有组件都必须在客户端执行”的前提打破了
+	- 但 这里还需要补一个边界：RSC 仍然不能自动消灭 hydration 和客户端下载，很多场景只是把“所有组件都必须在客户端执行”的前提打破了
 
 ## Source Pointers
 
 - `raw/sources/RSC.md`
-- `legacy-logseq-journals/2024_03_05.md`

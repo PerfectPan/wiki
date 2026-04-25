@@ -9,7 +9,6 @@ tags:
   - cpp
 source_refs:
   - raw/sources/C++.md
-  - legacy-logseq-journals/2023_10_15.md
 ---
 # C++
 
@@ -31,4 +30,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/C++.md`
-- `legacy-logseq-journals/2023_10_15.md`

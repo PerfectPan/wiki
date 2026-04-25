@@ -10,8 +10,7 @@ tags:
   - valibot
   - validation
   - typescript
-source_refs:
-  - legacy-logseq-journals/2024_01_21.md
+source_refs: []
 ---
 # Zod vs Valibot
 
@@ -33,10 +32,6 @@ source_refs:
 
 ## 推荐理由
 
-- journal 里的判断很明确：`Zod` 的链式 API 虽然顺手，但这类设计也会带来 tree shaking 层面的代价。
+- 判断很明确：`Zod` 的链式 API 虽然顺手，但这类设计也会带来 tree shaking 层面的代价。
 - `Valibot` 的价值不只是“小”，而是它把 API 设计得更原子化，因此更容易被摇树优化。
 - 这意味着这两者的核心取舍并不是“语法喜好”，而是生态成熟度与构建优化之间的平衡。
-
-## 来源指针
-
-- `legacy-logseq-journals/2024_01_21.md`

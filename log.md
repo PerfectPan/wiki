@@ -35,7 +35,6 @@
   - `raw/sources/RSS.md`
   - `raw/sources/UX.md`
   - `raw/sources/未来工作方向.md`
-- 备注：本轮遵循轻改原则，保留 raw 原件不动；`journals/` 仍未在当前仓库中整体迁入。
 
 ## 2026-04-19
 
@@ -83,7 +82,7 @@
 
 ## 2026-04-20
 
-- 摘要：补做一条 `journals` 抽取，把 dated raw 残留里关于 FLIP 布局动画的长期结论沉淀为 frontend synthesis。
+- 摘要：补做一条长期结论整理，把 dated raw 残留里关于 FLIP 布局动画的长期结论沉淀为 frontend synthesis。
 - 页面：
   - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
   - [[index]]
@@ -94,77 +93,58 @@
 
 ## 2026-04-22
 
-- 摘要：补做一条 `journals` 抽取，把旧 Logseq `journals/2024_05_29.md` 里关于依赖解析与 SAT 规约的长期结论沉淀为 tooling topic。
+- 摘要：补做一条长期结论整理，把关于依赖解析与 SAT 规约的内容沉淀为 tooling topic。
 - 页面：
   - [[wiki/topics/tooling/Dependency Resolution|Dependency Resolution]]
   - [[wiki/topics/algorithms/Algorithm|Algorithm]]
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_05_29.md`
   - `https://borretti.me/article/dependency-resolution-made-simple`
   - `https://github.com/dart-lang/pub/blob/master/doc/solver.md`
-- 备注：这条内容不在旧 `pages/Algorithm.md` 里，而是在 `journals/` 中；因此属于后补的 journal 抽取，不是 `pages` 漏迁修复。
 
 ## 2026-04-25
 
-- 摘要：继续从旧 Logseq `journals/` 抽取带总结的长期内容，补充依赖管理与 npm 包发布两篇 tooling synthesis。
+- 摘要：继续补充带总结的长期内容，补充依赖管理与 npm 包发布两篇 tooling synthesis。
 - 页面：
   - [[wiki/syntheses/tooling/npm 包发布与发布链路实践|npm 包发布与发布链路实践]]
   - [[wiki/syntheses/tooling/前端依赖管理策略|前端依赖管理策略]]
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_05_02.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_09_08.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_05_02.md`
   - [[wiki/topics/tooling/Dependency Resolution|Dependency Resolution]]
-- 备注：这批不是把 journal 整页迁入，而是只抽“链接 + 已成形总结”的条目，继续遵守 `journals` 非整体迁移规则。
 
 ## 2026-04-25
 
-- 摘要：继续从旧 Logseq `journals/` 抽取 frontend 与 ai 的高价值总结，补充 React 18 streaming / hydration、Next.js middleware 鉴权绕过与 MCP SSE 多实例路由策略。
+- 摘要：继续补充 frontend 与 ai 的高价值总结，补充 React 18 streaming / hydration、Next.js middleware 鉴权绕过与 MCP SSE 多实例路由策略。
 - 页面：
   - [[wiki/syntheses/frontend/React 18 流式 SSR 与渐进式 hydration|React 18 流式 SSR 与渐进式 hydration]]
   - [[wiki/topics/frontend/Next.js Middleware Auth Bypass|Next.js Middleware Auth Bypass]]
   - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_05_02.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_03_24.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_04_22.md`
   - `wiki/topics/frontend/SSR.md`
   - `wiki/topics/frontend/RSC.md`
   - `wiki/topics/ai/MCP.md`
-- 备注：这批继续遵循“只抽有结论的 journal 条目，不迁整页日记”的规则。
 
 ## 2026-04-25
 
-- 摘要：继续从旧 Logseq `journals/` 抽取剩余的高价值实现与工程策略，补充 `mcp-remote`、`npm Trusted Publishers` 与应用层通信可靠性边界。
+- 摘要：继续补充剩余的高价值实现与工程策略，补充 `mcp-remote`、`npm Trusted Publishers` 与应用层通信可靠性边界。
 - 页面：
   - [[wiki/topics/ai/mcp-remote|mcp-remote]]
   - [[wiki/topics/tooling/npm Trusted Publishers|npm Trusted Publishers]]
   - [[wiki/syntheses/frontend/应用层通信的可靠性边界|应用层通信的可靠性边界]]
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_03_30.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_05_03.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_09_07.md`
-- 备注：这批依旧遵循 “链接 + 已成形总结” 才抽取的原则；像只有单条链接、无明确结论的 journal 记录暂时保留在原处。
 
 ## 2026-04-25
 
-- 摘要：继续从旧 Logseq `journals/` 抽取 frontend 的高价值结论，补充 ES Module / Import Maps、shadcn registry 分发模式与 JSBridge 鉴权漏洞。
+- 摘要：继续补充 frontend 的高价值结论，补充 ES Module / Import Maps、shadcn registry 分发模式与 JSBridge 鉴权漏洞。
 - 页面：
   - [[wiki/syntheses/frontend/ES Module 加载与 Import Maps|ES Module 加载与 Import Maps]]
   - [[wiki/syntheses/frontend/shadcn Registry 组件分发模式|shadcn Registry 组件分发模式]]
   - [[wiki/topics/frontend/JSBridge 鉴权漏洞|JSBridge 鉴权漏洞]]
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_05_06.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_08_08.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_01_31.md`
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2025_04_20.md`
   - `http://myjsapi.alipay.com/jsapi/native/trade-pay.html`
-- 备注：这批仍然属于 “有链接且已有明确总结” 的 journal 抽取；不会把只含单条收藏的日记记录硬迁进 wiki。
 
 ## 2026-04-25
 
@@ -177,11 +157,6 @@
   - [[wiki/topics/languages/TypeScript|TypeScript]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_01_31.md`
-  - `legacy-logseq-journals/2023_04_03.md`
-  - `legacy-logseq-journals/2023_07_15.md`
-  - `legacy-logseq-journals/2023_08_06.md`
-  - `legacy-logseq-journals/2023_11_23.md`
 - 备注：这批继续只抽“已经形成可复用结论”的通用技术条目，不把题解、单链收藏或 TODO 强行提升为 wiki 页面。
 
 - 摘要：继续补做剩余的系统与前端通用结论，补充 SSL/TLS、Electron 更新排障、强制 reflow 与 React Context 颗粒度问题。
@@ -192,10 +167,6 @@
   - [[wiki/syntheses/frontend/React Context 颗粒度与 Selector 路径|React Context 颗粒度与 Selector 路径]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2022_10_30.md`
-  - `legacy-logseq-journals/2023_06_21.md`
-  - `legacy-logseq-journals/2024_01_21.md`
-  - `legacy-logseq-journals/2024_03_06.md`
 - 备注：这批继续只提升已有明确判断的通用结论；剩余的大头仍是题解、单链收藏或产品观察，我会继续筛，但不会硬迁。 
 
 - 摘要：继续补做前端渲染与校验相关条目，补充 React 重渲染优化、Zod vs Valibot 与模板克隆渲染路径。
@@ -205,10 +176,6 @@
   - [[wiki/syntheses/frontend/模板克隆与 DOM 渲染路径|模板克隆与 DOM 渲染路径]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_12_16.md`
-  - `legacy-logseq-journals/2024_01_16.md`
-  - `legacy-logseq-journals/2024_01_21.md`
-  - `legacy-logseq-journals/2024_12_14.md`
   - `raw/sources/React.md`
 - 备注：这批继续只抽可以独立复用的结论，不把零散链接和单篇题解强行提升到 wiki 层。
 
@@ -219,11 +186,6 @@
   - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2022_11_19.md`
-  - `legacy-logseq-journals/2023_04_03.md`
-  - `legacy-logseq-journals/2023_05_06.md`
-  - `legacy-logseq-journals/2023_05_13.md`
-  - `legacy-logseq-journals/2023_11_18.md`
   - `wiki/topics/product/Logseq.md`
 - 备注：这批继续优先提升能独立成页的系统性结论，而不是把相关链接简单堆回 topic。
 
@@ -234,10 +196,6 @@
   - [[wiki/syntheses/frontend/JavaScript 优化启发|JavaScript 优化启发]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2022_10_05.md`
-  - `legacy-logseq-journals/2023_06_25.md`
-  - `legacy-logseq-journals/2024_03_29.md`
-- 备注：这批继续只补能够独立复用的长期结论；更偏具体题解、单产品观察或零散收藏的 journal 条目仍保留在 raw 层。
 
 - 摘要：继续补做 TypeScript 和 SSR 相关长期条目，补充类型收窄 / IIMT、reflect-metadata 与服务端客户端视图一致性。
 - 页面：
@@ -246,9 +204,6 @@
   - [[wiki/syntheses/frontend/服务端与客户端视图一致性|服务端与客户端视图一致性]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_07_15.md`
-  - `legacy-logseq-journals/2023_07_29.md`
-  - `legacy-logseq-journals/2024_01_01.md`
   - `wiki/topics/architecture/@opensumi%2Fdi.md`
   - `wiki/topics/frontend/SSR.md`
   - `wiki/topics/frontend/useEffect.md`
@@ -262,13 +217,9 @@
   - [[wiki/topics/frontend/CSS|CSS]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2022_08_05.md`
-  - `legacy-logseq-journals/2022_10_31.md`
-  - `legacy-logseq-journals/2022_11_25.md`
-  - `legacy-logseq-journals/2024_08_26.md`
 - 备注：这批仍然以“已有明确总结的工程经验”为准，不把零散收藏和未成形观察硬拉进 wiki。
 
-- 摘要：继续从旧 Logseq `journals/` 并行抽取多簇高价值条目，补充 ai / frontend / career / systems / tooling 的第二批页面与对比页。
+- 摘要：继续并行补充多簇高价值条目，补充 ai / frontend / career / systems / tooling 的第二批页面与对比页。
 - 页面：
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/MCP Client|MCP Client]]
@@ -283,27 +234,11 @@
   - [[wiki/comparisons/tooling/文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf|文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_01_31.md`
-  - `legacy-logseq-journals/2023_03_15.md`
-  - `legacy-logseq-journals/2024_03_06.md`
-  - `legacy-logseq-journals/2024_10_25.md`
-  - `legacy-logseq-journals/2024_12_14.md`
-  - `legacy-logseq-journals/2024_12_24.md`
-  - `legacy-logseq-journals/2025_01_23.md`
-  - `legacy-logseq-journals/2025_03_01.md`
-  - `legacy-logseq-journals/2025_03_29.md`
-  - `legacy-logseq-journals/2025_03_31.md`
-  - `legacy-logseq-journals/2025_04_01.md`
-  - `legacy-logseq-journals/2025_04_18.md`
-  - `legacy-logseq-journals/2025_09_14.md`
-- 备注：这批是并行抽取后的主线程集成结果；只提升带明确总结的条目，其余 journal 条目继续留在旧 Logseq `journals/` 中，按需再抽取，不直接入库。
 
-- 摘要：为避免 `journals` 中仍有高价值内容遗漏，补做一轮全量核对，确认旧 Logseq `journals/` 的可追溯来源位置，并继续按“有明确总结的条目优先抽取”的原则沉淀到 `wiki/`。
+- 摘要：为避免高价值内容遗漏，补做一轮全量核对，并继续按“有明确总结的条目优先抽取”的原则沉淀到 `wiki/`。
 - 页面：
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/*`
-- 备注：这一步只保留旧仓库位置说明，不把 `journals` 原文直接带入当前仓库；后续仍按“有明确总结的条目优先抽取”为原则继续沉淀到 `wiki/`。
 
 - 摘要：继续补做剩余的高置信度通用结论，新增事件循环、Fetch streaming、GET body 语义与 Electron Deep Link，并把 `.d.ts` 规则补进 `TypeScript` 页面。
 - 页面：
@@ -314,19 +249,12 @@
   - [[wiki/topics/languages/TypeScript|TypeScript]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_01_31.md`
-  - `legacy-logseq-journals/2023_04_03.md`
-  - `legacy-logseq-journals/2023_07_15.md`
-  - `legacy-logseq-journals/2023_08_06.md`
-  - `legacy-logseq-journals/2023_11_23.md`
 - 备注：这批继续只抽“已经形成可复用结论”的通用技术条目，不把题解、单链收藏或 TODO 强行提升为 wiki 页面。
 
-- 摘要：为避免 `journals` 中仍有高价值内容遗漏，再补一轮旧 Logseq `journals/` 的全量核对，并继续把高置信度结论抽取为 wiki 页面。
+- 摘要：为避免高价值内容遗漏，再补一轮全量核对，并继续把高置信度结论抽取为 wiki 页面。
 - 页面：
   - [[index]]
 - 来源：
-  - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/*`
-- 备注：这一步同样只保留旧仓库位置说明，不把 `journals` 原文直接带入当前仓库；后续仍按“有明确总结的条目优先抽取”为原则继续沉淀到 `wiki/`。
 
 ## 2026-04-12
 
@@ -450,7 +378,6 @@
 - 来源：
   - `raw/sources/`
   - `raw/assets/`
-- 备注：本次全量迁移覆盖 `192/192` 个旧 `pages`；`journals/` 仍按既定规则未整体迁入。
 
 ## 2026-04-12
 
@@ -499,8 +426,6 @@
   - [[wiki/topics/languages/TypeScript|TypeScript]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2024_03_12.md`
-  - `legacy-logseq-journals/2024_04_02.md`
 - 备注：这批继续优先提升可长期复用的语言概念，不把只面向单一场景的零散观察硬转成独立页面。
 
 - 摘要：继续补做产品与基础设施层面的剩余结论，补充短链服务价值、状态页定位与 Serverless 分层隔离。
@@ -510,9 +435,6 @@
   - [[wiki/syntheses/systems/Serverless 应用分层与隔离|Serverless 应用分层与隔离]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_05_16.md`
-  - `legacy-logseq-journals/2024_03_25.md`
-  - `legacy-logseq-journals/2024_04_28.md`
 - 备注：这批继续只提升已经形成明确产品/系统判断的条目，不把泛产品收藏和杂项观察一股脑迁入 wiki。
 
 - 摘要：继续补做剩余的语言与 React 机制条目，补充 `Civet` 与 `React Hooks API` 的最小实现心智。
@@ -521,9 +443,6 @@
   - [[wiki/syntheses/frontend/React Hooks API 模拟实现|React Hooks API 模拟实现]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2025_03_16.md`
-  - `legacy-logseq-journals/2025_03_21.md`
-- 备注：这批继续只吸收已经能独立说明概念的条目；停留在“只是想再看看”的收藏仍保留在 journal 原文里。
 
 - 摘要：继续补做剩余的前端实现经验，补充小程序架构演进与 Ant Design 异步默认值渲染。
 - 页面：
@@ -531,8 +450,6 @@
   - [[wiki/topics/frontend/Ant Design 异步默认值渲染|Ant Design 异步默认值渲染]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2022_10_31.md`
-  - `legacy-logseq-journals/2022_11_01.md`
 - 备注：这批仍然只提升已有明确工程结论的实现经验，不把细碎 UI 收藏或未成形观察继续硬迁。
 
 - 摘要：继续补做交互规范层的高价值条目，补充交互式 UI 的可访问性基线。
@@ -540,7 +457,6 @@
   - [[wiki/syntheses/frontend/交互式 UI 的可访问性基线|交互式 UI 的可访问性基线]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2025_10_08.md`
 - 备注：这页提炼的是一组长期适用的交互约束，不是某个单一组件或单篇文章的摘要。
 
 - 摘要：继续补做剩余的前端工具与隔离实现条目，补充 `CVA` 与 `whyframe`。
@@ -549,8 +465,6 @@
   - [[wiki/topics/frontend/whyframe|whyframe]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2025_03_23.md`
-  - `legacy-logseq-journals/2025_04_20.md`
 - 备注：这批继续只提升已经有明确实现心智的工具页，不把单纯组件库收藏扩展成空洞 topic。
 
 - 摘要：继续补做剩余的产品观察与语言细节修正，补充 `AI Cover`、`Teable`，并把 TypeScript 内置类型继承的边界补强。
@@ -560,10 +474,6 @@
   - [[wiki/topics/languages/TypeScript|TypeScript]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2024_02_09.md`
-  - `legacy-logseq-journals/2024_03_13.md`
-  - `legacy-logseq-journals/2024_04_02.md`
-- 备注：这批开始把剩余的单条但仍有长期价值的产品观察纳入 wiki，同时继续把 journal 里的重复结论并回已有主题页。
 
 - 摘要：继续补做剩余的隔离与容器基础设施条目，补充同源 iframe 沙箱设计与 OCI 标准。
 - 页面：
@@ -571,7 +481,6 @@
   - [[wiki/topics/systems/Open Container Initiative|Open Container Initiative]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2023_05_16.md`
 - 备注：这批继续优先提升系统性抽象，不把具体业务实现细节整页搬进 wiki。
 
 - 摘要：继续补做前端基础概念，补充 `Polyfill` 与 `shim` 的关系。
@@ -579,5 +488,3 @@
   - [[wiki/topics/frontend/Polyfill|Polyfill]]
   - [[index]]
 - 来源：
-  - `legacy-logseq-journals/2022_10_31.md`
-- 备注：这条属于通用概念补齐，用来承接 journal 中已经出现、但此前未单独落页的术语。

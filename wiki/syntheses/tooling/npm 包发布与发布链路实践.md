@@ -11,11 +11,7 @@ tags:
   - tooling
   - monorepo
   - ci
-source_refs:
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_05_15.md
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_08_12.md
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_09_08.md
-  - /Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_12_31.md
+source_refs: []
 ---
 # npm 包发布与发布链路实践
 
@@ -29,7 +25,7 @@ source_refs:
 
 ## 综合结论
 
-- 旧 Logseq 的这条 journal 不是单篇链接摘录，而是一整段成体系的发布经验，已经足够沉淀成长期结论。
+- 这条记录 不是单篇链接摘录，而是一整段成体系的发布经验，已经足够沉淀成长期结论。
 - 在构建产物上，最重要的不是“工具是不是最新”，而是先明确要支持哪些格式：
   - 如果只需要单一格式，`tsc` 往往就够；
   - 如果需要同时输出 `esm` / `cjs`，就应优先选择更明确支持多格式的打包方案；
@@ -40,12 +36,12 @@ source_refs:
   - `package.json` / files / sideEffects 等元数据校验；
   - 基本测试；
   - CI 中的格式化与 lint。
-- 2023-08 和 2023-05 的 journal 把这套校验再补充得更具体：
+- 2023-08 和 2023-05 的把这套校验再补充得更具体：
   - `publint`、`arethetypeswrong` 这类检查值得作为发布前固定步骤；
   - `files`、`.npmignore`、`publishConfig` 应该被当成发布配置的一部分，而不是临发包时再手动确认；
   - 如果需要先验证安装与联调，`yalc` 一类本地模拟发布工具比“直接试着发一次”更稳妥。
 - 这里还有一个很容易忽略的小坑：`package.json` 的 `exports` 条件匹配有顺序语义。虽然 JSON 本身不强调 key 顺序，但 Node 在这里把顺序当成解析规则的一部分，因此条件应该按“越具体越靠前”的顺序写。
-- 在版本与发布流程上，这条 journal 的建议也很实用：
+- 在版本与发布流程上，这条记录 的建议也很实用：
   - 简单项目用 `npm version` + `npm publish` + GitHub 生成 changelog 已经足够；
   - 复杂项目再引入 `Changesets` 一类专门方案。
 - 对 monorepo 的判断很克制：不是不能用，而是不要为了“优雅”而上。只有当共享发布、依赖协同和多包工作流真的形成长期需求时，额外复杂度才值得承担。
@@ -56,10 +52,3 @@ source_refs:
 
 - 这条总结主要是经验提炼，还没有在当前仓库里对应到具体模板或脚本示例。
 - 现在这页已经同时覆盖了产物格式、发布校验和一部分供应链风险；如果后续继续积累，可以拆出更专门的 topic，例如 `package exports`、`tarball vs manifest` 或更细的发布 checklist。
-
-## 来源指针
-
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_05_15.md`
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2023_08_12.md`
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_09_08.md`
-- `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/2024_12_31.md`

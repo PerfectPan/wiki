@@ -10,7 +10,6 @@ tags:
   - theory
 source_refs:
   - raw/sources/Graph Theory.md
-  - legacy-logseq-journals/2022_07_31.md
 ---
 # Graph Theory
 
@@ -68,4 +67,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Graph Theory.md`
-- `legacy-logseq-journals/2022_07_31.md`

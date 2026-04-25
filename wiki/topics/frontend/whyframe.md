@@ -10,8 +10,7 @@ tags:
   - isolation
   - compilation
   - component
-source_refs:
-  - legacy-logseq-journals/2025_03_23.md
+source_refs: []
 ---
 # whyframe
 
@@ -21,13 +20,9 @@ whyframe 的核心思路是把需要 iframe 隔离的组件在编译期拆出来
 
 ## 关键点
 
-- journal 里的总结已经指出它的本质：
+- 它的本质是：
   - 用 `<iframe>` 做隔离；
   - 但不是运行时把现有组件塞进去；
   - 而是编译时把 iframe 内的源码剥离出来，生成独立的虚拟入口和根文件。
 - 这意味着它更像“构建工具层的 iframe 隔离方案”，而不是单纯的组件 API。
 - 好处是隔离边界清晰；代价是动态能力会受限，因为很多内容在构建期就已经决定好了。
-
-## 来源指针
-
-- `legacy-logseq-journals/2025_03_23.md`

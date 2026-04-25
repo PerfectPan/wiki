@@ -62,4 +62,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Monotonic Stack.md`
-

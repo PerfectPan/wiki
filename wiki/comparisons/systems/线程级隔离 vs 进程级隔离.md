@@ -12,7 +12,6 @@ tags:
   - sandbox
   - scheduling
 source_refs:
-  - legacy-logseq-journals/2023_05_16.md
   - wiki/topics/systems/操作系统上的进程.md
   - wiki/topics/systems/Sandbox.md
 ---
@@ -42,6 +41,5 @@ source_refs:
 
 ## 来源指针
 
-- `legacy-logseq-journals/2023_05_16.md`
 - [[wiki/topics/systems/操作系统上的进程|操作系统上的进程]]
 - [[wiki/topics/systems/Sandbox|Sandbox]]

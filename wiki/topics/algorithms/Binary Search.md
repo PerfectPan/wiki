@@ -43,4 +43,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Binary Search.md`
-

@@ -10,8 +10,6 @@ tags:
   - tailwind
 source_refs:
   - raw/sources/CSS.md
-  - legacy-logseq-journals/2024_03_06.md
-  - legacy-logseq-journals/2024_05_08.md
 ---
 # CSS
 

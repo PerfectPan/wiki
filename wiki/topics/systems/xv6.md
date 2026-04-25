@@ -90,4 +90,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/xv6.md`
-

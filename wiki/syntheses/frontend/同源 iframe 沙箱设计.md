@@ -10,8 +10,7 @@ tags:
   - sandbox
   - security
   - isolation
-source_refs:
-  - legacy-logseq-journals/2023_05_16.md
+source_refs: []
 ---
 # 同源 iframe 沙箱设计
 
@@ -25,7 +24,7 @@ source_refs:
 
 ## 综合结论
 
-- journal 里的总结说明，同源 iframe 的问题从来不是“能不能隔离”，而是“隔离粒度够不够细”。
+- 同源 iframe 的问题从来不是“能不能隔离”，而是“隔离粒度够不够细”。
 - 这条材料把沙箱控制点拆成了四类：
   - 脚本：不安全脚本不可运行；
   - 资源：不安全资源不可请求；
@@ -42,7 +41,3 @@ source_refs:
 
 - 当前材料还没有把同源 iframe 和 cross-origin iframe、Worker、进程隔离放在一起比较。
 - 如果后续继续沉淀沙箱系统内容，这页可以进一步连接到 `线程级隔离 vs 进程级隔离`。
-
-## 来源指针
-
-- `legacy-logseq-journals/2023_05_16.md`

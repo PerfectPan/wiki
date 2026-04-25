@@ -20,4 +20,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/GCC.md`
-

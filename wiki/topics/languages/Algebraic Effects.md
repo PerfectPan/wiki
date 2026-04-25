@@ -64,4 +64,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Algebraic Effects.md`
-

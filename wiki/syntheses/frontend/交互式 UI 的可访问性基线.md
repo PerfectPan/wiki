@@ -11,8 +11,7 @@ tags:
   - interaction
   - keyboard
   - performance
-source_refs:
-  - legacy-logseq-journals/2025_10_08.md
+source_refs: []
 ---
 # 交互式 UI 的可访问性基线
 
@@ -26,7 +25,7 @@ source_refs:
 
 ## 综合结论
 
-- 这条 journal 里的 checklist 已经接近一份成体系的交互基线，而不是零散技巧。
+- 这条记录 里的 checklist 已经接近一份成体系的交互基线，而不是零散技巧。
 - 其中最稳定的几组要求可以直接沉淀为长期规则：
   - 键盘可达：完整键盘操作、可见焦点、正确的焦点进入/离开；
   - 输入与表单：不阻断粘贴、错误就近显示、移动端输入考虑字号与 `inputmode`；
@@ -42,7 +41,3 @@ source_refs:
 
 - 当前仓库还没有把这些规则与具体组件（表单、弹窗、菜单、拖拽）逐一对应起来。
 - 如果后续继续沉淀 design system 内容，这页可以拆成多页 checklist 或 comparison。
-
-## 来源指针
-
-- `legacy-logseq-journals/2025_10_08.md`

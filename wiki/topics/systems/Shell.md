@@ -77,4 +77,3 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Shell.md`
-

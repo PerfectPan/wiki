@@ -10,9 +10,7 @@ tags:
   - embedding
   - retrieval
   - chatbot
-source_refs:
-  - legacy-logseq-journals/2023_04_03.md
-  - legacy-logseq-journals/2023_05_06.md
+source_refs: []
 ---
 # RAG 问答管线
 
@@ -26,7 +24,7 @@ source_refs:
 
 ## 综合结论
 
-- 2023-04 和 2023-05 的 journal 都在描述同一条基本链路：
+- 2023-04 和 2023-05 的都在描述同一条基本链路：
   - 文档先被切分和向量化；
   - 向量写入检索存储；
   - 用户问题也向量化；
@@ -35,15 +33,10 @@ source_refs:
 - 这条管线的关键不是“有没有向量数据库”，而是检索层和生成层被拆开了：
   - 检索负责缩小问题空间；
   - 模型负责把问题和上下文组织成最终回答。
-- journal 里的实际观察也很有价值：一旦这条链路跑通，就不仅适合通用 chatbot，也适合围绕某一套文档构建定制问答机器人。
+- 一旦这条链路跑通，就不仅适合通用 chatbot，也适合围绕某一套文档构建定制问答机器人。
 - 这说明 RAG 的真正价值，不只是提升准确率，而是把“模型不知道的具体资料”交回给可更新的数据层。
 
 ## 未决问题
 
 - 当前仓库还没有把 chunking、embedding 选择、检索重排和评估指标拆开讲。
 - 如果后续继续沉淀 AI 工作流，这页可以再拆成一页 comparison，例如“关键词检索 vs 向量检索 vs hybrid”。
-
-## 来源指针
-
-- `legacy-logseq-journals/2023_04_03.md`
-- `legacy-logseq-journals/2023_05_06.md`

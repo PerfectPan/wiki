@@ -11,8 +11,6 @@ tags:
   - block-tree
   - plugin-system
 source_refs:
-  - legacy-logseq-journals/2022_11_19.md
-  - legacy-logseq-journals/2023_05_13.md
   - wiki/topics/product/Logseq.md
 ---
 # Logseq 架构演进脉络
@@ -27,8 +25,8 @@ Logseq 为什么会从“操作字符串”的系统演进到“维护一棵 Blo
 
 ## 综合结论
 
-- 2022-11 的 journal 已经给出一条很明确的判断：Logseq 的架构演进方向，是从原来更偏字符串操作的实现，转向全局维护一棵 Block Tree，并在其上支持插件化。
-- 2023-05 的 journal 又补了实现层观察：其前端与 Electron 产物由 `shadow-cljs` 分别编译，`app` / `electron` 的入口、模块拆分和资源路径都被显式配置。这说明它已经不是一个单一页面脚本，而是围绕多入口、多模块和多运行环境组织起来的系统。
+- 2022-11 的一条观察已经给出一条很明确的判断：Logseq 的架构演进方向，是从原来更偏字符串操作的实现，转向全局维护一棵 Block Tree，并在其上支持插件化。
+- 2023-05 的另一条补充又补了实现层观察：其前端与 Electron 产物由 `shadow-cljs` 分别编译，`app` / `electron` 的入口、模块拆分和资源路径都被显式配置。这说明它已经不是一个单一页面脚本，而是围绕多入口、多模块和多运行环境组织起来的系统。
 - 把这两份材料合起来看，Logseq 的核心演进可以概括成三层：
   - 数据层：从更接近字符串和页面的操作，提升到块级结构；
   - 扩展层：围绕统一数据模型开放插件与扩展；
@@ -42,6 +40,4 @@ Logseq 为什么会从“操作字符串”的系统演进到“维护一棵 Blo
 
 ## 来源指针
 
-- `legacy-logseq-journals/2022_11_19.md`
-- `legacy-logseq-journals/2023_05_13.md`
 - `wiki/topics/product/Logseq.md`

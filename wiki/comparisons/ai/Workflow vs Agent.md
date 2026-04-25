@@ -11,7 +11,6 @@ tags:
   - orchestration
   - llm
 source_refs:
-  - legacy-logseq-journals/2024_12_24.md
   - https://www.anthropic.com/research/building-effective-agents
 ---
 # Workflow vs Agent
@@ -34,11 +33,10 @@ source_refs:
 
 ## 推荐理由
 
-- 2024-12-24 的 journal 已经给出一个很稳的区分：workflow 更接近确定性编排，像并行、循环等待、拆分子任务这类结构都由人预先规定。
+- 2024-12-24 的一条观察已经给出一个很稳的区分：workflow 更接近确定性编排，像并行、循环等待、拆分子任务这类结构都由人预先规定。
 - agent 则把“下一步做什么”交给模型，并通过反馈机制不断更新行动。
 - 这不是“谁更高级”的问题，而是“决策权放在哪一层”的问题。能在流程层写死的，通常先不要上升成 agent。
 
 ## 来源指针
 
-- `legacy-logseq-journals/2024_12_24.md`
 - [Building effective agents](https://www.anthropic.com/research/building-effective-agents)

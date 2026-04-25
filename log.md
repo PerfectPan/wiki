@@ -296,15 +296,14 @@
   - `legacy-logseq-journals/2025_04_01.md`
   - `legacy-logseq-journals/2025_04_18.md`
   - `legacy-logseq-journals/2025_09_14.md`
-- 备注：这批是并行抽取后的主线程集成结果；只提升带明确总结的条目，其余 journal 原文保留在 `legacy-logseq-journals/` 里继续待筛。
+- 备注：这批是并行抽取后的主线程集成结果；只提升带明确总结的条目，其余 journal 条目继续留在旧 Logseq `journals/` 中，按需再抽取，不直接入库。
 
-- 摘要：为避免 `journals` 中仍有高价值内容遗漏，补充归档旧 Logseq `journals/` 的全部原始副本到 `legacy-logseq-journals/`，并与前面的高价值抽取并行保留。
+- 摘要：为避免 `journals` 中仍有高价值内容遗漏，补做一轮全量核对，确认旧 Logseq `journals/` 的可追溯来源位置，并继续按“有明确总结的条目优先抽取”的原则沉淀到 `wiki/`。
 - 页面：
-  - `legacy-logseq-journals/*`
   - [[index]]
 - 来源：
   - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/*`
-- 备注：这一步是原始资料归档，不等于把所有 journal 直接提升为 wiki 页面；后续仍按“有明确总结的条目优先抽取”为原则继续沉淀到 `wiki/`。
+- 备注：这一步只保留旧仓库位置说明，不把 `journals` 原文直接带入当前仓库；后续仍按“有明确总结的条目优先抽取”为原则继续沉淀到 `wiki/`。
 
 - 摘要：继续补做剩余的高置信度通用结论，新增事件循环、Fetch streaming、GET body 语义与 Electron Deep Link，并把 `.d.ts` 规则补进 `TypeScript` 页面。
 - 页面：
@@ -322,13 +321,12 @@
   - `legacy-logseq-journals/2023_11_23.md`
 - 备注：这批继续只抽“已经形成可复用结论”的通用技术条目，不把题解、单链收藏或 TODO 强行提升为 wiki 页面。
 
-- 摘要：为避免 `journals` 中仍有高价值内容遗漏，补充归档旧 Logseq `journals/` 的全部原始副本到 `legacy-logseq-journals/`，并与前面的高价值抽取并行保留。
+- 摘要：为避免 `journals` 中仍有高价值内容遗漏，再补一轮旧 Logseq `journals/` 的全量核对，并继续把高置信度结论抽取为 wiki 页面。
 - 页面：
-  - `legacy-logseq-journals/*`
   - [[index]]
 - 来源：
   - `/Users/perfectpan/Library/Mobile Documents/iCloud~com~logseq~logseq/Documents/journals/*`
-- 备注：这一步是原始资料归档，不等于把所有 journal 直接提升为 wiki 页面；后续仍按“有明确总结的条目优先抽取”为原则继续沉淀到 `wiki/`。
+- 备注：这一步同样只保留旧仓库位置说明，不把 `journals` 原文直接带入当前仓库；后续仍按“有明确总结的条目优先抽取”为原则继续沉淀到 `wiki/`。
 
 ## 2026-04-12
 

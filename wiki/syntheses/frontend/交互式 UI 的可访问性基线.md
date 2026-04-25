@@ -1,0 +1,48 @@
+---
+title: 交互式 UI 的可访问性基线
+type: synthesis
+category: frontend
+status: seed
+created: 2026-04-25
+updated: 2026-04-25
+tags:
+  - accessibility
+  - ui
+  - interaction
+  - keyboard
+  - performance
+source_refs:
+  - legacy-logseq-journals/2025_10_08.md
+---
+# 交互式 UI 的可访问性基线
+
+## 问题
+
+做交互式 Web UI 时，哪些可访问性和交互基线应该被当作默认要求，而不是上线前的补救项？
+
+## 简答
+
+真正稳定的基线不是“最后再补 aria”，而是从交互设计一开始就把键盘支持、焦点管理、点击目标、URL 状态、反馈、动画和性能约束一起纳入。
+
+## 综合结论
+
+- 这条 journal 里的 checklist 已经接近一份成体系的交互基线，而不是零散技巧。
+- 其中最稳定的几组要求可以直接沉淀为长期规则：
+  - 键盘可达：完整键盘操作、可见焦点、正确的焦点进入/离开；
+  - 输入与表单：不阻断粘贴、错误就近显示、移动端输入考虑字号与 `inputmode`；
+  - 状态与导航：URL 反映状态，Back/Forward 能恢复，链接仍然是链接；
+  - 反馈：重要操作要有即时反馈，破坏性动作需要确认或 Undo；
+  - 动画与性能：尊重 `prefers-reduced-motion`，尽量用合成层友好的属性，避免无谓 reflow。
+- 这组要求有价值的地方在于：它把“可访问性”从标签层面推进到完整交互层面。也就是说，可访问性不是只靠 `aria-label`，而是贯穿输入、状态、导航、动画和性能。
+- 因此更稳的产品心智是：
+  - 可访问性不是一份上线前清单；
+  - 它应该是交互设计和组件系统的默认约束。
+
+## 未决问题
+
+- 当前仓库还没有把这些规则与具体组件（表单、弹窗、菜单、拖拽）逐一对应起来。
+- 如果后续继续沉淀 design system 内容，这页可以拆成多页 checklist 或 comparison。
+
+## 来源指针
+
+- `legacy-logseq-journals/2025_10_08.md`

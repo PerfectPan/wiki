@@ -4,7 +4,7 @@ type: topic
 category: frontend
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-04-25
 tags:
   - react
   - hooks
@@ -13,6 +13,7 @@ tags:
   - suspense
 source_refs:
   - raw/sources/React.md
+  - legacy-logseq-journals/2024_10_25.md
 ---
 # React
 
@@ -22,6 +23,7 @@ source_refs:
 	- 引用变了才会重新渲染
 	- [[zustand]] useShallow 内部会浅比较，不比较引用，优化 re render（为什么之前都不知道... 得用 react-scan 看看了..）
 - 状态设定原则：状态尽量是正交的，其他状态都可以由这些原子状态计算得来，如果要避免状态计算的高复杂度，可以用 [[useMemo]] 来缓存状态
+- 不要在组件函数内部再定义另一个组件。React 会按函数 identity 识别组件类型；如果每次 render 都重新创建子组件函数，React 会把它当成一个全新的组件，导致原子树被卸载再挂载，状态和副作用也会随之重置。
 - 使用 [[useEffect]] 的时机只有在 component was displayed to the user，要想清楚这个逻辑是否有必要在这个时机执行。如果是通过用户交互触发的，就请放在 Event Handler 里面执行
 - 如果要在子组件里去触发父组件的事件，最好直接放在 Event Handler 里就做掉了，如果放在 [[useEffect]] 里去做会触发两次 render，得不偿失
 - 如果要到了同步父子组件状态的地步，那么最好可以把状态提一级，直接由父组件去控制子组件的状态，子组件就是一个纯渲染的组件

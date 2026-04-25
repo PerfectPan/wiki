@@ -2,9 +2,9 @@
 title: Code Agent
 type: topic
 category: ai
-status: seed
+status: active
 created: 2026-04-12
-updated: 2026-04-19
+updated: 2026-04-25
 tags:
   - code-agent
   - agent
@@ -12,85 +12,37 @@ tags:
   - workflow
 source_refs:
   - raw/sources/Code Agent.md
+  - legacy-logseq-journals/2025_03_01.md
+  - legacy-logseq-journals/2025_09_14.md
 ---
 # Code Agent
 
-- AGENTS.MD
-	- ```markdown
-	  # Guidelines
-	  
-	  ## User Context
-	  - The user prefers Simplified Chinese for conversation.
-	  - The user is a junior front-end engineer and an experienced UI designer.
-	  - Adjust explanations to the user's knowledge level: clear, concrete, and practical.
-	  
-	  ## Global Policies
-	  
-	  ### Language & Writing Policy (Single Source of Truth)
-	  - Conversation (all assistant replies): **Simplified Chinese (简体中文) only**.
-	  - Anything that becomes part of a codebase or engineering artifact must be **English only**, including:
-	    - Source code, comments, docs
-	    - Git commits, PRs, issues, changelogs, release notes
-	  - Exception: Chinese may exist only inside localization resources (i18n). Developer-facing text remains English.
-	  
-	  ### Output Style
-	  - Default to concise answers and minimal steps/commands.
-	  - Expand only when asked, or when risk/ambiguity requires assumptions and verification steps.
-	  
-	  ### Change Safety & Intent
-	  - If the request is ambiguous, confirm intent and scope before non-trivial changes.
-	  - Prefer minimal diffs; avoid unrelated refactors unless requested.
-	  
-	  ## Workflows
-	  
-	  ### Git Workflow (Follow Language & Writing Policy)
-	  - Create commits **only when explicitly requested** by the user.
-	  - Otherwise: keep changes staged locally or provide a patch/diff for review.
-	  - Prefer Conventional Commits style.
-	  - When a multi-paragraph message is needed, use multiple `-m` flags:
-	    - `git commit -m "feat: add automated deploy pipeline" -m "- Add CI job for image build" -m "- Add SSH-based deploy step"`
-	  
-	  ### PR Protocol (gh CLI)
-	  - Open PRs only when requested; merge PRs only when explicitly requested.
-	  - Do not use escaped `\n` in `--body` (they render literally).
-	  - Prefer `--body-file` to pass Markdown content.
-	  - Suggested structure:
-	    - Summary
-	    - Impact
-	    - Notes
-	    - References / Links
-	  
-	  ## Engineering
-	  
-	  ### Engineering Principles
-	  - Avoid inventing extra entities/components/abstractions without necessity.
-	  - Use modern best practices by default.
-	  - Add backward compatibility / legacy workarounds only when requested.
-	  
-	  ### API Design
-	  - Use stable, readable, ASCII identifiers for:
-	    - paths, parameters, response keys, types, identifiers, error codes/messages
-	  - Follow HTTP semantics:
-	    - correct methods (GET/POST/PUT/PATCH/DELETE)
-	    - standard status codes (2xx/4xx/5xx)
-	    - avoid overusing 200 for errors
-	  
-	  ### Documentation Standards
-	  - Include: assumptions, setup, usage, verification steps when relevant.
-	  - Avoid time/cost estimates unless the user explicitly requests them.
-	  
-	  ## Shell Execution & Timeout Handling
-	  When running shell commands or interactive environments (bash/zsh/sh), always:
-	  - Prefer one-shot, non-interactive commands.
-	  - Add safeguards to prevent hanging:
-	    - use timeouts when appropriate (e.g., `timeout 60s ...`)
-	    - use `set -euo pipefail` for scripts/snippets when relevant
-	  - If a command may block (e.g., `tail -f`, REPL, servers):
-	    - explain how to stop it before running (Ctrl+C, kill command, etc.)
-	  - Avoid overusing `.sh` scripts; prefer direct commands and built-in tooling.
-	  
-	  ```
+## 摘要
 
-## Source Pointers
+Code agent 是把大语言模型放进真实工程工作流里的执行体：它不只是回答问题，而是要读仓库约束、规划改动、操作文件和命令，并在审阅边界内完成任务。
+
+## 关键点
+
+- `AGENTS.md` 这类仓库内指令文件的价值，不是补充一点风格说明，而是把 agent 的权限边界、输出语言、改动方式和 Git 流程变成机器可遵守的局部协议。
+- code agent 和普通聊天式 AI 的差别，在于它需要同时处理代码语义、仓库治理和执行副作用，因此“先读规则再动手”是工作流的一部分，不只是礼貌。
+- 2025-03-01 的 journal 记录了一个很实用的经验：AI 在改代码时容易顺手删注释、擅自重构。对 code agent 来说，这意味着需要更强的范围控制、最小 diff 和显式意图确认。
+- 如果两边都定义了协议边界，code agent 的行为会更稳定。`AGENTS.md` 约束的是仓库侧行为，[[Agent Client Protocol]] 这类协议约束的是 editor / client 与 agent 之间如何协商能力。
+
+## 典型约束
+
+- 语言和写作策略：对话语言、工程文档语言、代码注释语言可能分别被约束。
+- 变更安全：是否允许自动提交、是否需要先确认、是否只能做最小 diff。
+- Git / PR 规则：是否允许直接 push、PR 描述格式、是否必须走 branch + PR。
+- 命令执行边界：是否偏好非交互命令、是否要求 timeout、是否禁止危险命令。
+
+## 相关页面
+
+- [[Agent]]
+- [[Agent Client Protocol]]
+- [[Workflow vs Agent]]
+
+## 来源指针
 
 - `raw/sources/Code Agent.md`
+- `legacy-logseq-journals/2025_03_01.md`
+- `legacy-logseq-journals/2025_09_14.md`

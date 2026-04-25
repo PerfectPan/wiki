@@ -4,16 +4,21 @@ type: topic
 category: architecture
 status: seed
 created: 2026-04-12
-updated: 2026-04-19
+updated: 2026-04-25
 tags:
   - software-design
   - dependency-injection
   - modularity
 source_refs:
   - raw/sources/Software Design.md
+  - legacy-logseq-journals/2025_04_18.md
 ---
 # Software Design
 
+- 进行架构设计的目的，不是追求抽象本身，而是在需求变化来临时，用尽可能小的代价完成修改
+- 复杂度不会消失，只能管理
+	- 本质复杂度是任务固有的复杂性，通常无法消除，只能通过拆分、转移和复用来控制
+	- 偶然复杂度来自架构、技术选型、人员协作和历史债等额外因素，设计的一个重要目标就是减少这部分不必要的复杂度
 - 登录模块例子：
 	- 一开始工具栏，sheetbar，右键菜单直接依赖登录组件的登录状态来控制是否禁用
 	- 演进成工具栏，sheetbar，右键菜单，登录组件依赖一个新的权限模块，解耦
@@ -78,3 +83,4 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/Software Design.md`
+- `legacy-logseq-journals/2025_04_18.md`

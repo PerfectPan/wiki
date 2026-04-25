@@ -12,11 +12,18 @@
   - [[wiki/topics/frontend/响应式|响应式]]
   - [[wiki/topics/frontend/颜色|颜色]]
   - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
+  - [[wiki/topics/frontend/Ant Design 异步默认值渲染|Ant Design 异步默认值渲染]]
+  - [[wiki/topics/frontend/CVA|CVA]]
   - [[wiki/topics/frontend/CSS|CSS]]
   - [[wiki/topics/frontend/GithubNext-Blocks|GithubNext-Blocks]]
+  - [[wiki/topics/frontend/JSBridge 鉴权漏洞|JSBridge 鉴权漏洞]]
   - [[wiki/topics/frontend/Lit|Lit]]
+  - [[wiki/topics/frontend/Next.js Middleware Auth Bypass|Next.js Middleware Auth Bypass]]
+  - [[wiki/topics/frontend/Polyfill|Polyfill]]
+  - [[wiki/topics/frontend/小程序架构演进|小程序架构演进]]
   - [[wiki/topics/frontend/React Devtools|React Devtools]]
   - [[wiki/topics/frontend/React|React]]
+  - [[wiki/topics/frontend/React Render Optimization|React Render Optimization]]
   - [[wiki/topics/frontend/Ref|Ref]]
   - [[wiki/topics/frontend/RSC|RSC]]
   - [[wiki/topics/frontend/RxJS|RxJS]]
@@ -29,6 +36,7 @@
   - [[wiki/topics/frontend/useMemo|useMemo]]
   - [[wiki/topics/frontend/useRef|useRef]]
   - [[wiki/topics/frontend/Waku|Waku]]
+  - [[wiki/topics/frontend/whyframe|whyframe]]
   - [[wiki/topics/frontend/zustand|zustand]]
 - `architecture`
   - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi/di]]
@@ -41,15 +49,22 @@
   - [[wiki/topics/architecture/SSO|SSO]]
 - `ai`
   - [[wiki/topics/ai/Agent|Agent]]
+  - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/Code Agent|Code Agent]]
   - [[wiki/topics/ai/MCP|MCP]]
+  - [[wiki/topics/ai/MCP Client|MCP Client]]
+  - [[wiki/topics/ai/mcp-remote|mcp-remote]]
   - [[wiki/topics/ai/Prompt|Prompt]]
 - `product`
+  - [[wiki/topics/product/AI Cover|AI Cover]]
   - [[wiki/topics/product/Logseq|Logseq]]
+  - [[wiki/topics/product/Status Page|Status Page]]
+  - [[wiki/topics/product/Teable|Teable]]
 - `tooling`
   - [[wiki/topics/tooling/Bundle|Bundle]]
   - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
   - [[wiki/topics/tooling/CTF|CTF]]
+  - [[wiki/topics/tooling/Dependency Resolution|Dependency Resolution]]
   - [[wiki/topics/tooling/GCC|GCC]]
   - [[wiki/topics/tooling/GDB|GDB]]
   - [[wiki/topics/tooling/Git|Git]]
@@ -63,6 +78,7 @@
   - [[wiki/topics/tooling/SourceMap|SourceMap]]
   - [[wiki/topics/tooling/STL|STL]]
   - [[wiki/topics/tooling/tapable|tapable]]
+  - [[wiki/topics/tooling/npm Trusted Publishers|npm Trusted Publishers]]
   - [[wiki/topics/tooling/VSCode|VSCode]]
   - [[wiki/topics/tooling/Webpack|Webpack]]
   - [[wiki/topics/tooling/Yarn|Yarn]]
@@ -73,24 +89,33 @@
   - [[wiki/topics/languages/Algebraic Effects|Algebraic Effects]]
   - [[wiki/topics/languages/C 标准库的实现|C 标准库的实现]]
   - [[wiki/topics/languages/C++|C++]]
+  - [[wiki/topics/languages/Civet|Civet]]
   - [[wiki/topics/languages/Clojure|Clojure]]
   - [[wiki/topics/languages/EcmaScript|EcmaScript]]
   - [[wiki/topics/languages/Functional Programming|Functional Programming]]
   - [[wiki/topics/languages/JavaScript Runtime|JavaScript Runtime]]
   - [[wiki/topics/languages/JavaScript|JavaScript]]
   - [[wiki/topics/languages/Lambda 演算|Lambda 演算]]
+  - [[wiki/topics/languages/Pkl|Pkl]]
   - [[wiki/topics/languages/Prettier|Prettier]]
   - [[wiki/topics/languages/ReScript|ReScript]]
+  - [[wiki/topics/languages/reflect-metadata|reflect-metadata]]
   - [[wiki/topics/languages/Rust|Rust]]
   - [[wiki/topics/languages/Secure ECMAScript|Secure ECMAScript]]
   - [[wiki/topics/languages/StarkNet Workshop|StarkNet Workshop]]
   - [[wiki/topics/languages/TypeScript|TypeScript]]
+  - [[wiki/topics/languages/UTF-8 Overlong Encoding|UTF-8 Overlong Encoding]]
   - [[wiki/topics/languages/Unicode|Unicode]]
   - [[wiki/topics/languages/Zig|Zig]]
 - `systems`
   - [[wiki/topics/systems/2022 南京大学「操作系统」|2022 南京大学「操作系统」]]
   - [[wiki/topics/systems/操作系统的状态机模型|操作系统的状态机模型]]
   - [[wiki/topics/systems/操作系统上的进程|操作系统上的进程]]
+  - [[wiki/topics/systems/Electron Deep Link|Electron Deep Link]]
+  - [[wiki/topics/systems/Electron Auto Update 排障|Electron Auto Update 排障]]
+  - [[wiki/topics/systems/GET 请求的 body 语义|GET 请求的 body 语义]]
+  - [[wiki/topics/systems/Provisional headers 调试路径|Provisional headers 调试路径]]
+  - [[wiki/topics/systems/Windows 文件锁与 fs.rename 重试|Windows 文件锁与 fs.rename 重试]]
   - [[wiki/topics/systems/进程的地址空间|进程的地址空间]]
   - [[wiki/topics/systems/可执行文件|可执行文件]]
   - [[wiki/topics/systems/设备驱动程序|设备驱动程序]]
@@ -104,8 +129,10 @@
   - [[wiki/topics/systems/CSP|CSP]]
   - [[wiki/topics/systems/Electron|Electron]]
   - [[wiki/topics/systems/FAT 和 UNIX 文件系统|FAT 和 UNIX 文件系统]]
+  - [[wiki/topics/systems/SSL 与 TLS 握手|SSL 与 TLS 握手]]
   - [[wiki/topics/systems/Linux|Linux]]
   - [[wiki/topics/systems/Node|Node]]
+  - [[wiki/topics/systems/Open Container Initiative|Open Container Initiative]]
   - [[wiki/topics/systems/QEMU|QEMU]]
   - [[wiki/topics/systems/Redis|Redis]]
   - [[wiki/topics/systems/Sandbox|Sandbox]]
@@ -147,21 +174,66 @@
 - 综合理解页放在 `wiki/syntheses/`
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+  - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
+  - [[wiki/syntheses/ai/RAG 问答管线|RAG 问答管线]]
+- `career`
+  - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
+  - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
 - `frontend`
+  - [[wiki/syntheses/frontend/事件循环与 Microtask 检查点|事件循环与 Microtask 检查点]]
+  - [[wiki/syntheses/frontend/ES Module 加载与 Import Maps|ES Module 加载与 Import Maps]]
   - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
+  - [[wiki/syntheses/frontend/交互式 UI 的可访问性基线|交互式 UI 的可访问性基线]]
+  - [[wiki/syntheses/frontend/JavaScript 优化启发|JavaScript 优化启发]]
+  - [[wiki/syntheses/frontend/RSC 与 CSS-in-JS 的兼容性约束|RSC 与 CSS-in-JS 的兼容性约束]]
+  - [[wiki/syntheses/frontend/应用层通信的可靠性边界|应用层通信的可靠性边界]]
+  - [[wiki/syntheses/frontend/浏览器 Fetch Streaming 的读取边界|浏览器 Fetch Streaming 的读取边界]]
+  - [[wiki/syntheses/frontend/同源 iframe 沙箱设计|同源 iframe 沙箱设计]]
+  - [[wiki/syntheses/frontend/前端框架的四个时代|前端框架的四个时代]]
+  - [[wiki/syntheses/frontend/小程序运行时架构思路|小程序运行时架构思路]]
+  - [[wiki/syntheses/frontend/React 18 流式 SSR 与渐进式 hydration|React 18 流式 SSR 与渐进式 hydration]]
+  - [[wiki/syntheses/frontend/React Hooks API 模拟实现|React Hooks API 模拟实现]]
   - [[wiki/syntheses/frontend/RSC 的协议与渲染心智模型|RSC 的协议与渲染心智模型]]
+  - [[wiki/syntheses/frontend/服务端与客户端视图一致性|服务端与客户端视图一致性]]
+  - [[wiki/syntheses/frontend/Web Components 的服务端渲染路径|Web Components 的服务端渲染路径]]
+  - [[wiki/syntheses/frontend/模板克隆与 DOM 渲染路径|模板克隆与 DOM 渲染路径]]
+  - [[wiki/syntheses/frontend/html2canvas 的渲染局限与打印替代方案|html2canvas 的渲染局限与打印替代方案]]
+  - [[wiki/syntheses/frontend/shadcn Registry 组件分发模式|shadcn Registry 组件分发模式]]
   - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
+- `tooling`
+  - [[wiki/syntheses/tooling/npm 包发布与发布链路实践|npm 包发布与发布链路实践]]
+  - [[wiki/syntheses/tooling/前端依赖管理策略|前端依赖管理策略]]
+- `languages`
+  - [[wiki/syntheses/languages/TypeScript 类型收窄与 IIMT|TypeScript 类型收窄与 IIMT]]
+- `product`
+  - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
+- `systems`
+  - [[wiki/syntheses/systems/Serverless 应用分层与隔离|Serverless 应用分层与隔离]]
+  - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]
+- `product`
+  - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
+  - [[wiki/syntheses/product/短链服务的产品价值|短链服务的产品价值]]
 
 ## 对比页
 
 - 对比与取舍页放在 `wiki/comparisons/`
+- `ai`
+  - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
+- `career`
+  - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]
 - `frontend`
   - [[wiki/comparisons/frontend/SSR vs SSG vs RSC|SSR vs SSG vs RSC]]
+  - [[wiki/comparisons/frontend/Zod vs Valibot|Zod vs Valibot]]
 - `product`
   - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
+- `systems`
+  - [[wiki/comparisons/systems/线程级隔离 vs 进程级隔离|线程级隔离 vs 进程级隔离]]
+- `tooling`
+  - [[wiki/comparisons/tooling/文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf|文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf]]
 
 ## 原始资料
 
 - 所有旧 Logseq `pages/` 原始副本保留在 `raw/sources/`
+- 旧 Logseq `journals/` 不直接入库；仅在 `log.md` 和页面来源指针中保留旧仓库位置说明
 - 所有引用附件保留在 `raw/assets/`
 - `journals/` 按当前规则未整体迁入

@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-05-06
+
+- 摘要：基于《深度解析：Codex Pet Skill》沉淀一页 AI synthesis，总结成熟 Skill 的工程化范式：产物协议、manifest 状态、provenance、确定性脚本、QA 分层、局部 repair 与 control plane 提交权。
+- 页面：
+  - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-06-codex-pet-skill-article.md`
+  - `https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg`
+- 备注：这次更新保留来源摘要，不全文搬运公众号文章；知识主体是可迁移的 Agent Skill 工程模式。
+
 ## 2026-04-23
 
 - 摘要：基于一条关于 Git、GitButler 与 agent 协作的长帖整理出一页 AI synthesis，沉淀 Git 在 agent 时代的摩擦点与可能演进方向。

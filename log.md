@@ -15,6 +15,16 @@
 - 备注：
 ```
 
+## 2026-05-06
+
+- 摘要：补充 browser-use / Playwright / Chrome remote debugging 排障经验：本地 CDP 连接异常时，优先检查系统代理是否污染 `localhost` / `127.0.0.1`。
+- 页面：
+  - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
+- 来源：
+  - `raw/sources/2026-04-23-browser-use-localhost-proxy-debugging.md`
+  - `memory/2026-04-23.md`
+- 备注：这是一次真实排障后的可复用检查顺序，不扩展为新的独立主题页，直接并入既有 Chrome DevTools / CDP 页面。
+
 ## 2026-04-23
 
 - 摘要：基于一条关于 Git、GitButler 与 agent 协作的长帖整理出一页 AI synthesis，沉淀 Git 在 agent 时代的摩擦点与可能演进方向。

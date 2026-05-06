@@ -209,6 +209,7 @@
   - [[wiki/syntheses/languages/TypeScript 类型收窄与 IIMT|TypeScript 类型收窄与 IIMT]]
 - `product`
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
+  - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
 - `systems`
   - [[wiki/syntheses/systems/Serverless 应用分层与隔离|Serverless 应用分层与隔离]]
   - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]

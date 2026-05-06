@@ -17,6 +17,17 @@
 
 ## 2026-05-06
 
+- 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。
+- 页面：
+  - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-06-ai-design-quality-boundary.md`
+  - `https://jonnyburch.com/i-love-ai-but-it-still-cant-design-for-shit/`
+- 备注：这页关注 AI 设计工具的质量边界和人在回路里的信号价值，不把它归入具体 Figma 替代工具选型。
+
+## 2026-05-06
+
 - 摘要：基于《深度解析：Codex Pet Skill》沉淀一页 AI synthesis，总结成熟 Skill 的工程化范式：产物协议、manifest 状态、provenance、确定性脚本、QA 分层、局部 repair 与 control plane 提交权。
 - 页面：
   - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]

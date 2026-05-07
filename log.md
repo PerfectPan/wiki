@@ -17,14 +17,27 @@
 
 ## 2026-05-06
 
-- 摘要：基于《深度解析：Codex Pet Skill》沉淀一页 AI synthesis，总结成熟 Skill 的工程化范式：产物协议、manifest 状态、provenance、确定性脚本、QA 分层、局部 repair 与 control plane 提交权。
+- 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。
+- 页面：
+  - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-06-ai-design-quality-boundary.md`
+  - `https://jonnyburch.com/i-love-ai-but-it-still-cant-design-for-shit/`
+- 备注：这页关注 AI 设计工具的质量边界和人在回路里的信号价值，不把它归入具体 Figma 替代工具选型。
+
+## 2026-05-06
+
+- 摘要：基于《深度解析：Codex Pet Skill》和 Perplexity Research 的 Agent Skills 设计指南沉淀一页 AI synthesis，总结成熟 Skill 的工程化范式：路由 description、上下文税、evals、gotchas、产物协议、manifest 状态、provenance、确定性脚本、QA 分层、局部 repair 与 control plane 提交权。
 - 页面：
   - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
   - [[index]]
 - 来源：
   - `raw/sources/2026-05-06-codex-pet-skill-article.md`
   - `https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg`
-- 备注：这次更新保留来源摘要，不全文搬运公众号文章；知识主体是可迁移的 Agent Skill 工程模式。
+  - `raw/sources/2026-05-06-perplexity-agent-skills.md`
+  - `https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity`
+- 备注：这次更新保留来源摘要，不全文搬运公众号文章；知识主体是可迁移的 Agent Skill 工程模式；Perplexity 文章补充了 Skill 库维护、路由 eval 和 gotchas flywheel。
 
 ## 2026-04-23
 

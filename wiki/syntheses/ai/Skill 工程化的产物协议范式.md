@@ -11,9 +11,14 @@ tags:
   - workflow
   - qa
   - provenance
+  - evals
 source_refs:
   - raw/sources/2026-05-06-codex-pet-skill-article.md
   - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
+- `raw/sources/2026-05-06-perplexity-agent-skills.md`
+- https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
+  - raw/sources/2026-05-06-perplexity-agent-skills.md
+  - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
 ---
 # Skill 工程化的产物协议范式
 
@@ -23,7 +28,7 @@ source_refs:
 
 ## 简答
 
-成熟 Skill 的核心不是“让模型换一种说法”，而是先定义可消费的产物协议，再用 manifest 外部化任务状态，用脚本处理确定性编译，用 provenance 约束来源，用 QA 区分结构正确与语义正确，最后通过局部 repair 收敛失败。模型负责生成候选，不应直接拥有最终提交权。
+成熟 Skill 的核心不是“让模型换一种说法”，而是在上下文预算内封装模型会稳定用错、漏用或不一致的领域 know-how。它既要先定义可消费的产物协议，也要用 description 做精确路由，用 evals 防止误加载，用 manifest 外部化任务状态，用脚本处理确定性编译，用 provenance 约束来源，用 QA 区分结构正确与语义正确，最后通过局部 repair 收敛失败。模型负责生成候选，不应直接拥有最终提交权。
 
 ## 综合结论
 
@@ -48,6 +53,21 @@ source_refs:
 4. 来源、hash、依赖和完成状态是否可审计？
 5. QA 是否同时覆盖结构正确和语义正确？
 6. 失败后能否局部 repair，而不是只能整体 retry？
+
+## Perplexity 的 Skill 设计原则
+
+Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的内部流水线，而是从 Skill 库维护者角度说明什么值得成为 Skill、如何写、如何评审、如何维护。它的核心判断是：Skill 是模型与环境的上下文工程，不是传统软件，也不是人类 README。
+
+几个原则很硬：
+
+- **Skill 是目录，不是单文件。** `SKILL.md` 应该是 hub；确定性逻辑进 `scripts/`，重文档进 `references/`，模板和 schema 进 `assets/`，首次配置进 `config.json`。
+- **description 是路由触发器，不是功能介绍。** 好 description 应描述“用户什么时候会需要它”，最好来自真实 query；坏 description 只解释这个 Skill 有什么用。
+- **每个 Skill 都是税。** index 层的 `name: description` 每个 session 都付费；Skill body 加载后也会污染后续上下文。因此句子级检查是：没有这句话，agent 会不会做错？不会就删。
+- **gotchas 是最高价值内容。** 模型已经知道的通用命令和常识不该写；真正值钱的是边界、反例、已知失败和容易误路由的相邻场景。
+- **先 eval，后写 Skill。** 至少要覆盖真实用户 query、已知失败、相邻领域混淆；negative examples 往往比 positive examples 更能防止路由污染。
+- **维护是 gotchas flywheel。** 失败就加 gotcha；误加载就收紧 description 并加 negative eval；该加载却没加载就补关键词和 positive eval。不要随手改 description，因为小词改动可能影响整个 Skill 库。
+
+这让 Skill 工程从“写一个好提示词”变成“管理一个有路由成本、上下文成本和回归风险的能力索引”。新增一个 Skill 可能让其他 Skill 变差，这是典型的 action at a distance。
 
 ## 和 workflow 的关系
 
@@ -81,8 +101,12 @@ intent
 - 这种范式会增加脚本、manifest 和 QA 成本，不适合一次性小任务。
 - 子代理并行会增加 token 和额度消耗，只有任务天然可并行且产物需要严格验收时才划算。
 - `/goal` 这类目标驱动机制如果和 manifest / QA 结合，可能成为长任务持续推进的控制环，但仍需要明确完成证据和停止条件。
+- Skill description 的路由质量需要持续 eval；一旦 Skill 库变大，新增或修改 description 可能通过隐式匹配影响其他 Skill。
+- 自生成 Skill 不可靠。LLM 可以辅助整理材料，但真正的 Skill 需要人注入领域判断、gotchas、负例和维护经验。
 
 ## 来源指针
 
 - `raw/sources/2026-05-06-codex-pet-skill-article.md`
 - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
+- `raw/sources/2026-05-06-perplexity-agent-skills.md`
+- https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity

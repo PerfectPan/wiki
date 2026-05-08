@@ -15,6 +15,19 @@
 - 备注：
 ```
 
+## 2026-05-08
+
+- 摘要：基于一次源码审阅对比 OverlayScrollbars、SimpleBar 与 Perfect Scrollbar，沉淀自定义滚动条库的技术实现差异和选型策略：简单美化优先原生 CSS，普通容器可用 SimpleBar，复杂 Web App 关键滚动区域优先 OverlayScrollbars，Perfect Scrollbar 更适合历史项目延续。
+- 页面：
+  - [[wiki/comparisons/frontend/自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar|自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-08-custom-scrollbar-library-source-review.md`
+  - `https://github.com/KingSora/OverlayScrollbars`
+  - `https://github.com/Grsmto/simplebar`
+  - `https://github.com/mdbootstrap/perfect-scrollbar`
+- 备注：这次更新保留源码审阅摘要，不搬运源码；结论聚焦选型和长期维护成本。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

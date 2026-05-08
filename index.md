@@ -227,6 +227,7 @@
 - `frontend`
   - [[wiki/comparisons/frontend/SSR vs SSG vs RSC|SSR vs SSG vs RSC]]
   - [[wiki/comparisons/frontend/Zod vs Valibot|Zod vs Valibot]]
+  - [[wiki/comparisons/frontend/自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar|自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar]]
 - `product`
   - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
 - `systems`

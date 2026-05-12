@@ -4,7 +4,7 @@ type: synthesis
 category: ai
 status: seed
 created: 2026-05-06
-updated: 2026-05-06
+updated: 2026-05-12
 tags:
   - agent
   - skills
@@ -12,13 +12,14 @@ tags:
   - qa
   - provenance
   - evals
+  - cli
 source_refs:
   - raw/sources/2026-05-06-codex-pet-skill-article.md
   - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
-- `raw/sources/2026-05-06-perplexity-agent-skills.md`
-- https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
   - raw/sources/2026-05-06-perplexity-agent-skills.md
   - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
+  - raw/sources/2026-05-12-ai-cli-skill-review.md
+  - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
 ---
 # Skill 工程化的产物协议范式
 
@@ -69,6 +70,21 @@ Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的�
 
 这让 Skill 工程从“写一个好提示词”变成“管理一个有路由成本、上下文成本和回归风险的能力索引”。新增一个 Skill 可能让其他 Skill 变差，这是典型的 action at a distance。
 
+
+## ai-cli Skill 案例：合格但偏薄的 README 摘要型 Skill
+
+`vercel-labs/ai-cli` 的 `skills/ai-cli/SKILL.md` 是一个有代表性的中间状态：它不是坏 Skill，因为它清楚说明了工具边界、核心命令和 piping 模式，也明确提醒 agent 生成图片或视频时应使用 `-o` 保存文件，避免在非 TTY 场景把原始二进制写进 stdout、污染上下文。这个提醒属于真正的 gotcha，比重复 README 命令更有价值。
+
+但它还没有完全进入工程操作型 Skill。它缺少几类关键约束：
+
+- **默认操作协议不足。** 对 agent 来说，图片和视频生成的默认模式应该是 `-o <path-or-dir> --json`，然后从 JSON 的 `file` 字段读取产物路径，而不是让 agent 自己猜输出位置。
+- **成本和速率边界不足。** `-m` 多模型、`-n` 多结果和 video 生成都会快速放大成本与失败率，Skill 应提醒 agent 只有在用户明确要求比较或批量生成时才扩大 fan-out。
+- **失败处理不足。** 一个工程化 Skill 应写明超时、exit code、部分成功、降并发、换模型、保留成功产物和局部重试策略。
+- **结果选择不足。** 多模型比较不只是“能同时生成”，还要告诉 agent 如何组织输出目录、如何记录模型来源、如何让用户或视觉检查参与最终选择。
+- **负例不足。** Skill 应说明何时不要用这个工具，例如需要交互式长任务、需要严格可复现、没有 API key、或用户没有授权产生高成本 video。
+
+这个案例说明：一个 Skill 可以“可用”但还不“老练”。README 摘要型 Skill 让 agent 知道工具存在；工程操作型 Skill 则把工具调用变成低噪声、低成本、可恢复、可审计的执行协议。
+
 ## 和 workflow 的关系
 
 传统 workflow 擅长确定性链路，适合触发器、节点、固定分支和清晰输入输出。但当任务需要上下文理解、动态决策、候选筛选、多代理协作和局部修复时，画死节点图会越来越重。
@@ -110,3 +126,5 @@ intent
 - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
 - `raw/sources/2026-05-06-perplexity-agent-skills.md`
 - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
+- `raw/sources/2026-05-12-ai-cli-skill-review.md`
+- https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md

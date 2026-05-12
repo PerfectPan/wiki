@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-05-12
+
+- 摘要：基于 `vercel-labs/ai-cli` 仓库和其 `skills/ai-cli/SKILL.md` 的审阅，补充“README 摘要型 Skill”与“工程操作型 Skill”的区别：好 Skill 不只介绍命令，还应沉淀默认操作协议、成本边界、失败处理、结果选择和负例。
+- 页面：
+  - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
+- 来源：
+  - `raw/sources/2026-05-12-ai-cli-skill-review.md`
+  - `https://github.com/vercel-labs/ai-cli`
+  - `https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md`
+- 备注：这次更新不是沉淀 ai-cli 的完整仓库介绍，而是把它作为 Skill 质量判断的案例。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

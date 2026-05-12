@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-05-12
+
+- 摘要：基于 StepSecurity 对 Mini Shai-Hulud npm 供应链攻击的分析，沉淀 npm 蠕虫通过 GitHub Actions OIDC、npm trusted publishing 与 SLSA provenance 自传播的攻击链和防御要点。
+- 页面：
+  - [[wiki/syntheses/tooling/Mini Shai-Hulud npm 供应链攻击|Mini Shai-Hulud npm 供应链攻击]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-12-mini-shai-hulud-npm-supply-chain.md`
+  - `https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem`
+- 备注：重点沉淀信任模型教训：provenance 证明产出来源，不证明 pipeline 行为安全。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

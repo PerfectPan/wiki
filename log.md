@@ -17,14 +17,16 @@
 
 ## 2026-05-12
 
-- 摘要：基于 `vercel-labs/ai-cli` 仓库和其 `skills/ai-cli/SKILL.md` 的审阅，补充“README 摘要型 Skill”与“工程操作型 Skill”的区别：好 Skill 不只介绍命令，还应沉淀默认操作协议、成本边界、失败处理、结果选择和负例。
+- 摘要：基于 `vercel-labs/ai-cli` 仓库和其 `skills/ai-cli/SKILL.md` 的审阅，新增 `ai-cli` 工具主题页，并补充“README 摘要型 Skill”与“工程操作型 Skill”的区别：好 Skill 不只介绍命令，还应沉淀默认操作协议、成本边界、失败处理、结果选择和负例。
 - 页面：
+  - [[wiki/topics/tooling/ai-cli|ai-cli]]
   - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
+  - [[index]]
 - 来源：
   - `raw/sources/2026-05-12-ai-cli-skill-review.md`
   - `https://github.com/vercel-labs/ai-cli`
   - `https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md`
-- 备注：这次更新不是沉淀 ai-cli 的完整仓库介绍，而是把它作为 Skill 质量判断的案例。
+- 备注：`ai-cli` 仓库本身作为工具主题页沉淀；其 Skill 文件作为 Skill 质量判断案例沉淀。
 
 ## 2026-05-06
 

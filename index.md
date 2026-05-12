@@ -61,6 +61,7 @@
   - [[wiki/topics/product/Status Page|Status Page]]
   - [[wiki/topics/product/Teable|Teable]]
 - `tooling`
+  - [[wiki/topics/tooling/ai-cli|ai-cli]]
   - [[wiki/topics/tooling/Bundle|Bundle]]
   - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
   - [[wiki/topics/tooling/CTF|CTF]]

@@ -15,6 +15,16 @@
 - 备注：
 ```
 
+## 2026-05-16
+
+- 摘要：基于 Raycast 官方技术深潜文章，更新 Raycast 主题页，沉淀 Raycast 2.0 自建 hybrid desktop 架构、native shell + WebView + Node + Rust 的职责拆分，以及 native feel、内存 baseline、跨平台复用之间的工程取舍。
+- 页面：
+  - [[wiki/topics/tooling/Raycast|Raycast]]
+- 来源：
+  - `raw/sources/2026-05-16-raycast-2-technical-deep-dive.md`
+  - `https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast`
+- 备注：现有 `Raycast` 页已在 index 中，无需新增导航；本次主要补足产品架构和桌面 hybrid 取舍。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

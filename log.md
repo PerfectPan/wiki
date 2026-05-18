@@ -15,6 +15,19 @@
 - 备注：
 ```
 
+## 2026-05-18
+
+- 摘要：基于一次围绕 dottxt.ai 的对话，沉淀 LLM 结构化输出的可靠性边界：constrained decoding 能保证输出协议合法，但不能保证事实正确；普通应用优先使用厂商 Structured Outputs，自托管推理和大批量抽取场景再考虑独立约束解码层。
+- 页面：
+  - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-18-dottxt-structured-outputs-conversation.md`
+  - `https://dottxt.ai/`
+  - `https://docs.dottxt.ai/api/overview.md`
+  - `https://docs.dottxt.ai/api/models.md`
+- 备注：这页不把 dottxt 当作普通产品介绍，而是作为 constrained decoding 与厂商 Structured Outputs 取舍的案例。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

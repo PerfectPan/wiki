@@ -15,6 +15,17 @@
 - 备注：
 ```
 
+## 2026-05-24
+
+- 摘要：基于一条关于 KV Cache 的 X 帖和后续解释性讨论，沉淀一页 AI synthesis，区分 KV Cache、Prompt Cache / Prefix Cache 与普通结果缓存，并总结 KV Cache 为什么会成为 LLM 推理显存、长上下文和高并发成本的核心变量。
+- 页面：
+  - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-24-kv-cache-request-cache-conversation.md`
+  - `https://x.com/_avichawla/status/2034902650534187503`
+- 备注：这次更新以解释性讨论中形成的稳定心智模型为主，没有把 X 帖全文搬入 wiki。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

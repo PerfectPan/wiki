@@ -19,6 +19,7 @@
 
 - 摘要：基于对 `vercel-labs/ai-cli` 的仓库、npm 包、源码、release、开放 PR 和本地 CLI 行为调研，沉淀 agent-native 生成型 CLI 的产物协议：窄命令面、文件产物、JSON metadata、stdout/stderr 分离、并发与失败语义、provider adapter 化，以及成本和输入边界约束。
 - 页面：
+  - [[wiki/topics/ai/Code Agent|Code Agent]]
   - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
   - [[index]]
 - 来源：

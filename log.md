@@ -15,6 +15,19 @@
 - 备注：
 ```
 
+## 2026-05-31
+
+- 摘要：基于对 `vercel-labs/ai-cli` 的仓库、npm 包、源码、release、开放 PR 和本地 CLI 行为调研，沉淀 agent-native 生成型 CLI 的产物协议：窄命令面、文件产物、JSON metadata、stdout/stderr 分离、并发与失败语义、provider adapter 化，以及成本和输入边界约束。
+- 页面：
+  - [[wiki/topics/ai/Code Agent|Code Agent]]
+  - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-05-31-vercel-ai-cli-research.md`
+  - `https://github.com/vercel-labs/ai-cli`
+  - `https://www.npmjs.com/package/ai-cli`
+- 备注：本地环境没有 `bun`，未运行仓库测试；已通过 `npx ai-cli@0.3.0 --version` 和 `ai models --json` 验证发布包与模型目录行为，未配置 API key，因此未执行付费生成调用。
+
 ## 2026-05-06
 
 - 摘要：基于 Jonny Burch 的文章《I love AI, but it still can't design for shit》沉淀一页 product synthesis，总结 AI 辅助设计的质量边界：AI 能加速探索和表达，但不能替代人的 taste、编辑、上下文判断和最终验收。

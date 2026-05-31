@@ -75,6 +75,25 @@
 - GitHub Actions CI 包含 typecheck、format、lint、build、test。
 - 测试文件覆盖 CLI、parse、models、image references、p-map、png、mp4、h264、shimmer 等模块。由于本地环境没有 `bun`，本轮未运行仓库测试。
 
+## 可借鉴源码细节
+
+- 参数解析在 CLI 边界完成类型收窄。`parsePositiveInt`、`parseNonNegativeFloat`、`parseSize`、`parseAspectRatio`、`parseTemperature` 会先拒绝脏值，避免把半合法参数传到底层 SDK。
+- `readStdin()` 对非 TTY stdin 做 1 秒首包探测；没有数据时销毁 stdin 并返回 null，降低 agent / pipe 环境里误等 stdin 导致任务挂住的概率。
+- 自实现 `pMap` 用固定 worker 数限制并发，并按原 index 写回结果。这个设计适合生成任务：既控制 provider 压力，又保持输出顺序稳定。
+- 进度、warning、保存路径走 stderr；机器可读 `--json` 结果走 stdout。这个分离对 agent 解析很重要。
+- inline preview 是 best-effort。只有支持 Kitty graphics protocol 的终端才启用，视频预览失败会静默跳过，不影响主生成产物。
+- 模型目录 fetch 会缓存成功结果；失败时清空缓存，避免把一次网络错误永久缓存成长期故障。
+- 模型能力不是简单枚举。`language + image-generation tag` 的模型会同时进入 text 和 image 能力集合，但 image 路由时走 `generateText + messages`，体现了“能力”和“调用路径”分离。
+- 测试重点落在 CLI 边界、发布包入口、参数解析、模型目录、二进制输入输出、并发和预览底层，而不只是 happy path。
+
+## 不宜照抄的源码边界
+
+- stdin 1 秒探测很实用，但对慢管道或大文件场景可能误判；更稳的封装应允许配置。
+- reference image 读取没有明显大小限制，自动化接入时需要外层限制输入大小。
+- 默认模型写在源码里，模型过期时依赖发版或环境变量覆盖。
+- provider 绑定 Vercel AI Gateway 较深，后续如果作为基础能力，应抽成 provider adapter。
+- 没有内建成本账本，对高频内容自动化不够。
+
 ## 开放 PR 信号
 
 截至 2026-05-31，开放 PR 包括：
@@ -105,4 +124,3 @@
 - 生成调用成本需要外部记录，CLI 本身没有完整成本账本。
 - 文件命名、超时自定义、多 provider、seed、streaming 等能力仍在开放 PR 中。
 - 对 reference image / stdin 二进制缺少明显大小限制，自动化接入时需要外层约束。
-

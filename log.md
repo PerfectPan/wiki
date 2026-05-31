@@ -17,9 +17,9 @@
 
 ## 2026-05-31
 
-- 摘要：基于对 `vercel-labs/ai-cli` 的仓库、npm 包、源码、release、开放 PR 和本地 CLI 行为调研，沉淀其作为 agent / OpenClaw 自动化生成工具层的接入价值与边界：适合先做低风险生成产物节点，不适合作为完整 agent 框架或高可靠生产链路唯一依赖。
+- 摘要：基于对 `vercel-labs/ai-cli` 的仓库、npm 包、源码、release、开放 PR 和本地 CLI 行为调研，沉淀 agent-native 生成型 CLI 的产物协议：窄命令面、文件产物、JSON metadata、stdout/stderr 分离、并发与失败语义、provider adapter 化，以及成本和输入边界约束。
 - 页面：
-  - [[wiki/syntheses/ai/Vercel ai-cli 的自动化接入价值|Vercel ai-cli 的自动化接入价值]]
+  - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
   - [[index]]
 - 来源：
   - `raw/sources/2026-05-31-vercel-ai-cli-research.md`

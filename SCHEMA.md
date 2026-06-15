@@ -19,6 +19,7 @@
 ```yaml
 ---
 title: 页面标题
+description: 一句话说明这页解决什么问题，便于 agent 先扫 frontmatter
 type: topic
 category: frontend
 status: seed
@@ -26,16 +27,68 @@ created: 2026-04-12
 updated: 2026-04-12
 tags: []
 source_refs: []
+resource: []
+timestamp: 2026-04-12
 ---
 ```
 
 字段约定：
 
 - `type`：`topic`、`synthesis` 或 `comparison`
+- `description`：面向人和 agent 的一句话摘要。新页面应优先补上，避免 agent 必须打开正文才能判断页面是否相关
 - `category`：英文一级分类，例如 `frontend`、`ai`、`systems`
 - `status`：`seed`、`active` 或 `evergreen`
 - `tags`：细粒度英文主题，推荐 1 到 5 个
 - `source_refs`：支持本页内容的相对路径、页面名或 URL
+- `resource`：OKF-compatible 字段，导出时默认镜像 `source_refs`
+- `timestamp`：OKF-compatible 字段，导出时默认使用 `updated`
+
+## OKF 兼容约定
+
+这个 wiki 的主格式仍然是 Obsidian-compatible Markdown，但新页面应逐步兼容 Open Knowledge Format。
+
+兼容目标：
+
+1. 保留现有 `category`、`status`、`source_refs` 等治理字段，不为了兼容 OKF 丢掉本仓库的审阅和来源约束。
+2. 在 frontmatter 中补充 `description`，让 agent 可以在不读取全文的情况下初筛页面。
+3. 使用 `resource` 作为 OKF-compatible 来源字段。手写页面时可以让它与 `source_refs` 相同；未来导出工具可以自动从 `source_refs` 生成。
+4. 使用 `timestamp` 作为 OKF-compatible 更新时间字段。手写页面时可以与 `updated` 相同；未来导出工具可以自动生成。
+5. 仓库内部可以继续使用 `[[wikilink]]`，但 OKF 导出时应转换为标准 Markdown 链接。
+6. `raw/sources/` 继续作为事实层，不因 OKF 兼容而把未成熟资料直接提升到 `wiki/`。
+
+字段映射：
+
+| Wiki 字段 | OKF-compatible 字段 | 说明 |
+| --- | --- | --- |
+| `title` | `title` | 保持一致 |
+| `description` | `description` | 新增，一句话摘要 |
+| `type` | `type` | 保持一致，取值仍受本仓库页面类型约束 |
+| `tags` | `tags` | 保持一致 |
+| `source_refs` | `resource` | `source_refs` 是内部来源字段，`resource` 是导出友好字段 |
+| `updated` | `timestamp` | `updated` 是内部字段，`timestamp` 是导出友好字段 |
+| `category` | 扩展字段 | OKF 不强制，本仓库继续保留 |
+| `status` | 扩展字段 | OKF 不强制，本仓库继续保留 |
+
+最小样板：
+
+```yaml
+---
+title: 页面标题
+description: 一句话说明这页解决什么问题
+type: synthesis
+category: ai
+status: seed
+created: 2026-06-15
+updated: 2026-06-15
+timestamp: 2026-06-15
+tags:
+  - agent
+source_refs:
+  - raw/sources/example.md
+resource:
+  - raw/sources/example.md
+---
+```
 
 分类与 tag 的分工：
 

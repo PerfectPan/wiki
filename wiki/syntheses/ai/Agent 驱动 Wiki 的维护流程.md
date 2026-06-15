@@ -1,10 +1,12 @@
 ---
 title: Agent 驱动 Wiki 的维护流程
+description: 说明 agent 如何在文件优先、PR 审阅的个人 wiki 中承担 ingest、query 和 lint 等维护工作。
 type: synthesis
 category: ai
 status: seed
 created: 2026-04-19
 updated: 2026-04-19
+timestamp: 2026-04-19
 tags:
   - agent
   - wiki
@@ -12,6 +14,14 @@ tags:
   - mcp
   - prompt
 source_refs:
+  - AGENTS.md
+  - SCHEMA.md
+  - deep-research-report.md
+  - wiki/topics/ai/Agent.md
+  - wiki/topics/ai/Code Agent.md
+  - wiki/topics/ai/MCP.md
+  - wiki/topics/ai/Prompt.md
+resource:
   - AGENTS.md
   - SCHEMA.md
   - deep-research-report.md

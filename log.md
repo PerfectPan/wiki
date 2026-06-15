@@ -537,3 +537,27 @@
   - [[wiki/topics/frontend/Polyfill|Polyfill]]
   - [[index]]
 - 来源：
+
+## 2026-06-15
+
+- 摘要：整理 8 个历史未合入 PR，将仍有长期价值的 AI、工具链、前端选型和供应链安全内容合并为一个审阅入口。
+- 页面：
+  - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
+  - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
+  - [[wiki/comparisons/frontend/自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar|自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar]]
+  - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
+  - [[wiki/topics/tooling/ai-cli|ai-cli]]
+  - [[wiki/syntheses/tooling/Mini Shai-Hulud npm 供应链攻击|Mini Shai-Hulud npm 供应链攻击]]
+  - [[wiki/topics/tooling/Raycast|Raycast]]
+  - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
+  - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
+  - [[index]]
+- 来源：
+  - `raw/sources/2026-04-23-browser-use-localhost-proxy-debugging.md`
+  - `raw/sources/2026-05-08-custom-scrollbar-library-source-review.md`
+  - `raw/sources/2026-05-12-ai-cli-skill-review.md`
+  - `raw/sources/2026-05-12-mini-shai-hulud-npm-supply-chain.md`
+  - `raw/sources/2026-05-16-raycast-2-technical-deep-dive.md`
+  - `raw/sources/2026-05-18-dottxt-structured-outputs-conversation.md`
+  - `raw/sources/2026-05-24-kv-cache-request-cache-conversation.md`
+- 备注：历史 PR 本身均已与主干冲突，本次保留内容页更新，统一重建 `index.md` 和 `log.md`，旧 PR 将关闭并指向新的合并 PR。

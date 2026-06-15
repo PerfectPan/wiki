@@ -41,6 +41,7 @@ timestamp: 2026-04-12
 - `tags`：细粒度英文主题，推荐 1 到 5 个
 - `source_refs`：支持本页内容的相对路径、页面名或 URL
 - `resource`：OKF-compatible 字段，导出时默认镜像 `source_refs`
+- `resource_type`：可选字段。只有当页面描述真实外部资源时才填写，例如 `API Endpoint`、`Automation Job`、`Metric`、`BigQuery Table`
 - `timestamp`：OKF-compatible 字段，导出时默认使用 `updated`
 
 ## OKF 兼容约定
@@ -51,10 +52,12 @@ timestamp: 2026-04-12
 
 1. 保留现有 `category`、`status`、`source_refs` 等治理字段，不为了兼容 OKF 丢掉本仓库的审阅和来源约束。
 2. 在 frontmatter 中补充 `description`，让 agent 可以在不读取全文的情况下初筛页面。
-3. 使用 `resource` 作为 OKF-compatible 来源字段。手写页面时可以让它与 `source_refs` 相同；未来导出工具可以自动从 `source_refs` 生成。
-4. 使用 `timestamp` 作为 OKF-compatible 更新时间字段。手写页面时可以与 `updated` 相同；未来导出工具可以自动生成。
-5. 仓库内部可以继续使用 `[[wikilink]]`，但 OKF 导出时应转换为标准 Markdown 链接。
-6. `raw/sources/` 继续作为事实层，不因 OKF 兼容而把未成熟资料直接提升到 `wiki/`。
+3. 内部 `type` 始终表示页面职责，只允许 `topic`、`synthesis`、`comparison`。不要把外部资源类型直接塞进内部 `type`。
+4. 使用 `resource` 作为 OKF-compatible 来源字段。手写页面时可以让它与 `source_refs` 相同；未来导出工具可以自动从 `source_refs` 生成。
+5. 如果页面描述真实外部资源，使用可选 `resource_type` 表达资源对象类型，例如 `API Endpoint`、`Automation Job`、`Metric`、`BigQuery Table`。
+6. 使用 `timestamp` 作为 OKF-compatible 更新时间字段。手写页面时可以与 `updated` 相同；未来导出工具可以自动生成。
+7. 仓库内部可以继续使用 `[[wikilink]]`，但 OKF 导出时应转换为标准 Markdown 链接。
+8. `raw/sources/` 继续作为事实层，不因 OKF 兼容而把未成熟资料直接提升到 `wiki/`。
 
 字段映射：
 
@@ -66,8 +69,14 @@ timestamp: 2026-04-12
 | `tags` | `tags` | 保持一致 |
 | `source_refs` | `resource` | `source_refs` 是内部来源字段，`resource` 是导出友好字段 |
 | `updated` | `timestamp` | `updated` 是内部字段，`timestamp` 是导出友好字段 |
+| `resource_type` | `type` 或扩展字段 | 仅在 resource mode 导出时映射为 OKF `type`；knowledge mode 下保留为扩展字段 |
 | `category` | 扩展字段 | OKF 不强制，本仓库继续保留 |
 | `status` | 扩展字段 | OKF 不强制，本仓库继续保留 |
+
+导出模式：
+
+- **knowledge mode**：面向普通知识库 Agent 和 RAG。导出时 `type` 保持为 `topic`、`synthesis`、`comparison`，`resource_type` 作为扩展字段保留。
+- **resource mode**：面向资源目录或工具目录。若页面存在 `resource_type`，导出时可以令 OKF `type = resource_type`，并把内部页面职责保留为 `page_type`。
 
 最小样板：
 
@@ -87,6 +96,29 @@ source_refs:
   - raw/sources/example.md
 resource:
   - raw/sources/example.md
+---
+```
+
+资源页样板：
+
+```yaml
+---
+title: Search API
+description: 搜索服务的 HTTP API 入口与调用边界
+type: topic
+category: tooling
+status: seed
+created: 2026-06-15
+updated: 2026-06-15
+timestamp: 2026-06-15
+tags:
+  - api
+  - search
+resource_type: API Endpoint
+resource:
+  - https://example.com/api/search
+source_refs:
+  - raw/sources/search-api.md
 ---
 ```
 

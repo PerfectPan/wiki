@@ -4,7 +4,6 @@
 
 - [[deep-research-report]]
 - [[SCHEMA]]
-- [[log]]
 
 ## 主题页
 

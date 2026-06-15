@@ -8,7 +8,6 @@
 - `{{AGENTS}}`
 - `{{SCHEMA}}`
 - `{{INDEX}}`
-- `{{LOG}}`
 
 本次迁移输入：
 - Logseq 页面：`{{INPUT}}`
@@ -34,4 +33,3 @@
 - topics：`{{TOPICS}}`
 - syntheses：`{{SYNTHESES}}`
 - comparisons：`{{COMPARISONS}}`
-

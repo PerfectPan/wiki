@@ -38,7 +38,6 @@ function render(name: string, extra: TemplateValues = {}): string {
     AGENTS: resolve(ROOT, "AGENTS.md"),
     SCHEMA: resolve(ROOT, "SCHEMA.md"),
     INDEX: resolve(ROOT, "index.md"),
-    LOG: resolve(ROOT, "log.md"),
     RAW_SOURCES: resolve(ROOT, "raw", "sources"),
     RAW_ASSETS: resolve(ROOT, "raw", "assets"),
     TOPICS: resolve(ROOT, "wiki", "topics"),

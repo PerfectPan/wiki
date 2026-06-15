@@ -32,7 +32,7 @@ source_refs:
 
 ## 综合结论
 
-- 从仓库治理看，这个库已经把 agent 的职责限定得比较清楚：`raw/sources/` 是 append-only 的事实层，`wiki/` 是可整理的知识层，`index.md` 和 `log.md` 负责把改动变成可导航、可追踪的记录。
+- 从仓库治理看，这个库已经把 agent 的职责限定得比较清楚：`raw/sources/` 是 append-only 的事实层，`wiki/` 是可整理的知识层，`index.md` 负责导航，Git 提交和 PR 负责把改动变成可追踪、可审阅的记录。
 - 从 `deep-research-report.md` 的方法论看，agent 最适合承担三类工作：
   - ingest：读原始资料，补主题页、综合页、对比页，并同步索引与变更记录；
   - query：把已经问出来、且具有复用价值的答案沉淀回 `wiki/syntheses/` 或 `wiki/comparisons/`；

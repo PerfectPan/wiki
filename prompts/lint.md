@@ -8,7 +8,6 @@
 - `{{AGENTS}}`
 - `{{SCHEMA}}`
 - `{{INDEX}}`
-- `{{LOG}}`
 
 工作要求：
 - 巡检 `wiki/` 下页面是否重复、冲突、孤立或过时
@@ -28,4 +27,3 @@
 - topics：`{{TOPICS}}`
 - syntheses：`{{SYNTHESES}}`
 - comparisons：`{{COMPARISONS}}`
-

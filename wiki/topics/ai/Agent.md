@@ -4,7 +4,7 @@ type: topic
 category: ai
 status: active
 created: 2026-04-12
-updated: 2026-04-25
+updated: 2026-06-21
 tags:
   - agent
   - coding-agent
@@ -34,6 +34,7 @@ Agent 指的是能基于当前上下文自主决定下一步动作，并通过�
 - [[Code Agent]]
 - [[Workflow vs Agent]]
 - [[Agent Client Protocol]]
+- [[Agent Native 系统接口设计]]
 
 ## 来源指针
 

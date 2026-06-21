@@ -182,6 +182,7 @@
   - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
   - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
   - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
+  - [[wiki/syntheses/ai/Open Knowledge Format 与 Agent 可读知识库|Open Knowledge Format 与 Agent 可读知识库]]
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]

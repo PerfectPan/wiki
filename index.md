@@ -209,6 +209,7 @@
   - [[wiki/syntheses/frontend/shadcn Registry 组件分发模式|shadcn Registry 组件分发模式]]
   - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
 - `tooling`
+  - [[wiki/syntheses/tooling/GitHub Home Feed 每日摘要方案|GitHub Home Feed 每日摘要方案]]
   - [[wiki/syntheses/tooling/Mini Shai-Hulud npm 供应链攻击|Mini Shai-Hulud npm 供应链攻击]]
   - [[wiki/syntheses/tooling/npm 包发布与发布链路实践|npm 包发布与发布链路实践]]
   - [[wiki/syntheses/tooling/前端依赖管理策略|前端依赖管理策略]]

@@ -516,4 +516,4 @@
   - `docs/skills-protocol.md`
   - `plugins/spec/SPEC.md`
   - Anthropic Claude Design announcement and Help Center pages
-- 备注：没有找到一个独立于 Anthropic Claude Design 的可核验 “CloudDesign” 产品；本次按 Claude Design 处理并在对比页中显式说明。
+- 备注：没有找到一个独立于 Anthropic Claude Design 的可核验 “CloudDesign” 产品；本次按 Claude Design 处理并在对比页中显式说明。后续补强了 OpenDesign 系统架构图、run 执行链路图、扩展面地图，以及双方架构差异图。

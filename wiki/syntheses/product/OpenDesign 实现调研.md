@@ -33,6 +33,66 @@ OpenDesign 的核心不是再造一个模型或封闭设计产品，而是把“
 
 本页基于 `nexu-io/open-design` 在 `20c61f7732fa65ff656d3636327d99d6f7560f2d` 的源码快照和官方文档调研；仓库迭代很快，具体数字和路线图可能随后变化。
 
+## 系统架构图
+
+```mermaid
+flowchart TB
+  subgraph Surfaces["用户与集成入口"]
+    Web["apps/web\nNext.js + React"]
+    Desktop["apps/desktop + apps/packaged\nElectron shell"]
+    CLI["od CLI\napps/daemon/src/cli.ts"]
+    MCPClient["外部 coding agent\nMCP client"]
+  end
+
+  subgraph Daemon["本地 daemon：控制面与协议边界"]
+    API["Express /api/* + SSE"]
+    Runs["Run orchestrator\n状态机 + event log"]
+    RuntimeDefs["Runtime adapter registry\nClaude Code / Codex / Cursor / Gemini / AMR ..."]
+    ProjectServices["Project / artifact / file services"]
+    Resolvers["Skill / plugin / design-system resolvers"]
+    MCP["stdio MCP server / proxy"]
+    MediaExport["media / export / automation / memory"]
+  end
+
+  subgraph DataRoot["daemon 数据根与项目文件"]
+    SQLite["SQLite metadata\nprojects / messages / runs"]
+    ProjectFiles["project workspace files\nHTML / JSX / MD / media"]
+    ArtifactStore["artifacts + static serving"]
+    RuntimeState["memory / automation / plugin state / MCP tokens"]
+  end
+
+  subgraph External["外部执行与 provider"]
+    AgentCLIs["用户本机 agent CLI\nclaude / codex / cursor / gemini / qoder ..."]
+    AMR["AMR / BYOK compatible runtime"]
+    Providers["media providers / remote APIs"]
+  end
+
+  Web -->|"HTTP + SSE"| API
+  Desktop -->|"sidecar IPC discovers web/daemon"| Web
+  CLI -->|"same /api surface"| API
+  MCPClient -->|"stdio MCP"| MCP
+  MCP --> ProjectServices
+
+  API --> Runs
+  API --> ProjectServices
+  Runs --> Resolvers
+  Runs --> RuntimeDefs
+  RuntimeDefs -->|"spawn with cwd/env/prompt"| AgentCLIs
+  RuntimeDefs --> AMR
+  MediaExport --> Providers
+
+  ProjectServices --> SQLite
+  ProjectServices --> ProjectFiles
+  ProjectServices --> ArtifactStore
+  Resolvers --> RuntimeState
+  AgentCLIs -->|"write artifacts/files"| ProjectFiles
+  AMR -->|"write artifacts/files"| ProjectFiles
+  Runs -->|"persist normalized events"| SQLite
+  API -->|"serve artifact preview/export"| ArtifactStore
+```
+
+这张图的关键点是：OpenDesign 的 daemon 是产品控制面，agent CLI / AMR 是执行面，项目文件和 SQLite 是事实记录。Web、desktop、CLI、MCP 都不应绕过 daemon 直接拥有自己的业务协议；它们只是同一组项目、run 和 artifact 能力的不同入口。
+
 ## 领域模型
 
 | 概念 | 职责 | 主要证据 |
@@ -67,6 +127,81 @@ OpenDesign 的核心不是再造一个模型或封闭设计产品，而是把“
 4. Daemon 根据 agent definition 组装命令参数、环境变量、工作目录和 prompt 输入方式，然后 spawn 用户机器上的 CLI 或 AMR runtime。
 5. CLI 的 stdout/stderr/ACP/RPC/JSONL 被解析为统一事件，daemon 写入 run event log，并通过 SSE 推给 Web。
 6. Agent 写出的文件落在项目目录，Web 的 file workspace 和 iframe preview 读取同一份产物。导出、handoff、MCP 读取和后续 refinement 都围绕这些文件继续。
+
+```mermaid
+sequenceDiagram
+  autonumber
+  participant User as 用户
+  participant Surface as Web / Desktop / od CLI
+  participant API as Daemon API
+  participant Context as SQLite + project files
+  participant Runtime as Runtime adapter
+  participant Agent as Agent CLI / AMR
+  participant Preview as Web preview / export / MCP
+
+  User->>Surface: 输入需求，选择 project / skill / design system / agent
+  Surface->>API: POST /api/chat 或 /api/runs
+  API->>Context: 读取 project、conversation、files、memory、plugin snapshot
+  API->>Runtime: 组装 prompt、cwd、env、权限和输入格式
+  Runtime->>Agent: spawn 外部 agent runtime
+  Agent-->>Runtime: stdout / JSONL / ACP / RPC / stderr events
+  Agent->>Context: 写入 HTML、JSX、Markdown、媒体等 artifact 文件
+  Runtime-->>API: 归一化 run events
+  API->>Context: 写入 run event log 与状态
+  API-->>Surface: SSE 推送 token、tool、file、status、error
+  Surface->>API: 读取 artifact、文件树、导出结果
+  API-->>Preview: 静态服务、iframe preview、handoff、MCP read
+```
+
+这个链路解释了 OpenDesign 为什么同时需要 HTTP API、SSE、project filesystem 和 run event log：HTTP 负责命令入口，SSE 负责实时体验，文件系统承载可交付结果，event log 承载可回放和诊断。
+
+## 扩展面地图
+
+```mermaid
+flowchart LR
+  subgraph Contracts["文件化契约"]
+    Skill["SKILL.md\n任务策略 / prompt / mode"]
+    Design["DESIGN.md\n品牌与设计系统契约"]
+    Plugin["open-design.json\ncapabilities / pipeline / inputs"]
+    Craft["craft rules\n通用审美与产物规则"]
+  end
+
+  subgraph Runtime["运行时适配"]
+    RuntimeDef["runtime defs\n命令检测 / args / parser"]
+    MCPTools["MCP tools\n读取项目与 artifact"]
+    CLICommands["od subcommands\n机器可组合入口"]
+  end
+
+  subgraph Product["产品能力"]
+    Project["project setup"]
+    Run["agent run"]
+    Artifact["artifact preview/export"]
+    Automation["automation / memory proposal"]
+  end
+
+  Skill --> Run
+  Design --> Project
+  Design --> Run
+  Plugin --> Project
+  Plugin --> Run
+  Craft --> Run
+  RuntimeDef --> Run
+  MCPTools --> Artifact
+  CLICommands --> Project
+  CLICommands --> Run
+  Run --> Artifact
+  Artifact --> Automation
+```
+
+OpenDesign 的扩展策略不是单点 plugin API，而是几类不同生命周期的文本契约共同工作：`SKILL.md` 影响 agent 如何做事，`DESIGN.md` 影响产物风格和约束，`open-design.json` 把工作流产品化，runtime defs 把不同 CLI 接入同一事件模型，MCP / CLI 则把结果暴露给外部自动化。
+
+## 架构判断
+
+- **控制面和执行面分离**：daemon 统一管理项目、权限、上下文、状态与事件；真实模型调用和 tool loop 交给外部 agent。这降低了 OpenDesign 自研模型编排的负担，但把可靠性风险转移到 adapter conformance。
+- **文件系统是交付边界**：artifact 不是只存在于聊天记录里的 blob，而是项目目录中的文件。这让 Git、PR、MCP、导出和后续 agent refinement 都能复用同一份结果。
+- **设计系统被 Git 化**：Claude Design 把 design system 做成组织内托管资产；OpenDesign 把它做成 `DESIGN.md`。这更适合审阅和复用，但需要更强的质量校验、source evidence 和人工 review。
+- **本地优先不是完全离线**：daemon、SQLite、项目文件和插件状态默认本地；但 agent CLI、AMR、BYOK、media provider、connector 和 MCP 都可能联网。真实隐私边界取决于用户选择的 runtime 和 provider。
+- **架构复杂度来自“多入口一致性”**：Web、desktop、CLI、MCP、plugin、automation 都要指向同一套 daemon 能力。OpenDesign 的长期维护难点不只是 UI，而是保持这些入口的 contract、权限和事件语义一致。
 
 ## 实现特征
 

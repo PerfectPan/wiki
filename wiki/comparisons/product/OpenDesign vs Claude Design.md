@@ -29,6 +29,46 @@ Claude Design 是 Anthropic 在 Claude 生态内提供的托管设计产品：�
 
 所以二者不是简单的“谁功能更多”。Claude Design 更像一个成品 SaaS；OpenDesign 更像一个可审计、可自托管、可扩展的运行时与知识/技能文件系统。
 
+## 架构差异图
+
+```mermaid
+flowchart LR
+  subgraph Claude["Claude Design：Anthropic 托管产品"]
+    CUser["用户 / 团队"]
+    CUI["Claude Web / Desktop\nclaude.ai/design"]
+    CService["Anthropic hosted design service"]
+    CModel["Claude model + internal tools"]
+    CDesignSystem["managed org design system"]
+    CCollab["sharing / permissions / export"]
+    CHandoff["Claude Code handoff"]
+  end
+
+  subgraph Open["OpenDesign：本地优先 agent substrate"]
+    OUser["用户 / repo / 外部 agent"]
+    OUI["Web / Electron / od CLI / MCP"]
+    ODaemon["local daemon\n/api + SSE + SQLite"]
+    OContracts["SKILL.md / DESIGN.md / open-design.json"]
+    ORuntime["BYO agent CLI / AMR / BYOK"]
+    OFiles["project files + artifacts"]
+    OFlow["Git / PR / export / MCP reuse"]
+  end
+
+  CUser --> CUI --> CService
+  CService --> CModel
+  CService --> CDesignSystem
+  CService --> CCollab
+  CService --> CHandoff
+
+  OUser --> OUI --> ODaemon
+  ODaemon --> OContracts
+  ODaemon --> ORuntime
+  ORuntime --> OFiles
+  OContracts --> OFiles
+  OFiles --> OFlow
+```
+
+这张图背后的产品差异是：Claude Design 把模型、协作、设计系统、导出和 handoff 收进 Anthropic 的托管闭环；OpenDesign 把这些能力拆到本地 daemon、文本契约、外部 agent runtime 和项目文件里。前者降低组织采用成本，后者提高可审计性、可迁移性和可组合性。
+
 ## 备选项
 
 - **Claude Design**：Anthropic Labs 的托管设计工具，入口是 `claude.ai/design` 或 Claude Desktop 侧边栏，当前为 beta / research preview。
@@ -72,6 +112,17 @@ Claude Design 是 Anthropic 在 Claude 生态内提供的托管设计产品：�
 3. **Anthropic-owned loop vs BYO agent loop**：Claude Design 的智能与工具链集中在 Anthropic；OpenDesign 的生成能力随用户选择的 CLI / provider / model 变化。
 4. **协作优先 vs 可嵌入优先**：Claude Design 强在共享 canvas 和团队 rollout；OpenDesign 强在 `od` CLI、MCP、插件、文件和外部 repo 组合。
 5. **云治理 vs 本地治理**：Claude Design 的治理依赖 Anthropic plan、roles、retention 和 admin 设置；OpenDesign 的治理依赖本地数据根、权限、Git、安装来源和 adapter sandbox。
+
+## 同一工作流的不同落点
+
+| 工作流 | Claude Design 的落点 | OpenDesign 的落点 |
+| --- | --- | --- |
+| 建立品牌系统 | 上传 codebase、deck、brand guide 和资产后，由 Anthropic 托管提取并发布组织级 design system。 | 生成或维护 `DESIGN.md`，作为可 diff、可 review、可随 repo 分发的品牌契约。 |
+| 生成原型 | 在 Claude canvas 中 chat、评论、直接编辑，并由 Claude 模型链路生成。 | Web/desktop/CLI 通过 daemon 发起 run，由选定 agent CLI / AMR 写入项目文件。 |
+| 修改细节 | inline comments、direct edits、custom sliders 进入托管 canvas 的编辑模型。 | comment/tweaks/file workspace 变成后续 prompt、文件 diff 或 agent refinement。 |
+| 团队协作 | 产品内分享、权限、团队 rollout 和 admin toggle。 | Git、PR、MCP、CLI automation、项目目录和外部协作工具。 |
+| 交付与迁移 | Canva、PDF、PPTX、HTML、Claude Code handoff。 | HTML、PDF、PPTX、ZIP、Markdown、MP4、project files、MCP read、Claude Design ZIP import。 |
+| 治理与审计 | 依赖 Anthropic 的企业策略、retention、role 和未来 audit 能力。 | 依赖本地数据根、Git history、runtime/provider 选择、plugin 安装来源和权限边界。 |
 
 ## 未决问题
 

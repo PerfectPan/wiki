@@ -516,3 +516,15 @@
   - `plugins/spec/SPEC.md`
   - Anthropic Claude Design announcement and Help Center pages
 - 备注：没有找到一个独立于 Anthropic Claude Design 的可核验 “CloudDesign” 产品；本次按 Claude Design 处理并在对比页中显式说明。后续补强了 OpenDesign 系统架构图、run 执行链路图、扩展面地图，以及双方架构差异图。
+
+- 摘要：强化仓库级深度调研工作流，新增 `bin/wiki research <topic>` 标准入口和 `prompts/research.md` 提示词。
+- 页面：
+  - [[AGENTS]]
+  - `bin/wiki.ts`
+  - `prompts/research.md`
+  - `tests/wiki-cli.sh`
+- 来源：
+  - 本次 OpenDesign 调研 PR review 反馈
+  - `AGENTS.md`
+  - `SCHEMA.md`
+- 备注：这个仓库不新增项目内 `.codex/skills`；调研类约束统一沉淀为 `bin/wiki` workflow，要求架构图、数据流图、扩展面图、证据矩阵和 PR 验收。

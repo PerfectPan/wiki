@@ -34,6 +34,7 @@
 
 - `bin/wiki ingest <source>`：为新来源生成标准 ingest 提示词
 - `bin/wiki query <question>`：为知识问答生成标准 query 提示词
+- `bin/wiki research <topic>`：为深度调研和 Wiki 沉淀生成标准 research 提示词
 - `bin/wiki lint`：为巡检知识库生成标准 lint 提示词
 - `bin/wiki migrate <logseq-page>`：为 Logseq 页面迁移生成标准 migrate 提示词
 

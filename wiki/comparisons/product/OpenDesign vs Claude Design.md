@@ -23,7 +23,7 @@ source_refs:
 
 ## 当前结论
 
-这里的 “CloudDesign” 按 Anthropic 官方产品 **Claude Design** 处理。检索中没有发现一个可核验的、独立于 Claude Design 的 “CloudDesign” 目标；很多公开内容只是把 `claude.ai/design` 口误或字幕成 “Cloud design”。
+本页的对比对象是 Anthropic 的 **Claude Design**（`claude.ai/design`）。本次检索没有找到可核验的独立 `CloudDesign` 产品；如果后续要比较另一个名为 CloudDesign 的具体产品，应另起对比页并补来源。
 
 Claude Design 是 Anthropic 在 Claude 生态内提供的托管设计产品：体验集中、协作和品牌系统内建、与 Claude Code 的官方 handoff 紧密。OpenDesign 则是开源本地优先的设计 agent substrate：它不拥有唯一模型或 agent loop，而是把现有 coding-agent CLI、`SKILL.md`、`DESIGN.md`、plugin、MCP 和本地 daemon 编排起来。
 

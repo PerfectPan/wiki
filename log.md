@@ -499,7 +499,6 @@
 - 页面：
   - [[wiki/topics/frontend/Polyfill|Polyfill]]
   - [[index]]
-- 来源：
 
 ## 2026-06-22
 

@@ -500,3 +500,20 @@
   - [[wiki/topics/frontend/Polyfill|Polyfill]]
   - [[index]]
 - 来源：
+
+## 2026-06-22
+
+- 摘要：沉淀 OpenDesign 实现调研，并对比 OpenDesign 与 Claude Design（用户口径中的 CloudDesign）。
+- 页面：
+  - [[wiki/syntheses/product/OpenDesign 实现调研|OpenDesign 实现调研]]
+  - [[wiki/comparisons/product/OpenDesign vs Claude Design|OpenDesign vs Claude Design]]
+  - [[index]]
+- 来源：
+  - `nexu-io/open-design@20c61f7732fa65ff656d3636327d99d6f7560f2d`
+  - `README.md`
+  - `docs/architecture.md`
+  - `docs/agent-adapters.md`
+  - `docs/skills-protocol.md`
+  - `plugins/spec/SPEC.md`
+  - Anthropic Claude Design announcement and Help Center pages
+- 备注：没有找到一个独立于 Anthropic Claude Design 的可核验 “CloudDesign” 产品；本次按 Claude Design 处理并在对比页中显式说明。

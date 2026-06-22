@@ -213,6 +213,7 @@
   - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]
 - `product`
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
+  - [[wiki/syntheses/product/OpenDesign 实现调研|OpenDesign 实现调研]]
   - [[wiki/syntheses/product/短链服务的产品价值|短链服务的产品价值]]
 
 ## 对比页
@@ -227,6 +228,7 @@
   - [[wiki/comparisons/frontend/Zod vs Valibot|Zod vs Valibot]]
 - `product`
   - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
+  - [[wiki/comparisons/product/OpenDesign vs Claude Design|OpenDesign vs Claude Design]]
 - `systems`
   - [[wiki/comparisons/systems/线程级隔离 vs 进程级隔离|线程级隔离 vs 进程级隔离]]
 - `tooling`

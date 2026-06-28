@@ -1,10 +1,12 @@
 ---
 title: Agent 驱动 Wiki 的维护流程
+description: 说明 agent 如何在文件优先、PR 审阅的个人 wiki 中承担 ingest、query 和 lint 等维护工作。
 type: synthesis
 category: ai
 status: seed
 created: 2026-04-19
 updated: 2026-04-19
+timestamp: 2026-04-19
 tags:
   - agent
   - wiki
@@ -12,6 +14,14 @@ tags:
   - mcp
   - prompt
 source_refs:
+  - AGENTS.md
+  - SCHEMA.md
+  - deep-research-report.md
+  - wiki/topics/ai/Agent.md
+  - wiki/topics/ai/Code Agent.md
+  - wiki/topics/ai/MCP.md
+  - wiki/topics/ai/Prompt.md
+resource:
   - AGENTS.md
   - SCHEMA.md
   - deep-research-report.md
@@ -32,7 +42,7 @@ source_refs:
 
 ## 综合结论
 
-- 从仓库治理看，这个库已经把 agent 的职责限定得比较清楚：`raw/sources/` 是 append-only 的事实层，`wiki/` 是可整理的知识层，`index.md` 和 `log.md` 负责把改动变成可导航、可追踪的记录。
+- 从仓库治理看，这个库已经把 agent 的职责限定得比较清楚：`raw/sources/` 是 append-only 的事实层，`wiki/` 是可整理的知识层，`index.md` 负责导航，Git 提交和 PR 负责把改动变成可追踪、可审阅的记录。
 - 从 `deep-research-report.md` 的方法论看，agent 最适合承担三类工作：
   - ingest：读原始资料，补主题页、综合页、对比页，并同步索引与变更记录；
   - query：把已经问出来、且具有复用价值的答案沉淀回 `wiki/syntheses/` 或 `wiki/comparisons/`；

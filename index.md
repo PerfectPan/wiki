@@ -4,7 +4,6 @@
 
 - [[deep-research-report]]
 - [[SCHEMA]]
-- [[log]]
 
 ## 主题页
 
@@ -61,6 +60,7 @@
   - [[wiki/topics/product/Status Page|Status Page]]
   - [[wiki/topics/product/Teable|Teable]]
 - `tooling`
+  - [[wiki/topics/tooling/ai-cli|ai-cli]]
   - [[wiki/topics/tooling/Bundle|Bundle]]
   - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
   - [[wiki/topics/tooling/CTF|CTF]]
@@ -174,9 +174,16 @@
 - 综合理解页放在 `wiki/syntheses/`
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
+  - [[wiki/syntheses/ai/Agent Native 系统接口设计|Agent Native 系统接口设计]]
+  - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
   - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
   - [[wiki/syntheses/ai/RAG 问答管线|RAG 问答管线]]
+  - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
   - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
+  - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
+  - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
+  - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
+  - [[wiki/syntheses/ai/Open Knowledge Format 与 Agent 可读知识库|Open Knowledge Format 与 Agent 可读知识库]]
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
@@ -202,12 +209,14 @@
   - [[wiki/syntheses/frontend/shadcn Registry 组件分发模式|shadcn Registry 组件分发模式]]
   - [[wiki/syntheses/frontend/状态管理的技术选型维度|状态管理的技术选型维度]]
 - `tooling`
+  - [[wiki/syntheses/tooling/Mini Shai-Hulud npm 供应链攻击|Mini Shai-Hulud npm 供应链攻击]]
   - [[wiki/syntheses/tooling/npm 包发布与发布链路实践|npm 包发布与发布链路实践]]
   - [[wiki/syntheses/tooling/前端依赖管理策略|前端依赖管理策略]]
 - `languages`
   - [[wiki/syntheses/languages/TypeScript 类型收窄与 IIMT|TypeScript 类型收窄与 IIMT]]
 - `product`
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
+  - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
 - `systems`
   - [[wiki/syntheses/systems/Serverless 应用分层与隔离|Serverless 应用分层与隔离]]
   - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]
@@ -226,6 +235,7 @@
 - `frontend`
   - [[wiki/comparisons/frontend/SSR vs SSG vs RSC|SSR vs SSG vs RSC]]
   - [[wiki/comparisons/frontend/Zod vs Valibot|Zod vs Valibot]]
+  - [[wiki/comparisons/frontend/自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar|自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar]]
 - `product`
   - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
   - [[wiki/comparisons/product/OpenDesign vs Claude Design|OpenDesign vs Claude Design]]

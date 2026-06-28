@@ -4,14 +4,17 @@ type: topic
 category: tooling
 status: seed
 created: 2026-04-12
-updated: 2026-04-19
+updated: 2026-05-06
 tags:
   - chrome
   - devtools
+  - cdp
+  - browser-use
 source_refs:
   - raw/sources/Chrome DevTools.md
   - https://chromedevtools.github.io/devtools-protocol/
   - https://developer.chrome.com/docs/extensions/mv3/devtools/#overview
+  - raw/sources/2026-04-23-browser-use-localhost-proxy-debugging.md
 ---
 # Chrome DevTools
 
@@ -38,8 +41,22 @@ source_refs:
 - 贡献指南：https://docs.google.com/document/d/1WNF-KqRSzPLUUfZqQG5AFeU_Ll8TfWYcJasa_XGf7ro/view
 - Node SDK：https://github.com/cyrus-and/chrome-remote-interface，提供了一层抽象，方便发送 CDP 协议
 
+## 本地 CDP 连接排障
+
+如果 browser-use、Playwright、Chrome remote debugging 或其他基于 CDP 的工具连不上本机 Chrome，不要一上来就怀疑自动化库。先检查本地环回地址是否被代理污染。
+
+优先确认：
+
+- `localhost`、`127.0.0.1` 是否被系统代理、HTTP(S)_PROXY 环境变量或工具内代理配置接管。
+- `NO_PROXY` / 代理绕过列表是否覆盖 `localhost,127.0.0.1,::1`。
+- `http://127.0.0.1:<remote-debugging-port>/json` 能否直接返回页面列表。
+- `webSocketDebuggerUrl` 指向的 `ws://127.0.0.1:<port>/devtools/...` 是否能被当前工具进程直连。
+
+这个检查应放在排障前段。CDP 链路本身通常很直接；真正麻烦的是本机代理把环回流量送到了不该去的地方，导致上层工具表现得像“浏览器不可达”或“页面读不到”。
+
 ## Source Pointers
 
 - `raw/sources/Chrome DevTools.md`
 - https://chromedevtools.github.io/devtools-protocol/
 - https://developer.chrome.com/docs/extensions/mv3/devtools/#overview
+- `raw/sources/2026-04-23-browser-use-localhost-proxy-debugging.md`

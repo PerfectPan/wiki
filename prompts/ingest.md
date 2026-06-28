@@ -16,7 +16,7 @@
 - 优先把来源整理进 `wiki/topics/`、`wiki/syntheses/` 或 `wiki/comparisons/`
 - 不要改写或删除 `raw/` 中的原始资料
 - 如果导航发生变化，更新 `index.md`
-- 不要向 `log.md` 追加新记录；把本次知识变更说明写进 PR body
+- 在 PR body 中写清楚本次知识变更摘要、受影响页面和来源指针
 - 所有非微小改动都应走 branch + PR 审阅
 
 输出目标：

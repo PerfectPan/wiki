@@ -12,6 +12,7 @@ tags:
   - workflow
 source_refs:
   - raw/sources/Code Agent.md
+  - raw/sources/2026-05-31-vercel-ai-cli-research.md
 ---
 # Code Agent
 
@@ -25,6 +26,7 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 - code agent 和普通聊天式 AI 的差别，在于它需要同时处理代码语义、仓库治理和执行副作用，因此“先读规则再动手”是工作流的一部分，不只是礼貌。
 - 2025-03-01 的一条经验是一个很实用的经验：AI 在改代码时容易顺手删注释、擅自重构。对 code agent 来说，这意味着需要更强的范围控制、最小 diff 和显式意图确认。
 - 如果两边都定义了协议边界，code agent 的行为会更稳定。`AGENTS.md` 约束的是仓库侧行为，[[Agent Client Protocol]] 这类协议约束的是 editor / client 与 agent 之间如何协商能力。
+- code agent 不只需要调用 SDK 或 MCP，也经常依赖 CLI 作为执行边界。稳定的 agent-native CLI 应该把文件产物、JSON metadata、stdout/stderr 分离、并发控制和失败语义做成明确协议，而不是让 agent 从自然语言输出里猜结果。参见 [[Agent-native 生成型 CLI 的产物协议]]。
 
 ## 典型约束
 
@@ -37,8 +39,10 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 
 - [[Agent]]
 - [[Agent Client Protocol]]
+- [[Agent-native 生成型 CLI 的产物协议]]
 - [[Workflow vs Agent]]
 
 ## 来源指针
 
 - `raw/sources/Code Agent.md`
+- `raw/sources/2026-05-31-vercel-ai-cli-research.md`

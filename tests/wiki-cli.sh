@@ -22,6 +22,13 @@ assert_contains() {
 [[ -f "$CLI_TS" ]] || fail "expected TypeScript CLI at $CLI_TS"
 [[ ! -d "$ROOT/.codex/skills" ]] || fail "project-local skills should not exist"
 
+if git -C "$ROOT" rev-parse --verify origin/main >/dev/null 2>&1; then
+  changed_files="$(git -C "$ROOT" diff --name-only origin/main --)"
+  if [[ "$changed_files" == "log.md" || "$changed_files" == *$'\nlog.md' || "$changed_files" == *$'\nlog.md\n'* || "$changed_files" == *'log.md'$'\n'* ]]; then
+    fail "log.md is historical and must not be modified; put change notes in the PR body"
+  fi
+fi
+
 agents_text="$(cat "$ROOT/AGENTS.md")"
 assert_contains "$agents_text" "bin/wiki ingest <source>"
 assert_contains "$agents_text" "bin/wiki query <question>"

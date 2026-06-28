@@ -6,7 +6,7 @@
 
 - 保持知识库脱离单一应用后仍然可读。
 - 让 agent 承担重复性的整理工作。
-- 让长期知识变更始终有可审阅的变更记录。
+- 让长期知识变更始终通过 PR 获得可审阅的变更说明。
 
 ## 仓库结构
 
@@ -33,6 +33,7 @@
 
 - `bin/wiki ingest <source>`：为新来源生成标准 ingest 提示词
 - `bin/wiki query <question>`：为知识问答生成标准 query 提示词
+- `bin/wiki research <topic>`：为深度调研和 Wiki 沉淀生成标准 research 提示词
 - `bin/wiki lint`：为巡检知识库生成标准 lint 提示词
 - `bin/wiki migrate <logseq-page>`：为 Logseq 页面迁移生成标准 migrate 提示词
 

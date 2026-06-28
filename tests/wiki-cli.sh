@@ -40,7 +40,7 @@ ingest_output="$("$CLI" ingest deep-research-report.md)"
 assert_contains "$ingest_output" "操作：ingest"
 assert_contains "$ingest_output" "AGENTS.md"
 assert_contains "$ingest_output" "SCHEMA.md"
-assert_contains "$ingest_output" "log.md"
+assert_contains "$ingest_output" '不要向 `log.md` 追加'
 
 query_output="$("$CLI" query "什么是 vault")"
 assert_contains "$query_output" "操作：query"

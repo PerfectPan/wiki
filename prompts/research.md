@@ -8,7 +8,6 @@
 - `{{AGENTS}}`
 - `{{SCHEMA}}`
 - `{{INDEX}}`
-- `{{LOG}}`
 
 本次调研主题：
 - `{{INPUT}}`
@@ -33,7 +32,7 @@
 - 判断应新增或更新 `wiki/topics/`、`wiki/syntheses/` 还是 `wiki/comparisons/` 页面
 - 新页面应带 `SCHEMA.md` 约定的 frontmatter，并在单独打开时自洽
 - 如果导航发生变化，更新 `index.md`
-- 在 `log.md` 追加本次知识变更记录，包含日期、页面和来源指针
+- 不要向 `log.md` 追加新记录；把日期、页面和来源指针写进 PR body
 - 为 PR 写出简短摘要，说明调研范围、来源、图表、验证方式和剩余风险
 
 验证要求：

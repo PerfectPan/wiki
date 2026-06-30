@@ -213,6 +213,7 @@
   - [[wiki/syntheses/tooling/Mini Shai-Hulud npm 供应链攻击|Mini Shai-Hulud npm 供应链攻击]]
   - [[wiki/syntheses/tooling/npm 包发布与发布链路实践|npm 包发布与发布链路实践]]
   - [[wiki/syntheses/tooling/前端依赖管理策略|前端依赖管理策略]]
+  - [[wiki/syntheses/tooling/聚合型 Agent CLI 的架构设计观察|聚合型 Agent CLI 的架构设计观察]]
 - `languages`
   - [[wiki/syntheses/languages/TypeScript 类型收窄与 IIMT|TypeScript 类型收窄与 IIMT]]
 - `product`

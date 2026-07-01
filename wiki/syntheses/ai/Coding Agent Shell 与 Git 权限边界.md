@@ -1,10 +1,12 @@
 ---
 title: Coding Agent Shell 与 Git 权限边界
+description: 基于 OpenSeek 的 shell/Git sandbox 重构，总结 coding agent 如何在保留 Git 可用性的同时约束源文件写入。
 type: synthesis
 category: ai
 status: active
 created: 2026-07-01
 updated: 2026-07-01
+timestamp: 2026-07-01
 tags:
   - coding-agent
   - shell
@@ -12,6 +14,10 @@ tags:
   - sandbox
   - tool-boundary
 source_refs:
+  - raw/sources/2026-07-01-openseek-shell-git-policy.md
+  - https://github.com/moonbitlang/openseek
+  - https://github.com/moonbitlang/openseek/pull/273
+resource:
   - raw/sources/2026-07-01-openseek-shell-git-policy.md
   - https://github.com/moonbitlang/openseek
   - https://github.com/moonbitlang/openseek/pull/273
@@ -162,6 +168,9 @@ flowchart LR
 
 ## 相关页面
 
+- [[OpenSeek 项目架构总览]]
+- [[OpenSeek 会话与运行时模型]]
+- [[OpenSeek 工具协议与评测体系]]
 - [[Code Agent]]
 - [[Agent]]
 - [[Git 与 Agent 协作的摩擦点和演进方向]]

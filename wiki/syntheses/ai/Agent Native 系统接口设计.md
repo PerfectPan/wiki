@@ -145,6 +145,7 @@ Validation 也不等于真实正确。投资策略通过回测不代表未来有
 - [[Agent]]
 - [[Workflow vs Agent]]
 - [[LLM 结构化输出的可靠性边界]]
+- [[Agent Harness 演进范式]]
 - [[Agent-native 生成型 CLI 的产物协议]]
 
 ## 来源指针

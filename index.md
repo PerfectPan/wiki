@@ -175,6 +175,7 @@
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
   - [[wiki/syntheses/ai/Agent 主动上下文管理|Agent 主动上下文管理]]
+  - [[wiki/syntheses/ai/Agent Harness 演进范式|Agent Harness 演进范式]]
   - [[wiki/syntheses/ai/Agent Native 系统接口设计|Agent Native 系统接口设计]]
   - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
   - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]

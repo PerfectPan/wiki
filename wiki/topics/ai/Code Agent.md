@@ -27,6 +27,7 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 - 2025-03-01 的一条经验是一个很实用的经验：AI 在改代码时容易顺手删注释、擅自重构。对 code agent 来说，这意味着需要更强的范围控制、最小 diff 和显式意图确认。
 - 如果两边都定义了协议边界，code agent 的行为会更稳定。`AGENTS.md` 约束的是仓库侧行为，[[Agent Client Protocol]] 这类协议约束的是 editor / client 与 agent 之间如何协商能力。
 - code agent 不只需要调用 SDK 或 MCP，也经常依赖 CLI 作为执行边界。稳定的 agent-native CLI 应该把文件产物、JSON metadata、stdout/stderr 分离、并发控制和失败语义做成明确协议，而不是让 agent 从自然语言输出里猜结果。参见 [[Agent-native 生成型 CLI 的产物协议]]。
+- 大仓里的结构约定也应尽量机器可验证。像 `konsistent` 这类结构 linter 可以把 provider、adapter、plugin、harness 等重复结构的文件、导出、导入和继承约束变成 CI 检查，降低 agent 只凭样例模仿时的漂移。参见 [[Code Agent 结构约定的可验证边界]]。
 
 ## 典型约束
 
@@ -39,6 +40,7 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 
 - [[Agent]]
 - [[Agent Client Protocol]]
+- [[Code Agent 结构约定的可验证边界]]
 - [[Agent-native 生成型 CLI 的产物协议]]
 - [[Workflow vs Agent]]
 

@@ -182,6 +182,7 @@
   - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
   - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
   - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
+  - [[wiki/syntheses/ai/Code Agent 结构约定的可验证边界|Code Agent 结构约定的可验证边界]]
   - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
   - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
   - [[wiki/syntheses/ai/Open Knowledge Format 与 Agent 可读知识库|Open Knowledge Format 与 Agent 可读知识库]]

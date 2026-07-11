@@ -26,6 +26,10 @@ source_refs:
 - 某些 CSS transition 依赖浏览器先把元素放进渲染树。如果你在同一轮脚本里既让元素可见、又立刻移除初始隐藏类，过渡可能直接跳到终态；这时读取 `offsetWidth`、`getBoundingClientRect()` 一类布局信息会强制触发 reflow，让过渡按预期生效。
 - flex 容器里的子项如果看起来“明明设置了 `flex-shrink: 1` 还是不缩”，常见原因不是 shrink 失效，而是自动最小尺寸在生效。此时把子项的 `min-width` 显式设为 `0`，或通过 `overflow: hidden` 改写最小尺寸约束，往往才是正确修复方式。
 
+## Related Pages
+
+- [[wiki/topics/frontend/CSS Anchor Positioning|CSS Anchor Positioning]]
+
 ## Source Pointers
 
 - `raw/sources/CSS.md`

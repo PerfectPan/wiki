@@ -14,6 +14,7 @@ tags:
   - data-governance
   - developer-tools
 source_refs:
+  - raw/sources/2026-07-20-raft-orca-product-research.md
   - https://raft.build/zh-cn/
   - https://docs.raft.build/features/server/computers/
   - https://docs.raft.build/features/agents/external/
@@ -23,6 +24,7 @@ source_refs:
   - https://www.onorca.dev/docs/telemetry
   - https://github.com/stablyai/orca
 resource:
+  - raw/sources/2026-07-20-raft-orca-product-research.md
   - https://raft.build/zh-cn/
   - https://docs.raft.build/features/server/computers/
   - https://docs.raft.build/features/agents/external/

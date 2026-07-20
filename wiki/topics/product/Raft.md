@@ -14,12 +14,14 @@ tags:
   - saas
   - data-governance
 source_refs:
+  - raw/sources/2026-07-20-raft-orca-product-research.md
   - https://raft.build/zh-cn/
   - https://docs.raft.build/features/server/computers/
   - https://docs.raft.build/features/agents/runtime/
   - https://docs.raft.build/features/agents/external/
   - https://raft.build/zh-cn/privacy/
 resource:
+  - raw/sources/2026-07-20-raft-orca-product-research.md
   - https://raft.build/zh-cn/
   - https://docs.raft.build/features/server/computers/
   - https://docs.raft.build/features/agents/runtime/

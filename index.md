@@ -251,6 +251,7 @@
 - `product`
   - [[wiki/comparisons/product/Obsidian vs Logseq|Obsidian vs Logseq]]
   - [[wiki/comparisons/product/OpenDesign vs Claude Design|OpenDesign vs Claude Design]]
+  - [[wiki/comparisons/product/Raft vs Orca：多 Agent 协作与本地执行|Raft vs Orca：多 Agent 协作与本地执行]]
 - `systems`
   - [[wiki/comparisons/systems/线程级隔离 vs 进程级隔离|线程级隔离 vs 进程级隔离]]
 - `tooling`

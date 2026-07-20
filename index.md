@@ -60,6 +60,8 @@
 - `product`
   - [[wiki/topics/product/AI Cover|AI Cover]]
   - [[wiki/topics/product/Logseq|Logseq]]
+  - [[wiki/topics/product/Orca|Orca]]
+  - [[wiki/topics/product/Raft|Raft]]
   - [[wiki/topics/product/Status Page|Status Page]]
   - [[wiki/topics/product/Teable|Teable]]
 - `tooling`

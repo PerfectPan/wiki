@@ -206,6 +206,8 @@ Orca 的公开代码使用 MIT License，且其远程 Server 可以完全运行�
 
 ## 相关页面
 
+- [[wiki/topics/product/Raft|Raft]]
+- [[wiki/topics/product/Orca|Orca]]
 - [[wiki/topics/ai/Agent|Agent]]
 - [[wiki/topics/tooling/Git|Git]]
 

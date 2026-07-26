@@ -40,17 +40,16 @@ resource:
 
 ## 何时不依赖它
 
-| 需求 | 看哪里 |
-| --- | --- |
-| 布局状态切换怎么动画、为什么用 transform | [[wiki/syntheses/frontend/FLIP 布局动画的心智模型\|FLIP 布局动画的心智模型]] |
-| 动效观感 / 时序是否对 | 浏览器实测（例如 verifying-animation-timing 一类流程） |
-| 整体 UI 方向与打磨 | frontend-design / impeccable 等设计 skill，而不是抄 `t-*` 菜谱 |
+- 布局状态切换的心智与性能模型（为什么用 transform 做补偿）——需要单独的布局动画笔记，不在本站覆盖范围。
+- 动效观感 / 时序是否对——浏览器实测，而不是再抄一份 snippet。
+- 整体 UI 方向与打磨——frontend-design / impeccable 一类设计 skill，而不是默认套 `t-*` 菜谱。
 
 ## 与 agent skill 的边界
 
 - **默认**：不把 `transitions-dev` 写进跨机 skill manifest，不在每台机器、每个 agent 常驻安装。
 - **临时**：某次任务需要 agent 直接套菜谱时，可 `npx skills add Jakubantalik/transitions.dev`，用完可卸。
 - **原因**：本库日常以内容站 / 工具向 UI 为主，全量常驻 skill 噪音大于收益；菜谱站本身可外链查阅，不必再复制一份进 agent 目录。
+- 入口收藏放在 [[wiki/topics/frontend/CSS|CSS]] 的链接清单里，和其它好用参考同一层级。
 
 ## 使用注意
 
@@ -60,7 +59,6 @@ resource:
 
 ## Related Pages
 
-- [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]
 - [[wiki/topics/frontend/CSS|CSS]]
 
 ## Source Pointers

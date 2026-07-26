@@ -40,10 +40,6 @@ source_refs:
   - 如果父节点在做 scale，子节点可能需要套一层反向 scale 来抵消视觉拉伸，否则文本和内容会被一起压缩。
 - 因此，FLIP 更像一个布局动画的性能心智模型，而不是某个具体库的 API。`framer-motion` 只是把这套思路包装得更易用。
 
-## Related Pages
-
-- [[wiki/topics/frontend/Transitions.dev|Transitions.dev]] — product UI 动效菜谱参考站（观感 / 复制 CSS，不是布局动画心智）
-
 ## 未决问题
 
 - 当前仓库里还没有把 FLIP 与浏览器渲染流水线、合成层和布局抖动放在一起讲的页面，后续可以再补成一篇更底层的性能页。

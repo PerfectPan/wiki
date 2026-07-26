@@ -1,6 +1,6 @@
 ---
 title: Transitions.dev
-description: Product UI 动效菜谱参考站；写动画时查阅，不作为全局 agent skill 常驻。
+description: Product UI 动效菜谱参考站；写动画时查阅、复制 CSS。
 type: topic
 category: frontend
 status: seed
@@ -29,7 +29,7 @@ resource:
 
 ## 摘要
 
-[Transitions.dev](https://transitions.dev/) 是一套可交互的 product UI transition 菜谱站（约 20+ 种：modal、dropdown、badge、tabs、skeleton、accordion 等）。主用法是打开网站看观感、复制 CSS；它也提供 agent skill，但本库选择 **当参考站沉淀，不当全局常驻 skill**。
+[Transitions.dev](https://transitions.dev/) 是一套可交互的 product UI transition 菜谱站（约 20+ 种：modal、dropdown、badge、tabs、skeleton、accordion 等）。主用法是打开网站看观感、复制 CSS；入口挂在 [[wiki/topics/frontend/CSS|CSS]] 的参考清单里。
 
 ## 何时打开
 
@@ -43,13 +43,6 @@ resource:
 - 布局状态切换的心智与性能模型（为什么用 transform 做补偿）——需要单独的布局动画笔记，不在本站覆盖范围。
 - 动效观感 / 时序是否对——浏览器实测，而不是再抄一份 snippet。
 - 整体 UI 方向与打磨——frontend-design / impeccable 一类设计 skill，而不是默认套 `t-*` 菜谱。
-
-## 与 agent skill 的边界
-
-- **默认**：不把 `transitions-dev` 写进跨机 skill manifest，不在每台机器、每个 agent 常驻安装。
-- **临时**：某次任务需要 agent 直接套菜谱时，可 `npx skills add Jakubantalik/transitions.dev`，用完可卸。
-- **原因**：本库日常以内容站 / 工具向 UI 为主，全量常驻 skill 噪音大于收益；菜谱站本身可外链查阅，不必再复制一份进 agent 目录。
-- 入口收藏放在 [[wiki/topics/frontend/CSS|CSS]] 的链接清单里，和其它好用参考同一层级。
 
 ## 使用注意
 

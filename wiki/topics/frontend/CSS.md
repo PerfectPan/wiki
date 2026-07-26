@@ -19,7 +19,7 @@ source_refs:
 - [[Tailwind]]
 - Tutorial:
 	- 介绍 grid 的，感觉挺好的：https://ishadeed.com/article/css-grid-area/
-- 动效菜谱参考：https://transitions.dev/（product UI 微交互；当参考站，不当全局 skill）→ [[wiki/topics/frontend/Transitions.dev|Transitions.dev]]
+- 动效菜谱参考：https://transitions.dev/（product UI 微交互）→ [[wiki/topics/frontend/Transitions.dev|Transitions.dev]]
 
 ## 工程结论
 

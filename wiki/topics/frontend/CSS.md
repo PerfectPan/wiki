@@ -4,7 +4,7 @@ type: topic
 category: frontend
 status: seed
 created: 2026-04-12
-updated: 2026-04-25
+updated: 2026-07-26
 tags:
   - css
   - tailwind
@@ -19,6 +19,7 @@ source_refs:
 - [[Tailwind]]
 - Tutorial:
 	- 介绍 grid 的，感觉挺好的：https://ishadeed.com/article/css-grid-area/
+- 动效菜谱参考：https://transitions.dev/（product UI 微交互）→ [[wiki/topics/frontend/Transitions.dev|Transitions.dev]]
 
 ## 工程结论
 
@@ -29,6 +30,7 @@ source_refs:
 ## Related Pages
 
 - [[wiki/topics/frontend/CSS Anchor Positioning|CSS Anchor Positioning]]
+- [[wiki/topics/frontend/Transitions.dev|Transitions.dev]]
 
 ## Source Pointers
 

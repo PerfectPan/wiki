@@ -32,6 +32,7 @@
   - [[wiki/topics/frontend/State Management|State Management]]
   - [[wiki/topics/frontend/Suspense|Suspense]]
   - [[wiki/topics/frontend/SVG|SVG]]
+  - [[wiki/topics/frontend/Transitions.dev|Transitions.dev]]
   - [[wiki/topics/frontend/useEffect|useEffect]]
   - [[wiki/topics/frontend/useMemo|useMemo]]
   - [[wiki/topics/frontend/useRef|useRef]]

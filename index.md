@@ -230,6 +230,7 @@
   - [[wiki/syntheses/tooling/聚合型 Agent CLI 的架构设计观察|聚合型 Agent CLI 的架构设计观察]]
 - `languages`
   - [[wiki/syntheses/languages/TypeScript 类型收窄与 IIMT|TypeScript 类型收窄与 IIMT]]
+  - [[wiki/syntheses/languages/TypeScript Phantom Type Carriers|TypeScript Phantom Type Carriers]]
 - `product`
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
   - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]

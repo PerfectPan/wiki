@@ -267,6 +267,56 @@ RouteById<TRouteTree, '/blog/$slug'>['types']['allParams']
 3. **可审计。** 类型流是可追踪的（`infer U` → `schema.user.fields` → `InferUserFromClient`），不像运行时反射一样不可预测。
 4. **已成为生态共识。** 虽然 TypeScript 没有原生 phantom type 的语法糖，但 Better Auth、TanStack、tRPC、Zod 等库都在用同一种思想各自实现——说明这种模式是当前最有效的全栈类型传递方案。
 
+## 信任契约：`.d.ts` 和 JS 可以不一致
+
+这一整套技巧能成立，依赖 TypeScript 设计里的一个基本事实：**`.d.ts` 声明文件是宣言式的，编译器不验证实现文件（`.js`/`.mjs`）是否真的满足声明。**
+
+编译管道：
+
+```
+源码 .ts
+├── 编译 → .mjs（运行时执行）
+└── 生成 → .d.mts（类型系统读取）
+
+外部项目 import 时：
+├── TypeScript 读 .d.mts → 类型检查
+└── 打包工具读 .mjs → 运行时
+```
+
+两个文件完全独立，TypeScript 不做交叉验证。这导致了 phantom carrier 的核心矛盾：
+
+```
+.d.mts 声称:
+  $InferServerPlugin: { schema: { user: { fields: U } } }
+
+.mjs 实际:
+  $InferServerPlugin: {}   // 没有 schema
+```
+
+这条链路能运行，需要两个条件同时成立：
+
+1. **TypeScript 不验证声明文件和实现文件的一致性**——这是 TypeScript 的设计选择，不是为了 phantom type 开的特例，而是 `.d.ts` 为第三方 JS 库提供类型标注这个场景本身就要求声明和实现解耦
+2. **消费方永远在类型层面读 phantom field，不在运行时触碰它**——`InferAdditionalFromClient` 是纯类型计算（type alias），编译后完全擦除。产生的 JS 里没有任何 `.schema.user.fields` 的运行时属性访问路径
+
+换句话说，这个模式是**一个信任契约，不是编译器强制保证的安全**。如果一个粗心的开发者写了：
+
+```ts
+const fields = plugin.$InferServerPlugin.schema.user.fields; // ← 运行时访问
+```
+
+这行在编译时通过类型检查（`.d.ts` 说 `schema` 存在），但运行时 `schema` 是 `undefined`，直接炸。所以 phantom carrier 的使用方必须遵守约定：**只在 type alias / interface 里通过条件类型 `infer` 读取，不生成任何运行时代码去碰这个字段。**
+
+实际上，Better Auth 的消费端 `InferAdditionalFromClient` 在读取时也加了防御：
+
+```ts
+// client/types.d.mts
+Plugin extends { $InferServerPlugin?: infer SP }   // $InferServerPlugin 标了 optional
+  ? SP extends { schema?: infer Schema }            // schema 也标了 optional
+    ? ...
+```
+
+生产端的类型声明说 `schema` 必选，但消费端读的时候加了 `?`。这不是不一致——这是**知道 phantom carrier 在运行时是空对象，所以消费端类型读取全部走 optional，即使生产端说必选。** 两边的不对齐是故意的，是这条技术路线的隐含契约。
+
 ## 相关页面
 
 - [[TypeScript]]

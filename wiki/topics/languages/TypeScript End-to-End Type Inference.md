@@ -284,6 +284,8 @@ TypeScript 编译器做完了所有类型计算，输出到 `editor.getTypeOf(us
 
 ## 相关页面
 
+- [[TanStack Start Server Function Type Inference]]
+- [[TanStack Router Type Inference]]
 - [[TypeScript]]
 - [[reflect-metadata]]
 

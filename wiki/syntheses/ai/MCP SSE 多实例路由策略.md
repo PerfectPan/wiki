@@ -1,10 +1,12 @@
 ---
 title: MCP SSE 多实例路由策略
+description: 旧版有状态 MCP SSE 在多实例部署中的路由问题，以及 2026-07-28 无状态核心如何消除协议级 session
 type: synthesis
 category: ai
 status: seed
 created: 2026-04-25
-updated: 2026-04-25
+updated: 2026-07-29
+timestamp: 2026-07-29
 tags:
   - mcp
   - sse
@@ -13,6 +15,12 @@ tags:
   - distributed-system
 source_refs:
   - wiki/topics/ai/MCP.md
+  - https://modelcontextprotocol.io/specification/2026-07-28
+  - https://blog.modelcontextprotocol.io/posts/2026-07-28/
+resource:
+  - wiki/topics/ai/MCP.md
+  - https://modelcontextprotocol.io/specification/2026-07-28
+  - https://blog.modelcontextprotocol.io/posts/2026-07-28/
 ---
 # MCP SSE 多实例路由策略
 
@@ -22,7 +30,7 @@ source_refs:
 
 ## 简答
 
-因为 SSE 长连接和后续 HTTP 消息未必会命中同一个实例，而 MCP SSE transport 又天然带有会话状态。多实例下的核心问题不是“能不能用 SSE”，而是“后续请求如何稳定回到持有该 session 的实例”，或者干脆把这类状态从实例里拿掉。
+在 2026-07-28 之前，因为 SSE 长连接和后续 HTTP 消息未必会命中同一个实例，而 MCP SSE transport 又带有协议会话状态，多实例部署必须保证后续请求回到持有 session 的实例，或把映射状态外置。2026-07-28 规范移除了握手、`Mcp-Session-Id` 和协议级 session，使任意请求可以落到任意实例；旧方案因此主要保留为迁移背景。
 
 ## 综合结论
 
@@ -37,11 +45,21 @@ source_refs:
 - 以文中记录的 Higress 思路为例，就是把 session 关系放到中心化位置，再在发现目标 session 不在本机时转发到对应实例。
 - 进一步的工程化结论是：如果 SSE 本身承担了大量长连接，最好把它从普通业务网关里拆出来，形成更稳定、变化更少的一层协议网关，减少每次业务发布带来的大面积重连。
 
+## 2026-07-28 后的结论
+
+- 新版 MCP 的默认路线不再是维护 session -> instance 映射，而是让每个请求自描述、独立路由。
+- 服务端若确实需要跨调用状态，应显式返回业务 handle，并要求后续工具调用把 handle 作为参数带回；不要把状态隐藏在 transport session 中。
+- 中途确认、补参数和 server-to-client 交互由 MRTR 承载：服务端返回 `input_required`，客户端收集输入后重试原调用，不需要一直占用双向流。
+- 长任务状态进入 Tasks 扩展，通过持久句柄和轮询管理；它与协议核心的无状态性不冲突。
+- 旧 HTTP + SSE transport 已弃用但有至少 12 个月兼容期。迁移期内仍运行旧 server 时，本页记录的 sticky routing、中心化映射和连接层隔离仍然适用。
+
 ## 未决问题
 
-- 当前记录已经有了不错的系统设计结论，但还没有和现有开源 MCP server / gateway 的真实代码结构做更多交叉验证。
-- 后续如果仓库继续积累 MCP 部署实践，可以把“无状态化”与“中心化状态转移”做成一页 comparison。
+- 现有 server 中有多少把业务状态错误地绑定在 `Mcp-Session-Id` 上，仍需通过真实迁移案例验证。
+- MRTR、Tasks 和显式 handle 在失败恢复、幂等和超时语义上的最佳实践仍会继续演化。
 
 ## 来源指针
 
 - `wiki/topics/ai/MCP.md`
+- <https://modelcontextprotocol.io/specification/2026-07-28>
+- <https://blog.modelcontextprotocol.io/posts/2026-07-28/>

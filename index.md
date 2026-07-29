@@ -188,6 +188,7 @@
   - [[wiki/syntheses/ai/Claude 5 时代的上下文工程|Claude 5 时代的上下文工程]]
   - [[wiki/syntheses/ai/Coding Agent Shell 与 Git 权限边界|Coding Agent Shell 与 Git 权限边界]]
   - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
+  - [[wiki/syntheses/ai/可审计的本地 Agent 记忆架构|可审计的本地 Agent 记忆架构]]
   - [[wiki/syntheses/ai/OpenSeek 会话与运行时模型|OpenSeek 会话与运行时模型]]
   - [[wiki/syntheses/ai/OpenSeek 工具协议与评测体系|OpenSeek 工具协议与评测体系]]
   - [[wiki/syntheses/ai/OpenSeek 项目架构总览|OpenSeek 项目架构总览]]

@@ -53,6 +53,7 @@
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
+  - [[wiki/topics/ai/Obelisk|Obelisk]]
   - [[wiki/topics/ai/Code Agent|Code Agent]]
   - [[wiki/topics/ai/MCP|MCP]]
   - [[wiki/topics/ai/MCP Client|MCP Client]]

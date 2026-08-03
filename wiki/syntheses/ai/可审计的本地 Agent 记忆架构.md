@@ -5,8 +5,8 @@ type: synthesis
 category: ai
 status: seed
 created: 2026-07-29
-updated: 2026-07-29
-timestamp: 2026-07-29
+updated: 2026-08-02
+timestamp: 2026-08-02
 tags:
   - agent
   - memory
@@ -16,9 +16,11 @@ tags:
 source_refs:
   - https://x.com/asterove_ai/status/2082173389368909931
   - https://github.com/Asterove/AsterMem
+  - https://github.com/tommy0103/obelisk
 resource:
   - https://x.com/asterove_ai/status/2082173389368909931
   - https://github.com/Asterove/AsterMem
+  - https://github.com/tommy0103/obelisk
 ---
 
 # 可审计的本地 Agent 记忆架构
@@ -72,6 +74,12 @@ AsterMem 是这一架构的早期实现案例：
 
 它验证了“文件事实层 + 派生画像 + 可重建索引 + Agent 工具接口”可以包装成完整产品，但目前仍是早期项目：截至 2026-07-29，仓库历史和外部采用规模都很小，不能把产品声明等同于生产验证。
 
+## Obelisk 案例：把会话历史作为证据层
+
+[[Obelisk]] 展示的是相邻但不同的路线：它不先从对话自动提取用户画像，而是把 Claude Code、Codex 和 Kimi Code 已存在的本地会话统一索引为 SQLite 证据层，让 Agent 查询消息、工具调用、子 Agent、workflow 和文件历史；只有当检索得到的结论值得长期保存、且用户批准后，才把 Markdown memory 注册为二级综合缓存。
+
+这补充了本页的一个重要边界：对于 coding agent，“事实层”不一定只有人工维护的 Markdown，也可以包含可重放的原始会话；但原始会话量大且含噪，仍需要一个可重建索引，不能直接作为每次会话的启动上下文。Obelisk 当前的默认 FTS 对中文不友好，也说明“本地可审计”并不会自动解决召回质量。
+
 ## 采用判断
 
 对已有长期 Agent 系统，更稳妥的路线不是立即替换现有记忆，而是隔离试跑：
@@ -95,8 +103,10 @@ AsterMem 是这一架构的早期实现案例：
 - [[Claude 5 时代的上下文工程]]
 - [[RAG 问答管线]]
 - [[Agent Harness 演进范式]]
+- [[Obelisk]]
 
 ## 来源指针
 
 - <https://x.com/asterove_ai/status/2082173389368909931>
 - <https://github.com/Asterove/AsterMem>
+- <https://github.com/tommy0103/obelisk>

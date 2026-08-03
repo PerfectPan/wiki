@@ -44,6 +44,9 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 
 - [[Agent]]
 - [[Agent Client Protocol]]
+- [[大模型 101]]
+- [[Token 与计费口径]]
+- [[LLM API 协议选型]]
 - [[Code Agent 结构约定的可验证边界]]
 - [[Agent-native 生成型 CLI 的产物协议]]
 - [[OpenSeek 项目架构总览]]

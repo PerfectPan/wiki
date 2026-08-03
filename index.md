@@ -52,6 +52,8 @@
   - [[wiki/topics/ai/Agent|Agent]]
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
+  - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
+  - [[wiki/topics/ai/Chat Completions|Chat Completions]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
   - [[wiki/topics/ai/Obelisk|Obelisk]]
   - [[wiki/topics/ai/Code Agent|Code Agent]]
@@ -59,6 +61,8 @@
   - [[wiki/topics/ai/MCP Client|MCP Client]]
   - [[wiki/topics/ai/mcp-remote|mcp-remote]]
   - [[wiki/topics/ai/Prompt|Prompt]]
+  - [[wiki/topics/ai/Responses API|Responses API]]
+  - [[wiki/topics/ai/Token 与计费口径|Token 与计费口径]]
 - `product`
   - [[wiki/topics/product/AI Cover|AI Cover]]
   - [[wiki/topics/product/Logseq|Logseq]]
@@ -188,6 +192,7 @@
   - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
   - [[wiki/syntheses/ai/Claude 5 时代的上下文工程|Claude 5 时代的上下文工程]]
   - [[wiki/syntheses/ai/Coding Agent Shell 与 Git 权限边界|Coding Agent Shell 与 Git 权限边界]]
+  - [[wiki/syntheses/ai/大模型 101|大模型 101]]
   - [[wiki/syntheses/ai/MCP SSE 多实例路由策略|MCP SSE 多实例路由策略]]
   - [[wiki/syntheses/ai/可审计的本地 Agent 记忆架构|可审计的本地 Agent 记忆架构]]
   - [[wiki/syntheses/ai/OpenSeek 会话与运行时模型|OpenSeek 会话与运行时模型]]
@@ -250,6 +255,7 @@
 
 - 对比与取舍页放在 `wiki/comparisons/`
 - `ai`
+  - [[wiki/comparisons/ai/LLM API 协议选型|LLM API 协议选型]]
   - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
 - `career`
   - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]

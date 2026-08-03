@@ -236,6 +236,7 @@
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
   - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
 - `systems`
+  - [[wiki/syntheses/systems/Electron 扩展系统的隔离与通信边界|Electron 扩展系统的隔离与通信边界]]
   - [[wiki/syntheses/systems/Serverless 应用分层与隔离|Serverless 应用分层与隔离]]
   - [[wiki/syntheses/systems/CRDT 数据压缩策略|CRDT 数据压缩策略]]
 - `product`

@@ -211,6 +211,7 @@
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
 - `frontend`
   - [[wiki/syntheses/frontend/纯 CSS 手绘标注的实现与布局边界|纯 CSS 手绘标注的实现与布局边界]]
+  - [[wiki/syntheses/frontend/SVG 图标自动 Morph 的实现路径|SVG 图标自动 Morph 的实现路径]]
   - [[wiki/syntheses/frontend/事件循环与 Microtask 检查点|事件循环与 Microtask 检查点]]
   - [[wiki/syntheses/frontend/ES Module 加载与 Import Maps|ES Module 加载与 Import Maps]]
   - [[wiki/syntheses/frontend/FLIP 布局动画的心智模型|FLIP 布局动画的心智模型]]

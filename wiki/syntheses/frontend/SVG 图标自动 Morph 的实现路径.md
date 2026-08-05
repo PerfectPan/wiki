@@ -13,10 +13,12 @@ tags:
   - geometry
   - morphing
 source_refs:
+  - raw/sources/2026-08-05-morphicons-implementation-research.md
   - https://www.morphicons.com/#how
   - https://github.com/guillermolg00/morphicons
   - https://github.com/guillermolg00/morphicons/releases/tag/v1.4.1
 resource:
+  - raw/sources/2026-08-05-morphicons-implementation-research.md
   - https://www.morphicons.com/#how
   - https://github.com/guillermolg00/morphicons
   - https://github.com/guillermolg00/morphicons/releases/tag/v1.4.1
@@ -142,7 +144,7 @@ pure core：parse → normalize → resample → match → align → interpolate
 
 ## 来源指针
 
+- `raw/sources/2026-08-05-morphicons-implementation-research.md`
 - [Morphicons 官网与交互演示](https://www.morphicons.com/#how)
 - [Morphicons GitHub 源码与文档](https://github.com/guillermolg00/morphicons)
 - [Morphicons v1.4.1](https://github.com/guillermolg00/morphicons/releases/tag/v1.4.1)
-

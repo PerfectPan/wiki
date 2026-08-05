@@ -1,14 +1,18 @@
 ---
 title: SVG
+description: SVG 的基础图形、描边动画与相关实现资料入口
 type: topic
 category: frontend
 status: seed
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-08-05
+timestamp: 2026-08-05
 tags:
   - svg
   - graphics
 source_refs:
+  - raw/sources/SVG.md
+resource:
   - raw/sources/SVG.md
 ---
 # SVG
@@ -36,3 +40,7 @@ source_refs:
 ## Source Pointers
 
 - `raw/sources/SVG.md`
+
+## 相关页面
+
+- [[wiki/syntheses/frontend/SVG 图标自动 Morph 的实现路径|SVG 图标自动 Morph 的实现路径]]

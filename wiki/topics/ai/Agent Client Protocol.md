@@ -113,15 +113,64 @@ sequenceDiagram
 - **session/update 常见变体：** message chunks、`tool_call` / `tool_call_update`、`plan`、`usage_update`、`available_commands_update`、`current_mode_update`、`config_option_update`、`session_info_update`。
 - **Diff：** `oldText` / `newText`；**Permission：** 以 `toolCall` 为中心。
 
-### v1 张力（驱动 v2）
+## v2 改动出发点（Why）
 
-Turn 与后台更新、排队、多 Client 观察同一 session 难对齐；tool 创建/更新分裂；diff 难表达 delete/rename/binary；permission 文案污染 tool title；Client fs/terminal 实现参差。
+官方定位：v2 是 **consolidation release**，不是功能大礼包。v1 已用 RFD 加法演进 15+ 项且可前向兼容；但仍有一批问题 **卡在 turn 语义和表面不一致上**，必须 breaking 才能解开。新功能若可 optional/additive，继续走 RFD，不塞进 v2 本身。
+
+核心设计目标仍是：给 agent 与 client **尽量多的实现自由**，只在语义上必须对齐的地方立约。v2 明确要让 agent 在 session 里更灵活地工作，并为新的 client 模式铺路。
+
+### 问题 1：世界已超过「用户一问一答一轮」
+
+v1 心智是 **prompt turn**：多数 agent 在用户消息后吐事件，生成完就停；实现者也常把 `session/update` 理解成「只能出现在 turn 内」。协议并未严格禁止 turn 外更新，但 **turn 所有权绑在 pending 的 `session/prompt` 上**，导致：
+
+| 现实需求 | v1 为何别扭 |
+| --- | --- |
+| Agent 跑得更久、后台编排更多工作 | 进度更新与「prompt 是否还 pending」缠在一起 |
+| 排队 / steering / 未必要用户发起的更新 | turn 模型默认「一轮 = 一次 prompt 生命周期」 |
+| 前景已 idle，后台仍要推状态 | client 想用「turn 结束」当可输入信号，agent 还想继续 update |
+| 多 client 观察同一 session、历史 replay | 用户消息只活在 request 里，没有 agent 侧权威回放点 |
+
+**出发点：** 把「消息已被受理」和「前景工作结束」拆开。`session/prompt` 响应只表示 **ack**；完成与可输入靠 `state_update`（running / idle / requires_action）；`session/update` 可在 session 任意时刻流动。Agent 回放用户消息插入点（自有 `messageId`），便于 replay 与多观察者。
+
+> 官方原话方向：*moving beyond the turn*；prompt 不再拥有整段工作生命周期。
+
+### 问题 2：同一类「会话条目」更新语义不统一
+
+Tool call 已有按 ID 更新的模式，但消息、terminal、plan 等没有同一套 upsert。流式时只能反复重发整段 content；纠错、脱敏、replay 缺少稳定身份。
+
+**出发点：** 消息 / tool call / terminal / plan **统一 ID + patch**（省略不变、`null` 清空、有值替换、chunk 追加）；tool content 可流式 chunk，不必整包重传。
+
+### 问题 3：表达力缺口与实现分裂
+
+- **Diff：** 仅 `oldText`/`newText`，难区分删文件 vs 清空、rename/copy/binary。
+- **Permission：** 文案常塞进 tool `title`，污染工具展示；subject 死绑 tool call，难扩展到「批准一条命令」等。
+- **Client fs/terminal：** 协议有执行面，但生态实现参差；agent 往往已有自己的文件/命令路径 → v2 **删掉** 该 Client 执行面，本地能力改走 **MCP**；terminal 改为 agent-owned **display-only**。
+- **Modes vs config：** 专用 mode API 与后来的 config options 重叠 → 并入 config。
+- **扩展：** v1 已证明 capability/`_meta` 有用 → v2 把开放 enum（`_` 前缀扩展）做成默认，减少未知字段噎死旧实现。
+
+### 刻意不做的
+
+- 不把所有 wishlist 塞进一次 major（避免 v2 永远不落地）。
+- Queueing / steering 的完整产品策略 **不** 由 prompt lifecycle RFD 单独标准化（lifecycle 只铺路）。
+- 标准远程 HTTP/WS **不** 进 core v2 surface（独立 transport RFD）。
+
+### v1 → v2 因果一览
+
+```mermaid
+flowchart TB
+  T1["Turn 绑死 prompt 响应"] --> S1["state_update + prompt 仅 ack"]
+  T2["后台 / 多观察者 / replay"] --> S1
+  T3["更新语义不统一"] --> S2["ID upsert + chunk"]
+  T4["Diff / permission 表达不够"] --> S3["changes+git_patch / title+subject"]
+  T5["Client fs·terminal 分裂"] --> S4["删除执行面 → MCP + display terminal"]
+  T6["扩展靠习惯不靠 schema"] --> S5["开放 enum + 统一 capabilities 形状"]
+```
 
 ## v2 Draft：Session lifecycle 与统一 upsert
 
-**状态：** Draft。schema 分 `schema/v2/schema.json`（baseline）与 `schema.unstable.json`（opt-in）；**协商 `protocolVersion: 2` ≠ 开启全部 unstable 特性**。稳定前可能改；生产默认勿强切；**保留 v1**。
+**状态：** Draft（公告约 2026-07-20）。schema 分 `schema/v2/schema.json`（baseline）与 `schema.unstable.json`（opt-in）；**协商 `protocolVersion: 2` ≠ 开启全部 unstable 特性**。稳定前可能改；生产默认勿强切；**保留 v1**。
 
-### 五大主题
+### 五大主题（What，对应上面 Why）
 
 1. **Beyond the turn：** prompt 响应 = 受理；进度/结束用 `state_update`；`session/update` 可随时发送。
 2. **统一 upsert：** 按稳定 ID patch——省略不变、`null` 清空、有值替换、chunk 追加。
@@ -218,6 +267,8 @@ stdio 仍是主路径；v2 明确 JSON-RPC **batch**，但不要 batch `initiali
 | ACP 标准化 editor↔coding agent，类比 LSP | introduction | 高 |
 | 本地 stdio 子进程、多 session、MCP-friendly / Trusted | architecture | 高 |
 | v1 prompt turn：响应带 stopReason 结束 | v1 prompt-turn / overview | 高 |
+| v2 是 consolidation：解开 turn 语义，而非塞满新功能 | acp-v2-draft 公告；rfds/v2 | 高 |
+| 主因：后台工作、排队/steering、多观察者、replay 与 turn 模型冲突 | 公告 Beyond the turn；prompt RFD | 高 |
 | v2 Draft；双版本 + feature flag；勿默认生产开 | acp-v2-draft 公告、migration | 高 |
 | prompt `{}` 仅受理；完成靠 state_update | migration、v2 prompt-lifecycle | 高 |
 | 删除 Client fs/terminal；改走 MCP | migration | 高 |

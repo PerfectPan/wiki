@@ -203,11 +203,18 @@ sources:
 - Schema 发布形态：仓库 releases 中 `v2.0.0-alphaX` 与 v1 并列；另有 `schema/v2/schema.json`（stable v2 baseline）与 `schema/v2/schema.unstable.json`（opt-in draft layers）
 - 协商 `protocolVersion: 2` **不** 自动包含 unstable 层特性；各自 capability/flag 门控
 
-### 设计目标 / Big themes
+### 设计目标 / Big themes（出发点 Why → What）
 
-来源：公告 + [rfds/v2/overview](https://agentclientprotocol.com/rfds/v2/overview.md) + [migration 开篇](https://agentclientprotocol.com/protocol/v2/migration.md)
+来源：公告 + [rfds/v2/overview](https://agentclientprotocol.com/rfds/v2/overview.md) + [migration 开篇](https://agentclientprotocol.com/protocol/v2/migration.md) + [prompt RFD](https://agentclientprotocol.com/rfds/v2/prompt.md)
 
-v2 是 **consolidation release**，核心不是塞满新功能，而是：
+**Why（公告原意）：**
+
+- v1 可用 RFD 快速加法，但 **部分 breaking** 才能解锁：更丰富的 session 状态、巩固有用模式、整体一致性。
+- v2 = **consolidation**，故意不塞满 optional 新功能（那些继续 RFD）；聚焦改核心行为。
+- Agent 工作更长、更多后台编排后，**turn 所有权绑在 pending `session/prompt`** 让 client（要保证交互模式）与 agent（要随时 update、idle 仍可后台推）都不爽。
+- 需要清晰支持：queueing / steering、非用户发起工作的实时更新、多 client 观察、replay 时用户消息的权威插入点。
+
+**What（主题）：**
 
 1. **Moving beyond the turn** — prompt 响应 = 接受确认，不是 turn 结束；`session/update` 可随时流动；显式 idle/running/requires_action
 2. **统一 upsert/patch + streaming** — message / tool call / plan / terminal 按 ID patch；omitted / null / value / chunks append

@@ -208,7 +208,103 @@ sequenceDiagram
 | 结束 | prompt + `stopReason` | `idle` + `stopReason` |
 | 取消确认 | prompt `cancelled` | idle + `cancelled` |
 
-`stopReason` 取值集合与 v1 相同，仅位置迁移。**idle = 可接新 prompt**；后台 update 可不改变 state。Queueing / steering **尚未**由该 lifecycle 单独标准化。
+`stopReason` 取值集合与 v1 相同，仅位置迁移。**idle = 可接新 prompt**；后台 update 可不改变 state。Queueing / steering **尚未**由该 lifecycle 单独标准化（见下表「协议铺路 vs 产品自建」）。
+
+### v2 才能干净做的事（相对 v1）
+
+下面按 **场景 → v1 卡点 → v2 具体机制 → 实现上多出来的能力** 写。不是新 RPC 名词表，而是「以前只能 hack，现在协议有一等表达」。
+
+#### 1. 前景结束后仍推后台进度
+
+| | |
+| --- | --- |
+| **场景** | Agent 主回复已结束，但仍在跑测试、索引、长命令，UI 要继续刷日志/状态 |
+| **v1 卡点** | 完成信号 = `session/prompt` 的 response + `stopReason`。Client 常把「prompt 返回」当成整轮结束、关流式、解禁输入；turn 外再发 `session/update` 虽未必被禁，但与「响应已结束」语义打架，实现者容易拒收或丢更新 |
+| **v2 机制** | `session/prompt` → 立即 `{}`；前景结束 = `state_update` `idle` + `stopReason`；**idle 不禁止** 其它 `session/update` |
+| **多出来的能力** | Client 用 `idle` 解禁输入框，同时继续渲染后台 tool/terminal/usage；Agent 不必为了「还能推送」而假装 prompt 仍 pending |
+
+#### 2. 连发 / 插队用户消息（排队与 steering 的协议前提）
+
+| | |
+| --- | --- |
+| **场景** | 用户在 agent 还在跑时又发一条；或插入纠正（「停，改用 pnpm」） |
+| **v1 卡点** | 上一轮 `session/prompt` 仍 pending 时，下一轮 prompt 的生命周期、与旧 turn 的 `stopReason` 如何交错没有清晰模型；用户正文主要活在 **request params** 里，没有「插入历史的哪一点」的权威事件 |
+| **v2 机制** | 每条 prompt 先 ack；Agent **必须** 发 `user_message` / `user_message_chunk`（自有 `messageId`）标明写入历史的位置与内容；前景用 `running` / `idle` / `requires_action` 表达，与「是否已 ack 某条 prompt」解耦 |
+| **多出来的能力** | Client 可在 `idle` 或实现自定义队列时再发 `session/prompt`，而不靠「卡住旧 prompt 请求」；steering 消息与模型输出一样进入可 replay 的 update 流。**注意：** 队列调度策略（FIFO、取消旧任务、合并）仍由产品实现，协议只提供可组合的状态与历史事件 |
+
+#### 3. 多 Client 观察同一 session / 断线重连对齐
+
+| | |
+| --- | --- |
+| **场景** | 桌面 + 网页同时看一个 agent session；或刷新后要看到同一套消息与 tool 时间线 |
+| **v1 卡点** | 用户消息真相在各 Client 自己的 prompt 请求里；`session/load`（全量 replay）与 `session/resume`（不 replay）分裂，capability 还不一致 |
+| **v2 机制** | Agent 拥有历史与 `messageId`；统一 `session/resume`，`replayFrom: { type: "start" }` 用 **与线上相同** 的 update（message/tool/plan/terminal upsert）重放；省略 `replayFrom` = 只挂接不重放 |
+| **多出来的能力** | 第二观察者/重连方可以只信 Agent 推的流，而不用向「谁发过哪些 prompt」做双边对账；load/resume 不必维护两套 UI 管道 |
+
+#### 4. 改写、清空、纠错已展示内容
+
+| | |
+| --- | --- |
+| **场景** | 流式打错后改正；输出含密钥要红acted；resume 时用快照对齐而不是重放每一 token |
+| **v1 卡点** | `messageId` 在 chunk 上可选；缺少「整消息替换 / 清空」与 chunk 追加如何组合的统一语义；tool 常整表重发 `content` |
+| **v2 机制** | 所有 message 更新 **必填** `messageId`；`user_message` / `agent_message` / `agent_thought` 整段 upsert：`content` 省略=不变，`null`/`[]`=清空，数组=整段替换；`*_chunk` **只追加**；tool 同理 + `tool_call_content_chunk`；terminal 有 snapshot 整段替换 + `terminal_output_chunk` 按字节追加 |
+| **多出来的能力** | 可做「先流式再定稿替换」、脱敏清空、大 tool 输出增量推、terminal 用 snapshot resync 而不重放全部 chunk |
+
+#### 5. 文件变更的完整语义（给 UI / review）
+
+| | |
+| --- | --- |
+| **场景** | Agent 删文件、改名、拷贝、改二进制；Client 要画文件树 + diff，而不是猜 |
+| **v1 卡点** | 基本只有 path + `oldText`/`newText`：删 vs 清空难区分；rename/copy/binary 无一等操作 |
+| **v2 机制** | `type: "diff"` → 必填 `changes[]`：`add` / `delete` / `modify` / `move` / `copy`，可选 `fileType`（text/binary/directory/symlink）、`mimeType`；可选 `patch: { format: "git_patch", text }` 供渲染（须与 changes 一致） |
+| **多出来的能力** | 文件树/摘要只读 `changes` 即可；有 patch 再渲染文本 diff；无 patch 时仍能表示「删了这个 binary」 |
+
+#### 6. 权限：文案与工具状态分离，批准「命令」而不只是 tool 卡片
+
+| | |
+| --- | --- |
+| **场景** | 弹窗要写清风险说明，但不改 tool 列表上的短标题；或批准即将执行的 shell，而执行方是 Agent 不是 Client |
+| **v1 卡点** | `session/request_permission` 以 `toolCall` 为中心；实现常把长说明塞进 `title`，副作用是 tool UI 标题被改掉 |
+| **v2 机制** | 必填权限 `title`、可选 `description`（只服务弹窗）；可选 `subject`：`tool_call`（ToolCallUpdate upsert）或 `command`（`command` + 绝对 `cwd`，可选关联 `toolCallId`/`terminalId`）；pending 时 **SHOULD** `state_update: requires_action` |
+| **多出来的能力** | 弹窗文案 ⊥ tool 展示状态；可对「Agent 执行这条命令」建模而不要求 Client `terminal/*`；UI 可用 `requires_action` 显示「等你」而非空转 |
+
+#### 7. Agent 拥有的终端展示（不依赖 Client 执行 API）
+
+| | |
+| --- | --- |
+| **场景** | Agent 自己跑了 `cargo test`，要把输出流式给编辑器，且不要求 IDE 实现 `terminal/create|kill|...` |
+| **v1 卡点** | tool content 里的 terminal 引用的是 **Client 侧** terminal 能力；没实现该 cap 的 Client 整条链路缺失；执行与展示耦在同一套 API |
+| **v2 机制** | 删除 Client `terminal/*` 与 `fs/*`；tool 里 `terminal` 只是 `terminalId` 引用；状态用 `terminal_update`（command/cwd/output 快照/exitStatus）+ `terminal_output_chunk`（独立 base64 字节追加）。**无** input/resize/kill/wait——纯展示 |
+| **多出来的能力** | 任意 Client 都能渲染 Agent 输出的终端流；需要读工作区/跑命令时，Client 改通过 `mcpServers` 提供 MCP 工具，与第三方 MCP 同构。Agent 不必再维护「有 fs cap 走 Client、没有走本地」双路径（就协议而言） |
+
+#### 8. 多计划、可演进计划条目
+
+| | |
+| --- | --- |
+| **场景** | 同一 session 并行或先后两套 plan；某步取消；resume 后按 id 更新而非整表盲替换 |
+| **v1 卡点** | `plan` 是无 ID 的 entries 列表，难表达多 plan 与稳定身份 |
+| **v2 机制** | `plan_update` + `{ type: "items", planId, entries }`；同 `planId` 替换该 plan 的 entries；status 含 `cancelled`，enum 可扩展 |
+| **多出来的能力** | UI 可钉住多个 plan 卡片；后续可加其它 plan `type`（unstable/未来）而不新开 notification 名 |
+
+#### 9. 会话基线能力可依赖（少探测）
+
+| | |
+| --- | --- |
+| **场景** | Client 要 list / resume / close，不希望每个能力单独 probe |
+| **v1 卡点** | `list` / `resume` / `close` / `loadSession` 等分散 optional marker，行为不一致 |
+| **v2 机制** | 只要广告 `capabilities.session`，**必须** 实现 new/list/resume/close/prompt/cancel/update；delete 等仍 optional |
+| **多出来的能力** | 会话管理 UI 可默认假设基线在；减少「有的 agent 能 resume 不能 list」的矩阵 |
+
+#### 协议铺路 vs 仍须产品自建
+
+| 已有一等协议表达（v2） | 仍非 core 标准 / 须自建 |
+| --- | --- |
+| idle 后后台 update、state 三态、用户消息回放事件 | 队列策略、取消哪一条、优先级 |
+| resume + replayFrom 同一管道 | 多写者冲突、OT/CRDT、权限谁可写 |
+| message/tool/terminal 三态 patch | 业务层「何时 redact」策略 |
+| changes + git_patch | 具体 diff UI 组件 |
+| subject command + 删 Client terminal 执行面 | MCP filesystem/shell server 的质量与安全策略 |
+| 开放 enum / `_` 扩展 | 各家 `_foo` 扩展的互通 |
 
 ### 迁移对照（压缩）
 
@@ -269,6 +365,7 @@ stdio 仍是主路径；v2 明确 JSON-RPC **batch**，但不要 batch `initiali
 | v1 prompt turn：响应带 stopReason 结束 | v1 prompt-turn / overview | 高 |
 | v2 是 consolidation：解开 turn 语义，而非塞满新功能 | acp-v2-draft 公告；rfds/v2 | 高 |
 | 主因：后台工作、排队/steering、多观察者、replay 与 turn 模型冲突 | 公告 Beyond the turn；prompt RFD | 高 |
+| v2 具体解锁：idle 后台推送、user_message 历史点、resume replay、三态 upsert、changes diff、permission subject、agent terminal 展示等 | migration 各节；prompt-lifecycle | 高（产品队列策略仍自建） |
 | v2 Draft；双版本 + feature flag；勿默认生产开 | acp-v2-draft 公告、migration | 高 |
 | prompt `{}` 仅受理；完成靠 state_update | migration、v2 prompt-lifecycle | 高 |
 | 删除 Client fs/terminal；改走 MCP | migration | 高 |

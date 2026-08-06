@@ -1,10 +1,12 @@
 ---
 title: Skill 工程化的产物协议范式
+description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、manifest、QA 与 repair；案例含 hatch-pet、ai-cli、bento-slides
 type: synthesis
 category: ai
-status: seed
+status: active
 created: 2026-05-06
-updated: 2026-05-12
+updated: 2026-08-06
+timestamp: 2026-08-06
 tags:
   - agent
   - skills
@@ -20,6 +22,13 @@ source_refs:
   - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
   - raw/sources/2026-05-12-ai-cli-skill-review.md
   - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
+  - raw/sources/2026-08-06-bento-slides-skill-review.md
+  - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
+resource:
+  - raw/sources/2026-05-06-codex-pet-skill-article.md
+  - raw/sources/2026-05-12-ai-cli-skill-review.md
+  - raw/sources/2026-08-06-bento-slides-skill-review.md
+  - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
 ---
 # Skill 工程化的产物协议范式
 
@@ -85,6 +94,18 @@ Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的�
 
 这个案例说明：一个 Skill 可以“可用”但还不“老练”。README 摘要型 Skill 让 agent 知道工具存在；工程操作型 Skill 则把工具调用变成低噪声、低成本、可恢复、可审计的执行协议。
 
+## bento-slides 案例：强产物契约、无完整流水线仍值得学
+
+`nyblnet/bento` 的 `bento-slides` 落在 hatch-pet 与 ai-cli 之间，偏 **文档/产物协议型 Skill**：
+
+- **产物协议硬。** 只编辑 `.bento.html` 里 `#bento-doc` 的 JSON；runtime 壳不动；`<` 必须 `\u003c`；从零 curl 拉最新 shell，且下载块为空——这些都是模型不读 skill 就会搞砸的边界。
+- **description 是场景路由。** 用户要 slide / presentation / 从无做 deck 时加载，而不是介绍 Bento 有多酷。
+- **默认失败模式被显式否定。** 禁止默认 bullet 墙，要求把素材映射到 chart、table、morph、state slide、ken-burns 等；self-audit 清单逼 agent 自检。
+- **gotcha 密度高。** bar/line 必须 plain numbers、morph 靠稳定 id、大视频勿 embed、勿改 `docId` 等，属于领域 know-how 而非 README 复述。
+- **未到 hatch-pet 流水线。** 无 job manifest、无确定性编译脚本、无 provenance/repair；验收依赖「打开看每一页」和 runtime `validate()`，skill 未强制脚本化。负例与 evals 仍弱。
+
+它说明：即使没有完整 control plane，**先把可消费产物契约和反默认失败写死**，Skill 已经从 prompt 包装升到可收录的工程组件。收录索引见 [[Awesome Agent Skills]]；产品与 `window.bento` / 风格模型见 [[Bento]]；评审事实见 `raw/sources/2026-08-06-bento-slides-skill-review.md`。
+
 ## 和 workflow 的关系
 
 传统 workflow 擅长确定性链路，适合触发器、节点、固定分支和清晰输入输出。但当任务需要上下文理解、动态决策、候选筛选、多代理协作和局部修复时，画死节点图会越来越重。
@@ -120,6 +141,13 @@ intent
 - Skill description 的路由质量需要持续 eval；一旦 Skill 库变大，新增或修改 description 可能通过隐式匹配影响其他 Skill。
 - 自生成 Skill 不可靠。LLM 可以辅助整理材料，但真正的 Skill 需要人注入领域判断、gotchas、负例和维护经验。
 
+## 相关页面
+
+- [[Awesome Agent Skills]] — 过线条目的薄索引（Awesome）
+- [[Bento]]
+- [[ai-cli]]
+- [[Code Agent]]
+
 ## 来源指针
 
 - `raw/sources/2026-05-06-codex-pet-skill-article.md`
@@ -128,3 +156,6 @@ intent
 - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
 - `raw/sources/2026-05-12-ai-cli-skill-review.md`
 - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
+- `raw/sources/2026-08-06-bento-slides-skill-review.md`
+- https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
+- https://bento.page/agents.md

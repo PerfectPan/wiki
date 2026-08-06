@@ -51,6 +51,7 @@
 - `ai`
   - [[wiki/topics/ai/Agent|Agent]]
   - [[wiki/topics/ai/AI Slop|AI Slop]]
+  - [[wiki/topics/ai/Awesome Agent Skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
   - [[wiki/topics/ai/Chat Completions|Chat Completions]]
@@ -65,6 +66,7 @@
   - [[wiki/topics/ai/Token 与计费口径|Token 与计费口径]]
 - `product`
   - [[wiki/topics/product/AI Cover|AI Cover]]
+  - [[wiki/topics/product/Bento|Bento]]
   - [[wiki/topics/product/Logseq|Logseq]]
   - [[wiki/topics/product/Orca|Orca]]
   - [[wiki/topics/product/Raft|Raft]]

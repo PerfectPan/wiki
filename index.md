@@ -66,6 +66,7 @@
   - [[wiki/topics/ai/Token 与计费口径|Token 与计费口径]]
 - `product`
   - [[wiki/topics/product/AI Cover|AI Cover]]
+  - [[wiki/topics/product/Bento|Bento]]
   - [[wiki/topics/product/Logseq|Logseq]]
   - [[wiki/topics/product/Orca|Orca]]
   - [[wiki/topics/product/Raft|Raft]]

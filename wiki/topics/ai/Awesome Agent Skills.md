@@ -59,7 +59,7 @@ resource:
 
 | Skill | 一句话 | 指针 |
 | --- | --- | --- |
-| **bento-slides** | 只改 `#bento-doc` JSON 做单文件 deck；强制内容→chart/morph/state 映射，反 bullet 墙 | [repo](https://github.com/nyblnet/bento) · [SKILL.md](https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md) · [[raw/sources/2026-08-06-bento-slides-skill-review.md\|评审]] |
+| **bento-slides** | 只改 `#bento-doc` JSON 做单文件 deck；强制内容→chart/morph/state 映射，反 bullet 墙 | 产品 [[Bento]] · [SKILL.md](https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md) · [[raw/sources/2026-08-06-bento-slides-skill-review.md\|评审]] |
 | **hatch-pet**（范式锚点） | 图像生成收成可加载资产流水线：manifest、确定性编译、QA、局部 repair | [[Skill 工程化的产物协议范式]] · [[raw/sources/2026-05-06-codex-pet-skill-article.md\|来源]] |
 
 ### 可参考
@@ -82,6 +82,7 @@ resource:
 ## 相关页面
 
 - [[Skill 工程化的产物协议范式]] — 唯一判据源
+- [[Bento]] — bento-slides 背后的单文件 slides 产品
 - [[Code Agent]]
 - [[ai-cli]]
 - [[Agent-native 生成型 CLI 的产物协议]]

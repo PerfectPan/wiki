@@ -84,7 +84,7 @@ Skill 明确禁止默认「段落 slideshow」，要求按素材类型选 featur
 
 - **Awesome 分级：推荐（recommended）** — 作为「文档/产物协议型 Skill」正例。
 - 可进判据页案例节，论证：强产物契约 + 内容到能力映射 + gotcha，即使没有完整 manifest 流水线也值得学。
-- **产品**（单文件 office、CRDT collab、E2EE relay）与 **Skill** 解耦；本笔记只评 skill。产品 topic 可另开，非必须与本条绑定。
+- **产品**（单文件 office、CRDT collab、E2EE relay、theme/slides/`window.bento`）与 **Skill** 解耦；本笔记只评 skill。产品页：`wiki/topics/product/Bento.md`。
 
 ## 风险 / 限制
 

@@ -104,7 +104,3 @@ cmux **完全依赖**各 agent 自带的 hooks 机制，只是通过命令行参
 - **grok**：cmux 写 `~/.grok/hooks/cmux-session.json`（6 个事件：SessionStart/SessionEnd/Stop/UserPromptSubmit/Notification/PreToolUse），通过 socket 转发，受 `CMUX_GROK_HOOKS_DISABLED=1` 控制。
 
 `NODE_OPTIONS=--require restore-node-options.cjs`（仅 claude）**不是拦截**——那 9 行脚本只把 `NODE_OPTIONS` 还原成用户原始值（`CMUX_ORIGINAL_NODE_OPTIONS`），防止 cmux 的 `--max-old-space-size=4096` 等泄漏到 claude 的子进程。它不 patch 模块、不拦截 API。
-
-因此删除第三方（如 SuperSet）写入 settings 的 hooks 与 cmux 互不影响——cmux 走每次启动的命令行注入，不依赖 `~/.claude/settings.json` 或 `~/.codex/hooks.json` 里的内容。
-
-> 注：初版调查曾据 `NODE_OPTIONS=--require` 的表象误判为"进程内 require 拦截、不靠 hooks"，阅读 `cmux-claude-wrapper`（~1060 行）与 `cmux-codex-wrapper`（~290 行）后订正为"命令行动态注入各 agent 自带的 hooks"。

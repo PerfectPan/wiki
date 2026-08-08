@@ -95,7 +95,16 @@ cmux 通过三层实现 agent 编排：
 
 shell 本体（zsh）不被改写，仅被注入 env + ghostty shell integration。
 
-## 与 agent hooks 的关系
+## 与 agent hooks 的关系（读 wrapper 代码后订正）
 
-- claude/codex：cmux 不靠 settings `hooks` 字段，靠 wrapper + `NODE_OPTIONS` 运行时拦截；与第三方（如 SuperSet）写入/删除 settings hooks 互不影响。
-- grok：cmux 写入 `~/.grok/hooks/cmux-session.json`（6 个事件：SessionStart/SessionEnd/Stop/UserPromptSubmit/Notification/PreToolUse），通过 socket 转发，受 `CMUX_GROK_HOOKS_DISABLED=1` 控制。
+cmux **完全依赖**各 agent 自带的 hooks 机制，只是通过命令行参数**动态注入、不落盘**：
+
+- **claude**：`cmux-claude-wrapper` 构造 hooks JSON（SessionStart/Stop/SessionEnd/Notification/UserPromptSubmit/PreToolUse/PostToolUse/PermissionRequest/SubagentStop），通过 `claude --session-id <uuid> --settings <hooks-json>` 注入。`--settings` 与用户 `settings.json` 叠加；用户额外传的 `--settings` 用 wrapper 内联的 node 脚本 deep-merge 成单一 `--settings`（hook 数组 concat、用户标量优先）。
+- **codex**：`cmux-codex-wrapper` 调 `cmux hooks codex inject-args` 生成参数（`--enable hooks`、`--dangerously-bypass-hook-trust`、`-c hooks.<event>=<cmux-cmd>`），prepend 到 codex 命令行。hook 用 fire-and-forget（捕获 stdin 到临时文件 + nohup 后台 + 30s watchdog + 立即 `echo '{}'`），避免 codex 同步阻塞跑 hooks 导致每次启动卡 ~35s。
+- **grok**：cmux 写 `~/.grok/hooks/cmux-session.json`（6 个事件：SessionStart/SessionEnd/Stop/UserPromptSubmit/Notification/PreToolUse），通过 socket 转发，受 `CMUX_GROK_HOOKS_DISABLED=1` 控制。
+
+`NODE_OPTIONS=--require restore-node-options.cjs`（仅 claude）**不是拦截**——那 9 行脚本只把 `NODE_OPTIONS` 还原成用户原始值（`CMUX_ORIGINAL_NODE_OPTIONS`），防止 cmux 的 `--max-old-space-size=4096` 等泄漏到 claude 的子进程。它不 patch 模块、不拦截 API。
+
+因此删除第三方（如 SuperSet）写入 settings 的 hooks 与 cmux 互不影响——cmux 走每次启动的命令行注入，不依赖 `~/.claude/settings.json` 或 `~/.codex/hooks.json` 里的内容。
+
+> 注：初版调查曾据 `NODE_OPTIONS=--require` 的表象误判为"进程内 require 拦截、不靠 hooks"，阅读 `cmux-claude-wrapper`（~1060 行）与 `cmux-codex-wrapper`（~290 行）后订正为"命令行动态注入各 agent 自带的 hooks"。

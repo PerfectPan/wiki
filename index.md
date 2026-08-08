@@ -76,6 +76,7 @@
   - [[wiki/topics/tooling/ai-cli|ai-cli]]
   - [[wiki/topics/tooling/Bundle|Bundle]]
   - [[wiki/topics/tooling/Chrome DevTools|Chrome DevTools]]
+  - [[wiki/topics/tooling/cmux|cmux]]
   - [[wiki/topics/tooling/CTF|CTF]]
   - [[wiki/topics/tooling/Dependency Resolution|Dependency Resolution]]
   - [[wiki/topics/tooling/GCC|GCC]]

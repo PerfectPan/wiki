@@ -9,6 +9,7 @@
 
 - `frontend`
   - [[wiki/topics/frontend/响应式|响应式]]
+  - [[wiki/topics/frontend/页面时间冻结|页面时间冻结]]
   - [[wiki/topics/frontend/颜色|颜色]]
   - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
   - [[wiki/topics/frontend/Ant Design 异步默认值渲染|Ant Design 异步默认值渲染]]
@@ -72,6 +73,7 @@
   - [[wiki/topics/product/Raft|Raft]]
   - [[wiki/topics/product/Status Page|Status Page]]
   - [[wiki/topics/product/Teable|Teable]]
+  - [[wiki/topics/product/Voila|Voila]]
 - `tooling`
   - [[wiki/topics/tooling/ai-cli|ai-cli]]
   - [[wiki/topics/tooling/Bundle|Bundle]]
@@ -280,3 +282,4 @@
 
 - 所有旧 Logseq `pages/` 原始副本保留在 `raw/sources/`
 - 所有引用附件保留在 `raw/assets/`
+- [[raw/sources/voila-extension-teardown-2026-08|Voila 扩展拆解实录（2026-08）]]：manifest / freeze.js / content.js 一手读取记录

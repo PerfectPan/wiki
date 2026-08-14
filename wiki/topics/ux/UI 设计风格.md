@@ -68,7 +68,7 @@ UI 设计风格不是审美偏好，而是界面在四个基本问题上的一�
 - Liquid Glass —— 玻璃作为控制层、透镜折射、自适应自着色（vendor，Apple 2025）
 - Claymorphism —— 内外阴影 + 超大圆角 + 漂浮膨松物体（industry-coined）
 - Y2K Digital Aesthetic —— 液态金属、凝胶/塑料、虹彩蓝银（retrospective，千禧年前后）
-- Frutiger Aero —— 自然与科技融合、 glossy 水感表面、天蓝草绿（retrospective，2004–2013）
+- Frutiger Aero —— 自然与科技融合、水感光泽表面、天蓝草绿（retrospective，2004–2013）
 
 **扁平与极简系** —— 放弃材质模拟，靠习得惯例回答 affordance，占低深度/低装饰端：
 
@@ -94,11 +94,11 @@ UI 设计风格不是审美偏好，而是界面在四个基本问题上的一�
 
 - 给 agent 下风格类指令时，写**信号**不写风格名："`backdrop-filter: blur(16px)` + 半透明白 12% + 1px 亮边"比"做成玻璃拟态"可执行、可验收。
 - 评审时先定位坐标系（它在材质/深度/装饰轴上的哪里），再谈好不好看。
-- 参考图鉴：[Name That Vibe](https://namethatui.com/styles)（14 种风格的 signals、style DNA、agent brief）是目前最系统的实例库；详见 [[NameThatUI 是什么、什么时候用]]。
+- 参考图鉴：[Name That Vibe](https://namethatui.com/styles)（14 种风格的 signals、style DNA、agent brief）是目前最系统的实例库；元素层面的命名见 [[UI 元素命名]]。
 
 ## 相关页面
 
-- [[NameThatUI 是什么、什么时候用]] —— 元素层面的"叫什么"，本页是风格层面的"是什么风"
+- [[UI 元素命名]] —— 元素层面的"叫什么"，与本页的"是什么风"互为表里
 - [[wiki/topics/frontend/Transitions.dev|Transitions.dev]] —— 动效参考，风格的时序维度
 
 ## 来源指针

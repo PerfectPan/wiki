@@ -121,7 +121,7 @@ async function Yi(){ await tM(U1, { ...he, segs: Ft, undo: Object.fromEntries(xr
 - 动效：transition(+property/duration/timing-function), animation
 - 交互杂项：cursor, pointer-events, user-select, list-style(+type), object-fit/position, will-change
 
-**比妙搭 UIConfig 宽的部分**：Grid 全家、clip-path、backdrop-filter、mix-blend-mode、aspect-ratio —— 妙搭那套 setter 里都没有。
+**比常见可视化编辑器 setter 宽的部分**：Grid 全家、clip-path、backdrop-filter、mix-blend-mode、aspect-ratio —— 一般 setter 里都没有。
 
 ## 6. 两个官网没写的能力
 

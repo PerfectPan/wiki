@@ -39,6 +39,9 @@
   - [[wiki/topics/frontend/Waku|Waku]]
   - [[wiki/topics/frontend/whyframe|whyframe]]
   - [[wiki/topics/frontend/zustand|zustand]]
+- `ux`
+  - [[wiki/topics/ux/UI 元素命名|UI 元素命名]]
+  - [[wiki/topics/ux/UI 设计风格|UI 设计风格]]
 - `architecture`
   - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi/di]]
   - [[wiki/topics/architecture/技术方案|技术方案]]

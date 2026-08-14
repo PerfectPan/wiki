@@ -2,7 +2,6 @@
 title: 交互式 UI 的可访问性基线
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

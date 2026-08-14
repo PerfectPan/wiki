@@ -3,7 +3,6 @@ title: MCP
 description: Model Context Protocol 从本地上下文连接协议演进为远程 Agent 基础设施的完整脉络、核心模型与选型边界
 type: topic
 category: ai
-status: active
 created: 2026-04-12
 updated: 2026-07-30
 timestamp: 2026-07-30

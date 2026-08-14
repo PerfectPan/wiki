@@ -3,7 +3,6 @@ title: Transitions.dev
 description: Product UI 动效菜谱参考站；写动画时查阅、复制 CSS。
 type: topic
 category: frontend
-status: seed
 created: 2026-07-26
 updated: 2026-07-26
 timestamp: 2026-07-26

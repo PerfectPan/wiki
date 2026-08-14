@@ -2,7 +2,6 @@
 title: Git 与 Agent 协作的摩擦点和演进方向
 type: synthesis
 category: ai
-status: active
 created: 2026-04-23
 updated: 2026-04-23
 tags:

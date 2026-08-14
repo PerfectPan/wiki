@@ -2,7 +2,6 @@
 title: RSC 的协议与渲染心智模型
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-19
 updated: 2026-04-19
 tags:

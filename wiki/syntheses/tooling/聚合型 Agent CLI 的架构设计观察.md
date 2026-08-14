@@ -3,7 +3,6 @@ title: 聚合型 Agent CLI 的架构设计观察
 description: 从 ketch 代码试读中提炼聚合型 agent CLI 的命令边界、后端抽象、抓取链路和可靠性设计启发。
 type: synthesis
 category: tooling
-status: seed
 created: 2026-06-30
 updated: 2026-06-30
 timestamp: 2026-06-30

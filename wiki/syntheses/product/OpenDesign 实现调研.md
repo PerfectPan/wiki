@@ -2,7 +2,6 @@
 title: OpenDesign 实现调研
 type: synthesis
 category: product
-status: active
 created: 2026-06-22
 updated: 2026-06-22
 tags:

@@ -3,7 +3,6 @@ title: Bento
 description: 单文件 office（先 slides）：.bento.html = 文档 + 编辑器 + 放映器；JSON 模型驱动渲染，并暴露 window.bento 给 agent
 type: topic
 category: product
-status: active
 created: 2026-08-06
 updated: 2026-08-06
 timestamp: 2026-08-06

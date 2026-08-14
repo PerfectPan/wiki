@@ -3,7 +3,6 @@ title: Chat Completions
 description: OpenAI 风格的 /v1/chat/completions：messages 对话、tool_calls，以及作为事实标准的兼容生态。
 type: topic
 category: ai
-status: seed
 created: 2026-08-03
 updated: 2026-08-03
 timestamp: 2026-08-03

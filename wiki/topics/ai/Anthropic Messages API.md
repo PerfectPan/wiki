@@ -3,7 +3,6 @@ title: Anthropic Messages API
 description: Claude 原生 /v1/messages：独立 system、content 类型块、tool_use/tool_result，以及与 OpenAI Chat 的字段差异。
 type: topic
 category: ai
-status: seed
 created: 2026-08-03
 updated: 2026-08-03
 timestamp: 2026-08-03

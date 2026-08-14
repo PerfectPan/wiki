@@ -3,7 +3,6 @@ title: OpenAI Programmatic Tool Calling
 description: OpenAI Responses API 中由模型生成 JavaScript 协调工具调用的机制，以及它与直接工具调用的边界。
 type: topic
 category: ai
-status: seed
 created: 2026-07-11
 updated: 2026-07-11
 timestamp: 2026-07-11

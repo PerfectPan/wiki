@@ -3,7 +3,6 @@ title: SVG 图标自动 Morph 的实现路径
 description: 以 Morphicons 为例，拆解任意描边图标自动建立几何对应、对齐并平滑变形的实现方法与适用边界
 type: synthesis
 category: frontend
-status: seed
 created: 2026-08-05
 updated: 2026-08-05
 timestamp: 2026-08-05

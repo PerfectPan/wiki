@@ -3,7 +3,6 @@ title: Voila
 description: 一个不改源码的浏览器端可视化编辑扩展，产出 CSS 覆盖和交接物而非代码，其实现选择几乎全部由「不拥有目标站点」这个约束决定
 type: topic
 category: product
-status: seed
 created: 2026-08-13
 updated: 2026-08-13
 tags:

@@ -3,7 +3,6 @@ title: Awesome Agent Skills
 description: 经判据审过的 Agent Skill 薄索引：推荐 / 可参考 / 偏薄，链到评审与范式页，不镜像全文
 type: topic
 category: ai
-status: active
 created: 2026-08-06
 updated: 2026-08-06
 timestamp: 2026-08-06

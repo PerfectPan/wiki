@@ -2,7 +2,6 @@
 title: Software Design
 type: topic
 category: architecture
-status: seed
 created: 2026-04-12
 updated: 2026-04-25
 tags:

@@ -2,7 +2,6 @@
 title: npm 包发布与发布链路实践
 type: synthesis
 category: tooling
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

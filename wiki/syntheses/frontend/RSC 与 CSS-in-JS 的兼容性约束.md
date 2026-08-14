@@ -2,7 +2,6 @@
 title: RSC 与 CSS-in-JS 的兼容性约束
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

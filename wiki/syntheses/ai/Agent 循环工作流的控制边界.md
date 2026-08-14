@@ -3,7 +3,6 @@ title: Agent 循环工作流的控制边界
 description: 从 ClaudeDevs 的 loop 分类中抽象出 agent 自动化的触发、停止、验收和成本控制模型。
 type: synthesis
 category: ai
-status: seed
 created: 2026-07-08
 updated: 2026-07-08
 timestamp: 2026-07-08

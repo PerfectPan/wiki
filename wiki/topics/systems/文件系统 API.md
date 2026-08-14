@@ -2,7 +2,6 @@
 title: 文件系统 API
 type: topic
 category: systems
-status: seed
 created: 2026-04-12
 updated: 2026-04-19
 tags:

@@ -3,7 +3,6 @@ title: Coding Agent Shell 与 Git 权限边界
 description: 基于 OpenSeek 的 shell/Git sandbox 重构，总结 coding agent 如何在保留 Git 可用性的同时约束源文件写入。
 type: synthesis
 category: ai
-status: active
 created: 2026-07-01
 updated: 2026-07-01
 timestamp: 2026-07-01

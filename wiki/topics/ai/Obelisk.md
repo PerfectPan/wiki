@@ -3,7 +3,6 @@ title: Obelisk
 description: 为 Claude Code、Codex 和 Kimi Code 提供本地统一会话索引、可编程证据检索与人工批准记忆的早期基础设施
 type: topic
 category: ai
-status: seed
 created: 2026-08-02
 updated: 2026-08-02
 timestamp: 2026-08-02

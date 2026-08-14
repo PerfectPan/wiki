@@ -3,7 +3,6 @@ title: OpenSeek 项目架构总览
 description: 从源码结构看 OpenSeek 作为 MoonBit coding agent 基础设施的整体分层、边界和成熟度。
 type: synthesis
 category: ai
-status: active
 created: 2026-07-01
 updated: 2026-07-01
 timestamp: 2026-07-01

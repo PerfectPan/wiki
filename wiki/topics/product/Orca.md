@@ -3,7 +3,6 @@ title: Orca
 description: MIT 开源、local-first 的 Agent Development Environment，以 Git worktree 和自管执行面并行运行 coding agent。
 type: topic
 category: product
-status: active
 created: 2026-07-21
 updated: 2026-07-21
 timestamp: 2026-07-21

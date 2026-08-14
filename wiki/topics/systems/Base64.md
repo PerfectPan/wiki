@@ -2,7 +2,6 @@
 title: Base64
 type: topic
 category: systems
-status: seed
 created: 2026-04-12
 updated: 2026-04-12
 tags:

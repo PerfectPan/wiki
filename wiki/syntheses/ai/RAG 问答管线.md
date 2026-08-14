@@ -2,7 +2,6 @@
 title: RAG 问答管线
 type: synthesis
 category: ai
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

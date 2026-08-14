@@ -3,7 +3,6 @@ title: SVG
 description: SVG 的基础图形、描边动画与相关实现资料入口
 type: topic
 category: frontend
-status: seed
 created: 2026-04-12
 updated: 2026-08-05
 timestamp: 2026-08-05

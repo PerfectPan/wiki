@@ -3,7 +3,6 @@ title: TypeScript Phantom Type Carriers
 description: TypeScript 运行时和编译时之间的类型信息桥——通过 phantom type 字段在跨模块（服务端→客户端、配置→消费处）传递类型信息，零运行时开销
 type: synthesis
 category: languages
-status: seed
 created: 2026-07-26
 updated: 2026-07-26
 tags:

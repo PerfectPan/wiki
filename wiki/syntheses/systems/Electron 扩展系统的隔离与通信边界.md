@@ -3,7 +3,6 @@ title: Electron 扩展系统的隔离与通信边界
 description: 基于 utilityProcess、MessagePort、capability broker 和 sandboxed iframe 设计可审计的 Electron 扩展运行时
 type: synthesis
 category: systems
-status: seed
 created: 2026-08-02
 updated: 2026-08-02
 timestamp: 2026-08-02

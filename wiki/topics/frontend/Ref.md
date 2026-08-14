@@ -2,7 +2,6 @@
 title: Ref
 type: topic
 category: frontend
-status: seed
 created: 2026-04-12
 updated: 2026-04-12
 tags:

@@ -2,7 +2,6 @@
 title: MCP Client
 type: topic
 category: ai
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

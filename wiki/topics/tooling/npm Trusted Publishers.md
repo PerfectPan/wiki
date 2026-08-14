@@ -2,7 +2,6 @@
 title: npm Trusted Publishers
 type: topic
 category: tooling
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

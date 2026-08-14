@@ -2,7 +2,6 @@
 title: CRDT 数据压缩策略
 type: synthesis
 category: systems
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

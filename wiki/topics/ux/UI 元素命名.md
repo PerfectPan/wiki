@@ -3,7 +3,6 @@ title: UI 元素命名
 description: 为什么 UI 元素的名字重要：名字是设计-开发-agent 信道上的协议；好名字的三层权威来源与典型失败模式。
 type: topic
 category: ux
-status: seed
 created: 2026-08-13
 updated: 2026-08-14
 timestamp: 2026-08-14

@@ -3,7 +3,6 @@ title: MCP SSE 多实例路由策略
 description: 旧版有状态 MCP SSE 在多实例部署中的路由问题，以及 2026-07-28 无状态核心如何消除协议级 session
 type: synthesis
 category: ai
-status: seed
 created: 2026-04-25
 updated: 2026-07-29
 timestamp: 2026-07-29

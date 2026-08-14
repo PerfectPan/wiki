@@ -3,7 +3,6 @@ title: AI Slop
 description: 识别生成式默认选择在界面、文案与代码中留下的具体重复模式，并区分坏味道与有意设计。
 type: topic
 category: ai
-status: seed
 created: 2026-07-11
 updated: 2026-07-11
 timestamp: 2026-07-11

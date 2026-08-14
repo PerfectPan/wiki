@@ -2,7 +2,6 @@
 title: Windows 文件锁与 fs.rename 重试
 type: topic
 category: systems
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

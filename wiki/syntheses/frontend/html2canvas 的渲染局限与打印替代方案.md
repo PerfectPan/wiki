@@ -2,7 +2,6 @@
 title: html2canvas 的渲染局限与打印替代方案
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

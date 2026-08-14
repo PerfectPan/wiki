@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CLI="$ROOT/bin/wiki"
-CLI_JS="$ROOT/bin/wiki.js"
+CLI_TS="$ROOT/bin/wiki.ts"
 
 fail() {
   echo "FAIL: $*" >&2
@@ -19,7 +19,7 @@ assert_contains() {
   fi
 }
 
-[[ -f "$CLI_JS" ]] || fail "expected CLI at $CLI_JS"
+[[ -f "$CLI_TS" ]] || fail "expected TypeScript CLI at $CLI_TS"
 [[ ! -d "$ROOT/.codex/skills" ]] || fail "project-local skills should not exist"
 
 if git -C "$ROOT" rev-parse --verify origin/main >/dev/null 2>&1; then

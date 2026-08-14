@@ -29,7 +29,7 @@ const HELP_TEXT = `wiki CLI
   check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
 `;
 
-const VALID_TYPES = ["topic", "synthesis", "comparison"];
+const VALID_TYPES = ["topic", "synthesis", "comparison"] as const;
 const VALID_CATEGORIES = [
   "frontend",
   "ai",
@@ -41,7 +41,7 @@ const VALID_CATEGORIES = [
   "product",
   "career",
   "life",
-];
+] as const;
 
 const REQUIRED_FIELDS = [
   "title",
@@ -51,15 +51,26 @@ const REQUIRED_FIELDS = [
   "updated",
   "tags",
   "source_refs",
-];
+] as const;
 
-function loadTemplate(name) {
+type TemplateValues = Record<string, string>;
+
+interface Frontmatter {
+  [key: string]: string | string[];
+}
+
+interface CheckIssue {
+  level: "error" | "warning";
+  message: string;
+}
+
+function loadTemplate(name: string): string {
   return readFileSync(resolve(PROMPTS_DIR, `${name}.md`), "utf8");
 }
 
-function render(name, extra = {}) {
+function render(name: string, extra: TemplateValues = {}): string {
   let text = loadTemplate(name);
-  const values = {
+  const values: TemplateValues = {
     ROOT,
     AGENTS: resolve(ROOT, "AGENTS.md"),
     SCHEMA: resolve(ROOT, "SCHEMA.md"),
@@ -79,7 +90,7 @@ function render(name, extra = {}) {
   return text;
 }
 
-function die(message) {
+function die(message: string): never {
   console.error(message);
   process.exit(1);
 }
@@ -88,15 +99,15 @@ function die(message) {
  * 解析 Markdown 文件的 YAML frontmatter。
  * 支持简单的 key: value 和 key: 后跟缩进列表的格式。
  */
-function parseFrontmatter(content) {
+function parseFrontmatter(content: string): Frontmatter | null {
   const lines = content.split("\n");
   if (lines[0]?.trim() !== "---") {
     return null;
   }
 
-  const fm = {};
+  const fm: Frontmatter = {};
   let i = 1;
-  let currentKey = null;
+  let currentKey: string | null = null;
 
   while (i < lines.length) {
     const line = lines[i];
@@ -155,11 +166,11 @@ function parseFrontmatter(content) {
 /**
  * 校验单个文件的 frontmatter。
  */
-function checkFile(filePath) {
-  const issues = [];
+function checkFile(filePath: string): CheckIssue[] {
+  const issues: CheckIssue[] = [];
   const relPath = relative(ROOT, filePath);
 
-  let content;
+  let content: string;
   try {
     content = readFileSync(filePath, "utf8");
   } catch {
@@ -182,7 +193,7 @@ function checkFile(filePath) {
 
   // 2. type 枚举检查
   const type = fm["type"];
-  if (typeof type === "string" && !VALID_TYPES.includes(type)) {
+  if (typeof type === "string" && !VALID_TYPES.includes(type as (typeof VALID_TYPES)[number])) {
     issues.push({
       level: "error",
       message: `type 值无效: "${type}"，必须是 ${VALID_TYPES.join(" / ")} 之一`,
@@ -191,7 +202,7 @@ function checkFile(filePath) {
 
   // 3. category 枚举检查
   const category = fm["category"];
-  if (typeof category === "string" && !VALID_CATEGORIES.includes(category)) {
+  if (typeof category === "string" && !VALID_CATEGORIES.includes(category as (typeof VALID_CATEGORIES)[number])) {
     issues.push({
       level: "error",
       message: `category 值无效: "${category}"，必须是 ${VALID_CATEGORIES.join(" / ")} 之一`,
@@ -224,7 +235,7 @@ function checkFile(filePath) {
 
   // 6. 日期格式检查
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-  for (const field of ["created", "updated"]) {
+  for (const field of ["created", "updated"] as const) {
     const value = fm[field];
     if (typeof value === "string" && !dateRegex.test(value)) {
       issues.push({
@@ -282,8 +293,8 @@ function checkFile(filePath) {
 /**
  * 递归收集目录下的所有 .md 文件。
  */
-function collectMarkdownFiles(dir) {
-  const result = [];
+function collectMarkdownFiles(dir: string): string[] {
+  const result: string[] = [];
   const entries = readdirSync(dir, { withFileTypes: true });
   for (const entry of entries) {
     const fullPath = resolve(dir, entry.name);
@@ -296,10 +307,10 @@ function collectMarkdownFiles(dir) {
   return result;
 }
 
-function runCheck(targetPath) {
+function runCheck(targetPath?: string): void {
   const target = targetPath ? resolve(ROOT, targetPath) : resolve(ROOT, "wiki");
 
-  let files;
+  let files: string[];
   try {
     const stat = statSync(target);
     if (stat.isFile()) {
@@ -349,7 +360,7 @@ function runCheck(targetPath) {
   }
 }
 
-function main(argv) {
+function main(argv: string[]): void {
   const [, , command, ...rest] = argv;
 
   if (!command || command === "help" || command === "-h" || command === "--help") {

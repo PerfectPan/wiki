@@ -27,6 +27,28 @@
 5. 对有意义的知识变更，在 PR body 中写清楚摘要、受影响页面和来源指针；Git 提交与 PR 历史就是变更记录。
 6. 优先按主题或决策问题拆成小 PR，不要做超大迁移 PR。
 
+## Frontmatter 校验
+
+仓库提供 `bin/wiki check` 命令和 pre-commit hook 来校验 frontmatter 是否符合 SCHEMA 规范。
+
+安装 pre-commit hook：
+
+```bash
+git config core.hooksPath .githooks
+```
+
+校验规则：
+
+- **错误（阻断提交）**：缺少必填字段、type/category 枚举值非法、type 与目录不一致、category 与子目录不一致、日期格式错误、tags/source_refs 不是数组
+- **警告（不阻断提交）**：缺少 description、resource 与 source_refs 不一致、timestamp 与 updated 不一致
+
+也可以手动运行全量校验：
+
+```bash
+bin/wiki check              # 校验 wiki/ 下所有页面
+bin/wiki check <path>       # 校验单个文件或目录
+```
+
 ## 标准入口
 
 这个仓库不依赖项目内 skill。统一通过 `bin/wiki` 作为 agent 的标准入口。
@@ -36,6 +58,7 @@
 - `bin/wiki research <topic>`：为深度调研和 Wiki 沉淀生成标准 research 提示词
 - `bin/wiki lint`：为巡检知识库生成标准 lint 提示词
 - `bin/wiki migrate <logseq-page>`：为 Logseq 页面迁移生成标准 migrate 提示词
+- `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
 
 使用要求：
 

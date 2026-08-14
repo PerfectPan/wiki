@@ -35,6 +35,7 @@ assert_contains "$agents_text" "bin/wiki query <question>"
 assert_contains "$agents_text" "bin/wiki research <topic>"
 assert_contains "$agents_text" "bin/wiki lint"
 assert_contains "$agents_text" "bin/wiki migrate <logseq-page>"
+assert_contains "$agents_text" "bin/wiki check"
 
 help_output="$("$CLI" help)"
 assert_contains "$help_output" "ingest"
@@ -42,6 +43,7 @@ assert_contains "$help_output" "query"
 assert_contains "$help_output" "research"
 assert_contains "$help_output" "lint"
 assert_contains "$help_output" "migrate"
+assert_contains "$help_output" "check"
 
 ingest_output="$("$CLI" ingest deep-research-report.md)"
 assert_contains "$ingest_output" "操作：ingest"
@@ -71,5 +73,13 @@ migrate_output="$("$CLI" migrate '/Users/perfectpan/Library/Mobile Documents/iCl
 assert_contains "$migrate_output" "操作：migrate"
 assert_contains "$migrate_output" "journals 默认不迁移"
 assert_contains "$migrate_output" "topics"
+
+# check 命令：对合法页面应返回 0
+check_output="$("$CLI" check wiki/topics/ai/MCP.md 2>&1)" || true
+assert_contains "$check_output" "校验完成"
+
+# check 命令：全量校验不应有 error（只有 warning）
+full_check_output="$("$CLI" check 2>&1)" || true
+assert_contains "$full_check_output" "0 个错误"
 
 echo "PASS"

@@ -2,7 +2,7 @@
 title: UI 设计风格
 description: 从第一性原理理解 UI 风格：界面必须回答的四个基本问题、驱动风格变迁的三种外力、区分风格的坐标系；Name That Vibe 等图鉴是模型的实例。
 type: topic
-category: ux
+category: frontend
 created: 2026-08-14
 updated: 2026-08-14
 timestamp: 2026-08-14

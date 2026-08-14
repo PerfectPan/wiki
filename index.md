@@ -34,15 +34,14 @@
   - [[wiki/topics/frontend/Suspense|Suspense]]
   - [[wiki/topics/frontend/SVG|SVG]]
   - [[wiki/topics/frontend/Transitions.dev|Transitions.dev]]
+  - [[wiki/topics/frontend/UI 元素命名|UI 元素命名]]
+  - [[wiki/topics/frontend/UI 设计风格|UI 设计风格]]
   - [[wiki/topics/frontend/useEffect|useEffect]]
   - [[wiki/topics/frontend/useMemo|useMemo]]
   - [[wiki/topics/frontend/useRef|useRef]]
   - [[wiki/topics/frontend/Waku|Waku]]
   - [[wiki/topics/frontend/whyframe|whyframe]]
   - [[wiki/topics/frontend/zustand|zustand]]
-- `ux`
-  - [[wiki/topics/ux/UI 元素命名|UI 元素命名]]
-  - [[wiki/topics/ux/UI 设计风格|UI 设计风格]]
 - `architecture`
   - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi/di]]
   - [[wiki/topics/architecture/技术方案|技术方案]]

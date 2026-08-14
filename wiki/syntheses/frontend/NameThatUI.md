@@ -1,6 +1,6 @@
 ---
 title: NameThatUI 是什么、什么时候用
-description: 对 namethatui.com 的炼化：它是 UI 元素的"视觉词典"，价值在每个词条自带 agent prompt；适合写实现 prompt 前查正式名，不替代团队术语规范。
+description: namethatui.com 元素词典的使用判断：它是 UI 元素的"视觉词典"，价值在每个词条自带 agent prompt；适合写实现 prompt 前查正式名，不替代团队术语规范。
 type: synthesis
 category: frontend
 status: seed

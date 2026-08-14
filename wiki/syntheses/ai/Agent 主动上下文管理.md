@@ -2,7 +2,6 @@
 title: Agent 主动上下文管理
 type: synthesis
 category: ai
-status: seed
 created: 2026-06-28
 updated: 2026-06-28
 tags:

@@ -3,7 +3,6 @@ title: Agent Client Protocol
 description: Editor/Client 与 coding agent 之间的 JSON-RPC 协议：v1 prompt turn、v2 draft 的 session state 与 upsert，以及与 MCP 的边界
 type: topic
 category: ai
-status: active
 created: 2026-04-25
 updated: 2026-08-06
 timestamp: 2026-08-06

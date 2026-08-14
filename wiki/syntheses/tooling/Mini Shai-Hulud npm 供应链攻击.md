@@ -2,7 +2,6 @@
 title: Mini Shai-Hulud npm 供应链攻击
 type: synthesis
 category: tooling
-status: seed
 created: 2026-05-12
 updated: 2026-05-12
 tags:

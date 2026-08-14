@@ -2,7 +2,6 @@
 title: AI Cover
 type: topic
 category: product
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

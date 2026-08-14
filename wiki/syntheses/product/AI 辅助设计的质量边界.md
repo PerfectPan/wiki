@@ -2,7 +2,6 @@
 title: AI 辅助设计的质量边界
 type: synthesis
 category: product
-status: seed
 created: 2026-05-06
 updated: 2026-05-06
 tags:

@@ -2,7 +2,6 @@
 title: Workflow vs Agent
 type: comparison
 category: ai
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

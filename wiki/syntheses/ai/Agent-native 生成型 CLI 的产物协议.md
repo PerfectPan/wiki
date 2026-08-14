@@ -2,7 +2,6 @@
 title: Agent-native 生成型 CLI 的产物协议
 type: synthesis
 category: ai
-status: seed
 created: 2026-05-31
 updated: 2026-05-31
 tags: [agent, cli, automation, artifacts]

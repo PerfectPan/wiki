@@ -3,7 +3,6 @@ title: Agent Harness 演进范式
 description: 基于 HarnessX 论文，沉淀 agent harness 如何从静态脚手架演进为可组合、可观测、可演化的运行时接口。
 type: synthesis
 category: ai
-status: seed
 created: 2026-07-02
 updated: 2026-07-02
 timestamp: 2026-07-02

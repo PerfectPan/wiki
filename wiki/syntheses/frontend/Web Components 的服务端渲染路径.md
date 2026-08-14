@@ -2,7 +2,6 @@
 title: Web Components 的服务端渲染路径
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

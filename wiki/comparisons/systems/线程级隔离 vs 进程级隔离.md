@@ -2,7 +2,6 @@
 title: 线程级隔离 vs 进程级隔离
 type: comparison
 category: systems
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

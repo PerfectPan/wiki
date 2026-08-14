@@ -2,7 +2,6 @@
 title: String
 type: topic
 category: algorithms
-status: seed
 created: 2026-04-12
 updated: 2026-04-25
 tags:

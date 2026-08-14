@@ -2,7 +2,6 @@
 title: Claude Code 质量退化事故的产品与工程教训
 type: synthesis
 category: ai
-status: active
 created: 2026-04-24
 updated: 2026-04-24
 tags:

@@ -3,7 +3,6 @@ title: Agent Native 系统接口设计
 description: 综合 BMPI 两篇文章，沉淀 Agent Native 系统中 DSL、IR/DAG、验证契约和修复循环的设计范式。
 type: synthesis
 category: ai
-status: seed
 created: 2026-06-21
 updated: 2026-06-21
 timestamp: 2026-06-21

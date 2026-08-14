@@ -2,7 +2,6 @@
 title: 让AI主动管理自己的上下文
 type: source
 category: ai
-status: captured
 created: 2026-06-28
 source_url: https://blog.xlab.app/p/6a966aeb/
 author: 透明人

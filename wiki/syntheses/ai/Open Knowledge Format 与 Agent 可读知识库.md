@@ -3,7 +3,6 @@ title: Open Knowledge Format 与 Agent 可读知识库
 description: 分析 Google Cloud OKF v0.1 对文件优先、Agent 可读个人 wiki 的意义，以及本仓库为何应做 OKF-compatible 而不是 OKF-only。
 type: synthesis
 category: ai
-status: seed
 created: 2026-06-15
 updated: 2026-06-15
 timestamp: 2026-06-15

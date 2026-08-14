@@ -3,7 +3,6 @@ title: Raft
 description: Botiverse 的多 Agent 协作平台：本地 Agent 执行、托管 Server 承载频道、任务和共享上下文。
 type: topic
 category: product
-status: active
 created: 2026-07-21
 updated: 2026-07-21
 timestamp: 2026-07-21

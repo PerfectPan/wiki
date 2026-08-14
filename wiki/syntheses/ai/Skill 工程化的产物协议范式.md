@@ -3,7 +3,6 @@ title: Skill 工程化的产物协议范式
 description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、manifest、QA 与 repair；案例含 hatch-pet、ai-cli、bento-slides
 type: synthesis
 category: ai
-status: active
 created: 2026-05-06
 updated: 2026-08-06
 timestamp: 2026-08-06

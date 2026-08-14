@@ -3,7 +3,6 @@ title: CSS Anchor Positioning
 description: CSS Anchor Positioning 用声明式 CSS 把浮层绑定到触发元素，并提供溢出回退位置。
 type: topic
 category: frontend
-status: seed
 created: 2026-07-07
 updated: 2026-07-07
 timestamp: 2026-07-07

@@ -2,7 +2,6 @@
 title: 事件循环与 Microtask 检查点
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

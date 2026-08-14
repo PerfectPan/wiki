@@ -2,7 +2,6 @@
 title: 文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf
 type: comparison
 category: tooling
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

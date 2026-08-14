@@ -3,7 +3,6 @@ title: 纯 CSS 手绘标注的实现与布局边界
 description: 以 neat-annotations 为例，总结伪元素、SVG mask 和 CSS variables 实现零 JavaScript 标注时的能力与天花板
 type: synthesis
 category: frontend
-status: seed
 created: 2026-08-02
 updated: 2026-08-02
 timestamp: 2026-08-02

@@ -2,7 +2,6 @@
 title: StarkNet Workshop
 type: topic
 category: languages
-status: seed
 created: 2026-04-12
 updated: 2026-04-19
 tags:

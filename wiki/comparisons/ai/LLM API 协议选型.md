@@ -3,7 +3,6 @@ title: LLM API 协议选型
 description: Chat Completions、Anthropic Messages、Responses 三种主流插头怎么选，以及和 Claude Code / Codex / OpenCode 的对应关系。
 type: comparison
 category: ai
-status: seed
 created: 2026-08-03
 updated: 2026-08-03
 timestamp: 2026-08-03

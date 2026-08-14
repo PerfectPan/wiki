@@ -3,7 +3,6 @@ title: Claude 5 时代的上下文工程
 description: 新一代强模型下，如何在系统提示词、仓库指令、Skills、工具接口、记忆和参考物之间分配上下文
 type: synthesis
 category: ai
-status: seed
 created: 2026-07-25
 updated: 2026-07-25
 timestamp: 2026-07-25

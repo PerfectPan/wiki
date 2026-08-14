@@ -3,7 +3,6 @@ title: Code Agent 结构约定的可验证边界
 description: 以 Vercel Labs konsistent 为例，说明项目结构约定如何从文档经验变成 agent 和 CI 可执行的契约。
 type: synthesis
 category: ai
-status: seed
 created: 2026-07-02
 updated: 2026-07-02
 timestamp: 2026-07-02

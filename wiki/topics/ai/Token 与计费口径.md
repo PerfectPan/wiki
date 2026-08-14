@@ -3,7 +3,6 @@ title: Token 与计费口径
 description: Token、M/B 数量级、input/output/cache 分项，以及 ccusage 一类本地统计工具该怎么读。
 type: topic
 category: ai
-status: seed
 created: 2026-08-03
 updated: 2026-08-03
 timestamp: 2026-08-03

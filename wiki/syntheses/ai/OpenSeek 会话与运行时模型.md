@@ -3,7 +3,6 @@ title: OpenSeek 会话与运行时模型
 description: 拆解 OpenSeek 的 append-only session、model projection、runtime event、steering 和 serve/TUI 生命周期。
 type: synthesis
 category: ai
-status: active
 created: 2026-07-01
 updated: 2026-07-01
 timestamp: 2026-07-01

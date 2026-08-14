@@ -2,7 +2,6 @@
 title: Serverless 应用分层与隔离
 type: synthesis
 category: systems
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

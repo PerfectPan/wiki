@@ -3,7 +3,6 @@ title: Responses API
 description: OpenAI 新一代 agent 向协议：response 对象、output item 列表、previous_response_id 与托管工具。
 type: topic
 category: ai
-status: seed
 created: 2026-08-03
 updated: 2026-08-03
 timestamp: 2026-08-03

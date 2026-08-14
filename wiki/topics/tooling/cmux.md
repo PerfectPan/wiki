@@ -3,7 +3,6 @@ title: cmux
 description: 记录 cmux 作为 macOS AI agent 终端编排器，如何通过 PATH shim 拦截 agent 命令，再由 wrapper 用命令行参数动态注入各 agent 自带的 hooks（不写配置文件）把 claude/codex/grok 纳入编排。
 type: topic
 category: tooling
-status: seed
 created: 2026-08-08
 updated: 2026-08-08
 timestamp: 2026-08-08

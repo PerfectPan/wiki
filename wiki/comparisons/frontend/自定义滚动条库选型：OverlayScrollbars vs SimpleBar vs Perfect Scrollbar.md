@@ -3,7 +3,6 @@ title: 自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect S
 description: 比较 OverlayScrollbars、SimpleBar、Perfect Scrollbar 和原生 CSS scrollbar 的适用场景、维护风险和选型结论。
 type: comparison
 category: frontend
-status: seed
 created: 2026-05-08
 updated: 2026-05-08
 timestamp: 2026-05-08

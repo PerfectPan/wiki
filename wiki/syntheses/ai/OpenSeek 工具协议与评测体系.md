@@ -3,7 +3,6 @@ title: OpenSeek 工具协议与评测体系
 description: 总结 OpenSeek 如何把本地工具、副作用控制、structured output 和 eval harness 组合成 coding agent 的可靠性闭环。
 type: synthesis
 category: ai
-status: active
 created: 2026-07-01
 updated: 2026-07-01
 timestamp: 2026-07-01

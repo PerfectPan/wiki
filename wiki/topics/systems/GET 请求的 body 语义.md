@@ -2,7 +2,6 @@
 title: GET 请求的 body 语义
 type: topic
 category: systems
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

@@ -22,7 +22,6 @@ title: 页面标题
 description: 一句话说明这页解决什么问题，便于 agent 先扫 frontmatter
 type: topic
 category: frontend
-status: seed
 created: 2026-04-12
 updated: 2026-04-12
 tags: []
@@ -37,7 +36,6 @@ timestamp: 2026-04-12
 - `type`：`topic`、`synthesis` 或 `comparison`
 - `description`：面向人和 agent 的一句话摘要。新页面应优先补上，避免 agent 必须打开正文才能判断页面是否相关
 - `category`：英文一级分类，例如 `frontend`、`ai`、`systems`
-- `status`：`seed`、`active` 或 `evergreen`
 - `tags`：细粒度英文主题，推荐 1 到 5 个
 - `source_refs`：支持本页内容的相对路径、页面名或 URL
 - `resource`：OKF-compatible 字段，导出时默认镜像 `source_refs`
@@ -50,7 +48,7 @@ timestamp: 2026-04-12
 
 兼容目标：
 
-1. 保留现有 `category`、`status`、`source_refs` 等治理字段，不为了兼容 OKF 丢掉本仓库的审阅和来源约束。
+1. 保留现有 `category`、`source_refs` 等治理字段，不为了兼容 OKF 丢掉本仓库的审阅和来源约束。
 2. 在 frontmatter 中补充 `description`，让 agent 可以在不读取全文的情况下初筛页面。
 3. 内部 `type` 始终表示页面职责，只允许 `topic`、`synthesis`、`comparison`。不要把外部资源类型直接塞进内部 `type`。
 4. 使用 `resource` 作为 OKF-compatible 来源字段。手写页面时可以让它与 `source_refs` 相同；未来导出工具可以自动从 `source_refs` 生成。
@@ -71,7 +69,6 @@ timestamp: 2026-04-12
 | `updated` | `timestamp` | `updated` 是内部字段，`timestamp` 是导出友好字段 |
 | `resource_type` | `type` 或扩展字段 | 仅在 resource mode 导出时映射为 OKF `type`；knowledge mode 下保留为扩展字段 |
 | `category` | 扩展字段 | OKF 不强制，本仓库继续保留 |
-| `status` | 扩展字段 | OKF 不强制，本仓库继续保留 |
 
 导出模式：
 
@@ -86,7 +83,6 @@ title: 页面标题
 description: 一句话说明这页解决什么问题
 type: synthesis
 category: ai
-status: seed
 created: 2026-06-15
 updated: 2026-06-15
 timestamp: 2026-06-15
@@ -107,7 +103,6 @@ title: Search API
 description: 搜索服务的 HTTP API 入口与调用边界
 type: topic
 category: tooling
-status: seed
 created: 2026-06-15
 updated: 2026-06-15
 timestamp: 2026-06-15

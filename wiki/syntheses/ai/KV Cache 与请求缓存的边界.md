@@ -3,7 +3,6 @@ title: KV Cache 与请求缓存的边界
 description: 区分 KV Cache、Prompt Cache、请求缓存和普通结果缓存的作用范围、缓存对象和成本边界。
 type: synthesis
 category: ai
-status: seed
 created: 2026-05-24
 updated: 2026-05-24
 timestamp: 2026-05-24

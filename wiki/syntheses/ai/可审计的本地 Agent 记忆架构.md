@@ -3,7 +3,6 @@ title: 可审计的本地 Agent 记忆架构
 description: 如何用可编辑的事实层、带来源的画像层和混合检索，为长期 Agent 提供用户可控的本地记忆
 type: synthesis
 category: ai
-status: seed
 created: 2026-07-29
 updated: 2026-08-02
 timestamp: 2026-08-02

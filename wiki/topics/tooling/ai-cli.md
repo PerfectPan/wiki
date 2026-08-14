@@ -3,7 +3,6 @@ title: ai-cli
 description: 记录 vercel-labs/ai-cli 作为可脚本化 AI 生成 CLI 的产品边界、工程取舍和 agent 工作流启发。
 type: topic
 category: tooling
-status: seed
 created: 2026-05-12
 updated: 2026-05-12
 timestamp: 2026-05-12

@@ -2,7 +2,6 @@
 title: React 18 流式 SSR 与渐进式 hydration
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

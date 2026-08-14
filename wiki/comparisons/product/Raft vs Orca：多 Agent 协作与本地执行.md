@@ -3,7 +3,6 @@ title: Raft vs Orca：多 Agent 协作与本地执行
 description: 对比 Raft 的托管协作控制面与 Orca 的本地优先 Agent 开发环境，明确消息数据、执行权限和团队协作的边界。
 type: comparison
 category: product
-status: active
 created: 2026-07-21
 updated: 2026-07-21
 timestamp: 2026-07-21

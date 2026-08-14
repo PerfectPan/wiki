@@ -2,7 +2,6 @@
 title: JavaScript 优化启发
 type: synthesis
 category: frontend
-status: seed
 created: 2026-04-25
 updated: 2026-04-25
 tags:

@@ -2,7 +2,6 @@
 title: LLM 结构化输出的可靠性边界
 type: synthesis
 category: ai
-status: seed
 created: 2026-05-18
 updated: 2026-05-18
 tags:

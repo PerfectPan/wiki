@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CLI="$ROOT/bin/wiki"
+
+# 获取暂存区中的 .md 文件
+staged_md_files=$(git diff --cached --name-only --diff-filter=ACM -- '*.md' || true)
+
+if [ -z "$staged_md_files" ]; then
+  exit 0
+fi
+
+echo "Running frontmatter check on staged markdown files..."
+
+has_error=false
+
+while IFS= read -r file; do
+  [ -z "$file" ] && continue
+  # 只检查 wiki/ 下的页面
+  if [[ "$file" != wiki/* ]]; then
+    continue
+  fi
+
+  # 检查文件是否存在（可能被删除）
+  if [ ! -f "$ROOT/$file" ]; then
+    continue
+  fi
+
+  if ! "$CLI" check "$file" >/dev/null 2>&1; then
+    echo ""
+    echo "❌ $file failed frontmatter check:"
+    "$CLI" check "$file" 2>&1 | grep -E "error|warning" || true
+    has_error=true
+  fi
+done <<< "$staged_md_files"
+
+if [ "$has_error" = true ]; then
+  echo ""
+  echo "Frontmatter check failed. Please fix the errors above before committing."
+  echo "Tip: warnings (missing description) are allowed; only errors block commits."
+  exit 1
+fi
+
+echo "✅ Frontmatter check passed."
+exit 0

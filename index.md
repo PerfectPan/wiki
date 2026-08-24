@@ -56,6 +56,7 @@
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Awesome Agent Skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
+  - [[wiki/topics/ai/Agent Harness|Agent Harness]]
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
   - [[wiki/topics/ai/Chat Completions|Chat Completions]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]

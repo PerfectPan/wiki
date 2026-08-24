@@ -194,6 +194,7 @@
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
   - [[wiki/syntheses/ai/Agent 循环工作流的控制边界|Agent 循环工作流的控制边界]]
+  - [[wiki/syntheses/ai/Agent 团队的角色分工与协作模式|Agent 团队的角色分工与协作模式]]
   - [[wiki/syntheses/ai/Agent 主动上下文管理|Agent 主动上下文管理]]
   - [[wiki/syntheses/ai/Agent Harness 演进范式|Agent Harness 演进范式]]
   - [[wiki/syntheses/ai/Agent Native 系统接口设计|Agent Native 系统接口设计]]

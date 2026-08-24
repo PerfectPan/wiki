@@ -197,6 +197,7 @@
   - [[wiki/syntheses/ai/Agent 团队的角色分工与协作模式|Agent 团队的角色分工与协作模式]]
   - [[wiki/syntheses/ai/Agent 主动上下文管理|Agent 主动上下文管理]]
   - [[wiki/syntheses/ai/Agent Harness 演进范式|Agent Harness 演进范式]]
+  - [[wiki/syntheses/ai/持久化 Agent Harness 的设计模式|持久化 Agent Harness 的设计模式]]
   - [[wiki/syntheses/ai/Agent Native 系统接口设计|Agent Native 系统接口设计]]
   - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
   - [[wiki/syntheses/ai/Claude 5 时代的上下文工程|Claude 5 时代的上下文工程]]

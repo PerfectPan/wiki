@@ -1,23 +1,26 @@
 ---
 title: Agent 团队的角色分工与协作模式
-description: 从 mihomo-rust 移植实践中提炼多智能体协作模式：为什么需要角色分工、四角色（PM/Architect/Engineer/QA）的职责与模型匹配、以及通过文件系统而非对话进行状态同步的工程机制。
+description: 从 mihomo-rust 移植和 Cursor agent swarm 实验中提炼多智能体协作模式：为什么需要角色分工、四角色（PM/Architect/Engineer/QA）的职责与模型匹配、通过文件系统同步状态的工程机制，以及规划者/执行者分离的模型经济学。
 type: synthesis
 category: ai
 created: 2026-08-18
-updated: 2026-08-18
-timestamp: 2026-08-18
+updated: 2026-08-20
+timestamp: 2026-08-20
 tags:
   - agent
   - multi-agent
   - collaboration
   - harness
   - spec-driven
+  - model-economics
 source_refs:
   - raw/sources/2026-08-18-mihomo-rust-agent-team.md
   - https://maxlv.net/blog/porting-mihomo-to-rust-with-claude/
+  - https://cursor.com/zh-Hant/blog/agent-swarm-model-economics
 resource:
   - raw/sources/2026-08-18-mihomo-rust-agent-team.md
   - https://maxlv.net/blog/porting-mihomo-to-rust-with-claude/
+  - https://cursor.com/zh-Hant/blog/agent-swarm-model-economics
 ---
 
 # Agent 团队的角色分工与协作模式
@@ -101,6 +104,42 @@ mihomo-rust 的做法是让 agent **通过读写约定好的文件来同步状�
 
 这个分类法的价值在于给 Engineer 一个**默认规则**："不确定时选 Class A，在 PR 描述中标注"。不需要每次都暂停来请求 Architect 决策。
 
+### 6. 模型分工的经济学：规划者用强模型，执行者用便宜模型
+
+Cursor 的 agent swarm 实验（从零实现 SQLite）验证了一个关键结论：**不是所有角色都需要用最强模型**。
+
+实验测试了四种模型组合（规划者 + 执行者）：
+
+| 规划者 | 执行者 | 定位 |
+| --- | --- | --- |
+| GPT-5.5 | GPT-5.5 | 全高端模型 |
+| Grok 4.5 | Grok 4.5 | 成本效益基准 |
+| Opus 4.8 | Composer 2.5 | 高端判断 + 高效执行 |
+| Fable 5 | Composer 2.5 | 较低端规划者 |
+
+核心发现：
+
+- **Opus 4.8（规划者）+ Composer 2.5（执行者）的组合，以远低于全 Opus 的成本达到了相近的质量**。规划者负责"想清楚做什么"，需要强推理；执行者负责"把事做完"，可以用更便宜更快的模型。
+- **单 token 价格不等于总成本**。Fable 5 单 token 价格比 Opus 4.8 高约一倍，但因为用的 planning tokens 少得多，规划者账单反而更低；不过执行者消耗了好几倍 tokens，整体成本更高。
+- **提交数不等于产出**。旧版 Grok 4.5 两小时产生 68,000 次提交（新版的 70 倍），但效果更差——大部分是无效忙碌（反复折腾、来回变动）。
+
+这和 mihomo-rust 的模型匹配原则一致：推理强度按 Architect > PM ≈ Engineer > QA 递减。区别在于 Cursor 实验把"规划者/执行者"分得更彻底，证明了**强模型做决策、便宜模型做执行**的经济性。
+
+### 7. 规格是新的工作单位
+
+AI 能力每跃升一次，工程师的工作抽象层级就提高一层：
+
+| 阶段 | 工作单位 | AI 做什么 |
+| --- | --- | --- |
+| 自动补全 | 一行代码 | 补全字符 |
+| 早期模型 | 一个函数 | 实现函数体 |
+| 单 Agent | 一个功能 | 写多个函数 |
+| **Agent Swarm** | **规格（spec）** | **拆任务、写代码、测试、修复** |
+
+Cursor 实验中，agent swarm 的输入是 835 页 SQLite 手册（即规格），输出是一个能通过 sqllogictest 的数据库实现。**真正稀缺的不是模型能力，而是对意图恰如其分的描述**。
+
+这意味着：把时间花在写清楚规格上，比盯着 agent 写代码更高效。规格越精确，模型可以越便宜，产出越稳定。
+
 ## 适用场景与边界
 
 值得用多智能体团队的场景：
@@ -122,6 +161,9 @@ mihomo-rust 的做法是让 agent **通过读写约定好的文件来同步状�
 - **CLAUDE.md / AGENTS.md 是单 agent 场景下的 ADR**：只写不能从代码推断的信息（构建命令、架构骨架、扩展点），不写过时信息。
 - **Memory 要精简且可操作**：只存"不要做 X"或"做 Y 时注意 Z"的 feedback 规则，不存代码模式、Git 历史、调试方案。
 - **测试是验证 agent 产出的唯一可靠手段**："看起来正确"不等于"运行正确"。
+- **规划者用强模型，执行者用便宜模型**：架构决策、需求分析用强模型；按 spec 实现、格式调整用便宜快的模型；校验用脚本。不是所有任务都要上最强模型。
+- **写好规格比写好代码更重要**：把需求说清楚（输入是什么、输出是什么、约束是什么），agent 产出质量更高。规格模糊时，agent 会反复试错，产生大量无效改动。
+- **警惕无效忙碌**：看 agent 的产出要看最终结果（测试通过、规范校验），不看中间改了多少次。如果 agent 在反复修改同一个文件，说明规格不清楚，应该回去补规格。
 
 ## 相关页面
 
@@ -135,3 +177,4 @@ mihomo-rust 的做法是让 agent **通过读写约定好的文件来同步状�
 
 - `raw/sources/2026-08-18-mihomo-rust-agent-team.md`
 - https://maxlv.net/blog/porting-mihomo-to-rust-with-claude/
+- https://cursor.com/zh-Hant/blog/agent-swarm-model-economics

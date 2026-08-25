@@ -155,10 +155,11 @@ YYYY-MM-DD-主题名.html
 
 ### 7.6 代码仓库
 
-- 不 clone 全量仓库
-- 自动抓取 README（尝试 main/master 分支的 README.md/README.rst/README.txt）
-- 存 Markdown，记录仓库 URL
-- 如需关键文件，手动追加到同一个 .md 文件
+- shallow clone 到临时目录
+- 生成目录结构树（排除 .git、node_modules、dist 等）
+- 提取关键文件内容（README、package.json、Cargo.toml、pyproject.toml、go.mod、Makefile、CLAUDE.md、AGENTS.md）
+- 存为一份分析报告 Markdown
+- 如 clone 失败，回退到只抓 README
 
 ### 7.7 聊天记录
 

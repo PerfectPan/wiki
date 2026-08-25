@@ -70,6 +70,72 @@ def fetch_github_readme(url: str) -> tuple[str, str]:
     raise RuntimeError(f"无法找到 {owner}/{repo} 的 README")
 
 
+def analyze_github_repo(url: str) -> str:
+    """Clone GitHub 仓库并分析结构，返回分析报告"""
+    import subprocess
+    import tempfile
+
+    parsed = urlparse(url)
+    parts = parsed.path.strip("/").split("/")
+    owner, repo = parts[0], parts[1]
+    repo_name = f"{owner}/{repo}"
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        repo_path = os.path.join(tmpdir, repo)
+        # shallow clone
+        try:
+            subprocess.run(
+                ["git", "clone", "--depth", "1", url, repo_path],
+                check=True,
+                capture_output=True,
+                timeout=120,
+            )
+        except subprocess.CalledProcessError as e:
+            raise RuntimeError(f"clone 失败: {e.stderr.decode()}")
+
+        lines = []
+        lines.append(f"# {repo_name} 仓库分析\n")
+
+        # 目录树（排除 .git、node_modules 等）
+        lines.append("## 目录结构\n")
+        lines.append("```")
+        for root, dirs, files in os.walk(repo_path):
+            # 跳过无关目录
+            dirs[:] = [d for d in dirs if d not in (".git", "node_modules", "dist", "build", ".next", ".venv", "venv", "__pycache__")]
+            level = root.replace(repo_path, "").count(os.sep)
+            if level > 3:
+                continue
+            indent = "  " * level
+            dirname = os.path.basename(root)
+            if level == 0:
+                lines.append(f"{repo}/")
+            else:
+                lines.append(f"{indent}{dirname}/")
+            subindent = "  " * (level + 1)
+            for f in sorted(files):
+                if f.startswith(".") and f not in (".gitignore", ".env.example"):
+                    continue
+                lines.append(f"{subindent}{f}")
+        lines.append("```\n")
+
+        # 关键文件内容
+        key_files = ["README.md", "package.json", "Cargo.toml", "pyproject.toml", "go.mod", "Makefile", "CLAUDE.md", "AGENTS.md"]
+        for kf in key_files:
+            kf_path = os.path.join(repo_path, kf)
+            if os.path.exists(kf_path):
+                lines.append(f"## {kf}\n")
+                lines.append("```")
+                with open(kf_path, "r", encoding="utf-8", errors="replace") as f:
+                    content = f.read()
+                    # 限制长度
+                    if len(content) > 5000:
+                        content = content[:5000] + "\n... (truncated)"
+                    lines.append(content)
+                lines.append("```\n")
+
+        return "\n".join(lines)
+
+
 def slugify(text: str, max_len: int = 60) -> str:
     """从文本生成文件名 slug，优先保留 ASCII"""
     # 移除非 ASCII 字符（中文等），只保留英文、数字、连字符
@@ -306,20 +372,29 @@ def main():
 
     today = date.today().isoformat()
 
-    # GitHub 仓库：抓取 README
+    # GitHub 仓库：clone 分析结构，失败则回退到 README
     if is_github_repo(url):
         print(f"GitHub 仓库: {url}")
-        readme_content, repo_name = fetch_github_readme(url)
-        slug = slugify(repo_name.replace("/", "-"))
+        slug = get_slug_from_url(url)
         base_name = f"{today}-{slug}"
         md_path = os.path.join(sources_dir, f"{base_name}.md")
 
-        header = build_source_header(url, "repo", repo_name)
-        with open(md_path, "w", encoding="utf-8") as f:
-            f.write(header + readme_content)
-        print(f"已保存 README: {md_path}")
-        print(f"\n仓库: {repo_name}")
-        print(f"类型: repo")
+        try:
+            print("正在 clone 并分析仓库...")
+            analysis = analyze_github_repo(url)
+            header = build_source_header(url, "repo", slug)
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(header + analysis)
+            print(f"已保存仓库分析: {md_path}")
+        except Exception as e:
+            print(f"clone 分析失败 ({e})，回退到抓取 README...")
+            readme_content, repo_name = fetch_github_readme(url)
+            header = build_source_header(url, "repo", repo_name)
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(header + readme_content)
+            print(f"已保存 README: {md_path}")
+
+        print(f"\n类型: repo")
         return
 
     # 普通网页：抓取 HTML 并转 Markdown

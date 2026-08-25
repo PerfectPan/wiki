@@ -56,6 +56,7 @@
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Awesome Agent Skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
+  - [[wiki/topics/ai/Agent Harness|Agent Harness]]
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
   - [[wiki/topics/ai/Chat Completions|Chat Completions]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
@@ -193,8 +194,10 @@
 - `ai`
   - [[wiki/syntheses/ai/Agent 驱动 Wiki 的维护流程|Agent 驱动 Wiki 的维护流程]]
   - [[wiki/syntheses/ai/Agent 循环工作流的控制边界|Agent 循环工作流的控制边界]]
+  - [[wiki/syntheses/ai/Agent 团队的角色分工与协作模式|Agent 团队的角色分工与协作模式]]
   - [[wiki/syntheses/ai/Agent 主动上下文管理|Agent 主动上下文管理]]
   - [[wiki/syntheses/ai/Agent Harness 演进范式|Agent Harness 演进范式]]
+  - [[wiki/syntheses/ai/持久化 Agent Harness 的设计模式|持久化 Agent Harness 的设计模式]]
   - [[wiki/syntheses/ai/Agent Native 系统接口设计|Agent Native 系统接口设计]]
   - [[wiki/syntheses/ai/Claude Code 质量退化事故的产品与工程教训|Claude Code 质量退化事故的产品与工程教训]]
   - [[wiki/syntheses/ai/Claude 5 时代的上下文工程|Claude 5 时代的上下文工程]]

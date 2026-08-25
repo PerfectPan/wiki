@@ -3,6 +3,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { execSync } from "node:child_process";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -372,7 +373,19 @@ function main(argv: string[]): void {
     if (rest.length === 0) {
       die("缺少 source 参数。用法: bin/wiki ingest <source>");
     }
-    process.stdout.write(render("ingest", { INPUT: rest.join(" ") }));
+    const source = rest.join(" ");
+    // 如果是 URL，先抓取并存入 raw/sources/
+    if (source.startsWith("http://") || source.startsWith("https://")) {
+      try {
+        const script = resolve(ROOT, "tools", "ingest.py");
+        execSync(`python3 "${script}" "${source}" --type blog`, {
+          stdio: "inherit",
+        });
+      } catch (e) {
+        die(`抓取失败: ${(e as Error).message}`);
+      }
+    }
+    process.stdout.write(render("ingest", { INPUT: source }));
     return;
   }
 

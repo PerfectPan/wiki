@@ -378,7 +378,11 @@ function main(argv: string[]): void {
     if (source.startsWith("http://") || source.startsWith("https://")) {
       try {
         const script = resolve(ROOT, "tools", "ingest.py");
-        const type = source.includes("github.com") ? "repo" : "blog";
+        // 根据 URL 类型自动选择
+        let type = "blog";
+        if (source.includes("github.com")) type = "repo";
+        else if (source.includes("youtube.com") || source.includes("youtu.be")) type = "video";
+        else if (source.includes("x.com") || source.includes("twitter.com")) type = "tweet";
         execSync(`python3 "${script}" "${source}" --type ${type}`, {
           stdio: "inherit",
         });

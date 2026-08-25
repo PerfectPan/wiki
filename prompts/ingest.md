@@ -17,6 +17,8 @@
 来源已经被抓取并存入 `raw/sources/`。找到对应的文件：
 - 博客/文档：`raw/sources/YYYY-MM-DD-主题.md`（Markdown）和 `.html`（原始）
 - GitHub 仓库：`raw/sources/YYYY-MM-DD-仓库名.md`（分析报告）
+- X 推文线程：`raw/sources/YYYY-MM-DD-主题.md`（线程全文）
+- YouTube 视频：`raw/sources/YYYY-MM-DD-主题.md`（字幕转录）
 
 阅读素材，理解核心内容。
 
@@ -184,7 +186,7 @@ resource:
 
 - 判断这份来源应该影响哪些页面
 - 必要时新增或更新知识页
-- 为 PR 写出简短的变更摘要
+- 在 PR body 中写清楚本次知识变更摘要、受影响页面和来源指针
 
 目标目录：
 - topics：`{{TOPICS}}`

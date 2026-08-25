@@ -356,10 +356,103 @@ fetched: {today}
 """
 
 
+def is_youtube_url(url: str) -> bool:
+    """判断是否是 YouTube 视频 URL"""
+    parsed = urlparse(url)
+    return parsed.netloc in ("www.youtube.com", "youtube.com", "youtu.be")
+
+
+def fetch_youtube_transcript(url: str) -> tuple[str, str]:
+    """用 yt-dlp 获取 YouTube 视频字幕，返回 (transcript, title)"""
+    import subprocess
+    import json
+
+    # 获取视频信息
+    try:
+        result = subprocess.run(
+            ["yt-dlp", "--dump-json", "--skip-download", url],
+            capture_output=True,
+            text=True,
+            timeout=60,
+        )
+        if result.returncode != 0:
+            raise RuntimeError(f"yt-dlp 失败: {result.stderr}")
+        info = json.loads(result.stdout)
+        title = info.get("title", "untitled")
+    except FileNotFoundError:
+        raise RuntimeError("yt-dlp 未安装，请运行: brew install yt-dlp")
+
+    # 获取字幕
+    try:
+        result = subprocess.run(
+            ["yt-dlp", "--write-subs", "--write-auto-subs", "--sub-langs", "en,zh", "--skip-download", "-o", "/tmp/%(id)s", url],
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+    except Exception:
+        pass
+
+    # 尝试读取下载的字幕文件
+    import glob
+    subtitle_files = glob.glob("/tmp/*.vtt") + glob.glob("/tmp/*.srt")
+    if not subtitle_files:
+        return f"[无字幕] 视频标题: {title}\n\n请手动查看视频: {url}", title
+
+    # 读取第一个字幕文件
+    subtitle_file = subtitle_files[0]
+    with open(subtitle_file, "r", encoding="utf-8", errors="replace") as f:
+        content = f.read()
+
+    # 清理字幕格式（去掉时间戳等）
+    if subtitle_file.endswith(".vtt"):
+        content = re.sub(r"WEBVTT.*?\n\n", "", content, count=1)
+        content = re.sub(r"\d{2}:\d{2}:\d{2}\.\d{3} --> \d{2}:\d{2}:\d{2}\.\d{3}\n", "", content)
+    elif subtitle_file.endswith(".srt"):
+        content = re.sub(r"\d+\n", "", content)
+        content = re.sub(r"\d{2}:\d{2}:\d{2},\d{3} --> \d{2}:\d{2}:\d{2},\d{3}\n", "", content)
+
+    content = re.sub(r"\n{3,}", "\n\n", content).strip()
+
+    # 清理临时文件
+    for f in subtitle_files:
+        os.remove(f)
+
+    return content, title
+
+
+def is_x_url(url: str) -> bool:
+    """判断是否是 X (Twitter) URL"""
+    parsed = urlparse(url)
+    return parsed.netloc in ("x.com", "twitter.com", "www.x.com", "www.twitter.com")
+
+
+def fetch_x_thread(url: str) -> str:
+    """抓取 X 推文线程"""
+    # X 的网页抓取比较复杂，需要登录或 API
+    # 这里用一个简单的方式：尝试抓取页面，提取推文文本
+    html = fetch(url)
+
+    # 提取推文文本
+    tweets = re.findall(r'<article[^>]*>.*?<div[^>]*data-testid="tweetText"[^>]*>(.*?)</div>', html, re.DOTALL)
+
+    if not tweets:
+        return f"[无法自动抓取] 请手动复制推文内容到 raw/sources/\n\n原始链接: {url}"
+
+    lines = []
+    for tweet in tweets:
+        text = re.sub(r"<[^>]+>", "", tweet)
+        text = html.unescape(text).strip()
+        if text:
+            lines.append(text)
+
+    return "\n\n---\n\n".join(lines)
+
+
 def main():
     parser = argparse.ArgumentParser(description="抓取网页并存入 raw/sources/")
     parser.add_argument("url", help="网页 URL 或 GitHub 仓库 URL")
-    parser.add_argument("--type", default="blog", choices=["blog", "doc", "repo"], help="来源类型")
+    parser.add_argument("--type", default="blog", choices=["blog", "doc", "repo", "video", "tweet"], help="来源类型")
     args = parser.parse_args()
 
     url = args.url
@@ -371,6 +464,52 @@ def main():
     os.makedirs(sources_dir, exist_ok=True)
 
     today = date.today().isoformat()
+
+    # YouTube 视频：获取字幕
+    if is_youtube_url(url):
+        print(f"YouTube 视频: {url}")
+        slug = get_slug_from_url(url)
+        base_name = f"{today}-{slug}"
+        md_path = os.path.join(sources_dir, f"{base_name}.md")
+
+        try:
+            transcript, title = fetch_youtube_transcript(url)
+            header = build_source_header(url, "video", title)
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(header + f"# {title}\n\n" + transcript)
+            print(f"已保存字幕: {md_path}")
+        except Exception as e:
+            print(f"获取字幕失败: {e}")
+            header = build_source_header(url, "video", slug)
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(header + f"# {slug}\n\n[获取字幕失败，请手动查看视频]({url})")
+            print(f"已保存占位文件: {md_path}")
+
+        print(f"\n类型: video")
+        return
+
+    # X 推文线程
+    if is_x_url(url):
+        print(f"X 推文: {url}")
+        slug = get_slug_from_url(url)
+        base_name = f"{today}-{slug}"
+        md_path = os.path.join(sources_dir, f"{base_name}.md")
+
+        try:
+            thread = fetch_x_thread(url)
+            header = build_source_header(url, "tweet", slug)
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(header + thread)
+            print(f"已保存推文: {md_path}")
+        except Exception as e:
+            print(f"抓取失败: {e}")
+            header = build_source_header(url, "tweet", slug)
+            with open(md_path, "w", encoding="utf-8") as f:
+                f.write(header + f"[抓取失败，请手动复制推文内容]({url})")
+            print(f"已保存占位文件: {md_path}")
+
+        print(f"\n类型: tweet")
+        return
 
     # GitHub 仓库：clone 分析结构，失败则回退到 README
     if is_github_repo(url):

@@ -378,13 +378,13 @@ function main(argv: string[]): void {
     if (source.startsWith("http://") || source.startsWith("https://")) {
       try {
         const script = resolve(ROOT, "tools", "ingest.py");
-        // GitHub 仓库用 repo 类型，其他用 blog
         const type = source.includes("github.com") ? "repo" : "blog";
         execSync(`python3 "${script}" "${source}" --type ${type}`, {
           stdio: "inherit",
         });
       } catch (e) {
-        die(`抓取失败: ${(e as Error).message}`);
+        // 抓取失败不阻断，仍然输出 ingest 提示词
+        process.stderr.write(`警告: 抓取失败 (${(e as Error).message})\n`);
       }
     }
     process.stdout.write(render("ingest", { INPUT: source }));

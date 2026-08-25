@@ -94,13 +94,12 @@ def analyze_github_repo(url: str) -> str:
             raise RuntimeError(f"clone 失败: {e.stderr.decode()}")
 
         lines = []
-        lines.append(f"# {repo_name} 仓库分析\n")
+        lines.append(f"# {repo_name} 仓库\n")
 
-        # 目录树（排除 .git、node_modules 等）
+        # 目录结构
         lines.append("## 目录结构\n")
         lines.append("```")
         for root, dirs, files in os.walk(repo_path):
-            # 跳过无关目录
             dirs[:] = [d for d in dirs if d not in (".git", "node_modules", "dist", "build", ".next", ".venv", "venv", "__pycache__")]
             level = root.replace(repo_path, "").count(os.sep)
             if level > 3:
@@ -127,7 +126,6 @@ def analyze_github_repo(url: str) -> str:
                 lines.append("```")
                 with open(kf_path, "r", encoding="utf-8", errors="replace") as f:
                     content = f.read()
-                    # 限制长度
                     if len(content) > 5000:
                         content = content[:5000] + "\n... (truncated)"
                     lines.append(content)

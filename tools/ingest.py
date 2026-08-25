@@ -27,6 +27,49 @@ def fetch(url: str) -> str:
         return resp.read().decode("utf-8", errors="replace")
 
 
+def is_github_repo(url: str) -> bool:
+    """判断是否是 GitHub 仓库 URL"""
+    parsed = urlparse(url)
+    if parsed.netloc != "github.com":
+        return False
+    parts = parsed.path.strip("/").split("/")
+    return len(parts) >= 2 and parts[0] != "" and parts[1] != ""
+
+
+def fetch_github_readme(url: str) -> tuple[str, str]:
+    """抓取 GitHub 仓库的 README，返回 (markdown, repo_full_name)"""
+    parsed = urlparse(url)
+    parts = parsed.path.strip("/").split("/")
+    owner, repo = parts[0], parts[1]
+
+    # 尝试 main 和 master 分支
+    for branch in ["main", "master"]:
+        readme_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/README.md"
+        try:
+            req = Request(readme_url, headers={"User-Agent": "wiki-ingest/1.0"})
+            with urlopen(req, timeout=30) as resp:
+                if resp.status == 200:
+                    content = resp.read().decode("utf-8", errors="replace")
+                    return content, f"{owner}/{repo}"
+        except Exception:
+            continue
+
+    # 尝试其他常见 README 文件名
+    for branch in ["main", "master"]:
+        for name in ["README.rst", "README.txt", "readme.md"]:
+            readme_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{branch}/{name}"
+            try:
+                req = Request(readme_url, headers={"User-Agent": "wiki-ingest/1.0"})
+                with urlopen(req, timeout=30) as resp:
+                    if resp.status == 200:
+                        content = resp.read().decode("utf-8", errors="replace")
+                        return content, f"{owner}/{repo}"
+            except Exception:
+                continue
+
+    raise RuntimeError(f"无法找到 {owner}/{repo} 的 README")
+
+
 def slugify(text: str, max_len: int = 60) -> str:
     """从文本生成文件名 slug，优先保留 ASCII"""
     # 移除非 ASCII 字符（中文等），只保留英文、数字、连字符
@@ -249,14 +292,37 @@ fetched: {today}
 
 def main():
     parser = argparse.ArgumentParser(description="抓取网页并存入 raw/sources/")
-    parser.add_argument("url", help="网页 URL")
-    parser.add_argument("--type", default="blog", choices=["blog", "doc"], help="来源类型")
+    parser.add_argument("url", help="网页 URL 或 GitHub 仓库 URL")
+    parser.add_argument("--type", default="blog", choices=["blog", "doc", "repo"], help="来源类型")
     args = parser.parse_args()
 
     url = args.url
     source_type = args.type
 
-    # 抓取
+    # 确定保存路径
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sources_dir = os.path.join(repo_root, "raw", "sources")
+    os.makedirs(sources_dir, exist_ok=True)
+
+    today = date.today().isoformat()
+
+    # GitHub 仓库：抓取 README
+    if is_github_repo(url):
+        print(f"GitHub 仓库: {url}")
+        readme_content, repo_name = fetch_github_readme(url)
+        slug = slugify(repo_name.replace("/", "-"))
+        base_name = f"{today}-{slug}"
+        md_path = os.path.join(sources_dir, f"{base_name}.md")
+
+        header = build_source_header(url, "repo", repo_name)
+        with open(md_path, "w", encoding="utf-8") as f:
+            f.write(header + readme_content)
+        print(f"已保存 README: {md_path}")
+        print(f"\n仓库: {repo_name}")
+        print(f"类型: repo")
+        return
+
+    # 普通网页：抓取 HTML 并转 Markdown
     print(f"抓取: {url}")
     html = fetch(url)
 
@@ -264,13 +330,7 @@ def main():
     title = extract_title(html)
     # 优先用 URL 的 slug，标题作为备选
     slug = get_slug_from_url(url) or slugify(title)
-    today = date.today().isoformat()
     base_name = f"{today}-{slug}"
-
-    # 确定保存路径
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sources_dir = os.path.join(repo_root, "raw", "sources")
-    os.makedirs(sources_dir, exist_ok=True)
 
     html_path = os.path.join(sources_dir, f"{base_name}.html")
     md_path = os.path.join(sources_dir, f"{base_name}.md")

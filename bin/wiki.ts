@@ -378,7 +378,9 @@ function main(argv: string[]): void {
     if (source.startsWith("http://") || source.startsWith("https://")) {
       try {
         const script = resolve(ROOT, "tools", "ingest.py");
-        execSync(`python3 "${script}" "${source}" --type blog`, {
+        // GitHub 仓库用 repo 类型，其他用 blog
+        const type = source.includes("github.com") ? "repo" : "blog";
+        execSync(`python3 "${script}" "${source}" --type ${type}`, {
           stdio: "inherit",
         });
       } catch (e) {

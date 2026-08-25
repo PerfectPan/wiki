@@ -4,18 +4,22 @@ description: Agent harness 是为 AI 模型提供运行环境的软件层，由 
 type: topic
 category: ai
 created: 2026-08-20
-updated: 2026-08-20
-timestamp: 2026-08-20
+updated: 2026-08-26
+timestamp: 2026-08-26
 tags:
   - agent
   - harness
   - agent-framework
 source_refs:
   - raw/sources/2026-08-20-what-is-a-harness.md
+  - raw/sources/2026-08-26-yc-qm-agent-harness.md
   - https://earendil.com/posts/what-is-a-harness/
+  - https://qm.ycombinator.com/
 resource:
   - raw/sources/2026-08-20-what-is-a-harness.md
+  - raw/sources/2026-08-26-yc-qm-agent-harness.md
   - https://earendil.com/posts/what-is-a-harness/
+  - https://qm.ycombinator.com/
 ---
 
 # Agent Harness
@@ -52,7 +56,24 @@ Harness 是用户自主权的载体：
 - **数据本地化**：会话数据留在本地，而不是存在 AI 实验室的服务器上。
 - **可定制**：用户可以修改 system prompt、设计工作流、添加扩展。
 
-代表性的开源 harness 包括 Pi、OpenClaw、OpenCode、Hermes 等。
+代表性的开源 harness 包括 Pi、OpenClaw、OpenCode、Hermes、QM 等。
+
+### 5. 实践案例：YC 的 QM
+
+YC 内部实验过多个 agent harness，最终开源了 QM（quartermaster）：
+
+| 阶段 | 方案 | 问题 |
+| --- | --- | --- |
+| 第一代 | Ruby 写的基本 agent loop + 内部数据工具 | 上手快，但能力范围有限 |
+| 第二代 | 50+ Hermes agents 作为个人助理 | 灵活性高，但管理大规模 agent 团队困难 |
+| QM | 结合两者优点 | 灵活性 + 简单性，自托管 |
+
+QM 的设计目标：
+- 每个员工和项目都有一个 OpenClaw-like agent
+- 易于管理，适合工作相关任务
+- 自托管，用户拥有控制权
+
+代码：[github.com/yc-software/qm](https://github.com/yc-software/qm)
 
 ## 相关页面
 

@@ -157,11 +157,9 @@ YYYY-MM-DD-主题名.html
 
 ### 7.6 代码仓库
 
-- shallow clone 到临时目录
-- 生成目录结构树（排除 .git、node_modules、dist 等）
-- 提取关键文件内容（README、package.json、Cargo.toml、pyproject.toml、go.mod、Makefile、CLAUDE.md、AGENTS.md）
-- 存为一份分析报告 Markdown
-- 如 clone 失败，回退到只抓 README
+- 不 clone 全量仓库，不存 README 和目录树
+- 只存仓库元信息（描述、语言、stars、license）和关键文档指向（README、docs 目录的链接）
+- 深入的代码分析在临时目录中 clone 后进行，不存入 raw/sources/
 
 ### 7.7 聊天记录
 

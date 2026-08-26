@@ -12,18 +12,10 @@ tags:
   - agent-framework
 source_refs:
   - raw/sources/2026-08-20-what-is-a-harness.md
-  - raw/sources/2026-08-26-yc-qm-agent-harness.md
-  - raw/sources/2026-08-26-qm.md
   - https://earendil.com/posts/what-is-a-harness/
-  - https://qm.ycombinator.com/
-  - https://github.com/yc-software/qm
 resource:
   - raw/sources/2026-08-20-what-is-a-harness.md
-  - raw/sources/2026-08-26-yc-qm-agent-harness.md
-  - raw/sources/2026-08-26-qm.md
   - https://earendil.com/posts/what-is-a-harness/
-  - https://qm.ycombinator.com/
-  - https://github.com/yc-software/qm
 ---
 
 # Agent Harness
@@ -60,38 +52,21 @@ Harness 是用户自主权的载体：
 - **数据本地化**：会话数据留在本地，而不是存在 AI 实验室的服务器上。
 - **可定制**：用户可以修改 system prompt、设计工作流、添加扩展。
 
-代表性的开源 harness 包括 Pi、OpenClaw、OpenCode、Hermes、QM 等。
+代表性的开源 harness 包括 Pi、Claude Code、OpenCode、Codex、Hermes 等。
 
-### 5. 实践案例：YC 的 QM
+### 5. 与上层编排平台的边界
 
-YC 内部实验过多个 agent harness，最终开源了 QM（quartermaster）：
+Harness 负责**单个 Agent** 的运行循环（system prompt、tools、agentic loop、translation layer）。
 
-| 阶段 | 方案 | 问题 |
-| --- | --- | --- |
-| 第一代 | Ruby 写的基本 agent loop + 内部数据工具 | 上手快，但能力范围有限 |
-| 第二代 | 50+ Hermes agents 作为个人助理 | 灵活性高，但管理大规模 agent 团队困难 |
-| QM | 结合两者优点 | 灵活性 + 简单性，自托管 |
+而像 QM、Raft、Orca、OpenClaw 这类产品属于更上层的**企业级多人 Agent 编排平台 / Runtime**，它们在 harness 之上提供：
 
-QM 的架构设计（基于代码阅读）：
+- 多租户与 Scope 隔离（用户/项目/频道）
+- 权限、安全审批、审计
+- 多端接入（Slack、Web、Crons、Webhooks）
+- 沙箱执行与持久化
+- 多 harness 路由（同一平台可驱动 Pi、Claude Code、OpenCode 等）
 
-**Harness 抽象层**：定义统一的 `Harness` 接口，让 Pi、OpenCode、Codex、Claude Code 可以互换。每个适配器实现 `runTurn`，输入是 session、systemPrompt、history、tools、credentials，输出是 reply、pendingApprovals、modelCalls。
-
-**Headless core + 插件**：API、identity、policy、scheduler、agent loop 在 core 里；web UI、admin、Slack 都是可选插件。
-
-**Scope 隔离**：每个人和每个房间有独立的 memory、files、keychain、permissions、crons、sandbox。
-
-**Memory 策略**：三种策略——per-turn（每轮捕获）、scratch-promote（先存后提升）、agent-only（仅 agent 可写），配合 consolidation 定期整理。
-
-**安全模型**：
-- Security posture：Strict（每次工具调用需审批）/ Auto（分类器筛选外部数据）/ Dangerous（无筛选）
-- Command policy：预声明的审批规则和硬拒绝（如递归删除、破坏性 SQL），适用于所有 posture
-- Security screening：筛选外部数据和工具结果后再给模型
-
-**多 harness 支持**：Pi、OpenCode、Codex、Claude Code 驱动同一个 core，不绑定单一厂商。
-
-**部署目录**：公司特定配置（org config、自定义工具、沙箱镜像）独立于 core。
-
-代码：[github.com/yc-software/qm](https://github.com/yc-software/qm)
+两者的关系：**编排平台通过路由层调用具体的 harness，harness 负责单 agent 的实际执行。**
 
 ## 相关页面
 

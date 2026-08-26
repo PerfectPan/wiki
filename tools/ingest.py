@@ -71,67 +71,66 @@ def fetch_github_readme(url: str) -> tuple[str, str]:
 
 
 def analyze_github_repo(url: str) -> str:
-    """Clone GitHub 仓库并分析结构，返回分析报告"""
-    import subprocess
-    import tempfile
+    """抓取 GitHub 仓库元信息，返回精简的来源记录（不存 README 和目录树）"""
+    import json
 
     parsed = urlparse(url)
     parts = parsed.path.strip("/").split("/")
     owner, repo = parts[0], parts[1]
     repo_name = f"{owner}/{repo}"
 
-    with tempfile.TemporaryDirectory() as tmpdir:
-        repo_path = os.path.join(tmpdir, repo)
-        # shallow clone
-        try:
-            subprocess.run(
-                ["git", "clone", "--depth", "1", url, repo_path],
-                check=True,
-                capture_output=True,
-                timeout=120,
-            )
-        except subprocess.CalledProcessError as e:
-            raise RuntimeError(f"clone 失败: {e.stderr.decode()}")
+    # 用 GitHub API 获取仓库元信息
+    api_url = f"https://api.github.com/repos/{owner}/{repo}"
+    try:
+        req = Request(api_url, headers={"User-Agent": "wiki-ingest/1.0", "Accept": "application/vnd.github+json"})
+        with urlopen(req, timeout=30) as resp:
+            meta = json.loads(resp.read().decode("utf-8"))
+    except Exception:
+        meta = {}
 
-        lines = []
-        lines.append(f"# {repo_name} 仓库\n")
+    lines = []
+    lines.append(f"# {repo_name}\n")
 
-        # 目录结构
-        lines.append("## 目录结构\n")
-        lines.append("```")
-        for root, dirs, files in os.walk(repo_path):
-            dirs[:] = [d for d in dirs if d not in (".git", "node_modules", "dist", "build", ".next", ".venv", "venv", "__pycache__")]
-            level = root.replace(repo_path, "").count(os.sep)
-            if level > 3:
-                continue
-            indent = "  " * level
-            dirname = os.path.basename(root)
-            if level == 0:
-                lines.append(f"{repo}/")
-            else:
-                lines.append(f"{indent}{dirname}/")
-            subindent = "  " * (level + 1)
-            for f in sorted(files):
-                if f.startswith(".") and f not in (".gitignore", ".env.example"):
-                    continue
-                lines.append(f"{subindent}{f}")
-        lines.append("```\n")
+    description = meta.get("description", "")
+    if description:
+        lines.append(f"> {description}\n")
 
-        # 关键文件内容
-        key_files = ["README.md", "package.json", "Cargo.toml", "pyproject.toml", "go.mod", "Makefile", "CLAUDE.md", "AGENTS.md"]
-        for kf in key_files:
-            kf_path = os.path.join(repo_path, kf)
-            if os.path.exists(kf_path):
-                lines.append(f"## {kf}\n")
-                lines.append("```")
-                with open(kf_path, "r", encoding="utf-8", errors="replace") as f:
-                    content = f.read()
-                    if len(content) > 5000:
-                        content = content[:5000] + "\n... (truncated)"
-                    lines.append(content)
-                lines.append("```\n")
+    lines.append("## 基本信息\n")
+    lines.append(f"- **仓库**: [{repo_name}]({url})")
+    if meta.get("homepage"):
+        lines.append(f"- **官网**: {meta['homepage']}")
+    if meta.get("language"):
+        lines.append(f"- **主语言**: {meta['language']}")
+    if meta.get("stargazers_count") is not None:
+        lines.append(f"- **Stars**: {meta['stargazers_count']}")
+    if meta.get("license"):
+        lines.append(f"- **License**: {meta['license']['spdx_id']}")
+    lines.append("")
 
-        return "\n".join(lines)
+    # 关键文档指向（不存内容，只给链接）
+    lines.append("## 关键文档\n")
+    lines.append(f"- [README]({url}#readme)")
+    lines.append(f"- [Issues]({url}/issues)")
+    lines.append(f"- [Pull Requests]({url}/pulls)")
+
+    # 尝试获取 docs 目录
+    docs_url = f"https://api.github.com/repos/{owner}/{repo}/contents/docs"
+    try:
+        req = Request(docs_url, headers={"User-Agent": "wiki-ingest/1.0"})
+        with urlopen(req, timeout=15) as resp:
+            docs = json.loads(resp.read().decode("utf-8"))
+            if isinstance(docs, list):
+                doc_files = [d for d in docs if d.get("type") == "file" and d["name"].endswith(".md")]
+                for d in doc_files[:10]:
+                    lines.append(f"- [{d['name']}]({d['html_url']})")
+    except Exception:
+        pass
+
+    lines.append("")
+    lines.append("## 说明\n")
+    lines.append("本文件只记录仓库元信息和关键文档指向。深入的代码分析应在临时目录中 clone 后进行，不存入 raw/sources/。")
+
+    return "\n".join(lines) + "\n"
 
 
 def slugify(text: str, max_len: int = 60) -> str:
@@ -509,7 +508,7 @@ def main():
         print(f"\n类型: tweet")
         return
 
-    # GitHub 仓库：clone 分析结构，失败则回退到 README
+    # GitHub 仓库：只存元信息和关键文档指向
     if is_github_repo(url):
         print(f"GitHub 仓库: {url}")
         slug = get_slug_from_url(url)
@@ -517,19 +516,14 @@ def main():
         md_path = os.path.join(sources_dir, f"{base_name}.md")
 
         try:
-            print("正在 clone 并分析仓库...")
+            print("正在获取仓库元信息...")
             analysis = analyze_github_repo(url)
             header = build_source_header(url, "repo", slug)
             with open(md_path, "w", encoding="utf-8") as f:
                 f.write(header + analysis)
-            print(f"已保存仓库分析: {md_path}")
+            print(f"已保存仓库元信息: {md_path}")
         except Exception as e:
-            print(f"clone 分析失败 ({e})，回退到抓取 README...")
-            readme_content, repo_name = fetch_github_readme(url)
-            header = build_source_header(url, "repo", repo_name)
-            with open(md_path, "w", encoding="utf-8") as f:
-                f.write(header + readme_content)
-            print(f"已保存 README: {md_path}")
+            die(f"获取仓库元信息失败: {e}")
 
         print(f"\n类型: repo")
         return

@@ -358,35 +358,6 @@ function main(argv: string[]): void {
     return;
   }
 
-  if (command === "query") {
-    if (rest.length === 0) {
-      die('缺少 question 参数。用法: bin/wiki query "<question>"');
-    }
-    // 引导在 .agents/skills/query/SKILL.md
-    return;
-  }
-
-  if (command === "research") {
-    if (rest.length === 0) {
-      die('缺少 topic 参数。用法: bin/wiki research "<topic>"');
-    }
-    // 引导在 .agents/skills/research/SKILL.md
-    return;
-  }
-
-  if (command === "lint") {
-    // 引导在 .agents/skills/lint/SKILL.md
-    return;
-  }
-
-  if (command === "migrate") {
-    if (rest.length === 0) {
-      die("缺少 logseq-page 参数。用法: bin/wiki migrate <logseq-page>");
-    }
-    // 引导在 .agents/skills/migrate/SKILL.md
-    return;
-  }
-
   if (command === "check") {
     runCheck(rest[0]);
     return;

@@ -8,26 +8,19 @@ import { execSync } from "node:child_process";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, "..");
-const PROMPTS_DIR = resolve(ROOT, "prompts");
 
 const HELP_TEXT = `wiki CLI
 
 用法:
   bin/wiki help
   bin/wiki ingest <source>
-  bin/wiki query <question>
-  bin/wiki research <topic>
-  bin/wiki lint
-  bin/wiki migrate <logseq-page>
   bin/wiki check [path]
 
 命令:
-  ingest    为新来源生成标准 ingest 提示词
-  query     为知识问答生成标准 query 提示词
-  research  为深度调研和 Wiki 沉淀生成标准 research 提示词
-  lint      为巡检知识库生成标准 lint 提示词
-  migrate   为 Logseq 页面迁移生成标准 migrate 提示词
+  ingest    抓取来源并存入 raw/sources/
   check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+
+工作流引导见 .agents/skills/
 `;
 
 const VALID_TYPES = ["topic", "synthesis", "comparison"] as const;
@@ -54,8 +47,6 @@ const REQUIRED_FIELDS = [
   "source_refs",
 ] as const;
 
-type TemplateValues = Record<string, string>;
-
 interface Frontmatter {
   [key: string]: string | string[];
 }
@@ -63,32 +54,6 @@ interface Frontmatter {
 interface CheckIssue {
   level: "error" | "warning";
   message: string;
-}
-
-function loadTemplate(name: string): string {
-  return readFileSync(resolve(PROMPTS_DIR, `${name}.md`), "utf8");
-}
-
-function render(name: string, extra: TemplateValues = {}): string {
-  let text = loadTemplate(name);
-  const values: TemplateValues = {
-    ROOT,
-    AGENTS: resolve(ROOT, "AGENTS.md"),
-    SCHEMA: resolve(ROOT, "SCHEMA.md"),
-    INDEX: resolve(ROOT, "index.md"),
-    RAW_SOURCES: resolve(ROOT, "raw", "sources"),
-    RAW_ASSETS: resolve(ROOT, "raw", "assets"),
-    TOPICS: resolve(ROOT, "wiki", "topics"),
-    SYNTHESES: resolve(ROOT, "wiki", "syntheses"),
-    COMPARISONS: resolve(ROOT, "wiki", "comparisons"),
-    ...extra,
-  };
-
-  for (const [key, value] of Object.entries(values)) {
-    text = text.replaceAll(`{{${key}}}`, value);
-  }
-
-  return text;
 }
 
 function die(message: string): never {
@@ -374,11 +339,10 @@ function main(argv: string[]): void {
       die("缺少 source 参数。用法: bin/wiki ingest <source>");
     }
     const source = rest.join(" ");
-    // 如果是 URL，先抓取并存入 raw/sources/
+    // 如果是 URL，抓取并存入 raw/sources/
     if (source.startsWith("http://") || source.startsWith("https://")) {
       try {
         const script = resolve(ROOT, "tools", "ingest.py");
-        // 根据 URL 类型自动选择
         let type = "blog";
         if (source.includes("github.com")) type = "repo";
         else if (source.includes("youtube.com") || source.includes("youtu.be")) type = "video";
@@ -387,40 +351,9 @@ function main(argv: string[]): void {
           stdio: "inherit",
         });
       } catch (e) {
-        // 抓取失败不阻断，仍然输出 ingest 提示词
-        process.stderr.write(`警告: 抓取失败 (${(e as Error).message})\n`);
+        die(`抓取失败: ${(e as Error).message}`);
       }
     }
-    process.stdout.write(render("ingest", { INPUT: source }));
-    return;
-  }
-
-  if (command === "query") {
-    if (rest.length === 0) {
-      die('缺少 question 参数。用法: bin/wiki query "<question>"');
-    }
-    process.stdout.write(render("query", { INPUT: rest.join(" ") }));
-    return;
-  }
-
-  if (command === "research") {
-    if (rest.length === 0) {
-      die('缺少 topic 参数。用法: bin/wiki research "<topic>"');
-    }
-    process.stdout.write(render("research", { INPUT: rest.join(" ") }));
-    return;
-  }
-
-  if (command === "lint") {
-    process.stdout.write(render("lint"));
-    return;
-  }
-
-  if (command === "migrate") {
-    if (rest.length === 0) {
-      die("缺少 logseq-page 参数。用法: bin/wiki migrate <logseq-page>");
-    }
-    process.stdout.write(render("migrate", { INPUT: rest.join(" ") }));
     return;
   }
 

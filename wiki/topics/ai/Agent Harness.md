@@ -4,8 +4,8 @@ description: Agent harness 是为 AI 模型提供运行环境的软件层，由 
 type: topic
 category: ai
 created: 2026-08-20
-updated: 2026-08-20
-timestamp: 2026-08-20
+updated: 2026-08-26
+timestamp: 2026-08-26
 tags:
   - agent
   - harness
@@ -52,7 +52,11 @@ Harness 是用户自主权的载体：
 - **数据本地化**：会话数据留在本地，而不是存在 AI 实验室的服务器上。
 - **可定制**：用户可以修改 system prompt、设计工作流、添加扩展。
 
-代表性的开源 harness 包括 Pi、OpenClaw、OpenCode、Hermes 等。
+代表性的开源 harness 包括 Pi、Claude Code、OpenCode、Codex、Hermes 等。
+
+### 5. 与上层编排平台的边界
+
+Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产品属于更上层的 **Agent Orchestration Platform**，提供多租户、Scope 隔离、权限审批、多端接入、沙箱执行和多 Harness 路由等能力。详见 [[Agent Orchestration Platform]]。
 
 ## 相关页面
 

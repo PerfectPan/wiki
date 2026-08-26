@@ -51,19 +51,25 @@ bin/wiki check <path>       # 校验单个文件或目录
 
 ## 标准入口
 
-这个仓库不依赖项目内 skill。统一通过 `bin/wiki` 作为 agent 的标准入口。
+工作流引导放在 `.agents/skills/` 目录下，`.claude/skills` 软链接到 `.agents/skills` 以便 Claude Code 识别。
 
-- `bin/wiki ingest <source>`：为新来源生成标准 ingest 提示词
-- `bin/wiki query <question>`：为知识问答生成标准 query 提示词
-- `bin/wiki research <topic>`：为深度调研和 Wiki 沉淀生成标准 research 提示词
-- `bin/wiki lint`：为巡检知识库生成标准 lint 提示词
-- `bin/wiki migrate <logseq-page>`：为 Logseq 页面迁移生成标准 migrate 提示词
+`bin/wiki` 是工具 CLI，只负责执行操作，不输出引导：
+
+- `bin/wiki ingest <source>`：抓取来源并存入 `raw/sources/`
 - `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+
+工作流引导（skill）：
+
+- `.agents/skills/ingest/SKILL.md`：新来源的整理流程
+- `.agents/skills/query/SKILL.md`：知识问答
+- `.agents/skills/research/SKILL.md`：深度调研和 Wiki 沉淀
+- `.agents/skills/lint/SKILL.md`：巡检知识库
+- `.agents/skills/migrate/SKILL.md`：Logseq 页面迁移
 
 使用要求：
 
-1. 在执行任意命令前，先阅读 `AGENTS.md`、`SCHEMA.md`，必要时补读 `index.md`。
-2. `bin/wiki` 负责编译工作流提示词，不替代实际的审阅和页面修改。
+1. 在执行任意任务前，先阅读 `AGENTS.md`、`SCHEMA.md`，必要时补读 `index.md`。
+2. 执行对应任务前，阅读 `.agents/skills/` 下的相关 skill。
 3. agent 的写入仍然必须遵守 branch + PR 审阅规则。
 
 ## 迁移规则

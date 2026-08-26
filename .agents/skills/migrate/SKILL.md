@@ -1,3 +1,8 @@
+---
+name: migrate
+description: 将旧 Logseq 页面迁移到当前 Wiki 结构；当用户要求迁移旧笔记并保留有价值的链接、代码块或图片时使用。
+---
+
 操作：migrate
 
 你正在把旧 Logseq 内容迁移进这个 wiki。

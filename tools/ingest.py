@@ -127,8 +127,39 @@ def analyze_github_repo(url: str) -> str:
         pass
 
     lines.append("")
+
+    # 值得一看的关键文件：src/ 下的入口和核心模块
+    lines.append("## 关键文件\n")
+    key_dirs = ["src", "lib", "packages/core/src", "packages"]
+    found_any = False
+    for kd in key_dirs:
+        kd_url = f"https://api.github.com/repos/{owner}/{repo}/contents/{kd}"
+        try:
+            req = Request(kd_url, headers={"User-Agent": "wiki-ingest/1.0"})
+            with urlopen(req, timeout=15) as resp:
+                entries = json.loads(resp.read().decode("utf-8"))
+                if not isinstance(entries, list):
+                    continue
+                # 优先列入口文件，再列核心子目录
+                entry_files = [e for e in entries if e.get("type") == "file"]
+                entry_dirs = [e for e in entries if e.get("type") == "dir"]
+                for e in entry_files[:15]:
+                    lines.append(f"- [{e['path']}]({e['html_url']})")
+                    found_any = True
+                for e in entry_dirs[:10]:
+                    lines.append(f"- [{e['path']}/]({e['html_url']})")
+                    found_any = True
+                if found_any:
+                    break
+        except Exception:
+            continue
+
+    if not found_any:
+        lines.append("- （未找到 src/ 目录，请查看仓库根目录）")
+
+    lines.append("")
     lines.append("## 说明\n")
-    lines.append("本文件只记录仓库元信息和关键文档指向。深入的代码分析应在临时目录中 clone 后进行，不存入 raw/sources/。")
+    lines.append("本文件只记录仓库元信息、关键文档指向和值得一看的文件列表。深入的代码分析应在临时目录中 clone 后进行，不存入 raw/sources/。")
 
     return "\n".join(lines) + "\n"
 

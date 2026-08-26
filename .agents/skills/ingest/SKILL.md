@@ -1,3 +1,8 @@
+---
+name: ingest
+description: 将文章、网页、仓库、推文线程或视频素材整理为可审阅的 Wiki 页面；当用户要求把新来源沉淀进本仓库时使用。
+---
+
 操作：ingest
 
 你正在为这个 wiki 执行一次标准 ingest。

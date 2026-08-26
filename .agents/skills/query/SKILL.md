@@ -1,3 +1,8 @@
+---
+name: query
+description: 基于现有 Wiki 内容回答问题并给出页面指针；当用户要求查询知识库且不需要新增调研时使用。
+---
+
 操作：query
 
 你正在为这个 wiki 执行一次标准 query。

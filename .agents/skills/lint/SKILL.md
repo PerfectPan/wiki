@@ -1,3 +1,8 @@
+---
+name: lint
+description: 巡检 Wiki 的页面结构、frontmatter、链接与来源指针；当用户要求检查知识库一致性或修复规范问题时使用。
+---
+
 操作：lint
 
 你正在为这个 wiki 执行一次标准 lint。

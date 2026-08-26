@@ -38,6 +38,37 @@ resource:
 
 关系：编排平台通过路由层调用具体的 Harness，Harness 负责单 Agent 的实际执行。
 
+## 架构分层
+
+```mermaid
+flowchart TB
+    subgraph Platform["Agent Orchestration Platform"]
+        direction TB
+        UI["多端接入\nSlack / Web / Crons / Webhooks"]
+        Scope["Scope 隔离\nmemory / files / keychain / permissions"]
+        Security["安全与权限\nSecurity Posture / Command Policy / Audit"]
+        Sandbox["沙箱执行\nDocker / Fly / AWS MicroVM"]
+        Router["Harness 路由层"]
+        UI --> Scope --> Security --> Sandbox --> Router
+    end
+
+    subgraph Harness["Agent Harness 层"]
+        direction TB
+        SP["System Prompt"]
+        Tools["Tools"]
+        Loop["Agentic Loop"]
+        TL["Translation Layer"]
+        SP --> Tools --> Loop --> TL
+    end
+
+    subgraph Model["模型层"]
+        M["Anthropic / OpenAI / 开源模型"]
+    end
+
+    Router --> Harness
+    Harness --> Model
+```
+
 ## 核心能力
 
 ### 1. 多租户与 Scope 隔离
@@ -72,6 +103,43 @@ YC 开源的多人 Agent 编排平台。架构特点：
 - 多 Harness 支持：Pi、OpenCode、Codex、Claude Code
 - 安全模型：posture + command policy + security screening
 - 部署目录独立于 core
+
+QM 内部架构：
+
+```mermaid
+flowchart TB
+    subgraph Plugins["可选插件"]
+        Web["Web UI"]
+        Admin["Admin Panel"]
+        Slack["Slack"]
+    end
+
+    subgraph Core["Headless Core"]
+        API["API"]
+        Identity["Identity / Policy"]
+        Scheduler["Scheduler"]
+        Orchestrator["Orchestrator\n(agent loop 编排)"]
+    end
+
+    subgraph Scope["Per-Scope 隔离"]
+        Memory["Memory"]
+        Files["Files"]
+        Keychain["Keychain"]
+        Permissions["Permissions"]
+        Sandbox["Sandbox"]
+    end
+
+    subgraph Harness["Harness 路由"]
+        Pi["Pi"]
+        Claude["Claude Code"]
+        OpenCode["OpenCode"]
+        Codex["Codex"]
+    end
+
+    Plugins --> Core
+    Core --> Scope
+    Scope --> Harness
+```
 
 ### Raft
 

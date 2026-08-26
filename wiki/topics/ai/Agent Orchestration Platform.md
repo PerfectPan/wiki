@@ -1,6 +1,6 @@
 ---
 title: Agent Orchestration Platform
-description: 企业级多人 Agent 编排平台是运行在单一 Agent Harness 之上的平台层，提供多租户、Scope 隔离、权限审批、多端接入、沙箱执行和多 Harness 路由等能力，代表产品有 QM、Raft、Orca。
+description: 企业级多人 Agent 编排平台运行在单一 Agent Harness 之上，核心解决多 Agent 与人的协同问题：统一身份目录、Scope 级上下文共享、消息投递、会话并发控制和任务委派。代表产品有 QM、Raft、Orca。
 type: topic
 category: ai
 created: 2026-08-26
@@ -27,14 +27,14 @@ resource:
 
 ## 摘要
 
-企业级多人 Agent 编排平台（Agent Orchestration Platform）是运行在单一 Agent Harness 之上的平台层。它不直接实现 Agent 的运行循环，而是为多个 Agent 和多个用户提供协作、治理和执行环境。
+企业级多人 Agent 编排平台（Agent Orchestration Platform）运行在单一 Agent Harness 之上。它的核心不是提供 Agent 的运行循环，而是解决**多 Agent 与人的协同**问题：多个 Agent 和人如何在同一个工作空间里分工、通信、共享上下文、协调任务。
 
 ## 与 Agent Harness 的边界
 
 | 层 | 职责 | 代表 |
 | --- | --- | --- |
 | **Agent Harness** | 单个 Agent 的运行循环：system prompt、tools、agentic loop、translation layer | Pi、Claude Code、OpenCode、Codex |
-| **编排平台** | 多 Agent、多用户的协作与治理：多租户、权限、安全、多端接入、沙箱、多 Harness 路由 | QM、Raft、Orca |
+| **编排平台** | 多 Agent、多用户的协同：身份目录、上下文共享、消息投递、任务委派、并发控制 | QM、Raft、Orca |
 
 关系：编排平台通过路由层调用具体的 Harness，Harness 负责单 Agent 的实际执行。
 
@@ -45,11 +45,9 @@ flowchart TB
     subgraph Platform["Agent Orchestration Platform"]
         direction TB
         UI["多端接入\nSlack / Web / Crons / Webhooks"]
-        Scope["Scope 隔离\nmemory / files / keychain / permissions"]
-        Security["安全与权限\nSecurity Posture / Command Policy / Audit"]
-        Sandbox["沙箱执行\nDocker / Fly / AWS MicroVM"]
-        Router["Harness 路由层"]
-        UI --> Scope --> Security --> Sandbox --> Router
+        Coord["多 Agent 协同\n目录 / Scope / 消息 / 任务"]
+        Infra["基础设施\n安全 / 沙箱 / 多 Harness 路由"]
+        UI --> Coord --> Infra
     end
 
     subgraph Harness["Agent Harness 层"]
@@ -65,44 +63,70 @@ flowchart TB
         M["Anthropic / OpenAI / 开源模型"]
     end
 
-    Router --> Harness
+    Infra --> Harness
     Harness --> Model
 ```
 
-## 核心能力
+## 核心：多 Agent 协同机制
 
-### 1. 多租户与 Scope 隔离
+### 1. 统一身份目录
 
-每个用户、项目、频道都有独立的 Scope，包含独立的 memory、files、keychain、permissions、sandbox。不同 Scope 之间的数据和权限隔离。
+人和 Agent 在同一个 Directory 里，都是 `Principal`。Agent 有名字、头像、身份，可以被 @、被发消息、被加入频道。
 
-### 2. 权限与安全审批
+- `DirectoryMember`：成员（人或 Agent）
+- `DirectoryChannel`：频道（多人/多 Agent 共享）
+- `Group`：群组 DM
 
-- **Security Posture**：Strict（每次工具调用需审批）/ Auto（分类器筛选）/ Dangerous（无筛选）
-- **Command Policy**：预声明的审批规则和硬拒绝（如递归删除、破坏性 SQL）
-- **Audit**：所有操作可审计
+这让 Agent 看起来像团队成员，而不是后台服务。
 
-### 3. 多端接入
+### 2. Scope 级上下文共享
 
-支持 Slack、Web、Crons、Webhooks 等多种触发方式，让 Agent 可以在不同场景下被调用。
+每个频道、群组、个人都是一个 Scope。同一个 Scope 里的人和 Agent **共享**：
 
-### 4. 沙箱执行
+- **会话历史**：所有消息和事件都记录在同一个 Session 里，Agent 可以看到之前的对话
+- **Memory**：Scope 级的长期记忆，所有成员可读写
+- **Files**：共享的文件空间
+- **Keychain**：共享的凭据
 
-每个 Scope 的代码执行在独立的沙箱中（Docker、Fly、AWS MicroVM 等），避免互相影响和安全风险。
+Scope 之间互相隔离，但 Scope 内部是共享的——这是多 Agent 协同的基础。
 
-### 5. 多 Harness 路由
+### 3. 消息投递
 
-同一平台可以驱动多种 Harness（Pi、Claude Code、OpenCode、Codex），根据任务类型或用户偏好选择合适的 Harness。
+Agent 可以主动给人或其他 Agent 发消息：
+
+- 给特定成员发 DM（`principalDestination`）
+- 往频道里发消息
+- 群组 DM（最多 8 人）
+
+投递前会检查成员身份和权限，确保 Agent 只能往自己有权限的地方发消息。
+
+### 4. 会话并发控制
+
+多个 Agent 可能同时往同一个 Scope 发消息。平台用 **Lease 机制**保证一致性：
+
+- 同一时间只有一个 turn 可以写入 Session
+- Lease 持有者可以是 turn、compaction、fork、backfill
+- 其他写入请求会等待或失败
+
+这避免了多个 Agent 同时修改同一会话导致的冲突。
+
+### 5. 任务委派
+
+Agent 可以创建任务并分配给其他 Agent 或人。任务有状态、负责人、截止时间，可以在频道里跟踪进度。
+
+## 基础设施
+
+这些是支撑多 Agent 协同的底层能力，不是核心但必不可少：
+
+- **安全与权限**：Security Posture（Strict/Auto/Dangerous）、Command Policy（审批规则和硬拒绝）、Audit
+- **沙箱执行**：每个 Scope 的代码在独立沙箱中运行（Docker、Fly、AWS MicroVM）
+- **多 Harness 路由**：同一平台可驱动 Pi、Claude Code、OpenCode、Codex 等
 
 ## 代表产品
 
 ### QM（YC）
 
-YC 开源的多人 Agent 编排平台。架构特点：
-- Headless core + 可选插件（web UI、admin、Slack）
-- Scope 隔离：每人/房间独立的 memory、files、keychain、sandbox
-- 多 Harness 支持：Pi、OpenCode、Codex、Claude Code
-- 安全模型：posture + command policy + security screening
-- 部署目录独立于 core
+YC 开源的多人 Agent 编排平台。
 
 QM 内部架构：
 
@@ -116,16 +140,16 @@ flowchart TB
 
     subgraph Core["Headless Core"]
         API["API"]
-        Identity["Identity / Policy"]
-        Scheduler["Scheduler"]
-        Orchestrator["Orchestrator\n(agent loop 编排)"]
+        Directory["Directory\n身份目录"]
+        Orchestrator["Orchestrator\n会话编排 + Lease"]
+        Reach["Reach\n消息投递"]
     end
 
-    subgraph Scope["Per-Scope 隔离"]
+    subgraph Scope["Per-Scope 共享与隔离"]
+        Session["Session\n会话历史"]
         Memory["Memory"]
         Files["Files"]
         Keychain["Keychain"]
-        Permissions["Permissions"]
         Sandbox["Sandbox"]
     end
 
@@ -140,6 +164,12 @@ flowchart TB
     Core --> Scope
     Scope --> Harness
 ```
+
+QM 的协同设计：
+- 人和 Agent 在同一个 Slack 频道里，可以互相 @
+- 每个频道是一个 Scope，共享会话历史、memory、files
+- Agent 可以主动发消息、创建任务
+- Lease 机制保证多 Agent 并发写入的一致性
 
 ### Raft
 

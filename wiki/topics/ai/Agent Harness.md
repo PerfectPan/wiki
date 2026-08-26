@@ -56,17 +56,7 @@ Harness 是用户自主权的载体：
 
 ### 5. 与上层编排平台的边界
 
-Harness 负责**单个 Agent** 的运行循环（system prompt、tools、agentic loop、translation layer）。
-
-而像 QM、Raft、Orca、OpenClaw 这类产品属于更上层的**企业级多人 Agent 编排平台 / Runtime**，它们在 harness 之上提供：
-
-- 多租户与 Scope 隔离（用户/项目/频道）
-- 权限、安全审批、审计
-- 多端接入（Slack、Web、Crons、Webhooks）
-- 沙箱执行与持久化
-- 多 harness 路由（同一平台可驱动 Pi、Claude Code、OpenCode 等）
-
-两者的关系：**编排平台通过路由层调用具体的 harness，harness 负责单 agent 的实际执行。**
+Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产品属于更上层的 **Agent Orchestration Platform**，提供多租户、Scope 隔离、权限审批、多端接入、沙箱执行和多 Harness 路由等能力。详见 [[Agent Orchestration Platform]]。
 
 ## 相关页面
 

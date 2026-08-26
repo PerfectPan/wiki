@@ -354,7 +354,6 @@ function main(argv: string[]): void {
         die(`抓取失败: ${(e as Error).message}`);
       }
     }
-    // 引导在 .agents/skills/ingest/SKILL.md，agent 自行阅读
     return;
   }
 

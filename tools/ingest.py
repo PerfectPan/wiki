@@ -110,8 +110,6 @@ def analyze_github_repo(url: str) -> str:
     # 关键文档指向（不存内容，只给链接）
     lines.append("## 关键文档\n")
     lines.append(f"- [README]({url}#readme)")
-    lines.append(f"- [Issues]({url}/issues)")
-    lines.append(f"- [Pull Requests]({url}/pulls)")
 
     # 尝试获取 docs 目录
     docs_url = f"https://api.github.com/repos/{owner}/{repo}/contents/docs"

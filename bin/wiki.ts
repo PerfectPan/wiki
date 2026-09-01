@@ -26,6 +26,7 @@ const HELP_TEXT = `wiki CLI
 const VALID_TYPES = ["topic", "synthesis", "comparison"] as const;
 const VALID_CATEGORIES = [
   "frontend",
+  "design",
   "ai",
   "languages",
   "systems",

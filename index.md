@@ -11,7 +11,6 @@
   - [[wiki/topics/frontend/响应式|响应式]]
   - [[wiki/topics/frontend/页面时间冻结|页面时间冻结]]
   - [[wiki/topics/frontend/颜色|颜色]]
-  - [[wiki/topics/frontend/印刷与编辑设计术语|印刷与编辑设计术语]]
   - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
   - [[wiki/topics/frontend/Ant Design 异步默认值渲染|Ant Design 异步默认值渲染]]
   - [[wiki/topics/frontend/CVA|CVA]]
@@ -43,6 +42,8 @@
   - [[wiki/topics/frontend/Waku|Waku]]
   - [[wiki/topics/frontend/whyframe|whyframe]]
   - [[wiki/topics/frontend/zustand|zustand]]
+- `design`
+  - [[wiki/topics/design/印刷与编辑设计术语|印刷与编辑设计术语]]
 - `architecture`
   - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi/di]]
   - [[wiki/topics/architecture/技术方案|技术方案]]

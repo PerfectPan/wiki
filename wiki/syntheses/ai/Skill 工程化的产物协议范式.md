@@ -1,11 +1,11 @@
 ---
 title: Skill 工程化的产物协议范式
-description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、manifest、QA 与 repair；案例含 hatch-pet、ai-cli、bento-slides
+description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、manifest、QA 与 repair；案例含 hatch-pet、ai-cli、bento-slides、mono-color
 type: synthesis
 category: ai
 created: 2026-05-06
-updated: 2026-08-06
-timestamp: 2026-08-06
+updated: 2026-09-01
+timestamp: 2026-09-01
 tags:
   - agent
   - skills
@@ -23,11 +23,19 @@ source_refs:
   - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
   - raw/sources/2026-08-06-bento-slides-skill-review.md
   - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
+  - raw/sources/2026-09-01-mono-color-skill-review.md
+  - https://github.com/yanliudesign/mono-color-skill
 resource:
   - raw/sources/2026-05-06-codex-pet-skill-article.md
+  - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
+  - raw/sources/2026-05-06-perplexity-agent-skills.md
+  - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
   - raw/sources/2026-05-12-ai-cli-skill-review.md
+  - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
   - raw/sources/2026-08-06-bento-slides-skill-review.md
   - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
+  - raw/sources/2026-09-01-mono-color-skill-review.md
+  - https://github.com/yanliudesign/mono-color-skill
 ---
 # Skill 工程化的产物协议范式
 
@@ -37,7 +45,7 @@ resource:
 
 ## 简答
 
-成熟 Skill 的核心不是“让模型换一种说法”，而是在上下文预算内封装模型会稳定用错、漏用或不一致的领域 know-how。它既要先定义可消费的产物协议，也要用 description 做精确路由，用 evals 防止误加载，用 manifest 外部化任务状态，用脚本处理确定性编译，用 provenance 约束来源，用 QA 区分结构正确与语义正确，最后通过局部 repair 收敛失败。模型负责生成候选，不应直接拥有最终提交权。
+成熟 Skill 的核心不是“让模型换一种说法”，而是在上下文预算内封装模型会稳定用错、漏用或不一致的领域 know-how。它既要先定义可消费的产物协议，也要用 description 做精确路由，用 evals 防止误加载，用 manifest 外部化任务状态，用脚本处理确定性编译，用 provenance 约束来源，用 QA 区分结构正确与语义正确，最后通过局部 repair 收敛失败。当约束本质上是审美或品味判断时，还要把它们翻译成机器可读的取值域目录、变量替换规则和逐项验收清单，主观质量才能被稳定执行。模型负责生成候选，不应直接拥有最终提交权。
 
 ## 综合结论
 
@@ -62,6 +70,7 @@ resource:
 4. 来源、hash、依赖和完成状态是否可审计？
 5. QA 是否同时覆盖结构正确和语义正确？
 6. 失败后能否局部 repair，而不是只能整体 retry？
+7. 主观或审美判断是否已被翻译成可枚举的取值域、防火墙规则与逐项验收清单？
 
 ## Perplexity 的 Skill 设计原则
 
@@ -104,6 +113,20 @@ Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的�
 - **未到 hatch-pet 流水线。** 无 job manifest、无确定性编译脚本、无 provenance/repair；验收依赖「打开看每一页」和 runtime `validate()`，skill 未强制脚本化。负例与 evals 仍弱。
 
 它说明：即使没有完整 control plane，**先把可消费产物契约和反默认失败写死**，Skill 已经从 prompt 包装升到可收录的工程组件。收录索引见 [[Awesome Agent Skills]]；产品与 `window.bento` / 风格模型见 [[Bento]]；评审事实见 `raw/sources/2026-08-06-bento-slides-skill-review.md`。
+
+## mono-color 案例：视觉系统约束型 Skill
+
+`yanliudesign/mono-color-skill` 补上第三类：难点不是工具协议或产物格式，而是大量主观审美判断的生成型 Skill。它的工程化手法：
+
+- **catalog wins**：`design-system/` 六个 JSON catalog（colors/compositions/typography/rhythm/carriers/imperfections）是取值域的 source of truth；散文只解释意图，"when an exact value differs, the catalog wins"——约束来源有了明确的优先级规则。
+- **主观判据可枚举化**：原创性防火墙把「不抄参考」翻译成 10 个结构变量至少改 4 个的替换规则；Final Quality Gate 是约 20 项 yes/no 检查（焦点事件唯一、主体占画 45%-80%、字号 5x-12x 跳变等）；重生成判据同样可枚举（出现第三墨、留白出界、无 5x 跳变）。
+- **反默认失败的负例清单**：Hard Avoids 列的不是常识性禁令，而是模型会稳定滑入的审美默认：自动做旧（网点 + 限墨 ≠ 复古）、stock-photo 姿势、浪漫道具堆（串灯/酒杯/星空）、安全的首左图右分割。
+- **确定性默认**：同输入必须解析出同一 Recipe Manifest；通用色词有固定别名（blue→Cobalt）；瑕疵种子用稳定 hash 跨重试保持。
+- **诚实降级**：精确文字渲染失败时，重试一次后改为 text-light 底图并声明排版应在布局工具叠加——"Do not pretend distorted text is correct"。
+- **evals 带机器可查断言**：16 条 eval 的 assertions 含 `ratio`/`mode`/`ink_hexes`/`plate_roles`，与设计系统 catalog 一致性校验一起进 CI——取值域本身有回归保护，是现有案例中评测侧最完整的。
+- **未到 hatch-pet 流水线**：无 job manifest、无运行时确定性编译、无局部 repair；单次生成任务属性使然，降级路径存在。
+
+它说明：当 Skill 的难点是品味而非协议时，工程化抓手仍是同一套——把主观判断翻译成取值域、变量规则和逐项验收清单，审美领域同样适用「模型生成候选、判据拥有提交权」。视觉系统本体（色板 hex、布局族）是 skill 自己的 payload，不镜像进 wiki。收录索引见 [[Awesome Agent Skills]]；评审事实见 `raw/sources/2026-09-01-mono-color-skill-review.md`。
 
 ## 和 workflow 的关系
 
@@ -157,4 +180,6 @@ intent
 - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
 - `raw/sources/2026-08-06-bento-slides-skill-review.md`
 - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
+- `raw/sources/2026-09-01-mono-color-skill-review.md`
+- https://github.com/yanliudesign/mono-color-skill
 - https://bento.page/agents.md

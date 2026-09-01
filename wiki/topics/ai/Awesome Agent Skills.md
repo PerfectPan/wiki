@@ -4,8 +4,8 @@ description: 经判据审过的 Agent Skill 薄索引：推荐 / 可参考 / 偏
 type: topic
 category: ai
 created: 2026-08-06
-updated: 2026-08-06
-timestamp: 2026-08-06
+updated: 2026-09-01
+timestamp: 2026-09-01
 tags:
   - skills
   - agent
@@ -16,9 +16,13 @@ source_refs:
   - raw/sources/2026-08-06-bento-slides-skill-review.md
   - raw/sources/2026-05-12-ai-cli-skill-review.md
   - raw/sources/2026-05-06-codex-pet-skill-article.md
+  - raw/sources/2026-09-01-mono-color-skill-review.md
 resource:
   - wiki/syntheses/ai/Skill 工程化的产物协议范式.md
   - raw/sources/2026-08-06-bento-slides-skill-review.md
+  - raw/sources/2026-05-12-ai-cli-skill-review.md
+  - raw/sources/2026-05-06-codex-pet-skill-article.md
+  - raw/sources/2026-09-01-mono-color-skill-review.md
 ---
 # Awesome Agent Skills
 
@@ -60,6 +64,7 @@ resource:
 | --- | --- | --- |
 | **bento-slides** | 只改 `#bento-doc` JSON 做单文件 deck；强制内容→chart/morph/state 映射，反 bullet 墙 | 产品 [[Bento]] · [SKILL.md](https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md) · [[raw/sources/2026-08-06-bento-slides-skill-review.md\|评审]] |
 | **hatch-pet**（范式锚点） | 图像生成收成可加载资产流水线：manifest、确定性编译、QA、局部 repair | [[Skill 工程化的产物协议范式]] · [[raw/sources/2026-05-06-codex-pet-skill-article.md\|来源]] |
+| **mono-color** | 视觉系统约束型：design-system catalog 约束取值（catalog wins）+ 可枚举 Quality Gate + 原创性防火墙（≥4 结构变量）；evals 带 assertions 进 CI | [SKILL.md](https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md) · [[raw/sources/2026-09-01-mono-color-skill-review.md\|评审]] |
 
 ### 可参考
 
@@ -88,7 +93,9 @@ resource:
 
 ## 来源指针
 
+- `raw/sources/2026-09-01-mono-color-skill-review.md`
 - `raw/sources/2026-08-06-bento-slides-skill-review.md`
 - `raw/sources/2026-05-12-ai-cli-skill-review.md`
 - `raw/sources/2026-05-06-codex-pet-skill-article.md`
 - https://github.com/nyblnet/bento
+- https://github.com/yanliudesign/mono-color-skill

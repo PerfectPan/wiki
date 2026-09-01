@@ -43,6 +43,7 @@
   - [[wiki/topics/frontend/whyframe|whyframe]]
   - [[wiki/topics/frontend/zustand|zustand]]
 - `design`
+  - [[wiki/topics/design/界面质感细节|界面质感细节]]
   - [[wiki/topics/design/印刷与编辑设计术语|印刷与编辑设计术语]]
 - `architecture`
   - [[wiki/topics/architecture/@opensumi%2Fdi|@opensumi/di]]

@@ -6,7 +6,6 @@ ingest.py - 抓取网页并提取为 Markdown，存入 raw/sources/
   python3 tools/ingest.py <url> [--type blog|doc]
 
 输出:
-  raw/sources/YYYY-MM-DD-主题.html  (原始 HTML)
   raw/sources/YYYY-MM-DD-主题.md    (提取后的 Markdown)
 """
 
@@ -567,15 +566,9 @@ def main():
     slug = get_slug_from_url(url) or slugify(title)
     base_name = f"{today}-{slug}"
 
-    html_path = os.path.join(sources_dir, f"{base_name}.html")
     md_path = os.path.join(sources_dir, f"{base_name}.md")
 
-    # 保存 HTML
-    with open(html_path, "w", encoding="utf-8") as f:
-        f.write(html)
-    print(f"已保存 HTML: {html_path}")
-
-    # 转换并保存 Markdown
+    # 转换并保存 Markdown（不保存原始 HTML，避免 CSS/JS/SVG 噪音）
     md = html_to_markdown(html)
     header = build_source_header(url, source_type, title)
     with open(md_path, "w", encoding="utf-8") as f:

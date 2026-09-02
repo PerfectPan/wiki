@@ -13,51 +13,72 @@ sources:
 
 # mono-color-skill 评审记录
 
-## 对象
+## 基本信息
 
 | 项 | 值 |
 | --- | --- |
 | Skill | `mono-color` |
 | 仓库 | https://github.com/yanliudesign/mono-color-skill |
-| 版本 | v1.2.0（CHANGELOG），MIT License |
+| 版本 | v1.2.0，MIT License |
 | 形态 | 单 SKILL.md（34KB）+ `design-system/` 机器可读目录 + `evals/` + 校验脚本 + GitHub Actions |
 | 热度 | ~2400 stars / 140 forks（发布约两周，2026-09-01 访问） |
 | 定位 | 把主题、句子、实物或照片生成为「单墨/受控双色」编辑印刷风图像：孔版印刷质感、网点照片、25%-55% 留白、克制排版 |
 | 访问日 | 2026-09-01 |
 
-## 产物协议（事实）
+## 它交付什么
 
-- **三件套交付**写死在 SKILL.md `Output Format` 节：生成栅格图 + 最终生成 prompt（```text 代码块）+ 本次配方说明（Mode / Ink / Layout / Type / Process / Originality 六字段）。prompt-only 仅在用户明确要求或无图像生成能力时允许。
-- **Recipe Manifest**（Input Reading 之后的强制中间产物）：21 字段 YAML——subject、intent、exact_text、representation、ratio、carrier、substrate、mode、palette、inks、plate_roles、layout、empty_paper、visual_tension、focal_event、release_zone、unresolved_edge、image_treatment、type_hierarchy、disruption、imperfection_seed、imperfections。要求"do not skip fields"且默认不向用户暴露。
-- **design-system/ 目录是 source of truth**：colors / compositions / typography / rhythm / carriers / imperfections 六个 JSON catalog，分别定义色板与底色、布局族几何、排版角色、视觉张力、载体信号（poster/zine/journal 等的 required/forbidden signals）、受控印刷瑕疵取值域。SKILL.md 明确："when an exact value differs, the catalog wins"——散文解释意图，目录约束取值。
-- **确定性与默认值**：同输入必须解析出同一 manifest；通用色词有固定别名（blue→Cobalt、green→Botanical Green 等）；未指定主体默认 Cobalt + Terracotta；`imperfection_seed` 要求由 subject/text/palette/layout 推导稳定 hash 并跨重试保持。
-- **失败降级路径**：精确文字渲染错误时，重试一次后改为生成 text-light 底图并声明排版应在布局工具中叠加，"Do not pretend distorted text is correct"。
+SKILL.md 的 `Output Format` 节写死了三件套：
 
-## description / 路由
+1. 生成栅格图
+2. 最终生成 prompt（用 ```text 代码块）
+3. 本次配方说明（Mode / Ink / Layout / Type / Process / Originality 六个字段）
 
-frontmatter description 是场景路由而非功能广告：列出中英双语触发场景（单色海报、双色印刷、单色调视觉、孔版印刷、risograph、网点照片、zine poster、duotone print、mono-color style 等）。SKILL.md 尾部另有 `Example Triggers` 节，8 条真实句式（中文 5 条、英文 3 条），覆盖海报、照片改风格、封面、沿用既有视觉等入口。
+只有用户明确要求、或没有图像生成能力时，才允许只输出 prompt。
 
-## 高价值 gotchas（摘自 SKILL.md）
+在正式生成之前，还有一个强制的中间产物叫 **Recipe Manifest**，是 21 个字段的 YAML：subject、intent、exact_text、representation、ratio、carrier、substrate、mode、palette、inks、plate_roles、layout、empty_paper、visual_tension、focal_event、release_zone、unresolved_edge、image_treatment、type_hierarchy、disruption、imperfection_seed、imperfections。要求不跳字段，且默认不向用户暴露。
 
-- **墨数判定规则**：底色不算墨；两版叠印产生的深色不算第三种墨；墨量浓淡（近黑、浅网）只是 density 变化——模型极易把这三类误判为「三色」。
-- **单色作业的套准漂移**：one-ink 中 registration drift 只能表现为同一墨的淡色二次印象，不引入第二色。
-- **反自动做旧**：网点 + 限墨 ≠ 复古。未明确要求时禁止黄纸、褪色、sepia、旧化边框、怀旧道具（"automatic vintage styling" 列入 Hard Avoids）。
-- **无参考图时反 stock-photo**：不默认完整人像/广告姿势，改用 2-4 个识别锚点（如"手扶车把、一段弯腿、轮弧、发丝方向"）做局部编辑裁切。
-- **文字是素材不是装饰**：手写体只能做短插入语，永远不承载日期、地点、事实；微缩文字可作纹理但不得虚构机构、URL、赞助商。
-- **浪漫主题反道具清单**：不用串灯、酒杯、星空、逆光剪影，改用一个可观察关系（共边、使用痕迹、暗示亲近的裁切）。
+## design-system/ 目录是取值的唯一来源
 
-## 质量门与 evals
+`design-system/` 下有六个 JSON catalog：colors、compositions、typography、rhythm、carriers、imperfections，分别定义色板与底色、布局族几何、排版角色、视觉张力、载体信号（poster/zine/journal 等的 required/forbidden signals）、受控印刷瑕疵的取值范围。
 
-- **Final Quality Gate**：约 20 项语义 checklist——底色与墨数、焦点事件唯一、release zone 更安静、主体占画 45%-80%、标题与主体交叉/覆盖/紧锁、纸上曝光形成可见形状、字号 5x-12x 跳变、≤3 个 type voices、缩略图可识别、相对参考 ≥4 处结构差异等。
+SKILL.md 里明确写了："when an exact value differs, the catalog wins"——散文只解释意图，具体取值以 catalog 为准。
+
+## 确定性与默认值
+
+- 同一个输入必须解析出同一个 manifest
+- 通用色词有固定别名（blue→Cobalt、green→Botanical Green 等）
+- 未指定主体时默认 Cobalt + Terracotta
+- `imperfection_seed` 要求由 subject/text/palette/layout 推导稳定 hash，重试时保持不变
+
+## 失败时怎么降级
+
+精确文字渲染出错时，重试一次；还不行就改成生成 text-light 底图，并声明排版应该在布局工具里叠加。规则是："Do not pretend distorted text is correct"——不要假装乱码文字是对的。
+
+## description 怎么写的
+
+frontmatter 的 description 不是功能广告，而是场景路由：列出中英双语触发场景（单色海报、双色印刷、单色调视觉、孔版印刷、risograph、网点照片、zine poster、duotone print、mono-color style 等）。SKILL.md 尾部还有 `Example Triggers` 节，8 条真实句式（中文 5 条、英文 3 条），覆盖海报、照片改风格、封面、沿用既有视觉等入口。
+
+## 几个值得记的 gotcha
+
+- **墨数怎么算**：底色不算墨；两版叠印产生的深色不算第三种墨；墨量浓淡（近黑、浅网）只是 density 变化。模型很容易把这三类误判成「三色」。
+- **单色作业的套准漂移**：one-ink 里 registration drift 只能表现为同一墨的淡色二次印象，不能引入第二色。
+- **不要自动做旧**：网点 + 限墨不等于复古。没明确要求时禁止黄纸、褪色、sepia、旧化边框、怀旧道具（"automatic vintage styling" 列入 Hard Avoids）。
+- **没参考图时反 stock-photo**：不默认完整人像/广告姿势，改用 2-4 个识别锚点（比如"手扶车把、一段弯腿、轮弧、发丝方向"）做局部编辑裁切。
+- **文字是素材不是装饰**：手写体只能做短插入语，永远不承载日期、地点、事实；微缩文字可作纹理但不能虚构机构、URL、赞助商。
+- **浪漫主题反道具清单**：不用串灯、酒杯、星空、逆光剪影，改用一个可观察的关系（共边、使用痕迹、暗示亲近的裁切）。
+
+## 质量门和 evals
+
+- **Final Quality Gate**：约 20 项 checklist——底色与墨数、焦点事件唯一、release zone 更安静、主体占画 45%-80%、标题与主体交叉/覆盖/紧锁、纸上曝光形成可见形状、字号 5x-12x 跳变、≤3 个 type voices、缩略图可识别、相对参考 ≥4 处结构差异等。
 - **Generation and Inspection**：8+ 条重生成判据（出现第三墨、accent 超 30% 无理由、读作数字调色而非物理印刷、留白出界、主体不可识别、无 5x 字号跳变、文字乱码/虚构品牌、过贴参考等）。
 - **evals/evals.json**：16 条 eval，每条含 prompt（多为中文真实句式）、expected_output、机器可查 assertions（`ratio`、`mode`、`ink_hexes`、`plate_roles`、`layout` 等），配 `evals/schema.json` 契约。
 - **CI 强校验**（`.github/workflows/validate.yml`）：`validate_evals.py` 验 eval 契约、`validate_design_system.py` 验六目录一致性与参考板 PNG 尺寸、全量 JSON 语法检查。设计系统的取值域本身有回归保护。
 
-## 原创性防火墙（独有设计）
+## 原创性怎么保证
 
-Originality Firewall 把「不抄参考」变成可枚举规则：对任何给定参考，subject and crop / layout family / headline wording / headline location / image shape or count / grid structure / type pairing / metadata treatment / ratio / disruption device 十个结构变量至少改变四个；禁止复现参考的物件排布、断行、日期、logo、边框系统和签名。
+Originality Firewall 把「不抄参考」变成可枚举规则：对任何给定参考，subject and crop / layout family / headline wording / headline location / image shape or count / grid structure / type pairing / metadata treatment / ratio / disruption device 这十个结构变量至少改变四个；禁止复现参考的物件排布、断行、日期、logo、边框系统和签名。
 
-## 对照判据打分（见 Skill 工程化 synthesis）
+## 对照判据打分
 
 | 维度 | 判定 | 说明 |
 | --- | --- | --- |

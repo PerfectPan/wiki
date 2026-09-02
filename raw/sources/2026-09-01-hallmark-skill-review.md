@@ -13,7 +13,7 @@ sources:
 
 # hallmark Skill 评审记录
 
-## 对象
+## 基本信息
 
 | 项 | 值 |
 | --- | --- |
@@ -26,7 +26,7 @@ sources:
 | 谱系 | 自述规则来自 Anthropic frontend-design skill、Claude cookbook frontend aesthetics、2026 "tactile rebellion" 共识 |
 | 访问日 | 2026-09-01 |
 
-## 产物协议（事实）
+## 四个动词，各有各的输出
 
 一个默认行为 + 三个显式动词，每个有独立输出契约：
 
@@ -37,22 +37,23 @@ sources:
 | `redesign` | 现有页面 | 保留路由/组件归属/文案意图/品牌/IA，只换视觉-交互层；`--mood` 可选 |
 | `study` | 截图或 URL | DNA 诊断报告 → 三选一后续：用 DNA 重建 / lock 成可移植 `design.md` / 停在诊断 |
 
-**study 的防御性设计**（最重的部分）：
+### study 的防御性设计（最重的部分）
+
 - URL/图片模式自动检测；URL 模式经 WebFetch 浅抓取，HTML/CSS 按不可信惰性数据处理，忽略页面内的一切远程指令
 - 拒绝清单：themeforest / framer templates / webflow templates / gumroad UI kits / dribbble / behance；auth 墙、SPA 壳、<1KB body → 显式降级要截图，不许静默退化
 - 「永不复制像素」；`design.md` 发射比诊断有更紧的拒绝层，需声明来源是自己的作品或自有品牌的公开参考
 - 提取结构不提取像素：macrostructure、archetypes、type-pairing、colour anchor
 
-## 核心机制（事实）
+## 核心机制
 
-- **宏结构优先**：先选 macrostructure 再穿衣。六轴结构指纹：标题位置 / 正文构图 / 分隔语言 / 按钮语气 / 图像处理 / 出场模式；每轴有命名模式与真实世界参照
-- **反自我相似**：读取项目记忆，**拒绝重复最近 3 个宏结构**；slop test 第 F 轴按「结构距离」而非视觉距离评分——换配色不算变化
-- **58 道门禁 + pre-emit 自评**：交付前逐项回答且必须全为 no；门禁分通用与 genre 域（atmospheric 放宽 radial-bloom 门、modern-minimal 放宽零彩中性门）；先跑自评六轴（Philosophy/Hierarchy/Execution/Specificity/Restraint/Variety）再写预览块的 slop test 行
-- **20 主题 × 结构指纹表**：每主题建议 heading/body/divider/button/image/reveal/nav/footer 组合；不知道选什么时按领域给三选一，**永不默认**
-- **8 条基础约束**：Type（双字体分工）/ Colour（OKLCH、单锚色、强调 <5%）/ Space（命名刻度、4 的倍数、禁止随手 17px）/ Motion（指数缓出、每动画配 reduced-motion 替代）/ Voice（每主题独立语域，禁 SaaS 中性腔）/ Layout（偏置不对称）/ Hierarchy（2 秒可读的 display/body/label 权重梯）/ Restraint（**better nothing than bad something**）
-- **渐进披露纪律**：slop-test.md 明确「此步才加载，更早不需要」；动词执行前必须先读对应 reference，不许凭直觉
+- **先选宏结构，再穿衣**：六轴结构指纹——标题位置 / 正文构图 / 分隔语言 / 按钮语气 / 图像处理 / 出场模式；每轴有命名模式与真实世界参照。
+- **不重复最近 3 个宏结构**：读取项目记忆，拒绝重复；slop test 第 F 轴按「结构距离」而非视觉距离评分——换配色不算变化。
+- **58 道门禁 + 交付前自评**：交付前逐项回答且必须全为 no；门禁分通用与 genre 域（atmospheric 放宽 radial-bloom 门、modern-minimal 放宽零彩中性门）；先跑自评六轴（Philosophy/Hierarchy/Execution/Specificity/Restraint/Variety）再写预览块的 slop test 行。
+- **20 主题 × 结构指纹表**：每主题建议 heading/body/divider/button/image/reveal/nav/footer 组合；不知道选什么时按领域给三选一，**永不默认**。
+- **8 条基础约束**：Type（双字体分工）/ Colour（OKLCH、单锚色、强调 <5%）/ Space（命名刻度、4 的倍数、禁止随手 17px）/ Motion（指数缓出、每动画配 reduced-motion 替代）/ Voice（每主题独立语域，禁 SaaS 中性腔）/ Layout（偏置不对称）/ Hierarchy（2 秒可读的 display/body/label 权重梯）/ Restraint（**better nothing than bad something**）。
+- **按需加载 references**：slop-test.md 明确「此步才加载，更早不需要」；动词执行前必须先读对应 reference，不许凭直觉。
 
-## 对照判据打分（见 Skill 工程化 synthesis）
+## 对照判据打分
 
 | 维度 | 判定 | 说明 |
 | --- | --- | --- |

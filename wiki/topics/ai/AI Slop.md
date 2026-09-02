@@ -4,8 +4,8 @@ description: 识别生成式默认选择在界面、文案与代码中留下的�
 type: topic
 category: ai
 created: 2026-07-11
-updated: 2026-07-11
-timestamp: 2026-07-11
+updated: 2026-09-01
+timestamp: 2026-09-01
 tags:
   - design
   - frontend
@@ -110,3 +110,4 @@ AI slop 不是“用了 AI 就一定很差”，而是生成式默认选择在�
 - [视觉、文案与组件模式](https://github.com/yetone/kill-ai-slop/blob/6bfd693c075d405e2061620ce31b3d8c4eb4b920/skill/references/taxonomy.md)
 - [检测信号与常见误报](https://github.com/yetone/kill-ai-slop/blob/6bfd693c075d405e2061620ce31b3d8c4eb4b920/skill/references/detection.md)
 - [代码异味与保留条件](https://github.com/code-yeongyu/oh-my-openagent/blob/17104e1f6c86a47ab50ab2e1f5b5e0a6603443b8/packages/shared-skills/skills/remove-ai-slops/SKILL.md)
+- [hallmark](https://github.com/nutlope/hallmark) — 把本页的识别思路升级到生成侧：先选页面结构再做视觉，交付前过 58 道门禁；评审见 `raw/sources/2026-09-01-hallmark-skill-review.md`，收录见 [[Awesome Agent Skills]]

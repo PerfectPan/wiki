@@ -4,8 +4,8 @@ description: 经判据审过的 Agent Skill 薄索引：推荐 / 可参考 / 偏
 type: topic
 category: ai
 created: 2026-08-06
-updated: 2026-08-06
-timestamp: 2026-08-06
+updated: 2026-09-01
+timestamp: 2026-09-01
 tags:
   - skills
   - agent
@@ -16,9 +16,15 @@ source_refs:
   - raw/sources/2026-08-06-bento-slides-skill-review.md
   - raw/sources/2026-05-12-ai-cli-skill-review.md
   - raw/sources/2026-05-06-codex-pet-skill-article.md
+  - raw/sources/2026-09-01-mono-color-skill-review.md
+  - raw/sources/2026-09-01-hallmark-skill-review.md
 resource:
   - wiki/syntheses/ai/Skill 工程化的产物协议范式.md
   - raw/sources/2026-08-06-bento-slides-skill-review.md
+  - raw/sources/2026-05-12-ai-cli-skill-review.md
+  - raw/sources/2026-05-06-codex-pet-skill-article.md
+  - raw/sources/2026-09-01-mono-color-skill-review.md
+  - raw/sources/2026-09-01-hallmark-skill-review.md
 ---
 # Awesome Agent Skills
 
@@ -60,6 +66,8 @@ resource:
 | --- | --- | --- |
 | **bento-slides** | 只改 `#bento-doc` JSON 做单文件 deck；强制内容→chart/morph/state 映射，反 bullet 墙 | 产品 [[Bento]] · [SKILL.md](https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md) · [[raw/sources/2026-08-06-bento-slides-skill-review.md\|评审]] |
 | **hatch-pet**（范式锚点） | 图像生成收成可加载资产流水线：manifest、确定性编译、QA、局部 repair | [[Skill 工程化的产物协议范式]] · [[raw/sources/2026-05-06-codex-pet-skill-article.md\|来源]] |
+| **mono-color** | 生成单墨/双色印刷风图像：把色板、布局、排版等取值写进 JSON 目录，交付前过 20 项 checklist，"不抄参考"变成 10 个结构变量至少改 4 个；evals 带断言进 CI | [SKILL.md](https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md) · [[raw/sources/2026-09-01-mono-color-skill-review.md\|评审]] |
+| **hallmark** | 反 AI-slop 建页：先选页面结构（21 种，不重复最近 3 个），交付前过 58 道门禁；`study` 只提取结构不抄像素，`audit` 只诊断不改 | [SKILL.md](https://github.com/nutlope/hallmark/blob/main/skills/hallmark/SKILL.md) · [[raw/sources/2026-09-01-hallmark-skill-review.md\|评审]] · [[AI Slop]] |
 
 ### 可参考
 
@@ -81,6 +89,7 @@ resource:
 ## 相关页面
 
 - [[Skill 工程化的产物协议范式]] — 唯一判据源
+- [[AI Slop]] — hallmark 反模式的语义层归纳
 - [[Bento]] — bento-slides 背后的单文件 slides 产品
 - [[Code Agent]]
 - [[ai-cli]]
@@ -88,7 +97,11 @@ resource:
 
 ## 来源指针
 
+- `raw/sources/2026-09-01-hallmark-skill-review.md`
+- `raw/sources/2026-09-01-mono-color-skill-review.md`
 - `raw/sources/2026-08-06-bento-slides-skill-review.md`
 - `raw/sources/2026-05-12-ai-cli-skill-review.md`
 - `raw/sources/2026-05-06-codex-pet-skill-article.md`
 - https://github.com/nyblnet/bento
+- https://github.com/yanliudesign/mono-color-skill
+- https://github.com/nutlope/hallmark

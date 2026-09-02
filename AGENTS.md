@@ -87,6 +87,7 @@ bin/wiki check <path>       # 校验单个文件或目录
 当前使用这一组一级分类：
 
 - `frontend`：React、CSS、RSC、Web Components、状态管理、组件库、渲染层相关主题
+- `design`：设计、UX、视觉语言、颜色科学、排版、印刷与编辑设计相关主题
 - `ai`：LLM、GPT、MCP、Agent、RAG、Prompt、AI 工作流相关主题
 - `languages`：TypeScript、JavaScript、Rust、Go、ClojureScript、ReScript、Zig 以及语言特性
 - `systems`：操作系统、网络、编译器、运行时、文件系统、数据库等底层主题

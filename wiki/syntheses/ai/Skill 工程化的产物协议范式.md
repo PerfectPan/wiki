@@ -70,7 +70,7 @@ resource:
 4. 来源、hash、依赖和完成状态是否可审计？
 5. QA 是否同时覆盖结构正确和语义正确？
 6. 失败后能否局部 repair，而不是只能整体 retry？
-7. 主观或审美判断是否已被翻译成可枚举的取值域、防火墙规则与逐项验收清单？
+7. 主观或审美判断是否已被翻译成可逐条检查的取值范围、防抄袭规则与逐项验收清单？
 
 ## Perplexity 的 Skill 设计原则
 
@@ -112,7 +112,7 @@ Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的�
 - **gotcha 密度高。** bar/line 必须 plain numbers、morph 靠稳定 id、大视频勿 embed、勿改 `docId` 等，属于领域 know-how 而非 README 复述。
 - **未到 hatch-pet 流水线。** 无 job manifest、无确定性编译脚本、无 provenance/repair；验收依赖「打开看每一页」和 runtime `validate()`，skill 未强制脚本化。负例与 evals 仍弱。
 
-它说明：即使没有完整 control plane，**先把可消费产物契约和反默认失败写死**，Skill 已经从 prompt 包装升到可收录的工程组件。收录索引见 [[Awesome Agent Skills]]；产品与 `window.bento` / 风格模型见 [[Bento]]；评审事实见 `raw/sources/2026-08-06-bento-slides-skill-review.md`。
+它说明：即使没有完整 control plane，**先把产物该长什么样、模型容易犯的默认错误写死**，Skill 已经从 prompt 包装升到可收录的工程组件。收录索引见 [[Awesome Agent Skills]]；产品与 `window.bento` / 风格模型见 [[Bento]]；评审事实见 `raw/sources/2026-08-06-bento-slides-skill-review.md`。
 
 ## mono-color 案例：把审美判断变成可检查的规则
 

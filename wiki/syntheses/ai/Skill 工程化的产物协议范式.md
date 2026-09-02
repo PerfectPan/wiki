@@ -114,19 +114,19 @@ Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的�
 
 它说明：即使没有完整 control plane，**先把可消费产物契约和反默认失败写死**，Skill 已经从 prompt 包装升到可收录的工程组件。收录索引见 [[Awesome Agent Skills]]；产品与 `window.bento` / 风格模型见 [[Bento]]；评审事实见 `raw/sources/2026-08-06-bento-slides-skill-review.md`。
 
-## mono-color 案例：视觉系统约束型 Skill
+## mono-color 案例：把审美判断变成可检查的规则
 
-`yanliudesign/mono-color-skill` 补上第三类：难点不是工具协议或产物格式，而是大量主观审美判断的生成型 Skill。它的工程化手法：
+`yanliudesign/mono-color-skill` 补上第三类：它的难点不是工具协议或产物格式，而是图像生成里大量主观的审美判断。它的做法是把"品味"拆成可执行、可验收的规则：
 
-- **catalog wins**：`design-system/` 六个 JSON catalog（colors/compositions/typography/rhythm/carriers/imperfections）是取值域的 source of truth；散文只解释意图，"when an exact value differs, the catalog wins"——约束来源有了明确的优先级规则。
-- **主观判据可枚举化**：原创性防火墙把「不抄参考」翻译成 10 个结构变量至少改 4 个的替换规则；Final Quality Gate 是约 20 项 yes/no 检查（焦点事件唯一、主体占画 45%-80%、字号 5x-12x 跳变等）；重生成判据同样可枚举（出现第三墨、留白出界、无 5x 跳变）。
-- **反默认失败的负例清单**：Hard Avoids 列的不是常识性禁令，而是模型会稳定滑入的审美默认：自动做旧（网点 + 限墨 ≠ 复古）、stock-photo 姿势、浪漫道具堆（串灯/酒杯/星空）、安全的首左图右分割。
-- **确定性默认**：同输入必须解析出同一 Recipe Manifest；通用色词有固定别名（blue→Cobalt）；瑕疵种子用稳定 hash 跨重试保持。
-- **诚实降级**：精确文字渲染失败时，重试一次后改为 text-light 底图并声明排版应在布局工具叠加——"Do not pretend distorted text is correct"。
-- **evals 带机器可查断言**：16 条 eval 的 assertions 含 `ratio`/`mode`/`ink_hexes`/`plate_roles`，与设计系统 catalog 一致性校验一起进 CI——取值域本身有回归保护，是现有案例中评测侧最完整的。
-- **未到 hatch-pet 流水线**：无 job manifest、无运行时确定性编译、无局部 repair；单次生成任务属性使然，降级路径存在。
+- **取值写进 JSON 目录，不靠散文**：`design-system/` 下有六个 JSON 文件（colors/compositions/typography/rhythm/carriers/imperfections），分别定义色板、布局、排版、视觉张力、载体类型、印刷瑕疵的取值范围。SKILL.md 里只解释意图，具体数值以 JSON 为准——"when an exact value differs, the catalog wins"。
+- **主观标准变成逐条 checklist**：比如"不抄参考"被翻译成 10 个结构变量（裁切、布局、标题措辞、标题位置、图像形状数量、网格、字体搭配、元数据处理、比例、破格手法）至少改 4 个；交付前的 Final Quality Gate 是约 20 项 yes/no 检查（只有一个焦点、主体占画面 45%-80%、最大字和最小字差 5-12 倍等）；需要重生成的条件也列成清单（出现第三种墨、留白超出边界、字号没有 5 倍以上跳变等）。
+- **列出模型容易犯的审美错误**：Hard Avoids 不是泛泛的"不要不好看"，而是模型会稳定滑入的默认选择——比如以为网点+限墨就是复古（其实不是）、默认用 stock-photo 姿势、浪漫主题就堆串灯酒杯星空、安全地用左图右文分割。
+- **同样的输入得到同样的结果**：同一个输入必须解析出同一个 Recipe Manifest；通用色词有固定别名（blue→Cobalt）；印刷瑕疵的种子用 subject/text/palette/layout 算稳定 hash，重试时保持不变。
+- **出错时诚实降级**：精确文字渲染失败时，重试一次；还不行就生成文字少的底图，并说明排版应该在布局工具里叠加——"Do not pretend distorted text is correct"，不要假装乱码是对的。
+- **evals 进 CI**：16 条 eval 带机器可查的断言（`ratio`、`mode`、`ink_hexes`、`plate_roles` 等），和设计系统目录的一致性校验一起跑 CI——取值范围本身有回归保护，是现有案例里评测最完整的。
+- **还没有完整流水线**：没有 job manifest、没有运行时确定性编译、没有局部 repair；毕竟是单次生成任务，降级路径存在但还没到 hatch-pet 那套流水线的程度。
 
-它说明：当 Skill 的难点是品味而非协议时，工程化抓手仍是同一套——把主观判断翻译成取值域、变量规则和逐项验收清单，审美领域同样适用「模型生成候选、判据拥有提交权」。视觉系统本体（色板 hex、布局族）是 skill 自己的 payload，不镜像进 wiki。收录索引见 [[Awesome Agent Skills]]；评审事实见 `raw/sources/2026-09-01-mono-color-skill-review.md`。
+它说明：当 Skill 的难点是品味而非协议时，工程化的思路还是一样——把主观判断翻译成取值范围、变量规则和逐条验收清单。审美领域同样适用"模型出候选，规则说了算"。色板 hex、布局族这些是 skill 自己的内容，不镜像进 wiki。收录索引见 [[Awesome Agent Skills]]；评审事实见 `raw/sources/2026-09-01-mono-color-skill-review.md`。
 
 ## 和 workflow 的关系
 

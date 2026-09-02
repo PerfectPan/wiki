@@ -66,8 +66,8 @@ resource:
 | --- | --- | --- |
 | **bento-slides** | 只改 `#bento-doc` JSON 做单文件 deck；强制内容→chart/morph/state 映射，反 bullet 墙 | 产品 [[Bento]] · [SKILL.md](https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md) · [[raw/sources/2026-08-06-bento-slides-skill-review.md\|评审]] |
 | **hatch-pet**（范式锚点） | 图像生成收成可加载资产流水线：manifest、确定性编译、QA、局部 repair | [[Skill 工程化的产物协议范式]] · [[raw/sources/2026-05-06-codex-pet-skill-article.md\|来源]] |
-| **mono-color** | 视觉系统约束型：design-system catalog 约束取值（catalog wins）+ 可枚举 Quality Gate + 原创性防火墙（≥4 结构变量）；evals 带 assertions 进 CI | [SKILL.md](https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md) · [[raw/sources/2026-09-01-mono-color-skill-review.md\|评审]] |
-| **hallmark** | 反 AI-slop 建页：宏结构优先（21 种，拒绝重复最近 3 个）+ 58 道交付门禁 + study 提结构不提像素；audit 把 QA 做成动词 | [SKILL.md](https://github.com/nutlope/hallmark/blob/main/skills/hallmark/SKILL.md) · [[raw/sources/2026-09-01-hallmark-skill-review.md\|评审]] · [[AI Slop]] |
+| **mono-color** | 生成单墨/双色印刷风图像：把色板、布局、排版等取值写进 JSON 目录，交付前过 20 项 checklist，"不抄参考"变成 10 个结构变量至少改 4 个；evals 带断言进 CI | [SKILL.md](https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md) · [[raw/sources/2026-09-01-mono-color-skill-review.md\|评审]] |
+| **hallmark** | 反 AI-slop 建页：先选页面结构（21 种，不重复最近 3 个），交付前过 58 道门禁；`study` 只提取结构不抄像素，`audit` 只诊断不改 | [SKILL.md](https://github.com/nutlope/hallmark/blob/main/skills/hallmark/SKILL.md) · [[raw/sources/2026-09-01-hallmark-skill-review.md\|评审]] · [[AI Slop]] |
 
 ### 可参考
 

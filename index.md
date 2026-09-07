@@ -256,6 +256,7 @@
 - `product`
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
   - [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
+  - [[wiki/syntheses/product/Gloomberb 调研|Gloomberb 调研]]
 - `systems`
   - [[wiki/syntheses/systems/容器资源隔离与超卖机制|容器资源隔离与超卖机制]]
   - [[wiki/syntheses/systems/Electron 扩展系统的隔离与通信边界|Electron 扩展系统的隔离与通信边界]]

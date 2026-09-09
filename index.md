@@ -22,7 +22,6 @@
   - [[wiki/topics/frontend/Next.js Middleware Auth Bypass|Next.js Middleware Auth Bypass]]
   - [[wiki/topics/frontend/Polyfill|Polyfill]]
   - [[wiki/topics/frontend/小程序架构演进|小程序架构演进]]
-  - [[wiki/topics/frontend/Rare UI|Rare UI]]
   - [[wiki/topics/frontend/React Devtools|React Devtools]]
   - [[wiki/topics/frontend/React|React]]
   - [[wiki/topics/frontend/React Render Optimization|React Render Optimization]]

@@ -25,6 +25,8 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 - X 推文线程：`raw/sources/YYYY-MM-DD-主题.md`（线程全文）
 - YouTube 视频：`raw/sources/YYYY-MM-DD-主题.md`（字幕转录）
 
+**同一对象只留一份素材**：一个库 / 站（如一个组件库及其官网多个页面）的多次抓取，落盘前合并为一份 `raw/sources/YYYY-MM-DD-<对象>.md`——文件名用对象名，不用 URL slug；页面级噪音（testimonials、导航、广告）在收录时剔除，不整站搬运、不按 URL / 页面拆多个文件。
+
 **不要把整站 HTML 存进 raw/sources/**。HTML 里全是 CSS/JS/SVG 噪音，只保留提取出的正文 .md 即可。
 
 阅读素材，理解核心内容。
@@ -258,6 +260,7 @@ raw 评审文件（如 `raw/sources/YYYY-MM-DD-<topic>-review.md`）是分析素
 **不要做的事：**
 
 - 不要把整站 HTML 爬进 raw/sources/。HTML 里全是 CSS/JS/SVG 噪音，提取正文存成 .md 就够了。
+- 不要按 URL / 页面为同一对象拆多个 raw 文件（一个库 / 站只留一份合并素材，命名 `YYYY-MM-DD-<对象>.md`）。
 - 不要为了显得专业而堆砌术语。能说清楚就用最简单的词。
 
 ## 第八步：更新导航

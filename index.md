@@ -13,6 +13,7 @@
   - [[wiki/topics/frontend/颜色|颜色]]
   - [[wiki/topics/frontend/Color and Perception|Color and Perception]]
   - [[wiki/topics/frontend/Ant Design 异步默认值渲染|Ant Design 异步默认值渲染]]
+  - [[wiki/topics/frontend/Awesome Component Libraries|Awesome Component Libraries]]
   - [[wiki/topics/frontend/CVA|CVA]]
   - [[wiki/topics/frontend/CSS|CSS]]
   - [[wiki/topics/frontend/CSS Anchor Positioning|CSS Anchor Positioning]]

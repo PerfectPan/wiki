@@ -12,11 +12,7 @@ tags:
   - animation
   - reference
 source_refs:
-  - raw/sources/2026-09-09-rare-ui-home.md
-  - raw/sources/2026-09-09-rare-ui-components.md
   - raw/sources/2026-09-09-rare-ui.md
-  - raw/sources/2026-09-09-rare-ui-fluid-orb.md
-  - raw/sources/2026-09-09-rare-ui-otp-input.md
   - raw/sources/2026-07-26-transitions-dev.md
   - raw/sources/2026-05-08-custom-scrollbar-library-source-review.md
   - wiki/syntheses/frontend/shadcn Registry 组件分发模式.md
@@ -24,11 +20,7 @@ source_refs:
   - https://www.rareui.com/
   - https://transitions.dev/
 resource:
-  - raw/sources/2026-09-09-rare-ui-home.md
-  - raw/sources/2026-09-09-rare-ui-components.md
   - raw/sources/2026-09-09-rare-ui.md
-  - raw/sources/2026-09-09-rare-ui-fluid-orb.md
-  - raw/sources/2026-09-09-rare-ui-otp-input.md
   - raw/sources/2026-07-26-transitions-dev.md
   - raw/sources/2026-05-08-custom-scrollbar-library-source-review.md
   - wiki/syntheses/frontend/shadcn Registry 组件分发模式.md
@@ -77,7 +69,7 @@ resource:
 
 | 库 | 一句话 | 指针 |
 | --- | --- | --- |
-| **Rare UI** | React + Motion「稀有动效」组件库约 19 个（fluid orb / gooey nav / OTP input / gravity letters 等）；shadcn CLI 单文件分发、MIT；短板：多数为网上作品的复刻，商用前需按站内 Credits 自查归属，WebGL 组件需实测 | [官网](https://www.rareui.com/) · [components](https://www.rareui.com/components) · [GitHub](https://github.com/swamimalode07/rare-ui) · `raw/sources/2026-09-09-rare-ui-*.md` |
+| **Rare UI** | React + Motion「稀有动效」组件库约 19 个（fluid orb / gooey nav / OTP input / gravity letters 等）；shadcn CLI 单文件分发、MIT；短板：多数为网上作品的复刻，商用前需按站内 Credits 自查归属，WebGL 组件需实测 | [官网](https://www.rareui.com/) · [components](https://www.rareui.com/components) · [GitHub](https://github.com/swamimalode07/rare-ui) · `raw/sources/2026-09-09-rare-ui.md` |
 | **滚动条三件套** | OverlayScrollbars / SimpleBar / Perfect Scrollbar：横向选型已闭环，以 comparison 的取舍结论为准，本页只作召回入口 | [[wiki/comparisons/frontend/自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar|comparison]] · `raw/sources/2026-05-08-custom-scrollbar-library-source-review.md` |
 
 ### 偏薄
@@ -106,7 +98,7 @@ shadcn 生态动效组件站：Skiper UI、Aceternity UI、Magic UI、ReactBits�
 
 ## 来源指针
 
-- `raw/sources/2026-09-09-rare-ui-home.md` / `-components.md` / `-rare-ui.md` / `-fluid-orb.md` / `-otp-input.md`（Rare UI 收录素材）
+- `raw/sources/2026-09-09-rare-ui.md`（Rare UI 合并素材：官网首页 / 组件列表 / GitHub 元信息 / 两个组件页抽查）
 - `raw/sources/2026-07-26-transitions-dev.md`
 - `raw/sources/2026-05-08-custom-scrollbar-library-source-review.md`
 - https://www.rareui.com/

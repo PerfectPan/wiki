@@ -17,3 +17,12 @@
 ## 收录判断
 
 收录 Gemini 的任务范围、工具配置、求助入口和规划执行协作方式。工具数量、升级次数、性能倍数及请求处理比例只视为例子；模型价格、接入命令和平台设置未独立核验，不纳入操作指南。
+
+## 评测工具补充
+
+文章第二节使用 Promptfoo，通过 `exec:` 分别调用 OpenCode 的 Gemini 与 Claude 配置，运行同样的两个任务，再用 `promptfoo eval -c promptfooconfig.yaml --no-cache` 执行对照。展示的配置包含任务、命令及超时时间，没有质量断言。
+
+因此收录时需要区分“组织运行”和“验证质量”：文章演示了前者，后者仍需明确完成标准。同时，外部命令的指标回传也需要接入方确认，不能把模型用量和成本视为自动可得。
+
+- [Promptfoo 仓库](https://github.com/promptfoo/promptfoo)
+- [Custom Scripts 文档](https://www.promptfoo.dev/docs/providers/custom-script/)

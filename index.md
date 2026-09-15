@@ -56,6 +56,7 @@
   - [[wiki/topics/architecture/Software Design|Software Design]]
   - [[wiki/topics/architecture/SSO|SSO]]
 - `ai`
+  - [[wiki/topics/ai/模型使用与踩坑|模型使用与踩坑]]
   - [[wiki/topics/ai/Agent|Agent]]
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Awesome Agent Skills|Awesome Agent Skills]]

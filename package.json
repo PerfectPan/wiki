@@ -1,0 +1,6 @@
+{
+  "name": "wiki",
+  "private": true,
+  "type": "module",
+  "description": "文件优先、兼容 Obsidian 的知识库。这个 package.json 只用于声明 bin/wiki.ts 的模块类型（type=module），仓库没有依赖，也不需要 npm install；删除 type 字段会让 bin/wiki 在含 type=commonjs 的外层目录下失效。"
+}

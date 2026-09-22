@@ -40,7 +40,7 @@ resource:
 
 ## 问题
 
-Zed 团队为什么要再做一个 coding agent 产品？它和已经能改代码的 CLI agent 差在哪？它的对象模型、数据流、扩展面和信任边界分别是什么，代价是什么？
+Zed 团队为什么要在 Zed 编辑器之外另做一个产品？Delta 不自己提供模型或 agent，而是把第三方 agent（含 Claude Code 这类 CLI harness）的对话与它改动的代码收进同一个可共享对象。相对「在终端里让 agent 改代码、再走 PR 交付」的现成工作流，它重新定义了什么？它的对象模型、数据流、扩展面和信任边界分别是什么，代价又是什么？
 
 本页基于 2026-09-17 抓取的 delta.dev 站点与 26 个文档页、Zed 博客上的 Delta / DeltaDB 系列文章，以及一次对 `zed-industries` 公开仓库的核查。产品处于公开 beta、版本迭代极快（首版到 0.16.0 只用了三周多），任何具体行为都可能随后变化。
 
@@ -245,9 +245,9 @@ flowchart LR
 
 **4. 多人在场的规则定义得比能力更细。** 谁在跑（发送者的机器）、谁付钱（发送者）、谁能看见草稿（所有参与者）、谁能改权限（owner），文档都给了明确答案，也坦白了“没有只发给协作者的通道”。这套规则是产品的主体，模型反而是可换的部件。
 
-**4. 与本地 CLI agent 的位置差异。**
+**5. 与直接用本地 CLI agent 的工作流相比，位置差异在交付环节。** 注意这不是二选一：Delta 明确接入第三方 harness（先接 Claude Code，终端会话实时同步进 thread），下表比的是「终端里直接跑完再走 PR」与「在 thread 里跑」两种工作流。
 
-| 维度 | 本地 CLI agent | Delta |
+| 维度 | 本地 CLI agent 工作流 | Delta thread 工作流 |
 | --- | --- | --- |
 | 工作单元 | 会话 + 工作目录 | thread（对话 + 工作副本，可共享） |
 | 改动落点 | 直接改你的工作目录 | 默认隔离 checkout，改动要带回来 |
@@ -257,7 +257,7 @@ flowchart LR
 | 运行位置 | 你的机器 | 发送者所在环境；浏览器 turn 无 shell |
 | 数据边界 | 只经模型供应商 | 模型供应商 + Cloudflare 全量存储 |
 
-**5. 生态选择是“沿用约定、闭源本体”。** 技能目录、`AGENTS.md` 这些约定与 Zed 生态其它工具一致，接入成本低；但 Delta 本体在 `zed-industries` 的 131 个公开仓库中找不到对应仓库，文档也没有开源声明（这只是一次仓库检索的**观察**，不是官方说法）。不过数据面没那么神秘：博客把 DeltaDB 的依赖树讲得很清楚（Lamport 时间戳 + Merkle 命名 + CRDT 收敛），足以判断它的技术路线。生态策略上还有两条值得记：一是官方把“接入别人的 harness”当路线（先接 Claude Code，把会话同步进 thread），而不是只做自家 agent；二是把 DeltaDB 当独立产品线继续推（`/deltadb` 还在收集 early access 候补），并明确“DeltaDB will come to Zed”。
+**6. 生态选择是“沿用约定、闭源本体”。** 技能目录、`AGENTS.md` 这些约定与 Zed 生态其它工具一致，接入成本低；但 Delta 本体在 `zed-industries` 的 131 个公开仓库中找不到对应仓库，文档也没有开源声明（这只是一次仓库检索的**观察**，不是官方说法）。不过数据面没那么神秘：博客把 DeltaDB 的依赖树讲得很清楚（Lamport 时间戳 + Merkle 命名 + CRDT 收敛），足以判断它的技术路线。生态策略上还有两条值得记：一是官方把“接入别人的 harness”当路线（先接 Claude Code，把会话同步进 thread），而不是只做自家 agent；二是把 DeltaDB 当独立产品线继续推（`/deltadb` 还在收集 early access 候补），并明确“DeltaDB will come to Zed”。
 
 ## 证据矩阵
 

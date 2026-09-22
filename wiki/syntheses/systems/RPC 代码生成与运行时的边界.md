@@ -54,7 +54,7 @@ resource:
 | `00 00 00 02 68 69` | 字符串长度 2 + "hi" |
 | `00` ×2 | 内层 struct、args struct 各自的 STOP 结束符 |
 
-信封是协议自带的（不是框架私有 meta）：`0x8001` 是 strict protocol version 1 标记，低 8 位是消息类型（CALL=1 / REPLY=2 / EXCEPTION=3），其后是方法名和 seqid。零依赖按规范手写编码器可以逐字节复现同一帧（见来源中的实验记录），证明**线格式只属于协议规范，不属于任何实现**。
+信封是协议自带的（不是框架自定义的 meta）：`0x8001` 是 strict protocol version 1 标记，低 8 位是消息类型（CALL=1 / REPLY=2 / EXCEPTION=3），其后是方法名和 seqid。零依赖按规范手写编码器可以逐字节复现同一帧（见来源中的实验记录），证明**线格式只属于协议规范，不属于任何实现**。
 
 ### 2. 一次方法调用先被建模成两个 struct
 

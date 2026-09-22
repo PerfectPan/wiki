@@ -67,6 +67,7 @@
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
   - [[wiki/topics/ai/Obelisk|Obelisk]]
   - [[wiki/topics/ai/Code Agent|Code Agent]]
+  - [[wiki/topics/ai/Coding Agent 编辑工具|Coding Agent 编辑工具]]
   - [[wiki/topics/ai/MCP|MCP]]
   - [[wiki/topics/ai/MCP Client|MCP Client]]
   - [[wiki/topics/ai/mcp-remote|mcp-remote]]

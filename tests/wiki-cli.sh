@@ -69,4 +69,7 @@ assert_contains "$check_output" "校验完成"
 full_check_output="$("$CLI" check 2>&1)" || true
 assert_contains "$full_check_output" "0 个错误"
 
+# PR 标题 lint：内置正反用例自测
+bash "$ROOT/tests/pr-title.sh" --self-test >/dev/null
+
 echo "PASS"

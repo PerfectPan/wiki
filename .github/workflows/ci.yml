@@ -16,6 +16,12 @@ jobs:
         with:
           node-version: "24"
 
+      - name: Check PR title
+        if: github.event_name == 'pull_request'
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: bash tests/pr-title.sh
+
       - name: Run wiki CLI tests
         run: bash tests/wiki-cli.sh
 

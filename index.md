@@ -51,6 +51,7 @@
   - [[wiki/topics/architecture/技术方案|技术方案]]
   - [[wiki/topics/architecture/DDD|DDD]]
   - [[wiki/topics/architecture/Dependency Injection|Dependency Injection]]
+  - [[wiki/topics/architecture/JWT|JWT]]
   - [[wiki/topics/architecture/OAuth|OAuth]]
   - [[wiki/topics/architecture/OTP|OTP]]
   - [[wiki/topics/architecture/Software Design|Software Design]]
@@ -279,6 +280,8 @@
 - `ai`
   - [[wiki/comparisons/ai/LLM API 协议选型|LLM API 协议选型]]
   - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
+- `architecture`
+  - [[wiki/comparisons/architecture/Session vs JWT vs 双 Token|Session vs JWT vs 双 Token]]
 - `career`
   - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]
 - `frontend`

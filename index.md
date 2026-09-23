@@ -239,6 +239,7 @@
   - [[wiki/syntheses/frontend/浏览器 Fetch Streaming 的读取边界|浏览器 Fetch Streaming 的读取边界]]
   - [[wiki/syntheses/frontend/同源 iframe 沙箱设计|同源 iframe 沙箱设计]]
   - [[wiki/syntheses/frontend/前端框架的四个时代|前端框架的四个时代]]
+  - [[wiki/syntheses/frontend/反应性框架的复杂度归属：暴露给程序员 vs 编译器推断|反应性框架的复杂度归属：暴露给程序员 vs 编译器推断]]
   - [[wiki/syntheses/frontend/小程序运行时架构思路|小程序运行时架构思路]]
   - [[wiki/syntheses/frontend/React 18 流式 SSR 与渐进式 hydration|React 18 流式 SSR 与渐进式 hydration]]
   - [[wiki/syntheses/frontend/React Hooks API 模拟实现|React Hooks API 模拟实现]]

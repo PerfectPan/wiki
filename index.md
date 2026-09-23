@@ -269,6 +269,7 @@
 - `product`
   - [[wiki/syntheses/product/Logseq 架构演进脉络|Logseq 架构演进脉络]]
   - [[wiki/syntheses/product/OpenDesign 实现调研|OpenDesign 实现调研]]
+  - [[wiki/syntheses/product/Delta 产品与架构调研|Delta 产品与架构调研]]
   - [[wiki/syntheses/product/短链服务的产品价值|短链服务的产品价值]]
 
 ## 对比页

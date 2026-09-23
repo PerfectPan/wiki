@@ -216,6 +216,7 @@
   - [[wiki/syntheses/ai/OpenSeek 项目架构总览|OpenSeek 项目架构总览]]
   - [[wiki/syntheses/ai/RAG 问答管线|RAG 问答管线]]
   - [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
+  - [[wiki/syntheses/ai/手绘风格与讲解视频的工程约束|手绘风格与讲解视频的工程约束]]
   - [[wiki/syntheses/ai/Git 与 Agent 协作的摩擦点和演进方向|Git 与 Agent 协作的摩擦点和演进方向]]
   - [[wiki/syntheses/ai/Agent-native 生成型 CLI 的产物协议|Agent-native 生成型 CLI 的产物协议]]
   - [[wiki/syntheses/ai/Code Agent 结构约定的可验证边界|Code Agent 结构约定的可验证边界]]

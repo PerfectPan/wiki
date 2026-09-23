@@ -1,11 +1,11 @@
 ---
 title: Skill 工程化的产物协议范式
-description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、manifest、QA 与 repair；案例含 hatch-pet、ai-cli、bento-slides、mono-color
+description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、manifest、QA 与 repair；案例含 hatch-pet、ai-cli、bento-slides、mono-color、手绘风格库与逐笔讲解视频
 type: synthesis
 category: ai
 created: 2026-05-06
-updated: 2026-09-01
-timestamp: 2026-09-01
+updated: 2026-09-22
+timestamp: 2026-09-22
 tags:
   - agent
   - skills
@@ -25,6 +25,10 @@ source_refs:
   - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
   - raw/sources/2026-09-01-mono-color-skill-review.md
   - https://github.com/yanliudesign/mono-color-skill
+  - raw/sources/2026-09-22-handdraw-style-prompter-review.md
+  - https://github.com/yang0/handraw-style
+  - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
+  - https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
 resource:
   - raw/sources/2026-05-06-codex-pet-skill-article.md
   - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
@@ -36,6 +40,10 @@ resource:
   - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
   - raw/sources/2026-09-01-mono-color-skill-review.md
   - https://github.com/yanliudesign/mono-color-skill
+  - raw/sources/2026-09-22-handdraw-style-prompter-review.md
+  - https://github.com/yang0/handraw-style
+  - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
+  - https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
 ---
 # Skill 工程化的产物协议范式
 
@@ -128,6 +136,29 @@ Perplexity 这篇文章补上了另一层：不是只看一个高级 Skill 的�
 
 它说明：当 Skill 的难点是品味而非协议时，工程化的思路还是一样——把主观判断翻译成取值范围、变量规则和逐条验收清单。审美领域同样适用"模型出候选，规则说了算"。色板 hex、布局族这些是 skill 自己的内容，不镜像进 wiki。收录索引见 [[Awesome Agent Skills]]；评审事实见 `raw/sources/2026-09-01-mono-color-skill-review.md`。
 
+## 手绘类案例：风格编号库与逐笔讲解视频
+
+同一天入库的两个手绘类 Skill 覆盖了审美任务的两个阶段，它们的共同点是把「好看」拆成可判定的小问题。
+
+`yang0/handraw-style` 的 `handdraw-style-prompter`（274 个风格编号 / 118 条排版图型 / MIT）负责「画成什么样」：
+
+- **风格编号化**：权威内容是一张 Markdown 表（编号 · 原参考名称 / 生图名称 / 核心视觉特征），JSON 索引由脚本生成且必须重跑刷新；
+- **垫图的可判定性**：`model_capabilities.json` 的默认值是「能力未知 + 必须垫图」，只有被标定过的模型才允许仅靠名字或特征激活；未知模型不许猜，也不许编造特征；
+- **参考图隔离声明**：只抽线条、笔触、媒介、材质、色彩倾向，不得沿用主体、构图、文字、故事；图文模式下路径、上传说明与隔离块必须在可复制提示词之外；
+- **特征过滤器**：按分句丢掉含「避免 / 不要 / 不准 / 禁止」的子句，避免把负向句当正向风格写进提示词；
+- **QA 是数据与资产的不变量**：378 行脚本断言编号连续、归因来源、能力枚举、四种激活来源的样例、资产分桶、拼图覆盖与状态一致、gallery/README/图鉴交叉引用，并直接断言 CLI 输出里不许出现固定风格锚点。
+
+`hi-nikola/hand-drawn-explainer-video-nikola`（Apache-2.0 + vendor MIT）负责「怎么把一幅画边讲边画出来」：
+
+- **产物分层协议**：MP4 + SRT + 原稿 + 独立配音 + `timeline.json` + 可编辑工程 ZIP + 验证报告；项目文件布局、timeline schema 和 finalize manifest schema 都写死；
+- **反冒充约束**：两条路线不可混称，SVG 动效不得称为逐笔绘制，缺片的样片不得称为完整片，不假装完成无法验证的成片；
+- **参数职责分离**：`hand-follow` 只平滑手部显示位置（不改变笔迹速度），`hand-height` 管遮挡，笔迹速度由音频窗口与源图复杂度决定——文档明确禁止靠「调小 hand-follow」或降帧去解决速度问题；
+- **时间轴不变量**：区域被完全扣空时要占满原时间窗，不放静止假手、不让后续区域提前；
+- **失败恢复的类型分流**：预检失败只阻止依赖该能力的阶段，已通过的音频、插画、字幕不重做；上游快照固定 commit 且故意不含上游 SKILL.md，避免包内出现第二个可触发 Skill；
+- **分层验收与边界声明**：13 条含反例的 evals、四层验收、逐笔 10 条检查与「必须看边界帧」的规定；媒体检查工具同时声明自己不做语音识别、不判语义同步、不评美感，退出码 0 只代表本次自动检查无错误。
+
+两个案例合起来补上了判据里之前较弱的两块：**「审美判断 → 取值目录 + 隔离声明 + 兜底策略」的可执行链路**，以及**「自动检查证明结构、人看真实帧证明语义」的分工声明**。完整分析见 [[手绘风格与讲解视频的工程约束]]，事实与风险见两份 raw 评审。
+
 ## 和 workflow 的关系
 
 传统 workflow 擅长确定性链路，适合触发器、节点、固定分支和清晰输入输出。但当任务需要上下文理解、动态决策、候选筛选、多代理协作和局部修复时，画死节点图会越来越重。
@@ -162,10 +193,12 @@ intent
 - `/goal` 这类目标驱动机制如果和 manifest / QA 结合，可能成为长任务持续推进的控制环，但仍需要明确完成证据和停止条件。
 - Skill description 的路由质量需要持续 eval；一旦 Skill 库变大，新增或修改 description 可能通过隐式匹配影响其他 Skill。
 - 自生成 Skill 不可靠。LLM 可以辅助整理材料，但真正的 Skill 需要人注入领域判断、gotchas、负例和维护经验。
+- 编号风格库把真实作者的名字写进提示词，署名与许可边界（软件 MIT、图像版权、像不像某人）没有统一答案；模型能力清单需要持续实测维护，但没有机制规定谁来重测、多久测一次。
 
 ## 相关页面
 
 - [[Awesome Agent Skills]] — 过线条目的薄索引（Awesome）
+- [[手绘风格与讲解视频的工程约束]] — 手绘类两个案例的域内综合
 - [[Bento]]
 - [[ai-cli]]
 - [[Code Agent]]
@@ -182,4 +215,8 @@ intent
 - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
 - `raw/sources/2026-09-01-mono-color-skill-review.md`
 - https://github.com/yanliudesign/mono-color-skill
+- `raw/sources/2026-09-22-handdraw-style-prompter-review.md`
+- https://github.com/yang0/handraw-style
+- `raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md`
+- https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
 - https://bento.page/agents.md

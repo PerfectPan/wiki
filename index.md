@@ -65,6 +65,7 @@
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
   - [[wiki/topics/ai/Chat Completions|Chat Completions]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
+  - [[wiki/topics/ai/omp（oh-my-pi）|omp（oh-my-pi）]]
   - [[wiki/topics/ai/Obelisk|Obelisk]]
   - [[wiki/topics/ai/Code Agent|Code Agent]]
   - [[wiki/topics/ai/Coding Agent 编辑工具|Coding Agent 编辑工具]]
@@ -279,6 +280,7 @@
 - `ai`
   - [[wiki/comparisons/ai/LLM API 协议选型|LLM API 协议选型]]
   - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
+  - [[wiki/comparisons/ai/Agent 护栏的拦截位置：生成流中途 vs 工具调用门禁|Agent 护栏的拦截位置：生成流中途 vs 工具调用门禁]]
 - `career`
   - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]
 - `frontend`

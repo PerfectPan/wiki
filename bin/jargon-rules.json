@@ -1,0 +1,17 @@
+[
+  { "term": "护栏", "suggestion": "写明具体机制，例如输出检查、权限限制或重试规则", "exceptions": [] },
+  { "term": "门禁", "suggestion": "写明检查条件，例如发布检查、合并条件或权限检查", "exceptions": [] },
+  { "term": "契约", "suggestion": "按语境使用接口定义、调用约定或约束", "exceptions": ["契约测试"] },
+  { "term": "收口", "suggestion": "写明是汇总、缩小范围还是统一处理", "exceptions": [] },
+  { "term": "透传", "suggestion": "原样传递或直接转发", "exceptions": [] },
+  { "term": "口径", "suggestion": "写明指标定义、统计标准或具体说法", "exceptions": [] },
+  { "term": "拉齐", "suggestion": "同步信息或使具体内容一致", "exceptions": [] },
+  { "term": "踩坑", "suggestion": "遇到问题或触发异常", "exceptions": [] },
+  { "term": "坐实", "suggestion": "确认或证实，并给出依据", "exceptions": [] },
+  { "term": "墙钟", "suggestion": "实际耗时、经过时间或 wall-clock time", "exceptions": [] },
+  { "term": "颗粒度", "suggestion": "粒度或精细程度", "exceptions": [] },
+  { "term": "赋能", "suggestion": "写清为谁提供什么能力", "exceptions": [] },
+  { "term": "抓手", "suggestion": "写明具体手段或切入点", "exceptions": [] },
+  { "term": "闸门", "suggestion": "写明过滤条件、权限检查或执行限制", "exceptions": [] },
+  { "term": "反应性框架", "suggestion": "Reactive Framework", "exceptions": [] }
+]

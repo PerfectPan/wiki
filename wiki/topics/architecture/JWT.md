@@ -4,8 +4,8 @@ description: JWT 的结构、签名与加密的区别、常见算法、标准字
 type: topic
 category: architecture
 created: 2026-09-23
-updated: 2026-09-23
-timestamp: 2026-09-23
+updated: 2026-09-26
+timestamp: 2026-09-26
 tags:
   - jwt
   - auth
@@ -27,17 +27,17 @@ resource:
 
 ## 摘要
 
-JWT（JSON Web Token，RFC 7519）是一种 token 格式：把一组 JSON 字段（claim）编码后连同签名一起发给客户端，服务端验签后直接使用里面的字段，不需要查存储。它只规定 token 长什么样，不规定怎么拿到 token；获取流程由 [[OAuth]] 之类的协议负责。
+JWT（JSON Web Token，RFC 7519）是一种表示 JSON claims 的 token 格式，可使用 JWS 保护完整性，或使用 JWE 加密。服务端必须验证密码学保护与所需 claims；是否查询会话、权限或撤销状态，由应用设计决定。JWT 不规定获取流程，可以用于 [[OAuth]] 等协议。
 
-日常说的 JWT 几乎都是 JWS（签名版，RFC 7515）：**只签名，不加密**。内容也需要保密时用 JWE（RFC 7516），业务里少见。
+本页主要讨论 JWS 形式的 JWT（RFC 7515）：**签名或 MAC 不会加密内容**。需要内容保密时可使用 JWE（RFC 7516）；签名与加密也可以嵌套。
 
 ## 结构
 
 JWS 的紧凑格式是三段 Base64URL 字符串，用 `.` 连接：
 
 ```text
-eyJhbGciOiJIUzI1NiIsImtpZCI6InYxIn0 . eyJzdWIiOiIxMjMiLCJleHAiOjE3NTc3MDM2MDB9 . SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-            header                                  payload                                     signature
+base64url(header).base64url(payload).base64url(signature)
+# 结构示意，不是可验证的完整 token
 ```
 
 | 段 | 内容 | 说明 |
@@ -59,14 +59,14 @@ flowchart LR
 
 ## 标准字段（Registered Claims）
 
-RFC 7519 §4.1 定义，都是可选的，但建议使用：
+RFC 7519 §4.1 定义了这些字段。基础格式不强制全部存在，具体协议与应用应规定必填字段及验证要求：
 
 | 字段 | 含义 |
 | --- | --- |
 | `iss` | 签发者 |
 | `sub` | 主体，一般是用户 ID |
 | `aud` | 接收方，校验方应确认自己在其中 |
-| `exp` | 过期时间（Unix 秒）。实际使用中应视为必填 |
+| `exp` | 过期时间（Unix 秒）。用于有期限的访问凭证时应要求提供 |
 | `nbf` | 在此时间之前无效 |
 | `iat` | 签发时间 |
 | `jti` | token 唯一编号，用于黑名单或"只能用一次" |
@@ -82,7 +82,7 @@ RFC 7519 §4.1 定义，都是可选的，但建议使用：
 | ES256 | 非对称（ECDSA） | 私钥 | 公钥 | 同上，密钥和签名更短 |
 | EdDSA | 非对称（Ed25519） | 私钥 | 公钥 | 同上 |
 
-对称算法的问题是：能验签的一方也能伪造，所以密钥只能放在一个地方。需要让很多服务自己验签时，用非对称算法，把公钥（常见做法是 JWKS 端点）发给它们。
+HMAC 的签发方与验证方共享密钥，因此每个持有密钥的验证方也具备签发能力。共享范围必须受信任；需要把签发权限与验证权限分离时，可使用非对称算法，通过 JWKS 等方式发布公钥。
 
 ## 签名 ≠ 加密
 
@@ -90,13 +90,13 @@ RFC 7519 §4.1 定义，都是可选的，但建议使用：
 - 传输保密靠 HTTPS。
 - 内容本身需要对持有者保密时，才用 JWE。JWE 的紧凑格式是五段：header、加密后的内容密钥、IV、密文、认证标签。
 
-## JWT 自身的限制
+## 仅本地验证时的限制
 
-这些限制来自"服务端不存记录"这个设计，不是某个库的缺陷：
+以下讨论假设资源服务器只验证签名与 claims，不查询撤销或会话状态：
 
-1. **签出去就作废不了**：在 `exp` 之前一直有效。要提前作废只能另外存黑名单，这时就不再是纯无状态。
+1. **无法仅凭 token 判断提前撤销**：要按用户或 token 撤销，可增加撤销列表、会话版本检查或内省接口。停用签名密钥也可使一批 token 失效，但影响范围更大。
 2. **不能原地续期**：`exp` 在签名覆盖范围内，改了就验不过。续期只能签一个新 token。
-3. **泄露后拦不住**：纯 JWT 被偷后唯一的止损是等过期，所以 `exp` 不能设长。
+3. **Bearer token 泄露后存在可用时间窗口**：短有效期可以限制窗口，但应结合撤销需求、凭证存储与实际风险确定期限。JWT 格式本身不提供防重放能力。
 
 这几条如何在工程上取舍，见 [[Session vs JWT vs 双 Token]]。
 
@@ -112,7 +112,7 @@ RFC 8725（JWT Best Current Practices）列出了主要问题：
 | 弱密钥 | HS256 用短字符串做密钥，被离线暴力破解 | 用足够长的随机密钥（至少与哈希输出等长） |
 | 跨服务复用 | 给 A 服务的 token 拿去调 B 服务 | 校验 `iss`、`aud`；不同用途的 token 用不同密钥或 `typ` 区分 |
 | 重放 | 截获合法 token 重复使用 | 短 `exp`；一次性 token 用 `jti` 记录已用 |
-| 窃取 | XSS 读 localStorage、抓包 | HTTPS；浏览器里优先放 HttpOnly Cookie；短 `exp` |
+| 窃取 | XSS 读取可访问的存储、传输泄露 | HTTPS；按客户端设计保护凭证存储；Cookie 方案还需考虑 CSRF；限制有效期 |
 
 ## 校验清单
 

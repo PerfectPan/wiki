@@ -4,8 +4,8 @@ description: OAuth 2.0 的角色、授权方式（授权码 + PKCE、客户端�
 type: topic
 category: architecture
 created: 2026-04-12
-updated: 2026-09-23
-timestamp: 2026-09-23
+updated: 2026-09-26
+timestamp: 2026-09-26
 tags:
   - oauth
   - auth
@@ -39,7 +39,7 @@ resource:
 
 ## 摘要
 
-OAuth 2.0（RFC 6749）是一套**授权协议**：在用户同意的前提下，让第三方应用拿到一个有范围、有期限的 access_token，代替用户密码去访问用户在某个系统里的数据。
+OAuth 2.0（RFC 6749）是一套**授权协议**：客户端获得限定访问范围的 access_token 后访问资源。授权可由资源所有者参与，也可采用客户端凭证等不需要用户交互的方式。
 
 它规定"怎么拿到 token"，不规定"token 长什么样"。token 可以是随机字符串，也可以是 [[JWT]]。OAuth 本身也不负责"用户是谁"，这部分由建在它之上的 OpenID Connect（OIDC）补上。
 
@@ -48,7 +48,7 @@ OAuth 2.0（RFC 6749）是一套**授权协议**：在用户同意的前提下�
 | 角色 | 是谁 |
 | --- | --- |
 | Resource Owner | 用户，数据的所有者 |
-| Client | 第三方应用，想代表用户访问数据。事先在授权服务器注册，拿到 `client_id`（机密客户端还有 `client_secret`） |
+| Client | 第三方应用，想代表用户访问数据。事先在授权服务器注册，拿到 `client_id`（机密客户端还需配置客户端认证方式，不一定使用共享 secret） |
 | Authorization Server | 负责让用户登录、确认授权、发 token |
 | Resource Server | 存放数据的 API，收到请求时校验 access_token |
 
@@ -59,7 +59,7 @@ OAuth 2.0（RFC 6749）是一套**授权协议**：在用户同意的前提下�
 | 授权码（Authorization Code）+ PKCE | 有用户参与的 Web、App、SPA | 推荐的默认方式 |
 | 客户端凭证（Client Credentials） | 服务对服务，没有用户 | 常用 |
 | 设备码（Device Authorization，RFC 8628） | 电视、CLI 等不方便输入或接收回调的设备 | 常用 |
-| 刷新（Refresh Token） | access_token 过期后换新的 | 配合以上方式使用 |
+| 刷新（Refresh Token） | 换取新的 access_token | 取决于授权方式与服务器策略；客户端凭证流程通常不签发 refresh_token（RFC 6749 §4.4.3） |
 | 隐式（Implicit） | 早期浏览器应用 | RFC 9700 建议不再使用 |
 | 密码（Resource Owner Password） | 应用直接收用户密码 | RFC 9700 规定不得使用 |
 
@@ -75,7 +75,7 @@ sequenceDiagram
   U->>A: 用户登录并同意
   A->>U: 302 回 redirect_uri?code=...&state=...
   U->>C: 带着 code 回到应用
-  C->>A: POST /token（code, client_secret 或 code_verifier）
+  C->>A: POST /token（code, code_verifier，另做客户端认证）
   A->>C: access_token（+ refresh_token）
   C->>R: Authorization: Bearer access_token
   R->>C: 数据
@@ -84,7 +84,7 @@ sequenceDiagram
 要点：
 
 - `code` 很短（分钟级），只能用一次。
-- 换 token 那一步在后端做，`client_secret` 不经过浏览器。
+- 图中是有后端的机密客户端：兑换时同时提交 PKCE 的 `code_verifier` 并完成客户端认证，二者不互相替代。公开客户端也可直接兑换，但不应依赖保存在浏览器或 App 中的共享 secret。
 - `state` 用来确认回调是自己发起的，防止伪造的回调（CSRF）。
 - PKCE（RFC 7636）：客户端先生成随机的 `code_verifier`，授权请求里带它的哈希 `code_challenge`，换 token 时带原值。即使 `code` 被截获，没有 `code_verifier` 也换不到 token。原本为没有 secret 的公开客户端（App、SPA）设计。RFC 9700 规定公开客户端必须用，机密客户端推荐用。
 
@@ -96,17 +96,17 @@ sequenceDiagram
 
 | 实现 | 资源服务器怎么校验 | 能立刻作废 | 代价 |
 | --- | --- | --- | --- |
-| 随机字符串（引用型 / opaque） | 调授权服务器的内省接口 | 能，删记录即可 | 每个请求多一次跨服务调用 |
-| 签名 JWT（RFC 9068 定义了 access_token 的 JWT 格式） | 本地用公钥验签 | 不能，靠短 `exp` | 泄露后只能等过期 |
-| 加密 JWT（JWE） | 本地解密再验签 | 不能 | 实现和计算更重，用得少 |
+| 随机字符串（引用型 / opaque） | 查询共享记录或调用内省接口 | 取决于记录更新和缓存传播 | 需要查询或缓存状态 |
+| 签名 JWT（RFC 9068 定义了 access_token 的 JWT 格式） | 验签并校验 claims | 仅本地验证不能及时获知撤销；可增加状态检查 | 撤销及时性与查询成本需要取舍 |
+| 加密 JWT（JWE） | 解密并验证完整性与 claims；若内层还有 JWS，再验签 | 仍取决于撤销状态检查 | 增加密钥管理与加密处理 |
 
 ### 内省接口（RFC 7662）
 
-资源服务器看不懂随机字符串，只能拿 token 去 `POST /introspect` 问授权服务器，得到 `active`、`sub`、`scope`、`exp` 等信息。它和传统 Session 是同一类做法，区别只是查询放到了另一个服务。
+内省接口可返回 token 的 `active` 状态及适用的 claims。它既可用于 opaque token，也可用于 JWT；不是随机字符串的唯一校验方式。端点 URL 由部署配置，不必叫 `/introspect`。缓存内省结果会影响撤销生效时间（RFC 7662 §2）。
 
 ### 撤销接口（RFC 7009）
 
-客户端可以调 `POST /revoke` 主动作废 refresh_token 或 access_token（用户退出、解除授权时）。对 JWT 格式的 access_token，撤销通常只对 refresh_token 真正生效。
+RFC 7009 要求撤销端点支持 refresh_token，并建议支持 access_token；端点 URL 不必叫 `/revoke`。JWT access_token 的撤销也能生效，但资源服务器需要通过状态查询、通知等方式得知撤销；只做本地验证的服务器可能继续接受它直到过期。撤销 refresh_token 是否连带撤销 access_token，还取决于服务器的支持和策略。
 
 ## 使用 access_token
 
@@ -138,8 +138,8 @@ flowchart TB
 
 对公开客户端，授权服务器必须（MUST）用下面至少一种方式发现 refresh_token 被重放：
 
-- **轮换**：每次刷新发新的 refresh_token，旧的作废；检测到旧的被再次使用时，作废整条授权。
-- **绑定发送方**：把 refresh_token 和客户端持有的密钥绑定（如 DPoP，RFC 9449），偷走 token 本身没用。
+- **轮换**：每次刷新发新的 refresh_token，旧的作废；检测到旧的被再次使用时，撤销该轮换关系中当前有效的 refresh_token，要求重新授权。
+- **绑定发送方**：把 refresh_token 和客户端持有的密钥绑定（如 DPoP，RFC 9449），仅取得 token 而没有对应密钥，无法通过发送方证明；密钥也泄露时仍有风险。
 
 ## 原始笔记
 

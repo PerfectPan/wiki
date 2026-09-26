@@ -15,6 +15,8 @@ description: 巡检 Wiki 的页面结构、frontmatter、链接与来源指针�
 - `{{INDEX}}`
 
 工作要求：
+- 运行 `bin/wiki check` 和 `bin/wiki check-jargon`；局部修改用 `bin/wiki check-jargon --base <ref>` 检查新增或改写行，检查范围与例外写法见 `bin/README.md`
+- 根据上下文处理用词报告；原始引用与正式术语不机械替换。区分全库已有问题与本次引入的问题
 - 巡检 `wiki/` 下页面是否重复、冲突、孤立或过时
 - 检查页面是否缺少来源指针
 - 检查 `index.md` 导航是否遗漏重要页面

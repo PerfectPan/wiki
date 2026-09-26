@@ -12,6 +12,12 @@
 6. 新页面应带一个英文 `category` 字段，并按分类子目录存放。
 7. `tags` 用来表达细粒度主题，不用来替代一级分类。
 
+## 用词检查
+
+使用具体的动作和对象解释行为，保留更清晰的英文技术术语。描述字段与请求响应时使用“接口定义”，描述双方交互要求时使用“调用约定”；“契约测试”等正式术语保留。
+
+`bin/wiki check-jargon` 按 `bin/jargon-rules.json` 报告需修改的词项、位置和建议，不自动替换。原始引用和技术标识按 `bin/README.md` 的规则保留；需要上下文判断的表达仍由人工审阅。
+
 ## 建议使用的 frontmatter
 
 新页面建议带上这组最小 frontmatter：
@@ -298,6 +304,19 @@ resource:             # 镜像 source_refs
 - 收录页新增对象若本身值得开页（topic / product），导航同步更新 `index.md`；纯索引行变更不需要。
 
 样板页：`wiki/topics/ai/Awesome Agent Skills.md`（本约定的首个实例，2026-08 建立并沿用至今）。
+
+## 提示词（prompts/）
+
+提示词不进 `wiki/` 页面，而是单独的 `prompts/` 目录：一条一个 `<id>.md`，正文**原样复制**原文（不翻译、不精简），场景、分级、来源和使用限制写在 frontmatter。
+
+```text
+bin/wiki prompts list [--tag <tag>] [--level <档>] [--json]   列出
+bin/wiki prompts search <关键词>                              搜索（含正文）
+bin/wiki prompts show <id>                                    打印原文
+bin/wiki prompts check                                        校验所有提示词文件
+```
+
+正文是 frontmatter 之后的原文副本，保留原有格式，不额外包代码块。元数据的语言、字段、新增流程和存档使用限制见 `prompts/README.md`。
 
 ## 原始材料规则
 

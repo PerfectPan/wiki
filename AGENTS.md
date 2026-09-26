@@ -12,6 +12,7 @@
 
 - `raw/sources/`：不可变的原始输入、迁移残留、素材文档、原始笔记
 - `raw/assets/`：页面引用的图片和附件
+- `prompts/`：提示词库，一条提示词一个文件，正文原样复制（格式与命令见 `prompts/README.md`）
 - `wiki/topics/`：稳定主题页，同时容纳概念页和具体对象页
 - `wiki/syntheses/`：多来源综合页，用来沉淀整合后的理解
 - `wiki/comparisons/`：对比、选型、取舍页
@@ -26,6 +27,8 @@
 4. 当 `wiki/` 下新增页面或对页面做了实质更新时，如果导航发生变化，也要同步更新 `index.md`。
 5. 对有意义的知识变更，在 PR body 中写清楚摘要、受影响页面和来源指针；Git 提交与 PR 历史就是变更记录。
 6. 优先按主题或决策问题拆成小 PR，不要做超大迁移 PR。
+7. PR 标题和描述使用英文。标题采用 Conventional Commits；描述用英文说明摘要、受影响页面、来源和验证。中文文件路径或原始名称放在行内代码中，来源标题可保留在 Markdown 链接中，原文引用用引用块；这些例外不用于代替英文说明。Wiki 正文仍按写作规则使用中文。
+8. PR 创建或修改后检查 `PR metadata` 结果；机器检查只识别格式和非拉丁文字，英文是否准确、自然仍需审阅。英文模板见 `.github/pull_request_template.md`。
 
 ## Frontmatter 校验
 
@@ -56,7 +59,11 @@ bin/wiki check <path>       # 校验单个文件或目录
 `bin/wiki` 是工具 CLI，只负责执行操作，不输出引导：
 
 - `bin/wiki ingest <source>`：抓取来源并存入 `raw/sources/`
-- `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+- `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范（`prompts/` 下的文件按提示词规则校验）
+- `bin/wiki prompts list|search|show|check`：提示词库的列表、搜索、打印原文与校验
+- `bin/wiki check-jargon [path | --staged | --base <ref>]`：检查 Wiki 用词；写作规则见 `SCHEMA.md`，检查范围与例外写法见 `bin/README.md`。
+
+Agent hook 返回用词问题时，修正本任务涉及的文字并复查；不要改写原始引用或无关的既有修改。Claude Code 与 Codex 的仓库级 hook 配置、启用条件见 `bin/README.md`。
 
 工作流引导（skill）：
 
@@ -142,6 +149,7 @@ bin/wiki check <path>       # 校验单个文件或目录
 4. 任何非平凡结论都应附带来源指针。
 5. 如果一个页面无法明确归入其他类型，默认放到 `wiki/topics/`。
 6. 收录类 / awesome 索引页（把一批同类对象收进一页做 curated list）统一遵守 `SCHEMA.md` 的「收录页约定」：`tags` 带 `catalog`、判据与索引分离、分级三档、条目只写一句话价值 + 指针。
+7. 提示词原文存 `prompts/<id>.md`，格式、语言与新增流程见 `prompts/README.md`。维护提示词时先读该文件。
 
 ## 页面职责
 

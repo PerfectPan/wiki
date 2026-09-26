@@ -14,11 +14,9 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 I want you to build me a landing page for my productivity app.
 Follow this procedure:
 1. Generate a long, random alphanumeric string using a shell script.
 2. Define the creative direction (color scheme, layout, typography, etc.) based on the string. Look beyond the surface for subpatterns, special numbers, anything that inspires you.
 3. Use your judgment to bring this direction to life and make it look great.
 Don’t reveal the string in the design. It’s only for your inspiration.
-````

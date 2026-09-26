@@ -14,7 +14,6 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 I want to come up with a bold, unique design language for my product. Can you list as many ideas as you can, with short, high-level descriptions? Go broad, not deep.
 
 Industrial Control Panel:
@@ -25,4 +24,3 @@ Industrial Control Panel:
 Can you sharpen this one based on my tastes?
 
 Can you write a concise prompt that an AI agent could use to build an initial POC page with this?
-````

@@ -14,6 +14,4 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 Build me a landing page for my productivity app. Give me something totally unique. Make every design decision completely at random.
-````

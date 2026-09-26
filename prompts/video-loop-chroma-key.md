@@ -15,9 +15,7 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 Can you replace the image on this page with a looping video clip that does something more interesting? Have the crystal splinter apart and slowly spin around. It should have awesome glassy effects that refract the page background and cast shadows and light around it.
 To get convincing glass refraction effects, render the video of the glass over the page background colors first (so it bakes in the refraction effects), then remove the background with a video matting model.
 Use this fal.ai API key: sk-a1b2c3d4…
 Find appropriate recent models for video generation and background removal.
-````

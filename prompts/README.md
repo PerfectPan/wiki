@@ -7,7 +7,8 @@
 ## 文件规则
 
 - 文件名就是提示词的 `id`，例如 `seed-string.md` → `id: seed-string`。
-- 正文**只能有一个 fenced code block**，用四个反引号包住，语言标 `text`：
+- frontmatter 之后的所有内容就是**提示词原文**：不加代码块包装、不缩进、不翻译、不精简。所以 `bin/wiki prompts show <id>` 打印出来就是能直接粘的原文。
+- 场景、来源、坑、注意事项全部写在 frontmatter；正文里不要另加说明段落。
 
 ````markdown
 ---
@@ -25,13 +26,11 @@ notes:
 added: 2026-09-22
 ---
 
-````text
-这里是原样复制的提示词正文。
-````
+这里开始就是原样复制的提示词正文。
+直接顶格写，不要包代码块。
 ````
 
-- 用四个反引号是硬要求：原文里带三反引号代码块（例如让 agent 输出代码的提示词）时，三反引号会截断解析。
-- 正文之外不要再写别的段落；说明、坑、场景全部进 frontmatter，这样 `bin/wiki prompts show <id>` 打印出来的就是干净的原文。
+- 原文里带三反引号代码块（例如让 agent 输出代码的提示词）时，直接原样保留，不需要额外处理。
 
 ## frontmatter 字段
 
@@ -56,7 +55,7 @@ bin/wiki prompts show <id> [--meta]                  打印原文（--meta 连�
 bin/wiki prompts check                               校验所有提示词文件是否符合上面的规则
 ```
 
-`bin/wiki check` 也认这个目录：`bin/wiki check prompts/seed-string.md` 会用提示词的规则校验，而不是 wiki 页面规则。
+`bin/wiki check` 也认这个目录：`bin/wiki check prompts/seed-string.md` 会用提示词的规则校验，而不是 wiki 页面规则（只查必填字段、id 与文件名一致、level 取值、正文非空）。
 
 ## 新增一条提示词
 

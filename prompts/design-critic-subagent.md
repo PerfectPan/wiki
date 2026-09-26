@@ -17,7 +17,6 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 I want you to improve this design. To figure out what to focus on, use a Fable 5 subagent as a design critic.
 Follow this procedure at each iteration:
 - Capture a screenshot of the current design
@@ -30,4 +29,3 @@ Provide this guidance to the critic in its prompt:
 - It should provide tight, specific feedback, not vague prose
 - It should be bold and opinionated, not rely on what’s safe or easy
 Your work is only complete when the critic independently deems it 9/10 or higher. Do not put that criterion in the critic prompt; keep it objective in its scoring. Use the same critic prompt each time.
-````

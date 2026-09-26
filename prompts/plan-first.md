@@ -16,7 +16,6 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 ## 1. Explore the Codebase
 
 * List relevant directories to show project structure.
@@ -88,4 +87,3 @@ At the end of the plan, include:
 * Rationale for each change (why it's needed).
 * Dependencies or side effects to watch for.
 * Testing suggestions to validate correctness.
-````

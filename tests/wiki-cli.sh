@@ -92,7 +92,7 @@ assert_contains "$prompts_json" '"id": "seed-string"'
 prompts_show="$("$CLI" prompts show seed-string)"
 assert_contains "$prompts_show" "random alphanumeric string"
 if [[ "$prompts_show" == *'```'* ]]; then
-  fail "prompts show 应打印原文本身，不带 fence"
+  fail "prompts show 不应带代码块包装，应直接打印原文"
 fi
 
 prompts_search="$("$CLI" prompts search 随机)"
@@ -113,7 +113,7 @@ printf '# Awesome Prompts\n' >"$prompt_probe/project/wiki/topics/ai/Awesome Prom
 probe_cli="$prompt_probe/project/bin/wiki"
 
 write_prompt() { # <文件名> <id> <level> <正文>
-  printf -- '---\nid: %s\ntitle: t\nscene: s\nlevel: %s\ntags:\n  - t\nsource: x\nadded: 2026-09-22\n---\n\n````text\n%s\n````\n' \
+  printf -- '---\nid: %s\ntitle: t\nscene: s\nlevel: %s\ntags:\n  - t\nsource: x\nadded: 2026-09-22\n---\n\n%s\n' \
     "$2" "$3" "$4" >"$prompt_probe/project/prompts/$1"
 }
 
@@ -128,14 +128,8 @@ write_prompt bad-level.md bad-level 一般 hello
 "$probe_cli" prompts check >/dev/null 2>&1 && fail "level 非法时 prompts check 应失败"
 rm "$prompt_probe/project/prompts/bad-level.md"
 
-write_prompt two-blocks.md two-blocks 推荐 hello
-printf -- '````text\nsecond\n````\n' >>"$prompt_probe/project/prompts/two-blocks.md"
-"$probe_cli" prompts check >/dev/null 2>&1 && fail "正文有多个代码块时 prompts check 应失败"
-rm "$prompt_probe/project/prompts/two-blocks.md"
-
-write_prompt extra-text.md extra-text 推荐 hello
-printf '说明文字\n' >>"$prompt_probe/project/prompts/extra-text.md"
-"$probe_cli" prompts check >/dev/null 2>&1 && fail "代码块之外还有内容时 prompts check 应失败"
+write_prompt empty.md empty 推荐 ""
+"$probe_cli" prompts check >/dev/null 2>&1 && fail "正文为空时 prompts check 应失败"
 rm -rf "$prompt_probe"
 
 echo "PASS"

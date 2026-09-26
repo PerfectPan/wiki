@@ -14,8 +14,6 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 - Simplify the layout into an image-centric grid
 - Get rid of gradients, glows, and unnecessary containers
 - Aim for a truly minimalist aesthetic that feels Apple-native
-````

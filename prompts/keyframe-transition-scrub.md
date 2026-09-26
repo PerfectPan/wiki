@@ -15,7 +15,6 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 Build a demo page for a suitcase that uses a video model to create interactive transitions between a couple of screens. Each screen should show the suitcase in a different state, with vertical motion that feels appropriate for scrolling:
 - Initially, have the suitcase floating high up in the air
 - Then have it land on the floor and pop open
@@ -23,4 +22,3 @@ Build a demo page for a suitcase that uses a video model to create interactive t
 Generate the initial frame using your image generation skill. Then, generate a video clip that starts from that frame and animates to the next state. Use the final frame of that video to seed the next transition so that it continues seamlessly. Scrub through the transitions one by one as the user scrolls.
 Use this fal.ai API key: sk-a1b2c3d4…
 Use a video model with strong physics and consistency, like Seedance 2.5.
-````

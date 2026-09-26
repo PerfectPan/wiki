@@ -310,7 +310,7 @@ bin/wiki prompts show <id>                                    打印原文
 bin/wiki prompts check                                        校验所有提示词文件
 ```
 
-正文只能有一个 fenced code block（四个反引号，原样复制），说明与场景全部写在 frontmatter。字段表、新增流程、与 wiki 页面的分工都写在 `prompts/README.md`。
+正文就是 frontmatter 之后的所有内容（原样复制，不包代码块），场景与说明全写 frontmatter。字段表、新增流程、与 wiki 页面的分工都写在 `prompts/README.md`。
 
 ## 原始材料规则
 

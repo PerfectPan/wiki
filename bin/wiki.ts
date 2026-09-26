@@ -354,7 +354,6 @@ interface PromptRecord {
   id: string;
   fm: Frontmatter;
   body: string;
-  extra: string[];
   blocks: number;
 }
 
@@ -373,8 +372,8 @@ function promptPaths(): string[] {
 }
 
 /**
- * 拆分提示词文件：返回第一个 fenced code block 的内容，以及 block 之外的非空行。
- * 外层 fence 允许三个以上反引号，正文里出现三反引号代码块时用四个反引号包住。
+ * 拆分提示词文件：frontmatter 之后的所有内容就是提示词原文。
+ * 原文不加代码块包装，元数据全部写在 frontmatter 里。
  */
 function splitPromptBody(content: string): { body: string; extra: string[]; blocks: number } {
   const lines = content.split("\n");
@@ -384,42 +383,8 @@ function splitPromptBody(content: string): { body: string; extra: string[]; bloc
     while (i < lines.length && lines[i].trim() !== "---") i++;
     i++;
   }
-
-  const extra: string[] = [];
-  let fence: string | null = null;
-  let body = "";
-  let blocks = 0;
-  let buf: string[] = [];
-
-  for (; i < lines.length; i++) {
-    const line = lines[i];
-    const match = line.match(/^(`{3,})\s*\S*\s*$/);
-    if (fence === null) {
-      if (match) {
-        fence = match[1];
-        blocks++;
-        buf = [];
-        continue;
-      }
-      if (line.trim() !== "") {
-        extra.push(line.trim());
-      }
-      continue;
-    }
-    if (match && match[1].length >= fence.length) {
-      if (blocks === 1) {
-        body = buf.join("\n");
-      }
-      fence = null;
-      continue;
-    }
-    buf.push(line);
-  }
-
-  if (fence !== null) {
-    extra.push("代码块没有闭合");
-  }
-  return { body, extra, blocks };
+  const body = lines.slice(i).join("\n").replace(/^\n+/, "").replace(/\s+$/, "");
+  return { body, extra: [], blocks: body.trim() === "" ? 0 : 1 };
 }
 
 function readPrompt(path: string): PromptRecord {
@@ -427,8 +392,8 @@ function readPrompt(path: string): PromptRecord {
   const fm = parseFrontmatter(content) ?? {};
   const fallbackId = path.split("/").pop()!.replace(/\.md$/, "");
   const id = typeof fm["id"] === "string" && fm["id"] !== "" ? (fm["id"] as string) : fallbackId;
-  const { body, extra, blocks } = splitPromptBody(content);
-  return { path, id, fm, body, extra, blocks };
+  const { body, blocks } = splitPromptBody(content);
+  return { path, id, fm, body, blocks };
 }
 
 function checkPromptFile(filePath: string): CheckIssue[] {
@@ -484,19 +449,9 @@ function checkPromptFile(filePath: string): CheckIssue[] {
     issues.push({ level: "error", message: `added 日期格式无效: "${added}"，必须是 YYYY-MM-DD` });
   }
 
-  const { body, extra, blocks } = splitPromptBody(content);
-  if (blocks === 0) {
-    issues.push({ level: "error", message: "正文缺少提示词代码块（用 ````text 包住原文）" });
-  } else if (blocks > 1) {
-    issues.push({ level: "error", message: `正文有 ${blocks} 个代码块，只允许一个` });
-  } else if (body.trim() === "") {
-    issues.push({ level: "error", message: "提示词代码块是空的" });
-  }
-  if (extra.length > 0) {
-    issues.push({
-      level: "error",
-      message: `正文除代码块外还有内容（第 1 处: "${extra[0].slice(0, 40)}"），说明请写进 frontmatter`,
-    });
+  const { body } = splitPromptBody(content);
+  if (body.trim() === "") {
+    issues.push({ level: "error", message: "frontmatter 之后没有正文（提示词原文不能为空）" });
   }
 
   return issues;
@@ -627,7 +582,7 @@ function runPrompts(rest: string[]): void {
       }
       console.log("");
     }
-    process.stdout.write(target.body.trim() + "\n");
+    process.stdout.write(target.body + "\n");
     return;
   }
 

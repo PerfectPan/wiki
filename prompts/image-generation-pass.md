@@ -16,8 +16,6 @@ notes:
 added: 2026-09-22
 ---
 
-````text
 The design is pretty plain. Add more personality using image generation. Consider shaders or 3D effects in combination with images to create more interesting visuals.
 For image generation, use this OpenAI API key (only use it locally, do not store it in the code or product): sk-a1b2c3d4…
 Verify that your work looks right frame-by-frame in the browser.
-````

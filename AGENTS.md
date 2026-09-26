@@ -57,6 +57,9 @@ bin/wiki check <path>       # 校验单个文件或目录
 
 - `bin/wiki ingest <source>`：抓取来源并存入 `raw/sources/`
 - `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+- `bin/wiki check-jargon [path | --staged | --base <ref>]`：检查 Wiki 用词；写作规则见 `SCHEMA.md`，检查范围与例外写法见 `bin/README.md`。
+
+Agent hook 返回用词问题时，修正本任务涉及的文字并复查；不要改写原始引用或无关的既有修改。Claude Code 与 Codex 的仓库级 hook 配置、启用条件见 `bin/README.md`。
 
 工作流引导（skill）：
 

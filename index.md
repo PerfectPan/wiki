@@ -60,6 +60,7 @@
   - [[wiki/topics/ai/Agent|Agent]]
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Awesome Agent Skills|Awesome Agent Skills]]
+  - [[wiki/topics/ai/Awesome Prompts|Awesome Prompts]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/Agent Harness|Agent Harness]]
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]

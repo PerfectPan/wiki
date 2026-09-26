@@ -5,6 +5,12 @@
 - [[deep-research-report]]
 - [[SCHEMA]]
 
+## 提示词
+
+- 原文在 `prompts/`（一条一个文件，正文原样复制，格式见 `prompts/README.md`）
+- [[wiki/topics/ai/Awesome Prompts|Awesome Prompts]] — 收录索引；判据在 [[wiki/topics/ai/Prompt|Prompt]]
+- 召回：`bin/wiki prompts list [--tag <tag>] [--level <档>]`、`bin/wiki prompts search <关键词>`、`bin/wiki prompts show <id>`
+
 ## 主题页
 
 - `frontend`

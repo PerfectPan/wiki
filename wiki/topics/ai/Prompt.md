@@ -14,11 +14,13 @@ source_refs:
   - raw/sources/Prompt.md
   - https://github.com/anthropics/prompt-eng-interactive-tutorial
   - wiki/topics/ai/Awesome Prompts.md
+  - prompts/README.md
   - raw/sources/2026-09-22-lenny-world-class-designer.md
 resource:
   - raw/sources/Prompt.md
   - https://github.com/anthropics/prompt-eng-interactive-tutorial
   - wiki/topics/ai/Awesome Prompts.md
+  - prompts/README.md
   - raw/sources/2026-09-22-lenny-world-class-designer.md
 ---
 # Prompt
@@ -27,7 +29,24 @@ resource:
 
 Prompt 是用户交给模型的输入指令。在本 wiki 里，这页除了作为 Prompt 主题页，还兼作**提示词收录的判据页**：值得长期留存的提示词要满足下面几条，否之就只当素材放 `raw/sources/`。
 
-已过线的条目在 [[Awesome Prompts]]，那里只写「一句话价值 + 分级 + 指针」，不重复本页判据。
+过线的提示词存在 `prompts/`（一条一个文件，正文原样复制），索引在 [[Awesome Prompts]]，那里只写「一句话价值 + 分级 + 指针」。
+
+## 提示词放在哪
+
+| 位置 | 作用 |
+| --- | --- |
+| `prompts/<id>.md` | 提示词原文（逐字副本）+ 元数据（`scene` / `level` / `tags` / `source`） |
+| `raw/sources/` | 来源素材（文章、笔记），即原文的出处 |
+| [[Awesome Prompts]] | 人读的索引：一句话价值 + 分级 + 指针 |
+
+命令（文件格式见 `prompts/README.md`）：
+
+```text
+bin/wiki prompts list [--tag <tag>] [--level <档>] [--json]   列出
+bin/wiki prompts search <关键词>                              搜索（含正文）
+bin/wiki prompts show <id>                                    打印原文
+bin/wiki prompts check                                        校验所有提示词文件
+```
 
 ## 收录判据
 
@@ -131,6 +150,7 @@ Prompt 是用户交给模型的输入指令。在本 wiki 里，这页除了作�
 ## 相关页面
 
 - [[Awesome Prompts]] — 过线条目的薄索引
+- `prompts/README.md` — 提示词文件格式与命令
 - [[Claude 5 时代的上下文工程]] — 提示词之外的另一半：上下文怎么组织
 - [[AI Slop]] — 「AI 味」的语义层归纳
 - [[Awesome Agent Skills]] — 提示词升级成带脚本、manifest、QA 的 skill

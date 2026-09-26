@@ -301,7 +301,7 @@ resource:             # 镜像 source_refs
 
 ## 提示词（prompts/）
 
-提示词不进 `wiki/` 页面，而是单独的 `prompts/` 目录：一条一个 `<id>.md`，正文**原样复制**原文（不翻译、不精简），场景、分级、来源、坑全写在 frontmatter。
+提示词不进 `wiki/` 页面，而是单独的 `prompts/` 目录：一条一个 `<id>.md`，正文**原样复制**原文（不翻译、不精简），场景、分级、来源和使用限制写在 frontmatter。
 
 ```text
 bin/wiki prompts list [--tag <tag>] [--level <档>] [--json]   列出
@@ -310,7 +310,7 @@ bin/wiki prompts show <id>                                    打印原文
 bin/wiki prompts check                                        校验所有提示词文件
 ```
 
-正文就是 frontmatter 之后的所有内容（原样复制，不包代码块），场景与说明全写 frontmatter。字段表、新增流程、与 wiki 页面的分工都写在 `prompts/README.md`。
+正文是 frontmatter 之后的原文副本，保留原有格式，不额外包代码块。元数据的语言、字段、新增流程和存档使用限制见 `prompts/README.md`。
 
 ## 原始材料规则
 

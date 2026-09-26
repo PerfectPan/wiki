@@ -1,16 +1,16 @@
 ---
 id: design-direction-hunt
-title: 用 AI 找 prompt 点子的三步法
-scene: 自己想不出独特方向，而直接让 AI 出点子只会得到「人人可得」的那一版时
-level: 推荐
+title: Explore a design direction
+scene: When you want to explore visual directions, select one, and turn your preferences into a brief.
+level: recommended
 tags:
   - design
   - exploration
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 2 的三步法：先要宽泛清单 → 说清自己的反应 → 让 AI 写成可执行 prompt
+source_note: Technique 2, a sequence of three user messages.
 notes:
-  - 第二步才是关键：必须自己挑几条并说清喜欢/讨厌什么，跳过它等于把 AI 的平均品味直接搬回来
-  - 第三步让 AI 写的那条 prompt 才是给 agent 用的
+  - Run the messages as separate steps and replace the sample preferences with your own.
+  - The final message asks for a prompt; it does not implement the design.
 added: 2026-09-22
 ---
 

@@ -1,18 +1,18 @@
 ---
 id: image-generation-pass
-title: 用图像生成补质感（而不是渐变和形状）
-scene: 界面一眼看出是 AI 生成时——只有渐变、色块和基础形状，缺材质与光影
-level: 可参考
+title: Add generated imagery
+scene: When a page needs custom images or materials beyond basic shapes.
+level: reference
 tags:
   - design
   - image-generation
   - agent
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 4
+source_note: Technique 4.
 notes:
-  - 正文里的 sk- 开头字符串是原文的占位符，不要把真实 key 写进仓库
-  - 原文给了三条接入路径：用 agent 自带图像工具、让 Codex CLI 走 ChatGPT 订阅、或给一个带消费上限的 API key
-  - key 建议放 gitignored 文件并在 AGENTS.md / CLAUDE.md 里写明「仅供开发、不得随产品发布」
+  - The API key in the body is a placeholder from the source, not a usable credential.
+  - The prompt depends on access to an image generation tool; configure credentials separately.
+  - Check costs and inspect the generated assets before using them.
 added: 2026-09-22
 ---
 

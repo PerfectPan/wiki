@@ -1,17 +1,18 @@
 ---
 id: keyframe-transition-scrub
-title: 关键帧插值做滚动转场
-scene: 想让页面转场跟着滚动或手势逐帧 scrub，而不是硬切或淡入淡出时
-level: 可参考
+title: Scroll through video transitions
+scene: When a prototype needs scroll-controlled transitions between visual states.
+level: reference
 tags:
   - design
   - video
   - interaction
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 5 的第二个用法
+source_note: Technique 5, second example.
 notes:
-  - 用上一段的末帧当下一段的起始帧，接缝才连续
-  - 需要物理和一致性强的视频模型（原文点名 Seedance 2.5）
+  - The last frame of each clip supplies the starting frame for the next clip.
+  - The source names a specific video model; availability and output quality need verification.
+  - The API key in the body is a source placeholder.
 added: 2026-09-22
 ---
 

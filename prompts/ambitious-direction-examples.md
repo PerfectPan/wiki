@@ -1,16 +1,16 @@
 ---
 id: ambitious-direction-examples
-title: 更野心勃勃的方向描述（三个示例）
-scene: 想让模型跳出默认版式，把「具体灵感」写进 prompt 时；这三条是写法示例
-level: 可参考
+title: Design direction examples
+scene: When a design brief needs concrete visual references rather than a generic style request.
+level: reference
 tags:
   - design
   - exploration
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 2 的三个方向示例
+source_note: Technique 2, three example directions.
 notes:
-  - 照抄这三条同样会趋同，价值在「把自己的品味写成具体画面」这个写法
-  - 配套用法是上面那条三步法：灵感来自你自己的反应，不是来自 AI 的清单
+  - These are alternative examples, not a single prompt to run unchanged.
+  - Replace the visual references with choices suited to your product.
 added: 2026-09-22
 ---
 

@@ -1,18 +1,18 @@
 ---
 id: plan-first
-title: 计划模式（Plan-first）
-scene: 让 agent 动大改动之前先交计划，避免它边想边改、顺手改到别的模块时
-level: 可参考
+title: Plan first
+scene: Before a substantial code change, when you want a file-by-file plan for review.
+level: reference
 tags:
   - agent
   - code
   - workflow
 source: raw/sources/Prompt.md
-source_note: 仓库内既有素材（原样保留），非本次外部来源
+source_note: Existing repository material in raw/sources/Prompt.md.
 notes:
-  - 正文照 `raw/sources/Prompt.md` 原样复制，其中 `\`\`\`` 是素材里带反斜杠的转义写法，真正使用时换成普通三反引号
-  - 素材里还有 `http://AGENTS[.]md` 这种被「防链接化」过的写法，同样保持原样
-  - 缺正例/负例和一个明确的验收信号，所以没有放进推荐档
+  - This is an archival copy, not a ready-to-use template.
+  - The source contains escaped code fences and malformed strings such as http://AGENTS[.]md and http://u[.]email.
+  - Repair those artifacts in a separate working copy before use.
 added: 2026-09-22
 ---
 

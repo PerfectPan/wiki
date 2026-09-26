@@ -1,16 +1,16 @@
 ---
 id: negative-random-ask
-title: 反例：要求「完全随机」
-scene: 反例。以为让模型「完全随机」就能得到多样性时，先看这条实测结果
-level: 偏薄
+title: Random design request, a counterexample
+scene: When comparing a generic request for randomness with a more specific design brief.
+level: limited
 tags:
   - design
   - anti-pattern
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 1 的反例（同一条基线要求换着说法再来一次）
+source_note: Technique 1, the author's counterexample.
 notes:
-  - 结果和基线不同，但配色、结构、甚至同一个陶器隐喻都在重复
-  - 模型没有真正随机的能力，随机性必须从模型外部带进来（见 seed-string）
+  - The author reports repeated visual choices in this example; that is not a general model evaluation.
+  - Retained for comparison, not as a recommended prompt.
 added: 2026-09-22
 ---
 

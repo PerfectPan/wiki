@@ -8,7 +8,6 @@
 ## 提示词
 
 - 原文在 `prompts/`（一条一个文件，正文原样复制，格式见 `prompts/README.md`）
-- [[wiki/topics/ai/Awesome Prompts|Awesome Prompts]] — 收录索引；判据在 [[wiki/topics/ai/Prompt|Prompt]]
 - 召回：`bin/wiki prompts list [--tag <tag>] [--level <档>]`、`bin/wiki prompts search <关键词>`、`bin/wiki prompts show <id>`
 
 ## 主题页
@@ -66,7 +65,6 @@
   - [[wiki/topics/ai/Agent|Agent]]
   - [[wiki/topics/ai/AI Slop|AI Slop]]
   - [[wiki/topics/ai/Awesome Agent Skills|Awesome Agent Skills]]
-  - [[wiki/topics/ai/Awesome Prompts|Awesome Prompts]]
   - [[wiki/topics/ai/Agent Client Protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/Agent Harness|Agent Harness]]
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]

@@ -346,7 +346,7 @@ function runCheck(targetPath?: string): void {
 
 const PROMPT_DIR = "prompts";
 const PROMPT_REQUIRED = ["id", "title", "scene", "level", "tags", "source", "added"] as const;
-const PROMPT_LEVELS = ["推荐", "可参考", "偏薄"] as const;
+const PROMPT_LEVELS = ["recommended", "reference", "limited"] as const;
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 interface PromptRecord {
@@ -607,22 +607,6 @@ function runPrompts(rest: string[]): void {
         console.log(`\n⚠️  ${relPath}`);
         console.log(`  [warning] ${issue.message}`);
       }
-    }
-
-    // 索引导航：wiki/topics/ai/Awesome Prompts.md 应覆盖所有 id（只提醒，不阻断）
-    const indexPath = resolve(ROOT, "wiki/topics/ai/Awesome Prompts.md");
-    try {
-      const index = readFileSync(indexPath, "utf8");
-      const missing = files
-        .map((f) => readPrompt(f).id)
-        .filter((id) => !index.includes(`${PROMPT_DIR}/${id}`));
-      if (missing.length > 0) {
-        warningCount += 1;
-        console.log(`\n⚠️  wiki/topics/ai/Awesome Prompts.md 未收录: ${missing.join(", ")}`);
-      }
-    } catch {
-      warningCount += 1;
-      console.log("\n⚠️  找不到 wiki/topics/ai/Awesome Prompts.md，跳过索引一致性检查");
     }
 
     console.log(`\n---`);

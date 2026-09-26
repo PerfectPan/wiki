@@ -1,19 +1,19 @@
 ---
 id: design-critic-subagent
-title: 设计批评者子代理（critic loop）
-scene: 模型自己评审自己的产出、越改越平庸时；需要外部审美判决和一个能收敛的停止条件
-level: 推荐
+title: Design critic subagent
+scene: When you want a separate model context to review a screenshot and suggest changes.
+level: recommended
 tags:
   - design
   - agent
   - qa
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 3；作者用强模型当 critic，critic 只占不到 10% 输出 token
+source_note: Technique 3.
 notes:
-  - critic 的判据要客观：「5 张图排序」比「判断好不好看」稳定得多
-  - 先只跑 1–2 轮看是否收敛，再加轮次，否则 critic 会让 agent 空烧 token
-  - 9/10 的完成阈值留在实现者侧，不要写进 critic 的 prompt，否则打分不再独立
-  - 参考图只当 baseline / moodboard，不要让它照抄
+  - The source uses a particular model; check that it is available in your environment.
+  - Keep the completion threshold out of the critic prompt, as the source instructs.
+  - A model score is subjective; it is not independent evidence of design quality.
+  - Set an iteration limit before using a loop that waits for a target score.
 added: 2026-09-22
 ---
 

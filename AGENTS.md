@@ -144,7 +144,7 @@ bin/wiki check <path>       # 校验单个文件或目录
 4. 任何非平凡结论都应附带来源指针。
 5. 如果一个页面无法明确归入其他类型，默认放到 `wiki/topics/`。
 6. 收录类 / awesome 索引页（把一批同类对象收进一页做 curated list）统一遵守 `SCHEMA.md` 的「收录页约定」：`tags` 带 `catalog`、判据与索引分离、分级三档、条目只写一句话价值 + 指针。
-7. 提示词不写进 wiki 页面：原文存 `prompts/<id>.md`（正文原样复制、说明全放 frontmatter），判据写在 `wiki/topics/ai/Prompt.md`，索引写在 `wiki/topics/ai/Awesome Prompts.md`。格式与命令见 `prompts/README.md`。
+7. 提示词原文存 `prompts/<id>.md`，格式、语言与新增流程见 `prompts/README.md`。维护提示词时先读该文件。
 
 ## 页面职责
 

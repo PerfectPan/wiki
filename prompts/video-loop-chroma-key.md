@@ -1,17 +1,18 @@
 ---
 id: video-loop-chroma-key
-title: 视频循环片 + 抠背景做动效
-scene: 代码做不出的效果（玻璃折射、焦散、流体运动），需要一段能叠在 UI 上又不像视频的动效时
-level: 可参考
+title: Looping video with background removal
+scene: When a prototype needs a video effect composited over its page background.
+level: reference
 tags:
   - design
   - video
   - image-generation
 source: https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-source_note: 原文 Technique 5 的第一个用法
+source_note: Technique 5, first example.
 notes:
-  - 折射类效果要先把页面背景色渲进视频再抠背景，否则抠完就没有折射
-  - 依赖外部视频模型与额度（原文用 fal.ai 一个 key 切模型）
+  - The example renders the page colors into the glass effect before removing the video background.
+  - Requires video generation and background removal tools.
+  - The API key in the body is a source placeholder.
 added: 2026-09-22
 ---
 

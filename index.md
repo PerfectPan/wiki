@@ -280,7 +280,7 @@
 - `ai`
   - [[wiki/comparisons/ai/LLM API 协议选型|LLM API 协议选型]]
   - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
-  - [[wiki/comparisons/ai/Agent 护栏的拦截位置：生成流中途 vs 工具调用门禁|Agent 护栏的拦截位置：生成流中途 vs 工具调用门禁]]
+  - [[wiki/comparisons/ai/Agent 输出检查：TTSR、权限规则与 PreToolUse hooks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
 - `career`
   - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]
 - `frontend`

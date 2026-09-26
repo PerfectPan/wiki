@@ -18,8 +18,8 @@ has_error=false
 
 while IFS= read -r file; do
   [ -z "$file" ] && continue
-  # 只检查 wiki/ 下的页面
-  if [[ "$file" != wiki/* ]]; then
+  # 只检查 wiki/ 与 prompts/ 下的文件
+  if [[ "$file" != wiki/* && "$file" != prompts/* ]]; then
     continue
   fi
 

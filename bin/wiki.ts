@@ -15,10 +15,18 @@ const HELP_TEXT = `wiki CLI
   bin/wiki help
   bin/wiki ingest <source>
   bin/wiki check [path]
+  bin/wiki prompts <list|search|show|check> [...]
 
 命令:
   ingest    抓取来源并存入 raw/sources/
   check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+  prompts   提示词库：列表、搜索、打印原文、校验（见 prompts/README.md）
+
+prompts 子命令:
+  list [--tag <tag>] [--level <档>] [--json]   列出提示词
+  search <关键词> [--json]                     在元数据与正文里搜索
+  show <id> [--meta]                           打印提示词原文
+  check                                        校验 prompts/ 下所有提示词文件
 
 工作流引导见 .agents/skills/
 `;
@@ -136,6 +144,11 @@ function parseFrontmatter(content: string): Frontmatter | null {
 function checkFile(filePath: string): CheckIssue[] {
   const issues: CheckIssue[] = [];
   const relPath = relative(ROOT, filePath);
+
+  // prompts/ 下的文件走提示词规则，而不是 wiki 页面规则
+  if (relPath === PROMPT_DIR || relPath.startsWith(`${PROMPT_DIR}/`)) {
+    return checkPromptFile(filePath);
+  }
 
   let content: string;
   try {
@@ -327,6 +340,347 @@ function runCheck(targetPath?: string): void {
   }
 }
 
+/* ------------------------------------------------------------------ *
+ * prompts/
+ * ------------------------------------------------------------------ */
+
+const PROMPT_DIR = "prompts";
+const PROMPT_REQUIRED = ["id", "title", "scene", "level", "tags", "source", "added"] as const;
+const PROMPT_LEVELS = ["推荐", "可参考", "偏薄"] as const;
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+interface PromptRecord {
+  path: string;
+  id: string;
+  fm: Frontmatter;
+  body: string;
+  extra: string[];
+  blocks: number;
+}
+
+function promptPaths(): string[] {
+  const dir = resolve(ROOT, PROMPT_DIR);
+  let names: string[];
+  try {
+    names = readdirSync(dir);
+  } catch {
+    return [];
+  }
+  return names
+    .filter((name) => name.endsWith(".md") && name !== "README.md")
+    .map((name) => resolve(dir, name))
+    .sort();
+}
+
+/**
+ * 拆分提示词文件：返回第一个 fenced code block 的内容，以及 block 之外的非空行。
+ * 外层 fence 允许三个以上反引号，正文里出现三反引号代码块时用四个反引号包住。
+ */
+function splitPromptBody(content: string): { body: string; extra: string[]; blocks: number } {
+  const lines = content.split("\n");
+  let i = 0;
+  if (lines[0]?.trim() === "---") {
+    i = 1;
+    while (i < lines.length && lines[i].trim() !== "---") i++;
+    i++;
+  }
+
+  const extra: string[] = [];
+  let fence: string | null = null;
+  let body = "";
+  let blocks = 0;
+  let buf: string[] = [];
+
+  for (; i < lines.length; i++) {
+    const line = lines[i];
+    const match = line.match(/^(`{3,})\s*\S*\s*$/);
+    if (fence === null) {
+      if (match) {
+        fence = match[1];
+        blocks++;
+        buf = [];
+        continue;
+      }
+      if (line.trim() !== "") {
+        extra.push(line.trim());
+      }
+      continue;
+    }
+    if (match && match[1].length >= fence.length) {
+      if (blocks === 1) {
+        body = buf.join("\n");
+      }
+      fence = null;
+      continue;
+    }
+    buf.push(line);
+  }
+
+  if (fence !== null) {
+    extra.push("代码块没有闭合");
+  }
+  return { body, extra, blocks };
+}
+
+function readPrompt(path: string): PromptRecord {
+  const content = readFileSync(path, "utf8");
+  const fm = parseFrontmatter(content) ?? {};
+  const fallbackId = path.split("/").pop()!.replace(/\.md$/, "");
+  const id = typeof fm["id"] === "string" && fm["id"] !== "" ? (fm["id"] as string) : fallbackId;
+  const { body, extra, blocks } = splitPromptBody(content);
+  return { path, id, fm, body, extra, blocks };
+}
+
+function checkPromptFile(filePath: string): CheckIssue[] {
+  const issues: CheckIssue[] = [];
+  const name = filePath.split("/").pop()!;
+
+  if (name === "README.md") {
+    return issues;
+  }
+
+  let content: string;
+  try {
+    content = readFileSync(filePath, "utf8");
+  } catch {
+    issues.push({ level: "error", message: "无法读取文件" });
+    return issues;
+  }
+
+  const fm = parseFrontmatter(content);
+  if (fm === null) {
+    issues.push({ level: "error", message: "缺少 frontmatter（没有以 --- 开头的 YAML 块）" });
+    return issues;
+  }
+
+  for (const field of PROMPT_REQUIRED) {
+    const value = fm[field];
+    if (!(field in fm)) {
+      issues.push({ level: "error", message: `缺少必填字段: ${field}` });
+    } else if (Array.isArray(value) ? value.length === 0 : String(value).trim() === "") {
+      issues.push({ level: "error", message: `字段为空: ${field}` });
+    }
+  }
+
+  const expectedId = name.replace(/\.md$/, "");
+  if (typeof fm["id"] === "string" && fm["id"] !== expectedId) {
+    issues.push({ level: "error", message: `id (${fm["id"]}) 与文件名 (${expectedId}) 不一致` });
+  }
+
+  const level = fm["level"];
+  if (typeof level === "string" && !PROMPT_LEVELS.includes(level as (typeof PROMPT_LEVELS)[number])) {
+    issues.push({
+      level: "error",
+      message: `level 值无效: "${level}"，必须是 ${PROMPT_LEVELS.join(" / ")} 之一`,
+    });
+  }
+
+  if ("tags" in fm && !Array.isArray(fm["tags"])) {
+    issues.push({ level: "error", message: "tags 必须是数组格式" });
+  }
+
+  const added = fm["added"];
+  if (typeof added === "string" && !DATE_RE.test(added)) {
+    issues.push({ level: "error", message: `added 日期格式无效: "${added}"，必须是 YYYY-MM-DD` });
+  }
+
+  const { body, extra, blocks } = splitPromptBody(content);
+  if (blocks === 0) {
+    issues.push({ level: "error", message: "正文缺少提示词代码块（用 ````text 包住原文）" });
+  } else if (blocks > 1) {
+    issues.push({ level: "error", message: `正文有 ${blocks} 个代码块，只允许一个` });
+  } else if (body.trim() === "") {
+    issues.push({ level: "error", message: "提示词代码块是空的" });
+  }
+  if (extra.length > 0) {
+    issues.push({
+      level: "error",
+      message: `正文除代码块外还有内容（第 1 处: "${extra[0].slice(0, 40)}"），说明请写进 frontmatter`,
+    });
+  }
+
+  return issues;
+}
+
+function collectPromptRecords(): PromptRecord[] {
+  return promptPaths().map(readPrompt);
+}
+
+function promptToJson(record: PromptRecord): Record<string, unknown> {
+  const out: Record<string, unknown> = { path: relative(ROOT, record.path) };
+  for (const key of ["id", "title", "scene", "level", "tags", "source", "source_note", "notes", "added"] as const) {
+    if (key in record.fm) {
+      out[key] = record.fm[key];
+    }
+  }
+  return out;
+}
+
+function runPrompts(rest: string[]): void {
+  const sub = rest[0];
+  if (!sub || sub === "help" || sub === "-h" || sub === "--help") {
+    process.stdout.write(`用法:
+  bin/wiki prompts list [--tag <tag>] [--level <档>] [--json]
+  bin/wiki prompts search <关键词> [--json]
+  bin/wiki prompts show <id> [--meta]
+  bin/wiki prompts check
+
+提示词文件格式见 prompts/README.md，分级标准见 wiki/topics/ai/Prompt.md。\n`);
+    return;
+  }
+
+  const records = collectPromptRecords();
+
+  if (sub === "list") {
+    const json = rest.includes("--json");
+    const tagFlag = rest.indexOf("--tag");
+    const levelFlag = rest.indexOf("--level");
+    const tag = tagFlag >= 0 ? rest[tagFlag + 1] : undefined;
+    const level = levelFlag >= 0 ? rest[levelFlag + 1] : undefined;
+
+    let hits = records;
+    if (tag) {
+      hits = hits.filter((r) => Array.isArray(r.fm["tags"]) && (r.fm["tags"] as string[]).includes(tag));
+    }
+    if (level) {
+      hits = hits.filter((r) => r.fm["level"] === level);
+    }
+
+    if (json) {
+      process.stdout.write(JSON.stringify(hits.map(promptToJson), null, 2) + "\n");
+      return;
+    }
+
+    if (hits.length === 0) {
+      console.log("没有匹配的提示词。");
+      return;
+    }
+    const filters = [tag ? `tag=${tag}` : null, level ? `level=${level}` : null].filter(Boolean).join(" ");
+    console.log(`提示词 ${hits.length} 条${filters ? `（${filters}）` : ""}\n`);
+    for (const r of hits) {
+      const tags = Array.isArray(r.fm["tags"]) ? (r.fm["tags"] as string[]).join(", ") : "";
+      console.log(`- ${r.id} [${r.fm["level"] ?? "?"}] ${tags}`);
+      console.log(`  ${r.fm["title"] ?? ""}`);
+      console.log(`  场景: ${r.fm["scene"] ?? ""}`);
+      console.log(`  原文: ${relative(ROOT, r.path)}`);
+    }
+    return;
+  }
+
+  if (sub === "search") {
+    const keyword = rest[1];
+    if (!keyword) {
+      die("缺少关键词。用法: bin/wiki prompts search <关键词>");
+    }
+    const needle = keyword.toLowerCase();
+    const hits = records.filter((r) => {
+      const haystack = [
+        r.id,
+        String(r.fm["title"] ?? ""),
+        String(r.fm["scene"] ?? ""),
+        String(r.fm["source"] ?? ""),
+        String(r.fm["source_note"] ?? ""),
+        Array.isArray(r.fm["tags"]) ? (r.fm["tags"] as string[]).join(" ") : "",
+        Array.isArray(r.fm["notes"]) ? (r.fm["notes"] as string[]).join(" ") : "",
+        r.body,
+      ]
+        .join("\n")
+        .toLowerCase();
+      return haystack.includes(needle);
+    });
+
+    if (rest.includes("--json")) {
+      process.stdout.write(JSON.stringify(hits.map(promptToJson), null, 2) + "\n");
+      return;
+    }
+    if (hits.length === 0) {
+      console.log(`没有命中 "${keyword}" 的提示词。`);
+      return;
+    }
+    console.log(`命中 ${hits.length} 条 ("${keyword}")\n`);
+    for (const r of hits) {
+      console.log(`- ${r.id} [${r.fm["level"] ?? "?"}] ${r.fm["title"] ?? ""}`);
+      console.log(`  场景: ${r.fm["scene"] ?? ""}`);
+      console.log(`  原文: ${relative(ROOT, r.path)}`);
+    }
+    return;
+  }
+
+  if (sub === "show") {
+    const id = rest[1];
+    if (!id) {
+      die("缺少 id。用法: bin/wiki prompts show <id>");
+    }
+    const target = records.find((r) => r.id === id.replace(/\.md$/, ""));
+    if (!target) {
+      die(`找不到提示词: ${id}（用 bin/wiki prompts list 查看可用 id）`);
+    }
+    if (rest.includes("--meta")) {
+      for (const key of ["id", "title", "scene", "level", "source", "source_note", "added"] as const) {
+        if (key in target.fm) {
+          console.log(`${key}: ${target.fm[key]}`);
+        }
+      }
+      const tags = target.fm["tags"];
+      if (Array.isArray(tags)) {
+        console.log(`tags: ${tags.join(", ")}`);
+      }
+      console.log("");
+    }
+    process.stdout.write(target.body.trim() + "\n");
+    return;
+  }
+
+  if (sub === "check") {
+    let errorCount = 0;
+    let warningCount = 0;
+    const files = promptPaths();
+    for (const file of files) {
+      const issues = checkPromptFile(file);
+      const relPath = relative(ROOT, file);
+      const fileErrors = issues.filter((i) => i.level === "error");
+      const fileWarnings = issues.filter((i) => i.level === "warning");
+      errorCount += fileErrors.length;
+      warningCount += fileWarnings.length;
+      if (fileErrors.length > 0) {
+        console.error(`\n❌ ${relPath}`);
+        for (const issue of fileErrors) {
+          console.error(`  [error] ${issue.message}`);
+        }
+      }
+      for (const issue of fileWarnings) {
+        console.log(`\n⚠️  ${relPath}`);
+        console.log(`  [warning] ${issue.message}`);
+      }
+    }
+
+    // 索引导航：wiki/topics/ai/Awesome Prompts.md 应覆盖所有 id（只提醒，不阻断）
+    const indexPath = resolve(ROOT, "wiki/topics/ai/Awesome Prompts.md");
+    try {
+      const index = readFileSync(indexPath, "utf8");
+      const missing = files
+        .map((f) => readPrompt(f).id)
+        .filter((id) => !index.includes(`${PROMPT_DIR}/${id}`));
+      if (missing.length > 0) {
+        warningCount += 1;
+        console.log(`\n⚠️  wiki/topics/ai/Awesome Prompts.md 未收录: ${missing.join(", ")}`);
+      }
+    } catch {
+      warningCount += 1;
+      console.log("\n⚠️  找不到 wiki/topics/ai/Awesome Prompts.md，跳过索引一致性检查");
+    }
+
+    console.log(`\n---`);
+    console.log(`校验完成: ${files.length} 个提示词文件，${errorCount} 个错误，${warningCount} 个警告`);
+    if (errorCount > 0) {
+      process.exit(1);
+    }
+    return;
+  }
+
+  die(`未知的 prompts 子命令: ${sub}`);
+}
+
 function main(argv: string[]): void {
   const [, , command, ...rest] = argv;
 
@@ -360,6 +714,11 @@ function main(argv: string[]): void {
 
   if (command === "check") {
     runCheck(rest[0]);
+    return;
+  }
+
+  if (command === "prompts") {
+    runPrompts(rest);
     return;
   }
 

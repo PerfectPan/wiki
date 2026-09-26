@@ -27,3 +27,6 @@ jobs:
 
       - name: Check frontmatter
         run: ./bin/wiki check
+
+      - name: Check prompts
+        run: ./bin/wiki prompts check

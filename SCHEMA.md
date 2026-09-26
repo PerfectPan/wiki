@@ -299,6 +299,19 @@ resource:             # 镜像 source_refs
 
 样板页：`wiki/topics/ai/Awesome Agent Skills.md`（本约定的首个实例，2026-08 建立并沿用至今）。
 
+## 提示词（prompts/）
+
+提示词不进 `wiki/` 页面，而是单独的 `prompts/` 目录：一条一个 `<id>.md`，正文**原样复制**原文（不翻译、不精简），场景、分级、来源、坑全写在 frontmatter。
+
+```text
+bin/wiki prompts list [--tag <tag>] [--level <档>] [--json]   列出
+bin/wiki prompts search <关键词>                              搜索（含正文）
+bin/wiki prompts show <id>                                    打印原文
+bin/wiki prompts check                                        校验所有提示词文件
+```
+
+正文只能有一个 fenced code block（四个反引号，原样复制），说明与场景全部写在 frontmatter。字段表、新增流程、与 wiki 页面的分工都写在 `prompts/README.md`。
+
 ## 原始材料规则
 
 - `raw/sources/` 存放原始资料和迁移后的残留材料。

@@ -72,4 +72,70 @@ assert_contains "$full_check_output" "0 个错误"
 # PR 标题 lint：内置正反用例自测
 bash "$ROOT/tests/pr-title.sh" --self-test >/dev/null
 
+# prompts 命令
+help_output="$("$CLI" help)"
+assert_contains "$help_output" "prompts"
+
+prompts_list="$("$CLI" prompts list)"
+assert_contains "$prompts_list" "seed-string"
+assert_contains "$prompts_list" "推荐"
+
+prompts_tagged="$("$CLI" prompts list --tag design)"
+assert_contains "$prompts_tagged" "seed-string"
+if [[ "$prompts_tagged" == *"plan-first"* ]]; then
+  fail "prompts list --tag design 不应包含 plan-first"
+fi
+
+prompts_json="$("$CLI" prompts list --tag design --json)"
+assert_contains "$prompts_json" '"id": "seed-string"'
+
+prompts_show="$("$CLI" prompts show seed-string)"
+assert_contains "$prompts_show" "random alphanumeric string"
+if [[ "$prompts_show" == *'```'* ]]; then
+  fail "prompts show 应打印原文本身，不带 fence"
+fi
+
+prompts_search="$("$CLI" prompts search 随机)"
+assert_contains "$prompts_search" "negative-random-ask"
+
+prompts_check="$("$CLI" prompts check 2>&1)" || fail "prompts check 不应失败: $prompts_check"
+assert_contains "$prompts_check" "0 个错误"
+
+prompt_file_check="$("$CLI" check prompts/seed-string.md 2>&1)" || true
+assert_contains "$prompt_file_check" "校验完成"
+
+# 坏提示词必须被拦下：在临时仓库里跑，不动真实 prompts/
+prompt_probe="$(mktemp -d)"
+mkdir -p "$prompt_probe/project/prompts" "$prompt_probe/project/wiki/topics/ai"
+cp -R "$ROOT/bin" "$prompt_probe/project/bin"
+cp "$ROOT/package.json" "$prompt_probe/project/package.json"
+printf '# Awesome Prompts\n' >"$prompt_probe/project/wiki/topics/ai/Awesome Prompts.md"
+probe_cli="$prompt_probe/project/bin/wiki"
+
+write_prompt() { # <文件名> <id> <level> <正文>
+  printf -- '---\nid: %s\ntitle: t\nscene: s\nlevel: %s\ntags:\n  - t\nsource: x\nadded: 2026-09-22\n---\n\n````text\n%s\n````\n' \
+    "$2" "$3" "$4" >"$prompt_probe/project/prompts/$1"
+}
+
+write_prompt good.md good 推荐 hello
+"$probe_cli" prompts check >/dev/null 2>&1 || fail "合法提示词应通过 prompts check"
+
+write_prompt bad-id.md other 推荐 hello
+"$probe_cli" prompts check >/dev/null 2>&1 && fail "id 与文件名不一致时 prompts check 应失败"
+rm "$prompt_probe/project/prompts/bad-id.md"
+
+write_prompt bad-level.md bad-level 一般 hello
+"$probe_cli" prompts check >/dev/null 2>&1 && fail "level 非法时 prompts check 应失败"
+rm "$prompt_probe/project/prompts/bad-level.md"
+
+write_prompt two-blocks.md two-blocks 推荐 hello
+printf -- '````text\nsecond\n````\n' >>"$prompt_probe/project/prompts/two-blocks.md"
+"$probe_cli" prompts check >/dev/null 2>&1 && fail "正文有多个代码块时 prompts check 应失败"
+rm "$prompt_probe/project/prompts/two-blocks.md"
+
+write_prompt extra-text.md extra-text 推荐 hello
+printf '说明文字\n' >>"$prompt_probe/project/prompts/extra-text.md"
+"$probe_cli" prompts check >/dev/null 2>&1 && fail "代码块之外还有内容时 prompts check 应失败"
+rm -rf "$prompt_probe"
+
 echo "PASS"

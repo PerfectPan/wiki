@@ -12,6 +12,7 @@
 
 - `raw/sources/`：不可变的原始输入、迁移残留、素材文档、原始笔记
 - `raw/assets/`：页面引用的图片和附件
+- `prompts/`：提示词库，一条提示词一个文件，正文原样复制（格式与命令见 `prompts/README.md`）
 - `wiki/topics/`：稳定主题页，同时容纳概念页和具体对象页
 - `wiki/syntheses/`：多来源综合页，用来沉淀整合后的理解
 - `wiki/comparisons/`：对比、选型、取舍页
@@ -56,7 +57,8 @@ bin/wiki check <path>       # 校验单个文件或目录
 `bin/wiki` 是工具 CLI，只负责执行操作，不输出引导：
 
 - `bin/wiki ingest <source>`：抓取来源并存入 `raw/sources/`
-- `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+- `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范（`prompts/` 下的文件按提示词规则校验）
+- `bin/wiki prompts list|search|show|check`：提示词库的列表、搜索、打印原文与校验
 
 工作流引导（skill）：
 
@@ -142,6 +144,7 @@ bin/wiki check <path>       # 校验单个文件或目录
 4. 任何非平凡结论都应附带来源指针。
 5. 如果一个页面无法明确归入其他类型，默认放到 `wiki/topics/`。
 6. 收录类 / awesome 索引页（把一批同类对象收进一页做 curated list）统一遵守 `SCHEMA.md` 的「收录页约定」：`tags` 带 `catalog`、判据与索引分离、分级三档、条目只写一句话价值 + 指针。
+7. 提示词不写进 wiki 页面：原文存 `prompts/<id>.md`（正文原样复制、说明全放 frontmatter），判据写在 `wiki/topics/ai/Prompt.md`，索引写在 `wiki/topics/ai/Awesome Prompts.md`。格式与命令见 `prompts/README.md`。
 
 ## 页面职责
 

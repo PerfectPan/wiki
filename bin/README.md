@@ -7,6 +7,17 @@
 - `wiki`
 - `wiki.ts`
 
+提示词库的命令也是同一个入口：
+
+```text
+bin/wiki prompts list [--tag <tag>] [--level <档>] [--json]
+bin/wiki prompts search <关键词>
+bin/wiki prompts show <id>
+bin/wiki prompts check
+```
+
+提示词文件格式见 `prompts/README.md`。
+
 说明：
 
 - 这两个文件不是知识内容，而是仓库的工作流工具。

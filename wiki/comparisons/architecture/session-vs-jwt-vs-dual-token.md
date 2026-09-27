@@ -77,7 +77,7 @@ flowchart LR
 
 图以同源 Web 应用为例：AT 放页面内存，RT 放 HttpOnly Cookie，服务端保留 RT 摘要与会话状态。清除 RT Cookie 通过服务端的 Set-Cookie 完成；仅本地验证的旧 AT 不会因退出立即失效。
 
-完整接口、RT 原子轮换、并发请求和响应丢失处理，见 [[wiki/syntheses/architecture/dual-token-server-api|双 Token 登录的服务端接口设计]]。图片的[生成提示词](../../../raw/sources/2026-09-27-dual-token-diagram-prompt.md)单独保存。
+Session、单 JWT 和双 Token 的完整接口，以及各自的续期、退出和并发处理，见 [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]。
 
 ## 常见疑问
 
@@ -153,7 +153,7 @@ OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_to
 
 ## 相关页面
 
-- [[wiki/syntheses/architecture/dual-token-server-api|双 Token 登录的服务端接口设计]]
+- [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
 
 - [[wiki/topics/architecture/jwt|JWT]]
 - [[OAuth]]

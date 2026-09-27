@@ -51,6 +51,7 @@
   - [[wiki/topics/architecture/技术方案|技术方案]]
   - [[wiki/topics/architecture/DDD|DDD]]
   - [[wiki/topics/architecture/Dependency Injection|Dependency Injection]]
+  - [[wiki/topics/architecture/jwt|JWT]]
   - [[wiki/topics/architecture/OAuth|OAuth]]
   - [[wiki/topics/architecture/OTP|OTP]]
   - [[wiki/topics/architecture/Software Design|Software Design]]
@@ -223,6 +224,8 @@
   - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
   - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
   - [[wiki/syntheses/ai/Open Knowledge Format 与 Agent 可读知识库|Open Knowledge Format 与 Agent 可读知识库]]
+- `architecture`
+  - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
@@ -279,6 +282,8 @@
 - `ai`
   - [[wiki/comparisons/ai/LLM API 协议选型|LLM API 协议选型]]
   - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
+- `architecture`
+  - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - `career`
   - [[wiki/comparisons/career/简历排版引擎选择|简历排版引擎选择]]
 - `frontend`

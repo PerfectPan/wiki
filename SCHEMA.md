@@ -4,7 +4,7 @@
 
 ## 全局规则
 
-1. 文件名应当可读，并尽量与页面标题一致。
+1. 新增文件使用英文小写的 kebab-case，具体规则见「文件命名」；页面标题与正文可以使用中文。
 2. 新的知识页面只能放在 `wiki/topics/`、`wiki/syntheses/` 或 `wiki/comparisons/` 下。
 3. 每个页面都应当在 Obsidian 中单独打开时仍然容易理解。
 4. 优先通过页面链接建立关系，而不是在不同页面中重复解释同一件事。
@@ -17,6 +17,15 @@
 使用具体的动作和对象解释行为，保留更清晰的英文技术术语。描述字段与请求响应时使用“接口定义”，描述双方交互要求时使用“调用约定”；“契约测试”等正式术语保留。
 
 `bin/wiki check-jargon` 按 `bin/jargon-rules.json` 报告需修改的词项、位置和建议，不自动替换。原始引用和技术标识按 `bin/README.md` 的规则保留；需要上下文判断的表达仍由人工审阅。
+
+## 文件命名
+
+- 新增文件的名称主体使用英文小写、数字和连字符，使用小写扩展名。例如 `dual-token-server-api.md`、`2026-09-27-dual-token-lifecycle.png`；不使用空格、下划线或中文文件名。
+- 语义后缀按工具约定保留，例如 `check-jargon.test.ts`。点分隔的是后缀，名称主体仍用 kebab-case。
+- `AGENTS.md`、`SCHEMA.md`、`README.md`、`SKILL.md`、`LICENSE` 等约定文件，以及工具要求的 `.gitignore`、`.github/pull_request_template.md` 等固定名称保留原样；不要借例外命名普通知识页面。
+- 已在目标分支存在的文件不批量改名，修改正文也不要求改名；尚未合入的 PR 新增文件遵守新规则。
+- 文件名与展示标题分开：frontmatter 的 `title` 和正文标题可以使用中文。链接使用实际路径，必要时用显示文本，例如 `[[wiki/topics/architecture/jwt|JWT]]`。
+- 重命名新增文件时，同步修改导航、页面链接、来源指针及 PR 中的路径说明；原始素材正文不因命名规则改写。
 
 ## 建议使用的 frontmatter
 
@@ -280,7 +289,7 @@ source_refs:          # 判据页 + 各条目 raw 评审 + 对象来源
 resource:             # 镜像 source_refs
 ```
 
-- 命名统一为 `Awesome <领域>`（沿用 awesome 的 curated list 语义）或 `<领域> 收录索引`，方便按名字召回。
+- 页面标题统一为 `Awesome <领域>`（沿用 awesome 的 curated list 语义）或 `<领域> 收录索引`，方便按标题召回；新增文件名仍遵守「文件命名」。
 - 分级语义统一三档：**推荐 / 可参考 / 偏薄**；每档在该领域的具体含义由判据页定义，收录页只放三档各一张表。
 
 ### 结构模板（必要小节）

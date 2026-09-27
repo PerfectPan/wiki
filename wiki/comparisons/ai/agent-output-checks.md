@@ -59,4 +59,4 @@ PreToolUse 可以检查 edit/write 的输入内容，不一定需要解析 diff�
 - [omp TTSR](https://omp.sh/docs/ttsr)
 - [Claude Code hooks](https://code.claude.com/docs/en/hooks)
 - [Claude Code permissions](https://code.claude.com/docs/en/permissions)
-- [[omp（oh-my-pi）]]
+- [[wiki/topics/ai/oh-my-pi|omp（oh-my-pi）]]

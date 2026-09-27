@@ -224,6 +224,8 @@
   - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
   - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
   - [[wiki/syntheses/ai/Open Knowledge Format 与 Agent 可读知识库|Open Knowledge Format 与 Agent 可读知识库]]
+- `architecture`
+  - [[wiki/syntheses/architecture/双 Token 登录的服务端接口设计|双 Token 登录的服务端接口设计]]
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]

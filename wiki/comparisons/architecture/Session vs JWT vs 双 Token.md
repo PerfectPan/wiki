@@ -4,8 +4,8 @@ description: 登录态该用 Session、单个 JWT 还是 access_token + refresh_
 type: comparison
 category: architecture
 created: 2026-09-23
-updated: 2026-09-26
-timestamp: 2026-09-26
+updated: 2026-09-27
+timestamp: 2026-09-27
 tags:
   - auth
   - jwt
@@ -70,6 +70,14 @@ flowchart LR
 | 单 JWT，仅本地验证 | 不查会话状态 | 无法按 token 立即撤销 | 重新签发 | 存在有效期窗口 | 可接受该窗口的短期凭证；一次性使用还需防重放机制 |
 | 单 JWT + jti 撤销列表 | 查询撤销状态 | 取决于状态传播与缓存 | 重新签发 | 撤销被盗 token | 需要 JWT claims 与提前撤销 |
 | 双 Token（AT 仅本地验证） | 验证 AT 不查，刷新时查 RT 状态 | 撤销 RT；旧 AT 可用至过期 | 用 RT 换新 AT | 限制 AT 可用窗口，保护 RT 并处理重放 | 需要独立验证与持续登录的场景 |
+
+## 双 Token 的请求过程
+
+![AT 访问业务，RT 轮换刷新，退出后旧 AT 可能继续有效](../../../raw/assets/2026-09-27-dual-token-lifecycle.png)
+
+图以同源 Web 应用为例：AT 放页面内存，RT 放 HttpOnly Cookie，服务端保留 RT 摘要与会话状态。清除 RT Cookie 通过服务端的 Set-Cookie 完成；仅本地验证的旧 AT 不会因退出立即失效。
+
+完整接口、RT 原子轮换、并发请求和响应丢失处理，见 [[双 Token 登录的服务端接口设计]]。图片的[生成提示词](../../../raw/sources/2026-09-27-dual-token-diagram-prompt.md)单独保存。
 
 ## 常见疑问
 
@@ -144,6 +152,8 @@ OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_to
 另外，用了 JWT 但每个请求仍去查存储（黑名单、会话记录），效果上和 Session / 内省接口相同，JWT 在这里主要起防伪造作用。这是合理的选择，但要清楚没有拿到"不查存储"的好处。
 
 ## 相关页面
+
+- [[双 Token 登录的服务端接口设计]]
 
 - [[JWT]]
 - [[OAuth]]

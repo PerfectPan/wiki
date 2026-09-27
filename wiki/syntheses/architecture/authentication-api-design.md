@@ -37,6 +37,12 @@ resource:
 
 这是**自有同源 Web 应用的设计示例**，不是运行中的服务。路径、JSON、错误码和期限是应用选择，不是 OAuth 标准要求。注册、密码找回、MFA 与第三方登录先完成身份验证，再按所选方案创建登录态；它们自身的验证流程不在本页展开。App、CLI 或跨站部署需要调整凭证传输和存储，不能直接照搬浏览器 Cookie 设置。
 
+## 三种方案的整体流程
+
+![Session、单 JWT 与双 Token 的凭证位置、请求方向和退出效果](../../../raw/assets/2026-09-27-authentication-strategies.png)
+
+图以同源 Web 为例；JWT 与 AT 采用本地验证。图中省略了业务数据查询，不表示业务服务完全不访问数据库。
+
 ## 三种方案的接口对照
 
 部署时选择一种登录态策略，不让请求体里的 `auth_type` 任意切换认证方式。同一个产品确实支持多种客户端时，应按明确的客户端配置选择，避免 Cookie 与 Authorization 同时出现时随意取一个身份。
@@ -153,28 +159,7 @@ Pragma: no-cache
 
 业务接口不接受 RT，刷新接口不要求 AT 尚未过期。本例允许旧 AT 在退出后继续使用到过期；需要立即失效时，要增加会话或撤销状态检查。
 
-### 组件与信任范围
-
-```mermaid
-flowchart LR
-  subgraph browser[浏览器：输入不可信]
-    JS[页面内存中的 AT]
-    CK[HttpOnly RT Cookie]
-  end
-  subgraph server[服务端：验证后授权]
-    AUTH[认证接口 /auth]
-    API[业务接口 /api]
-    DB[(会话与 RT 摘要)]
-    KEY[签名私钥]
-  end
-  JS -->|Bearer AT| API
-  CK -->|仅匹配 /auth 路径| AUTH
-  AUTH --> DB
-  KEY --> AUTH
-  AUTH -->|响应体中的新 AT| JS
-  AUTH -->|Set-Cookie 中的新 RT| CK
-  API -.->|需要及时撤销时查询| DB
-```
+### 签发与验证职责
 
 私钥只在认证服务一侧，业务服务取得公钥，校验算法、签发者、接收方和有效期后，再执行资源权限判断。JWT 中的用户 ID 不代表可以访问任意对象。[RFC 8725 §3](https://www.rfc-editor.org/rfc/rfc8725#section-3)
 

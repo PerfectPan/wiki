@@ -45,15 +45,7 @@ resource:
 
 本页按资源服务器如何取得验证信息，比较以下两种常见实现；JWT 也可以结合状态查询使用：
 
-```mermaid
-flowchart LR
-  subgraph 引用型
-    C1[客户端] -->|随机 ID| S1[服务端] -->|每次都查| DB[(Redis / DB)]
-  end
-  subgraph 自包含型
-    C2[客户端] -->|JWT| S2[服务端] -->|本地验签| K[密钥]
-  end
-```
+![Session、单 JWT 与双 Token 的凭证位置、请求方向和退出效果](../../../raw/assets/2026-09-27-authentication-strategies.png)
 
 | | 引用型（Session ID、opaque token） | 自包含型（JWT） |
 | --- | --- | --- |
@@ -105,12 +97,6 @@ Session、单 JWT 和双 Token 的完整接口，以及各自的续期、退出�
 
 平时一样，区别在**退出登录**。已签名 JWT 的内容不能直接修改。按 token 提前撤销需要资源服务器取得额外状态，例如撤销列表、会话版本或内省结果。双 Token 可以选择让 AT 仅本地验证，接受旧 AT 在撤销 RT 后仍可用至过期；也可以增加 AT 撤销检查。
 
-```mermaid
-flowchart LR
-  A["AT 正常使用<br>本地验签"] --> B["用户退出<br>服务端删除 RT"]
-  B --> C["残留窗口<br>旧 AT 仍能通过验签"]
-  C --> D["AT 到 exp<br>拿 RT 刷新被拒"]
-```
 
 ### 4. 没有退出登录的需求，单个 JWT 能设长 exp 吗？
 

@@ -26,7 +26,7 @@ description: 围绕主题开展深度调研并沉淀为可审阅的 Wiki 页面�
 - 不要新增项目内 `.codex/skills` 或本地 skill；本仓库的 agent 工作流统一沉淀在 `bin/wiki` 和 `prompts/`
 
 深度验收项：
-- 必须包含系统架构图；优先使用兼容 Obsidian 和 GitHub 的 Mermaid
+- 必须包含系统架构图；图形形式按 `AGENTS.md` 的「配图规则」选择
 - 必须包含核心数据流、执行链路或生命周期图
 - 必须包含扩展面、边界或 trust model 图
 - 对比类调研必须包含双方架构差异图

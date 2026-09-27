@@ -155,8 +155,6 @@ Pragma: no-cache
 
 ![双 Token 流程：登录取得 AT 和 RT，AT 访问业务，RT 轮换刷新，退出撤销刷新能力](../../../raw/assets/2026-09-27-dual-token-lifecycle.png)
 
-图由 imagegen 生成，已核对文字与箭头。“清除 RT Cookie”由服务端返回过期 Cookie 完成，页面 JS 不能直接删除 HttpOnly Cookie。
-
 业务接口不接受 RT，刷新接口不要求 AT 尚未过期。本例允许旧 AT 在退出后继续使用到过期；需要立即失效时，要增加会话或撤销状态检查。
 
 ### 签发与验证职责

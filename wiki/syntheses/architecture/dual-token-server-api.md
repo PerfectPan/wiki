@@ -212,11 +212,11 @@ stateDiagram-v2
 | Cookie 属性与 CSRF 控制各有用途 | MDN Cookies、OWASP CSRF | 本例只适用于同源 Web |
 | 期限、路径、表结构和严格重试策略 | 本页设计示例 | 尚未实现或进行负载测试 |
 
-上线前仍需确定：旧 AT 撤销时效、重新登录的体验、MFA、密钥轮换及存储故障策略。不需要这套复杂度时仍可选择服务端 Session，见 [[Session vs JWT vs 双 Token]]。
+上线前仍需确定：旧 AT 撤销时效、重新登录的体验、MFA、密钥轮换及存储故障策略。不需要这套复杂度时仍可选择服务端 Session，见 [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]。
 
 ## 相关页面与来源
 
-- [[Session vs JWT vs 双 Token]]、[[JWT]]、[[OAuth]]
+- [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]、[[wiki/topics/architecture/jwt|JWT]]、[[OAuth]]
 - [RFC 6749](https://www.rfc-editor.org/rfc/rfc6749)
 - [RFC 6750](https://www.rfc-editor.org/rfc/rfc6750)
 - [RFC 9700](https://www.rfc-editor.org/rfc/rfc9700)

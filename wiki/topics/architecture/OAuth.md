@@ -41,7 +41,7 @@ resource:
 
 OAuth 2.0（RFC 6749）是一套**授权协议**：客户端获得限定访问范围的 access_token 后访问资源。授权可由资源所有者参与，也可采用客户端凭证等不需要用户交互的方式。
 
-它规定"怎么拿到 token"，不规定"token 长什么样"。token 可以是随机字符串，也可以是 [[JWT]]。OAuth 本身也不负责"用户是谁"，这部分由建在它之上的 OpenID Connect（OIDC）补上。
+它规定"怎么拿到 token"，不规定"token 长什么样"。token 可以是随机字符串，也可以是 [[wiki/topics/architecture/jwt|JWT]]。OAuth 本身也不负责"用户是谁"，这部分由建在它之上的 OpenID Connect（OIDC）补上。
 
 ## 四个角色
 
@@ -132,7 +132,7 @@ flowchart TB
 
 - OAuth 管授权：第三方应用能访问什么。
 - OIDC 在授权码流程上加了 `openid` scope 和 `id_token`，回答"用户是谁"，常用于 [[SSO]] 和"用 XX 账号登录"。
-- JWT 只是格式。只做自己系统的前后端登录，不需要 OAuth，用 Session 或 JWT + refresh_token 即可，见 [[Session vs JWT vs 双 Token]]。
+- JWT 只是格式。只做自己系统的前后端登录，不需要 OAuth，用 Session 或 JWT + refresh_token 即可，见 [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]。
 
 ## refresh_token 的安全要求（RFC 9700 §4.14）
 
@@ -148,12 +148,12 @@ flowchart TB
 - 一般第三方应用要先去系统注册获取 client id 和 secret
 - 第三方应用会向系统携带 client id，告诉系统是谁在请求，用户授权以后会 redirect 到第三方应用的网址，携带授权码，然后请求业务后端，业务后端用 client id 和 secret 加授权码去请求系统的令牌，再跳回到前端（可以是裸的令牌，可以是和业务绑定后的 token），然后前端就可以用这个令牌（以用户的身份）去请求用户在系统的信息了
 - 看着向 Github 注册的 **Homepage URL** 和 **Authorization callback URL** 不会校验端口，只会校验域名和 callback 的 path
-- ~~TODO 如何结合这个进一步设计登录态？~~ 见 [[Session vs JWT vs 双 Token]]
+- ~~TODO 如何结合这个进一步设计登录态？~~ 见 [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 
 ## 相关页面
 
-- [[JWT]]
-- [[Session vs JWT vs 双 Token]]
+- [[wiki/topics/architecture/jwt|JWT]]
+- [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - [[SSO]]
 
 ## 来源指针

@@ -77,7 +77,7 @@ flowchart LR
 
 图以同源 Web 应用为例：AT 放页面内存，RT 放 HttpOnly Cookie，服务端保留 RT 摘要与会话状态。清除 RT Cookie 通过服务端的 Set-Cookie 完成；仅本地验证的旧 AT 不会因退出立即失效。
 
-完整接口、RT 原子轮换、并发请求和响应丢失处理，见 [[双 Token 登录的服务端接口设计]]。图片的[生成提示词](../../../raw/sources/2026-09-27-dual-token-diagram-prompt.md)单独保存。
+完整接口、RT 原子轮换、并发请求和响应丢失处理，见 [[wiki/syntheses/architecture/dual-token-server-api|双 Token 登录的服务端接口设计]]。图片的[生成提示词](../../../raw/sources/2026-09-27-dual-token-diagram-prompt.md)单独保存。
 
 ## 常见疑问
 
@@ -139,7 +139,7 @@ Session 可以原地续期，因为记录在服务端，key 不变，改 TTL 即
 
 ### 7. OAuth 和这些是什么关系？
 
-OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_token 可以是随机字符串，也可以是 JWT。只做自己系统的登录不需要 OAuth。详见 [[OAuth]] 和 [[JWT]]。
+OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_token 可以是随机字符串，也可以是 JWT。只做自己系统的登录不需要 OAuth。详见 [[OAuth]] 和 [[wiki/topics/architecture/jwt|JWT]]。
 
 ## 推荐理由
 
@@ -153,9 +153,9 @@ OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_to
 
 ## 相关页面
 
-- [[双 Token 登录的服务端接口设计]]
+- [[wiki/syntheses/architecture/dual-token-server-api|双 Token 登录的服务端接口设计]]
 
-- [[JWT]]
+- [[wiki/topics/architecture/jwt|JWT]]
 - [[OAuth]]
 - [[SSO]]
 

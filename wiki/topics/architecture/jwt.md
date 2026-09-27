@@ -98,7 +98,7 @@ HMAC 的签发方与验证方共享密钥，因此每个持有密钥的验证方
 2. **不能原地续期**：`exp` 在签名覆盖范围内，改了就验不过。续期只能签一个新 token。
 3. **Bearer token 泄露后存在可用时间窗口**：短有效期可以限制窗口，但应结合撤销需求、凭证存储与实际风险确定期限。JWT 格式本身不提供防重放能力。
 
-这几条如何在工程上取舍，见 [[Session vs JWT vs 双 Token]]。
+这几条如何在工程上取舍，见 [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]。
 
 ## 常见攻击与防御
 
@@ -126,7 +126,7 @@ RFC 8725（JWT Best Current Practices）列出了主要问题：
 ## 相关页面
 
 - [[OAuth]]
-- [[Session vs JWT vs 双 Token]]
+- [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - [[SSO]]
 
 ## 来源指针

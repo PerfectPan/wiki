@@ -5,6 +5,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CLI="$ROOT/bin/wiki"
 
+"$CLI" check-jargon --staged
+
 # 获取暂存区中的 .md 文件
 staged_md_files=$(git diff --cached --name-only --diff-filter=ACM -- '*.md' || true)
 

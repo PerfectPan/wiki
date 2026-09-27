@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -24,6 +26,15 @@ jobs:
 
       - name: Run wiki CLI tests
         run: bash tests/wiki-cli.sh
+
+      - name: Test wording checks
+        run: node --test tests/check-jargon.test.ts
+
+      - name: Check wording in PR changes
+        if: github.event_name == 'pull_request'
+        env:
+          JARGON_BASE_REF: ${{ github.event.pull_request.base.sha }}
+        run: ./bin/wiki check-jargon --base "$JARGON_BASE_REF"
 
       - name: Check frontmatter
         run: ./bin/wiki check

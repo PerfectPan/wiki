@@ -4,6 +4,7 @@ import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execSync } from "node:child_process";
+import { runJargonCheck } from "./check-jargon.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -15,10 +16,12 @@ const HELP_TEXT = `wiki CLI
   bin/wiki help
   bin/wiki ingest <source>
   bin/wiki check [path]
+  bin/wiki check-jargon [path | --staged | --base <ref>]
 
 命令:
   ingest    抓取来源并存入 raw/sources/
   check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+  check-jargon  检查 Wiki 用词，报告位置与修改建议
 
 工作流引导见 .agents/skills/
 `;
@@ -360,6 +363,11 @@ function main(argv: string[]): void {
 
   if (command === "check") {
     runCheck(rest[0]);
+    return;
+  }
+
+  if (command === "check-jargon") {
+    runJargonCheck(ROOT, rest);
     return;
   }
 

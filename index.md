@@ -66,6 +66,7 @@
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
   - [[wiki/topics/ai/Chat Completions|Chat Completions]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
+  - [[wiki/topics/ai/oh-my-pi|omp（oh-my-pi）]]
   - [[wiki/topics/ai/Obelisk|Obelisk]]
   - [[wiki/topics/ai/Code Agent|Code Agent]]
   - [[wiki/topics/ai/Coding Agent 编辑工具|Coding Agent 编辑工具]]
@@ -282,6 +283,7 @@
 - `ai`
   - [[wiki/comparisons/ai/LLM API 协议选型|LLM API 协议选型]]
   - [[wiki/comparisons/ai/Workflow vs Agent|Workflow vs Agent]]
+  - [[wiki/comparisons/ai/agent-output-checks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
 - `architecture`
   - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - `career`

@@ -70,6 +70,7 @@
   - [[wiki/topics/ai/Agent Harness|Agent Harness]]
   - [[wiki/topics/ai/Anthropic Messages API|Anthropic Messages API]]
   - [[wiki/topics/ai/Chat Completions|Chat Completions]]
+  - [[wiki/topics/ai/gpu-time|gpu-time]]
   - [[wiki/topics/ai/OpenAI Programmatic Tool Calling|OpenAI Programmatic Tool Calling]]
   - [[wiki/topics/ai/oh-my-pi|omp（oh-my-pi）]]
   - [[wiki/topics/ai/Obelisk|Obelisk]]

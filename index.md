@@ -230,6 +230,7 @@
   - [[wiki/syntheses/ai/LLM 结构化输出的可靠性边界|LLM 结构化输出的可靠性边界]]
   - [[wiki/syntheses/ai/KV Cache 与请求缓存的边界|KV Cache 与请求缓存的边界]]
   - [[wiki/syntheses/ai/Open Knowledge Format 与 Agent 可读知识库|Open Knowledge Format 与 Agent 可读知识库]]
+  - [[wiki/syntheses/ai/Plan Mode：如何规划，以及哪些决定需要人参与|Plan Mode：如何规划，以及哪些决定需要人参与]]
 - `architecture`
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
 - `career`

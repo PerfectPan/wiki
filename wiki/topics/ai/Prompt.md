@@ -29,11 +29,13 @@ Prompt 是提供给模型的输入，可以包含任务指令、上下文、示�
 
 本仓库将可复查的来源放在 `raw/sources/`，提取的提示词放在 `prompts/`。例如 [[prompts/seed-string|Seed string]] 使用随机字符串辅助探索设计方向；具体使用条件见文件中的 `notes`。
 
+文章中的可复用做法见 [[wiki/syntheses/design/ai-assisted-design-techniques|用 AI 做设计的几个技巧]]，包括方向探索、截图评审、图像与视频素材以及删减。
+
 ## 本仓库的提示词记录
 
 每个文件记录用途、来源和使用条件，格式与查找方式见 [[prompts/README|prompts README]]。说明使用英文或中文取决于提示词本身的语言，不要求统一翻译。
 
-当前 PR 使用三个分类值：
+提示词文件使用以下分类值：
 
 | 值 | 原有分类意图 |
 | --- | --- |

@@ -39,6 +39,8 @@ added: 2026-09-22
 
 现有分级是整理者的判断，不表示已经测试过效果。是否继续保留分级，仍需结合提示词库的用途决定。
 
+文章方法总结见 [[wiki/syntheses/design/ai-assisted-design-techniques|用 AI 做设计的几个技巧]]；本目录保留需要查阅的提示词原文。
+
 ## 查找与读取
 
 ```text

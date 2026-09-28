@@ -234,6 +234,8 @@
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
+- `design`
+  - [[wiki/syntheses/design/ai-assisted-design-techniques|用 AI 做设计的几个技巧]]
 - `frontend`
   - [[wiki/syntheses/frontend/纯 CSS 手绘标注的实现与布局边界|纯 CSS 手绘标注的实现与布局边界]]
   - [[wiki/syntheses/frontend/SVG 图标自动 Morph 的实现路径|SVG 图标自动 Morph 的实现路径]]

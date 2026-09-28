@@ -5,6 +5,11 @@
 - [[deep-research-report]]
 - [[SCHEMA]]
 
+## 提示词
+
+- 原文在 `prompts/`（一条一个文件，正文原样复制，格式见 `prompts/README.md`）
+- 召回：`bin/wiki prompts list [--tag <tag>] [--level <档>]`、`bin/wiki prompts search <关键词>`、`bin/wiki prompts show <id>`
+
 ## 主题页
 
 - `frontend`
@@ -230,6 +235,8 @@
 - `career`
   - [[wiki/syntheses/career/招聘中的搜索问题与用人标准|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/结构化面试与行为追问|结构化面试与行为追问]]
+- `design`
+  - [[wiki/syntheses/design/ai-assisted-design-techniques|用 AI 做设计的几个技巧]]
 - `frontend`
   - [[wiki/syntheses/frontend/纯 CSS 手绘标注的实现与布局边界|纯 CSS 手绘标注的实现与布局边界]]
   - [[wiki/syntheses/frontend/SVG 图标自动 Morph 的实现路径|SVG 图标自动 Morph 的实现路径]]

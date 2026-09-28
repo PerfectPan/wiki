@@ -80,10 +80,10 @@ prompts_list="$("$CLI" prompts list)"
 assert_contains "$prompts_list" "seed-string"
 assert_contains "$prompts_list" "recommended"
 
-prompts_tagged="$("$CLI" prompts list --tag design)"
-assert_contains "$prompts_tagged" "seed-string"
-if [[ "$prompts_tagged" == *"plan-first"* ]]; then
-  fail "prompts list --tag design 不应包含 plan-first"
+prompts_tagged="$("$CLI" prompts list --tag video)"
+assert_contains "$prompts_tagged" "keyframe-transition-scrub"
+if [[ "$prompts_tagged" == *"seed-string"* ]]; then
+  fail "prompts list --tag video 不应包含 seed-string"
 fi
 
 prompts_json="$("$CLI" prompts list --tag design --json)"
@@ -95,8 +95,8 @@ if [[ "$prompts_show" == *'```'* ]]; then
   fail "prompts show 不应带代码块包装，应直接打印原文"
 fi
 
-prompts_search="$("$CLI" prompts search counterexample)"
-assert_contains "$prompts_search" "negative-random-ask"
+prompts_search="$("$CLI" prompts search "random alphanumeric string")"
+assert_contains "$prompts_search" "seed-string"
 
 prompts_check="$("$CLI" prompts check 2>&1)" || fail "prompts check 不应失败: $prompts_check"
 assert_contains "$prompts_check" "0 个错误，0 个警告"

@@ -4,8 +4,8 @@ description: Prompt 的用途、教程与本仓库保存的提示词素材
 type: topic
 category: ai
 created: 2026-04-12
-updated: 2026-09-26
-timestamp: 2026-09-26
+updated: 2026-09-28
+timestamp: 2026-09-28
 tags:
   - prompt
   - prompt-engineering
@@ -27,7 +27,7 @@ resource:
 
 Prompt 是提供给模型的输入，可以包含任务指令、上下文、示例和输出要求。
 
-本仓库将可复查的来源放在 `raw/sources/`，提取的提示词放在 `prompts/`。例如 [[prompts/plan-first|Plan first]] 要求 agent 先提出代码修改计划；该副本保留了原素材的格式错误，使用前需要处理，详见文件中的 `notes`。
+本仓库将可复查的来源放在 `raw/sources/`，提取的提示词放在 `prompts/`。例如 [[prompts/seed-string|Seed string]] 使用随机字符串辅助探索设计方向；具体使用条件见文件中的 `notes`。
 
 ## 本仓库的提示词记录
 

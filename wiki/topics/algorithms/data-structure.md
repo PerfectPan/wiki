@@ -14,7 +14,7 @@ source_refs:
 
 - [[sqrt-tree]]
 - [[monotonic-stack]]
-- [[Segment Tree]]
+- [[wiki/topics/algorithms/segment-tree.md|Segment Tree]]
 -
 
 ## Source Pointers

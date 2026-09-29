@@ -45,8 +45,8 @@ source_refs:
 	    return data;
 	  }
 	  ```
-- 组件关注 mount / update / unmount 三个阶段，而 Effect 需要关注的是每一个分开的同步的过程（包含开始和结束）就够了，从组件的角度考虑会显得很复杂，React 会将 [[useEffect]] 里包裹的函数在「正确」的时机去进行同步，你要做的就是把这个开始和结束(cleanup function)的过程写好写对，标记好正确的 dependency array 即可
-- React 借助 [[ESLint]] 能够静态分析出你的 [[useEffect]] 的 dependency array 是否缺少响应的响应式变量
+- 组件关注 mount / update / unmount 三个阶段，而 Effect 需要关注的是每一个分开的同步的过程（包含开始和结束）就够了，从组件的角度考虑会显得很复杂，React 会将 [[wiki/topics/frontend/use-effect|useEffect]] 里包裹的函数在「正确」的时机去进行同步，你要做的就是把这个开始和结束(cleanup function)的过程写好写对，标记好正确的 dependency array 即可
+- React 借助 [[ESLint]] 能够静态分析出你的 [[wiki/topics/frontend/use-effect|useEffect]] 的 dependency array 是否缺少响应的响应式变量
 - [[ref]]
 - [[useState]] 每次调用返回的都是上一次 snapshot 的值，初始化的时候会返回 initialValue 或者如果是个函数会将其在初始化阶段调用一次
 - 自定义 Hooks 里的 useState 是独立的，可以理解为把函数展开

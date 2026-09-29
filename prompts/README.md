@@ -30,7 +30,7 @@ added: 2026-09-22
 | `id` | 是 | 与文件名相同 |
 | `title` | 是 | 短标题 |
 | `scene` | 是 | 什么时候使用 |
-| `level` | 是 | 现有分类值为 `recommended`、`reference`、`limited`；说明见 [[wiki/topics/ai/Prompt\|Prompt]] |
+| `level` | 是 | 现有分类值为 `recommended`、`reference`、`limited`；说明见 [[wiki/topics/ai/prompt\|Prompt]] |
 | `tags` | 是 | 用于筛选的英文短词列表 |
 | `source` | 是 | 来源 URL 或素材路径 |
 | `source_note` | 否 | 来源中的章节或位置 |

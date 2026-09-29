@@ -77,8 +77,8 @@ Gannaway 转述了有人选择用 agent 改善现有 React 应用、而不迁移
 
 ## 相关页面
 
-- [[前端框架的四个时代]]
-- [[State Management]]
+- [[frontend-framework-four-eras]]
+- [[state-management]]
 
 ## 来源指针
 

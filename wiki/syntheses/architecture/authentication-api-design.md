@@ -314,7 +314,7 @@ stateDiagram-v2
 
 ## 相关页面与来源
 
-- [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]、[[wiki/topics/architecture/jwt|JWT]]、[[OAuth]]
+- [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]、[[wiki/topics/architecture/jwt|JWT]]、[[oauth]]
 - [OWASP Session Management](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html)
 - [RFC 6749](https://www.rfc-editor.org/rfc/rfc6749)
 - [RFC 6750](https://www.rfc-editor.org/rfc/rfc6750)

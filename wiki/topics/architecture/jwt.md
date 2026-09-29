@@ -27,7 +27,7 @@ resource:
 
 ## 摘要
 
-JWT（JSON Web Token，RFC 7519）是一种表示 JSON claims 的 token 格式，可使用 JWS 保护完整性，或使用 JWE 加密。服务端必须验证密码学保护与所需 claims；是否查询会话、权限或撤销状态，由应用设计决定。JWT 不规定获取流程，可以用于 [[OAuth]] 等协议。
+JWT（JSON Web Token，RFC 7519）是一种表示 JSON claims 的 token 格式，可使用 JWS 保护完整性，或使用 JWE 加密。服务端必须验证密码学保护与所需 claims；是否查询会话、权限或撤销状态，由应用设计决定。JWT 不规定获取流程，可以用于 [[oauth]] 等协议。
 
 本页主要讨论 JWS 形式的 JWT（RFC 7515）：**签名或 MAC 不会加密内容**。需要内容保密时可使用 JWE（RFC 7516）；签名与加密也可以嵌套。
 
@@ -125,9 +125,9 @@ RFC 8725（JWT Best Current Practices）列出了主要问题：
 
 ## 相关页面
 
-- [[OAuth]]
+- [[oauth]]
 - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
-- [[SSO]]
+- [[sso]]
 
 ## 来源指针
 

@@ -272,7 +272,7 @@ source_refs:
 ### 定位纪律
 
 1. 收录页是 curated list，不是 star 排行榜，也不是全网镜像；只收「过线或有教学价值」的条目。
-2. 判据与索引分离：领域判据只存在于该领域的唯一判据页（如 skill 领域见 `wiki/syntheses/ai/Skill 工程化的产物协议范式.md`），收录页只写「一句话价值 + 分级 + 指针」；不要在收录页里重建判据细则。
+2. 判据与索引分离：领域判据只存在于该领域的唯一判据页（如 skill 领域见 `wiki/syntheses/ai/skill-engineering-artifact-protocol.md`），收录页只写「一句话价值 + 分级 + 指针」；不要在收录页里重建判据细则。
 3. 未过判据的链接堆、摘录 → `raw/sources/`，不进收录页。
 4. 对象若另开 topic / product 页，收录页条目与对象页解耦：收录页只留指针。
 5. 素材合并：同一对象（一个库 / 站）在 `raw/sources/` 只保留一份合并素材（`YYYY-MM-DD-<对象>.md`），不按 URL / 页面拆多个文件；页面级噪音（testimonials、导航、广告）在收录时剔除，不整站搬运。
@@ -312,7 +312,7 @@ resource:             # 镜像 source_refs
 - 收录页加条目、改分级 = 知识变更，走 branch + PR；PR body 说明该条目的判据与分级理由。
 - 收录页新增对象若本身值得开页（topic / product），导航同步更新 `index.md`；纯索引行变更不需要。
 
-样板页：`wiki/topics/ai/Awesome Agent Skills.md`（本约定的首个实例，2026-08 建立并沿用至今）。
+样板页：`wiki/topics/ai/awesome-agent-skills.md`（本约定的首个实例，2026-08 建立并沿用至今）。
 
 ## 提示词（prompts/）
 

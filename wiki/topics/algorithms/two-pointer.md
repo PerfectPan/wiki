@@ -1,0 +1,45 @@
+---
+title: Two Pointer
+type: topic
+category: algorithms
+created: 2026-04-12
+updated: 2026-04-12
+tags:
+  - two
+  - pointer
+source_refs:
+  - raw/sources/two-pointer.md
+---
+# Two Pointer
+
+- https://leetcode.cn/problems/find-the-longest-equal-subarray/?envType=daily-question&envId=2023-09-01
+	- ![CleanShot 2023-09-01 at 13.25.09@2x.png](raw/assets/cleanshot-2023-09-01-at-13-25-09-2x-1693545921073-0.png)
+	- ```cpp
+	  class Solution {
+	  public:
+	      int longestEqualSubarray(vector<int> &nums, int k) {
+	          int n = nums.size(), ans = 0;
+	          vector<vector<int>> pos(n + 1);
+	          for (int i = 0; i < n; i++)
+	              pos[nums[i]].push_back(i - pos[nums[i]].size());
+	          for (auto &ps: pos) {
+	              if (ps.size() <= ans) continue;
+	              int left = 0;
+	              for (int right = 0; right < ps.size(); right++) {
+	                  while (ps[right] - ps[left] > k) // 要删除的数太多了
+	                      left++;
+	                  ans = max(ans, right - left + 1);
+	              }
+	          }
+	          return ans;
+	      }
+	  };
+
+	  ```
+- https://leetcode.cn/problems/maximum-sum-of-3-non-overlapping-subarrays/description/
+	- ![CleanShot 2023-11-20 at 12.38.58@2x.png](raw/assets/cleanshot-2023-11-20-at-12-38-58-2x-1700455141533-0.png)
+-
+
+## Source Pointers
+
+- `raw/sources/two-pointer.md`

@@ -92,13 +92,13 @@ wangleineo 用 Spec、Defaults、Gap 区分三类信息。这套分类来自知�
 
 ## 相关页面
 
-- [[Code Agent]]
-- [[Agent Harness]]
-- [[Coding Agent 编辑工具]]
-- [[Agent 循环工作流的控制边界]]
-- [[Claude 5 时代的上下文工程]]
-- [[AI Slop]]
-- [[Prompt]]
+- [[code-agent]]
+- [[agent-harness]]
+- [[coding-agent-edit-tools]]
+- [[agent-loop-control-boundaries]]
+- [[claude-5-context-engineering]]
+- [[ai-slop]]
+- [[prompt]]
 
 ## 来源指针
 

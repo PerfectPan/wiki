@@ -1,0 +1,22 @@
+---
+title: 技术方案
+type: topic
+category: architecture
+created: 2026-04-12
+updated: 2026-04-19
+tags:
+  - architecture
+  - system-design
+  - data-modeling
+  - api-design
+source_refs:
+  - raw/sources/technical-design.md
+---
+# 技术方案
+
+- 实体建模 -> 存储设计 -> 接口设计
+- 前端应该也要根据后端存储的实体建设对应的前端实体，再创建数据实体到 UI 实体的 binding
+
+## Source Pointers
+
+- `raw/sources/technical-design.md`

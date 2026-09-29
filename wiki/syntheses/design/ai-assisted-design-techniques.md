@@ -74,8 +74,8 @@ resource:
 
 ## 相关页面与来源
 
-- [[Prompt]]
-- [[wiki/syntheses/product/AI 辅助设计的质量边界|AI 辅助设计的质量边界]]
-- [[wiki/topics/design/界面质感细节|界面质感细节]]
+- [[prompt]]
+- [[wiki/syntheses/product/ai-assisted-design-quality-boundary|AI 辅助设计的质量边界]]
+- [[wiki/topics/design/interface-polish-details|界面质感细节]]
 - [文章存档：Technique 1–6](../../../raw/sources/2026-09-22-lenny-world-class-designer.md)
 - [How to turn your AI into a world-class designer](https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world)

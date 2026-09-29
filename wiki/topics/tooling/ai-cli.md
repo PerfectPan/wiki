@@ -49,7 +49,7 @@ resource:
 
 ## 相关页面
 
-- [[wiki/syntheses/ai/Skill 工程化的产物协议范式|Skill 工程化的产物协议范式]]
+- [[wiki/syntheses/ai/skill-engineering-artifact-protocol|Skill 工程化的产物协议范式]]
 
 ## 来源指针
 

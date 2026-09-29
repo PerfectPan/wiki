@@ -45,8 +45,8 @@ omp 是一个终端 coding agent。本页主要记录它的 TTSR（Time-Travelin
 ## 相关页面
 
 - [[wiki/comparisons/ai/agent-output-checks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
-- [[Agent Harness]]
-- [[Code Agent]]
+- [[agent-harness]]
+- [[code-agent]]
 
 ## 来源指针
 

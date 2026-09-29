@@ -19,7 +19,7 @@ source_refs:
 - https://juejin.cn/post/7097881373754687525
 - https://juejin.cn/post/7040982789650382855#heading-25
 - 实际到 .call | .callAsync 的时候才会根据注册的事件去动态 gen 一个函数，并且如果注册的事件没有变化不会重新 gen
-- Async 类的都会补充一个 callback 函数，作为异步的桥接，类似于 [[Node]] 的 callback 机制
+- Async 类的都会补充一个 callback 函数，作为异步的桥接，类似于 [[node]] 的 callback 机制
 - 之所以要标明 name 还有参数列表，应该就是为了动态生成函数用的，不过 https://juejin.cn/post/7097881373754687525 这篇文章貌似已经证伪了，这样并没有多快，可能是因为 V8 性能优化的越来越好了 https://github.com/lizuncong/mini-tapable
 - tapAsync 理论上需要自己处理好[[异步]]的捕获，不然会有 unHandledPromiseRejection 的问题
 - ```js

@@ -10,7 +10,7 @@ tags:
   - metadata
   - reflection
 source_refs:
-  - wiki/topics/architecture/@opensumi%2Fdi.md
+  - wiki/topics/architecture/opensumi-di.md
 ---
 # reflect-metadata
 
@@ -29,9 +29,9 @@ source_refs:
 
 ## 相关页面
 
-- [[TypeScript]]
+- [[typescript]]
 - [[@opensumi/di]]
 
 ## 来源指针
 
-- `wiki/topics/architecture/@opensumi%2Fdi.md`
+- `wiki/topics/architecture/opensumi-di.md`

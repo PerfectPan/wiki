@@ -483,7 +483,7 @@ function runPrompts(rest: string[]): void {
   bin/wiki prompts show <id> [--meta]
   bin/wiki prompts check
 
-提示词文件格式见 prompts/README.md，分级标准见 wiki/topics/ai/Prompt.md。\n`);
+提示词文件格式见 prompts/README.md，分级标准见 wiki/topics/ai/prompt.md。\n`);
     return;
   }
 

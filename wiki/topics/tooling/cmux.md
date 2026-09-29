@@ -49,9 +49,9 @@ cmux 是一个 macOS 上的 AI agent 终端编排器（内嵌 ghostty 终端）�
 
 ## 相关页面
 
-- [[Code Agent]]
-- [[Agent]]
-- [[wiki/syntheses/tooling/聚合型 Agent CLI 的架构设计观察|聚合型 Agent CLI 的架构设计观察]]
+- [[code-agent]]
+- [[agent]]
+- [[wiki/syntheses/tooling/aggregator-agent-cli-architecture-observations|聚合型 Agent CLI 的架构设计观察]]
 
 ## 来源指针
 

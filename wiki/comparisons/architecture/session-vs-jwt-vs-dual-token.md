@@ -50,7 +50,7 @@ resource:
 | | 引用型（Session ID、opaque token） | 自包含型（JWT） |
 | --- | --- | --- |
 | 身份信息在哪 | 服务端存储 | token 里 |
-| 每次请求 | 查一次存储（或调一次 [[OAuth]] 内省接口） | 本地计算 |
+| 每次请求 | 查一次存储（或调一次 [[oauth]] 内省接口） | 本地计算 |
 | 提前作废 | 更新记录；生效速度取决于缓存 | 需要额外的撤销机制；仅本地验证不能获知单个 token 已撤销 |
 | 续期 | 改记录的过期时间 | 只能签新 token |
 
@@ -125,7 +125,7 @@ Session 可以原地续期，因为记录在服务端，key 不变，改 TTL 即
 
 ### 7. OAuth 和这些是什么关系？
 
-OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_token 可以是随机字符串，也可以是 JWT。只做自己系统的登录不需要 OAuth。详见 [[OAuth]] 和 [[wiki/topics/architecture/jwt|JWT]]。
+OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_token 可以是随机字符串，也可以是 JWT。只做自己系统的登录不需要 OAuth。详见 [[oauth]] 和 [[wiki/topics/architecture/jwt|JWT]]。
 
 ## 推荐理由
 
@@ -142,8 +142,8 @@ OAuth 规定怎么拿到 token，不规定 token 格式；它发出的 access_to
 - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
 
 - [[wiki/topics/architecture/jwt|JWT]]
-- [[OAuth]]
-- [[SSO]]
+- [[oauth]]
+- [[sso]]
 
 ## 来源指针
 

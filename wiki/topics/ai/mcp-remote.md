@@ -26,8 +26,8 @@ source_refs:
 
 ## 相关页面
 
-- [[MCP]]
-- [[OAuth]]
+- [[mcp]]
+- [[oauth]]
 
 ## 来源指针
 

@@ -62,7 +62,7 @@ assert_contains "$help_output" "check"
 "$CLI" ingest deep-research-report.md >/dev/null
 
 # check 命令：对合法页面应返回 0
-check_output="$("$CLI" check wiki/topics/ai/MCP.md 2>&1)" || true
+check_output="$("$CLI" check wiki/topics/ai/mcp.md 2>&1)" || true
 assert_contains "$check_output" "校验完成"
 
 # check 命令：全量校验不应有 error（只有 warning）

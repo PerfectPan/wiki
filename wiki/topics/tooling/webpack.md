@@ -62,7 +62,7 @@ source_refs:
       ],
     },
   ```
-- `import.meta.url` 也是一个容易踩坑的点：webpack 默认会编译它，因此结果不一定还是浏览器里直觉理解的 URL，可能被改写成 `file://...` 一类构建期路径。
+- `import.meta.url` 也是一个容易遇到问题的点：webpack 默认会编译它，因此结果不一定还是浏览器里直觉理解的 URL，可能被改写成 `file://...` 一类构建期路径。
 - 这里的前提是 `import.meta` 本身只在 ESM 语境里成立；如果模块不是按 ESM 处理，连语法层面都可能先报错。
 - 如果确实要保留原始的 `import.meta.url` 语义，需要显式检查 webpack 对 `importMeta` 的相关配置，而不是默认相信它会原样透传。
 

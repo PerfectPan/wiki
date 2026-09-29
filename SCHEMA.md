@@ -25,6 +25,7 @@
 - `AGENTS.md`、`SCHEMA.md`、`README.md`、`SKILL.md`、`LICENSE` 等约定文件，以及工具要求的 `.gitignore`、`.github/pull_request_template.md` 等固定名称保留原样；不要借例外命名普通知识页面。
 - 已在目标分支存在的文件不批量改名，修改正文也不要求改名；尚未合入的 PR 新增文件遵守新规则。
 - 文件名与展示标题分开：frontmatter 的 `title` 和正文标题可以使用中文。链接使用实际路径，必要时用显示文本，例如 `[[wiki/topics/architecture/jwt|JWT]]`。
+- wikilink 别名：`[[实际路径|显示文本]]` 中竖线左侧是链接目标、右侧是渲染文本；指向页内小节用 `[[路径#小节]]`。Markdown 表格内竖线与列分隔冲突，别名需转义写成 `\|`（如 `[[wiki/topics/ai/prompt\|Prompt]]`）。批量改文件名时只替换目标路径，显示文本保持原样。
 - 重命名新增文件时，同步修改导航、页面链接、来源指针及 PR 中的路径说明；原始素材正文不因命名规则改写。
 
 ## 建议使用的 frontmatter

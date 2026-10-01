@@ -60,7 +60,7 @@ bin/wiki check <path>       # 校验单个文件或目录
 
 `bin/wiki` 是工具 CLI，只负责执行操作，不输出引导：
 
-- `bin/wiki ingest <source>`：抓取来源并存入 `raw/sources/`；直抓被反爬拦截或提取太脏时，用 `--file` 喂入会话侧 reader 预抓的正文，用法见 `bin/README.md`
+- `bin/wiki ingest <source>`：抓取来源并存入 `raw/sources/`；直抓与 `--file` 预抓正文两条路径的选择见 `.agents/skills/ingest/SKILL.md`，参数细节见 `bin/README.md`
 - `bin/wiki check [path]`：校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范（`prompts/` 下的文件按提示词规则校验）
 - `bin/wiki prompts list|search|show|check`：提示词库的列表、搜索、打印原文与校验
 - `bin/wiki check-jargon [path | --staged | --base <ref>]`：检查 Wiki 用词；写作规则见 `SCHEMA.md`，检查范围与例外写法见 `bin/README.md`。

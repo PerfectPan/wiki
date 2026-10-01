@@ -386,6 +386,7 @@ stdio 仍是主路径；v2 明确 JSON-RPC **batch**，但不要 batch `initiali
 
 ## 相关页面
 
+- [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - [[code-agent]]
 - [[agent]]
 - [[mcp]]

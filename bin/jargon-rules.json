@@ -12,5 +12,9 @@
   { "term": "赋能", "suggestion": "写清为谁提供什么能力", "exceptions": [] },
   { "term": "抓手", "suggestion": "写明具体手段或切入点", "exceptions": [] },
   { "term": "闸门", "suggestion": "写明过滤条件、权限检查或执行限制", "exceptions": [] },
-  { "term": "反应性框架", "suggestion": "Reactive Framework", "exceptions": [] }
+  { "term": "反应性框架", "suggestion": "Reactive Framework", "exceptions": [] },
+  { "term": "补偿型脚手架", "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单", "exceptions": [] },
+  { "term": "补偿性脚手架", "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单", "exceptions": [] },
+  { "term": "协作原语", "suggestion": "写明具体机制，例如任务依赖、消息频道或共享任务列表", "exceptions": [] },
+  { "term": "上下文接力", "suggestion": "写明数据如何传递，例如通过文件、工具返回值或会话接口", "exceptions": [] }
 ]

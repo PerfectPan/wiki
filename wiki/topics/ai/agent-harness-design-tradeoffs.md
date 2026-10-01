@@ -18,6 +18,10 @@ source_refs:
   - https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/
   - raw/sources/2026-04-15-openai-agents-sdk-evolution.md
   - https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/
+  - raw/sources/2026-10-01-claude-code-task-tools-docs.md
+  - https://code.claude.com/docs/en/agent-sdk/todo-tracking
+  - https://code.claude.com/docs/en/tools-reference
+  - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 resource:
   - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
@@ -25,6 +29,10 @@ resource:
   - https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/
   - raw/sources/2026-04-15-openai-agents-sdk-evolution.md
   - https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/
+  - raw/sources/2026-10-01-claude-code-task-tools-docs.md
+  - https://code.claude.com/docs/en/agent-sdk/todo-tracking
+  - https://code.claude.com/docs/en/tools-reference
+  - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
 ---
 
 # Agent Harness 的设计取舍
@@ -39,7 +47,7 @@ harness 的基础定义（system prompt、tools、agentic loop、translation lay
 | --- | --- | --- | --- |
 | 工具组合放哪 | 上下文接力 vs 代码沙箱 | 移进代码沙箱 | Pi、OpenAI |
 | 组合执行放哪 | 并进 agent loop 或工具沙箱 vs 单独一层 | 受信侧受限沙箱（第三层） | Pi |
-| 脚手架留不留 | 补偿模型短板 vs 拆除减负 | 补偿型随模型退役，协作型保留增厚 | Claude Code |
+| 脚手架留不留 | 补偿模型短板 vs 拆除减负 | 补偿型随模型退役；协作型保留，但任务工具组按模型门控 | Claude Code |
 | 多 agent 共享状态 | 文件系统协议 vs 平台会话原语 | 两条路线并行 | Claude Code、OpenAI |
 | harness 归谁 | 用户可拥有的中立层 vs 厂商平台 | 并存且开始竞争 | Pi、OpenAI |
 
@@ -75,7 +83,19 @@ TodoWrite 原本补偿的是模型自管状态能力弱：长任务里模型容�
 
 **退役的只是补偿部分**：Tasks 留下并强化的恰好是非补偿的部分——任务依赖元数据、跨会话共享的 Task List（`CLAUDE_CODE_TASK_LIST_ID`）。这些是协作结构，模型再强也不会自己长出来。Slash Commands → Skills 是同构拆分：progressive disclosure 是「模型不会自己找上下文」的补偿，被 Skills 自动装配上下文取代；SKILL.MD 引用其他文件形成的多步上下文链是协作资产，留下了。
 
-**限定**：这条取舍的前提是绑定最新强模型。[[agent-harness-evolution-paradigm]] 里 HarnessX 的 inverse-scaling 结论（弱模型从 harness 改进中获益更大）说明对弱模型外部清单仍是净收益；「unhobbling」这个概括出自博主转述而非 Anthropic 的可验证表述，可靠的工程事实是两个工具被替换、新抽象变强。对 harness 维护者的操作含义：每个补偿型机制都记录它补偿的短板和退役条件——没有退出条件的补偿层会累积成模型不需要时也不肯走的遗产。
+两个工具的机械对比（官方 tools-reference 与 todo-tracking 文档，2026-10 查证）：
+
+| | TodoWrite | Tasks（TaskCreate / TaskGet / TaskUpdate / TaskList） |
+| --- | --- | --- |
+| 工具形态 | 单工具，一次调用重写整张清单 | 四个工具：建 / 查 / 改 / 列，按任务 ID 增量更新 |
+| 数据模型 | 条目数组，状态 pending / in_progress / completed | 任务带 subject 与状态生命周期（completed 或 deleted 收尾），依赖与阻塞由 TaskUpdate 维护 |
+| 清单归属 | 会话内的自我对齐清单，只在本会话存在 | 共享任务清单：多会话、子 agent、agent teams 队友都可读写，`CLAUDE_CODE_TASK_LIST_ID` 让多个实例共享同一清单 |
+| 消费者 | 只有模型自己 | 模型之外的协调载体：其他会话认领工作、人查看进度 |
+| 默认状态 | 仍存在但默认关闭，`CLAUDE_CODE_ENABLE_TASKS=0` 可切回 | 有这组工具的会话里的默认 |
+
+**门控比博客知道的走得更远**：changelog 显示 v2.1.233 起 TodoWrite 与 Task 工具组在 Opus 4.8、Sonnet 5、Fable 5、Mythos 5 及更新模型上整体不再提供；v2.1.268 收敛为现行规则——默认只提供给 Claude 3.x、Opus 4.0–4.7、Sonnet 4.0–4.6、Haiku 4.5，其余模型需 `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` 或 allowedTools 显式启用。官方给的理由与本页的补偿逻辑同向：「新模型无需书面清单即可跟踪多步工作，工具定义与提醒占用上下文」。两个例外值得注意：后台会话与云端会话在所有模型上保留这组工具；子 agent 仅当主会话有这组工具时才有，没有 Task 工具的 agent teams 队友改用消息而非共享任务清单协调。
+
+**限定**：这条取舍的前提是绑定最新强模型。[[agent-harness-evolution-paradigm]] 里 HarnessX 的 inverse-scaling 结论（弱模型从 harness 改进中获益更大）说明对弱模型外部清单仍是净收益；「协作层保留」也要按门控来读——协作工具的价值没有变，但交互式会话里「谁默认拥有它」成了模型能力的函数。对 harness 维护者的操作含义：每个补偿型机制都记录它补偿的短板和退役条件——没有退出条件的补偿层会累积成模型不需要时也不肯走的遗产。
 
 ## 取舍四：多 agent 共享状态——文件系统还是平台原语
 
@@ -108,7 +128,7 @@ Pi 的应对值得记录：不是回避协议生态，而是把 MCP 接进核心
 
 ## 保留判断
 
-- 「unhobbling」是二手解读框架；可确认的事实只有「替换发生、新抽象变强」。
+- 「unhobbling」最初是二手解读，但官方文档后来给出同向理由（新模型无需书面清单、工具定义占上下文）；Tony Lee 文中未见于官方文档的细节，引用前以官方 tools-reference / env-vars 为准。
 - OpenAI Harness 处于 alpha，`agent.as_harness()` 等接口形态可能变化；appsec bug 减少 45%、修复速度 2.5 倍是 OpenAI 自述的早期信号，无外部验证。
 - 三份来源均有立场：Pi 是 harness 厂商（为拥抱 MCP 的决定辩护），OpenAI 是平台方（推广平台化），Tony Lee 是基于 changelog 的推断。
 - OpenAI 原文直连返回 403，raw 素材是 web reader 提取的重构版而非逐字副本，关键 API 示例保留原文。
@@ -128,3 +148,4 @@ Pi 的应对值得记录：不是回避协议生态，而是把 MCP 接进核心
 - `raw/sources/2026-09-29-you-said-no-mcp.md` / [You Said No MCP! — Earendil，2026-09-29](https://earendil.com/posts/you-said-no-mcp/)
 - `raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md` / [Why Claude Code Dropped Todos and Slash Commands — Tony Lee，2026-02-08](https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/)
 - `raw/sources/2026-04-15-openai-agents-sdk-evolution.md` / [Agents SDK 的全新演进 — OpenAI，2026-04-15](https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/)
+- `raw/sources/2026-10-01-claude-code-task-tools-docs.md` / [Track todos — Claude Code 官方文档](https://code.claude.com/docs/en/agent-sdk/todo-tracking)、[Tools reference（task-tool availability）](https://code.claude.com/docs/en/tools-reference)、[CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)

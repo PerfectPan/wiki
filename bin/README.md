@@ -18,6 +18,18 @@ bin/wiki prompts check
 
 提示词文件格式见 `prompts/README.md`。
 
+## Ingest 来源
+
+```bash
+bin/wiki ingest <url>                                        # 直抓并转 Markdown 存入 raw/sources/
+bin/wiki ingest <url> --file <path>                          # 用预抓正文落盘，跳过直抓
+bin/wiki ingest <url> --file <path> --author <name> --published <date>
+```
+
+`--file` 接受 Markdown 文件，或含 `content` / `markdown` / `body` 字段的 JSON（例如会话侧 web reader 工具的返回值）；JSON 里的 `title`、`author`、`publishedTime` 会自动提取写入头注释。
+
+使用场景：直抓被反爬拦截（403），或 HTML 转 Markdown 提取太脏（导航、噪音、格式丢失）。先用会话侧 reader 工具（如 GLM 的 webReader MCP，是否可用取决于客户端）把正文抓下来存成文件，再交给本命令按标准格式落盘；`--file` 与具体 reader 无绑定，手动复制的正文文件同样适用。直抓路径保持不变，没有 reader 工具的环境继续用它兜底。
+
 ## Wiki 用词检查
 
 ```bash

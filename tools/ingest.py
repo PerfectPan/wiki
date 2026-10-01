@@ -10,6 +10,7 @@ ingest.py - 抓取网页并提取为 Markdown，存入 raw/sources/
 """
 
 import argparse
+import json
 import os
 import re
 import sys
@@ -17,6 +18,11 @@ from datetime import date
 from html.parser import HTMLParser
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
+
+
+def die(message: str) -> None:
+    print(f"错误: {message}", file=sys.stderr)
+    sys.exit(1)
 
 
 def fetch(url: str) -> str:
@@ -369,16 +375,77 @@ def html_to_markdown(html: str) -> str:
     return text.strip() + "\n"
 
 
-def build_source_header(url: str, source_type: str, title: str) -> str:
+def build_source_header(
+    url: str,
+    source_type: str,
+    title: str,
+    author: str | None = None,
+    published: str | None = None,
+    note: str | None = None,
+) -> str:
     """生成来源头"""
     today = date.today().isoformat()
-    return f"""<!--
-source: {url}
-type: {source_type}
-fetched: {today}
--->
+    lines = ["<!--", f"source: {url}", f"type: {source_type}"]
+    if author:
+        lines.append(f"author: {author}")
+    if published:
+        lines.append(f"published: {published}")
+    lines.append(f"fetched: {today}")
+    if note:
+        lines.append(f"note: {note}")
+    lines.append("-->")
+    return "\n".join(lines) + "\n\n"
 
-"""
+
+def first_heading(markdown: str) -> str:
+    """取 Markdown 第一个标题作为标题备选"""
+    m = re.search(r"^#\s+(.+)$", markdown, re.MULTILINE)
+    return m.group(1).strip() if m else ""
+
+
+def read_prefetched(path: str) -> tuple[str, dict]:
+    """读取会话侧工具预抓的正文，返回 (markdown 正文, 元信息)。
+
+    支持两种输入：Markdown 文件，或含 content/markdown/body 字段的 JSON
+    （例如会话侧 web reader 工具的返回值），JSON 里的 title、author、
+    publishedTime 会一并提取进元信息。
+    """
+    with open(path, "r", encoding="utf-8", errors="replace") as f:
+        raw = f.read().strip()
+
+    if not raw.startswith("{"):
+        return raw, {}
+
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return raw, {}
+
+    if not isinstance(data, dict):
+        return raw, {}
+
+    node = data.get("text") if isinstance(data.get("text"), dict) else data
+    body = ""
+    for key in ("content", "markdown", "body"):
+        value = node.get(key)
+        if isinstance(value, str) and value.strip():
+            body = value.strip()
+            break
+    if not body:
+        die(f"{path} 是 JSON 但找不到 content/markdown/body 字段；请保存正文为 Markdown 文件后重试")
+
+    meta: dict = {}
+    if isinstance(node.get("title"), str) and node["title"].strip():
+        meta["title"] = node["title"].strip()
+    if isinstance(node.get("author"), str) and node["author"].strip():
+        meta["author"] = node["author"].strip()
+    for key in ("publishedTime", "published_time", "published"):
+        value = node.get(key)
+        if isinstance(value, str) and value.strip():
+            # publishedTime 形如 2026-02-08T00:00:00.000Z，取日期部分
+            meta["published"] = value.strip()[:10]
+            break
+    return body, meta
 
 
 def is_youtube_url(url: str) -> bool:
@@ -478,6 +545,9 @@ def main():
     parser = argparse.ArgumentParser(description="抓取网页并存入 raw/sources/")
     parser.add_argument("url", help="网页 URL 或 GitHub 仓库 URL")
     parser.add_argument("--type", default="blog", choices=["blog", "doc", "repo", "video", "tweet"], help="来源类型")
+    parser.add_argument("--file", help="预抓正文路径（Markdown，或含 content 字段的 JSON），给出时跳过直接抓取")
+    parser.add_argument("--author", help="来源作者，写入头注释")
+    parser.add_argument("--published", help="来源发布日期（YYYY-MM-DD），写入头注释")
     args = parser.parse_args()
 
     url = args.url
@@ -556,23 +626,34 @@ def main():
         print(f"\n类型: repo")
         return
 
-    # 普通网页：抓取 HTML 并转 Markdown
-    print(f"抓取: {url}")
-    html = fetch(url)
+    # 普通网页：优先使用预抓正文，否则抓取 HTML 并转 Markdown
+    if args.file:
+        print(f"使用预抓正文: {args.file}")
+        body_md, meta = read_prefetched(args.file)
+        title = meta.get("title") or first_heading(body_md) or "untitled"
+        note = "body pre-fetched via in-session reader tool; direct fetch skipped"
+    else:
+        print(f"抓取: {url}")
+        html = fetch(url)
+        title = extract_title(html)
+        body_md = html_to_markdown(html)
+        meta = {}
+        note = None
 
-    # 提取标题
-    title = extract_title(html)
+    author = args.author or meta.get("author")
+    published = args.published or meta.get("published")
+
     # 优先用 URL 的 slug，标题作为备选
     slug = get_slug_from_url(url) or slugify(title)
     base_name = f"{today}-{slug}"
 
     md_path = os.path.join(sources_dir, f"{base_name}.md")
 
-    # 转换并保存 Markdown（不保存原始 HTML，避免 CSS/JS/SVG 噪音）
-    md = html_to_markdown(html)
-    header = build_source_header(url, source_type, title)
+    # 保存 Markdown（不保存原始 HTML，避免 CSS/JS/SVG 噪音）
+    body_md = body_md.rstrip() + "\n"
+    header = build_source_header(url, source_type, title, author=author, published=published, note=note)
     with open(md_path, "w", encoding="utf-8") as f:
-        f.write(header + md)
+        f.write(header + body_md)
     print(f"已保存 Markdown: {md_path}")
 
     print(f"\n标题: {title}")

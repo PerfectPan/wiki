@@ -12,5 +12,7 @@
   { "term": "赋能", "suggestion": "写清为谁提供什么能力", "exceptions": [] },
   { "term": "抓手", "suggestion": "写明具体手段或切入点", "exceptions": [] },
   { "term": "闸门", "suggestion": "写明过滤条件、权限检查或执行限制", "exceptions": [] },
-  { "term": "反应性框架", "suggestion": "Reactive Framework", "exceptions": [] }
+  { "term": "反应性框架", "suggestion": "Reactive Framework", "exceptions": [] },
+  { "term": "脚手架", "suggestion": "区分是开发脚手架工具（scaffolding CLI）还是抽象比喻；若比喻为辅助机制，直接写明具体工具机制与限制（如 Todo 备忘工具）", "exceptions": ["脚手架工具", "项目脚手架"] },
+  { "term": "原语", "suggestion": "尽量写明具体的机制、API 或结构（例如任务依赖、进程通信协议、会话接口）", "exceptions": [] }
 ]

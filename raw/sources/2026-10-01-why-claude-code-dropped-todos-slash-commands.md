@@ -1,10 +1,14 @@
 <!--
 source: https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/
 type: blog
+author: Tony Lee
+published: 2026-02-08 (updated 2026-02-18)
 fetched: 2026-10-01
+note: page navigation, related-posts links and newsletter trailer removed at ingest
 -->
 
-# [← Index](/en/blog/)     February 8, 2026   3 min read   [2026](/en/blog/year/2026/)     Updated Feb 18, 2026        page       page    page as Markdown for LLMs  [View as Markdown     View this page as plain text](https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/llms.txt)[Open in ChatGPT     Ask questions about this page](https://chatgpt.com/?hints=search&q=https%3A%2F%2Ftonylee.im%2Fen%2Fblog%2Fwhy-claude-code-dropped-todos-slash-commands%2F)[Open in Claude     Ask questions about this page](https://claude.ai/new?q=https%3A%2F%2Ftonylee.im%2Fen%2Fblog%2Fwhy-claude-code-dropped-todos-slash-commands%2F)[Open in Perplexity     Ask questions about this page](https://www.perplexity.ai/search?q=https%3A%2F%2Ftonylee.im%2Fen%2Fblog%2Fwhy-claude-code-dropped-todos-slash-commands%2F)         Why Claude Code Dropped Todos and Slash Commands
+# Why Claude Code Dropped Todos and Slash Commands
+
 Anthropic replaced TodoWrite with Tasks and Slash Commands with Skills in two days. Both changes point in the same direction - unhobbling the model.
 Over two days, Anthropic changed two things in Claude Code simultaneously. Todos became Tasks. Slash Commands became Skills. Both were framed as “existing features, same behavior” - easy to overlook. But the two changes point in exactly the same direction.
 ## Why TodoWrite Disappeared
@@ -36,10 +40,8 @@ What Skills added:
 - An agent: setting that creates a sub-agent with a skill loaded
 - A context: fork option that clones the full current context into a separate sub-agent
 - Fine-grained control over who can invoke a skill - user, model, or both
-## ``
-``
 
-A New Principle for Agent Design
+## A New Principle for Agent Design
 The principle I read from these two changes:
 - Simple tasks: Hand them to the model and remove the tools
 - Complex collaboration: Build structures for shared state and context isolation
@@ -49,8 +51,3 @@ The principle I read from these two changes:
 An environment variable like CLAUDE_CODE_TASK_LIST_ID=groceries claude lets multiple sessions share the same Task List. Combined with Skills’ sub-agent integration for splitting context, you can run multiple workstreams concurrently. This is the basic skeleton of multi-agent collaboration that Claude Code is proposing.
 As models get smarter, simple scaffolding disappears and only the collaboration layer remains.
 The future of agent systems isn’t about betting on a single agent’s capability. It’s about designing how multiple agents split and merge state. That’s what will matter most going forward.
-## Related Posts
-[Claude Code Agent Teams - From Setup to Shortcuts   Feb 9, 2026](/en/blog/claude-code-agent-teams-setup-shortcuts-guide/)
-[Claude Code in 2026: Layers Matter More Than Tools   Apr 1, 2026](/en/blog/claude-code-layers-over-tools-2026/)
-### [The 10-Hour Skill Beats the 10-Minute Skill Every Time   Mar 26, 2026](/en/blog/claude-code-skill-creator-skill-2-era/)     Join the newsletter
-Get insights on the latest AI.

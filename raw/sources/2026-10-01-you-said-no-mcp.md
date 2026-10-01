@@ -186,8 +186,7 @@ in long sessions
 The per-issue verdicts are stored in codemode under frustration, so I can dig
 into any of them without fetching the issues again.
 ```
-A
-condensed replay of such a session in Pi.
+A condensed replay of such a session in Pi.
 
 We will have more to say about things like Jev and Codemode later, but we hope
 this post serves as an example of how we continue to adapt and update Pi

@@ -209,6 +209,7 @@ MCP 扩大了 Agent 的行动面，也扩大了风险面。至少要区分四层
 - [[mcp-client]]
 - [[mcp-sse-multi-instance-routing]]
 - [[mcp-remote]]
+- [[wiki/syntheses/ai/agent-harness-restructuring|Agent Harness 的职责重构]]
 
 ## 来源指针
 

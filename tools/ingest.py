@@ -643,9 +643,16 @@ def main():
     author = args.author or meta.get("author")
     published = args.published or meta.get("published")
 
+    # 文件名日期优先用来源发布日期，未知时用抓取日
+    name_date = today
+    if published:
+        m = re.match(r"\d{4}-\d{2}-\d{2}", published)
+        if m:
+            name_date = m.group(0)
+
     # 优先用 URL 的 slug，标题作为备选
     slug = get_slug_from_url(url) or slugify(title)
-    base_name = f"{today}-{slug}"
+    base_name = f"{name_date}-{slug}"
 
     md_path = os.path.join(sources_dir, f"{base_name}.md")
 

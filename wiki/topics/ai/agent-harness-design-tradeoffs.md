@@ -1,6 +1,6 @@
 ---
 title: Agent Harness 的设计取舍
-description: 持续追踪 agent harness 当前实践中的设计取舍：工具组合放沙箱还是上下文、组合执行落在信任分层哪一层、补偿型脚手架何时退役、多 agent 共享状态走文件系统还是平台会话、中立 harness 与厂商平台化的边界。
+description: 追踪主流 Agent Harness 在工程演进中的关键设计抉择：工具组合在沙箱还是上下文执行、单兵任务清单何时退役、多 Agent 状态共享走文件还是平台原语、中立运行时与云厂商一体化的边界。
 type: topic
 category: ai
 created: 2026-10-01
@@ -39,99 +39,97 @@ resource:
 
 ## 摘要
 
-harness 的基础定义（system prompt、tools、agentic loop、translation layer）见 [[agent-harness]]。这页在它之下持续追踪一个更细的问题：**各家 harness 当下正在做哪些设计取舍，落点在哪**。
+Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[agent-harness]]。本页聚焦一线框架（Claude Code、OpenAI、Pi）在实际工程落地中的五个关键取舍：
 
-2026 年 2 月到 9 月的三份来源（Claude Code、OpenAI、Pi）给出五个正在被实践的维度：
-
-| 维度 | 取舍两边 | 当前落点 | 主要来源 |
+| 维度 | 痛点 / 矛盾 | 主流做法 / 演进方向 | 代表案例 |
 | --- | --- | --- | --- |
-| 工具组合放哪 | 上下文接力 vs 代码沙箱 | 移进代码沙箱 | Pi、OpenAI |
-| 组合执行放哪 | 并进 agent loop 或工具沙箱 vs 单独一层 | 受信侧受限沙箱（第三层） | Pi |
-| 脚手架留不留 | 补偿模型短板 vs 拆除减负 | 补偿型随模型退役；协作型保留，但任务工具组按模型门控 | Claude Code |
-| 多 agent 共享状态 | 文件系统协议 vs 平台会话原语 | 两条路线并行 | Claude Code、OpenAI |
-| harness 归谁 | 用户可拥有的中立层 vs 厂商平台 | 并存且开始竞争 | Pi、OpenAI |
+| **工具组合方式** | 每次调用都把海量数据塞回上下文 vs 用代码在沙箱里批量执行 | 移进代码沙箱用脚本编排，只向模型返回最终结果 | Pi Codemode、OpenAI PTC |
+| **脚本执行环境** | 放在高权限主进程（不安全）vs 放在底层系统（缺接口）vs 独立沙箱 | 放在受控的轻量沙箱（能调内部工具，无系统破坏权限） | Pi JS/WASM、OpenAI 托管 V8 |
+| **任务进度管理** | 强制每步打卡写 Todo vs 依赖模型自主规划 | 撤除个人备忘清单（`TodoWrite`）；保留团队协作看板（`Tasks`） | Claude Code |
+| **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台偏好托管会话 | Claude Code vs OpenAI Agent Server |
+| **框架生态路线** | 保持模型中立与开放协议 vs 使用云厂商全家桶 | 中立框架靠标准协议（MCP）维持开放；厂商主打全托管一体化 | Pi vs OpenAI Agents SDK |
 
-## 取舍一：工具组合——上下文接力还是代码沙箱
+## 取舍一：工具组合——上下文人肉倒手还是沙箱批量执行
 
-**上下文接力**是默认形态：工具逐个暴露给模型，模型逐个调用、逐个阅读返回，组合靠模型在上下文里完成。它的问题是 token 成本随组合深度上升，组合表达力受限于模型的注意力——没有循环、没有并发、没有中间变量暂存。按 Pi 文中的判断，当前多数 MCP server 就是按这个假设建的：为「把工具倒进上下文」的 harness 优化，返回纯文本省 token。
+**传统做法（上下文反复中转）**：
+框架把可用工具列表提供给模型，模型每调一次工具，框架就把完整的返回数据（哪怕有几万字 JSON）全部灌入对话上下文。模型读完之后，再发起下一次调用。
+* **痛点**：极其浪费 token，且每次调用都有网络等待延迟。更关键的是，模型无法像写代码那样直接用 `for` 循环、`Promise.all` 并发或使用中间变量。
+* 多数 MCP 工具最初也是按这种习惯设计的：把数据压成纯文本倒进模型上下文里让模型肉眼筛选。
 
-**代码沙箱**把组合移出上下文：模型生成一段 JS，在沙箱里用控制流、并发和中间状态编排工具调用，只把结构化结论带回。Pi 的 Codemode 与 OpenAI 的 Programmatic Tool Calling（[[openai-programmatic-tool-calling]]）是同一模式在 harness 侧与服务端的两个版本。Pi 的类比是 shell：CLI 之所以至今是 agent 最顺手的工具面，是因为 shell 天生就是组合引擎（bashisms）；Codemode 是把这套组合方式搬进 harness 受信侧，组合表达力从模型的注意力换成 JS 控制流。
+**进阶做法（代码沙箱 / 程序化工具调用）**：
+让模型不再充当“数据搬运工”，而是写一段轻量脚本（如 JavaScript/Python），交给内置沙箱执行。沙箱负责在后台并发调用多个工具、过滤成百上千条中间数据，只把最后算好的结论返回给上下文。
+* **典型案例**：Pi 的 Codemode 与 OpenAI 的 Programmatic Tool Calling（参见 [[openai-programmatic-tool-calling]]）。
+* **Codemode 与 MCP 的关系**：两者并不是替代关系。MCP 负责提供现成的外部接口能力（如读取 GitHub、Linear 的数据），而沙箱负责提供批量组合与并发调用的能力。例如需要检查 100 个 issue 时，沙箱开并发直接拉取并统计完毕，只给模型回传一行汇总报告，彻底解放上下文。
 
-**Codemode 与 MCP 是互补而非替代**。Pi 把 MCP 接进核心时的判断：Pi 需要的和 MCP 需要的是同一个东西——一个解释器形式的沙箱。没有组合沙箱，MCP 只能被逐个倒进上下文（协议层已有结构化输出与发现机制，「难以组合」更多是 server 生态的用法惯性，不是协议缺陷）；没有 MCP，沙箱只有内置工具可组合，接不上 Linear、GitHub 这类外部生态。Pi 给 MCP 的定位「带智能工具发现的 OpenAPI」要放在这个语境读：[[mcp]] 页的协议时间线（无状态化解决部署与路由）之外，这是 harness 侧使用效率的线索。MCP 进核心而非扩展的技术原因也在组合这层：deferred tool loading、codemode-only 工具需要 harness 的 tool loadout 元数据做分流，普通 MCP 扩展拿不到这种元数据。
+**适用边界**：对于最终代码写入、核心决策确认、权限审批等高影响操作，依然需要走模型直接确认与调用；只有中间查询、过滤与数据汇总才适合交给脚本沙箱。
 
-Linear + Jev 的例子是这条组合链的完整形态：MCP 供给工具面（拉 167 个 issue 的评论），Codemode 供给组合引擎（四个并行 worker、`store()` 暂存中间结果、只把统计带回），整条流水线「不浪费任何 context」。
+## 取舍二：脚本沙箱放在哪——安全与功能的平衡
 
-**限定**：[[openai-programmatic-tool-calling]] 页已有的边界仍然成立——语义判断、审批、高影响写入和最终引用默认走直接工具调用，不是所有阶段都值得程序化。
+既然允许模型写脚本在沙箱里组合调用工具，这个沙箱应该部署在哪里？框架面临着权限隔离的三层划分：
 
-## 取舍二：组合执行的位置——信任分层的哪一层
-
-Pi 文中对执行位置的说明：harness 执行工具分两侧——bash 运行的位置在不受信沙箱里，agent loop 运行的位置在受信环境里，两侧信任级别完全不同。Codemode 选了第三个位置：**受信侧的受限沙箱**。harness 的执行面因此是三层：
-
-| 层 | 运行位置 | 信任与权限 | 例子 |
+| 层次 | 所在环境 | 权限与安全性 | 典型功能 |
 | --- | --- | --- | --- |
-| Agent loop | harness 进程 | 受信：用户环境、完整权限、持有会话状态 | 模型请求循环、路由、持久化 |
-| 组合沙箱 | harness 侧的隔离运行时 | 受信环境内受限执行：只能调用被暴露的工具和模型 | Pi Codemode（JS/WASM）、OpenAI PTC（托管 V8） |
-| 工具执行 | 外部沙箱 | 不受信：假定代码与返回数据都可能出问题 | bash、MCP server、shell 工具 |
+| **Agent 主循环** | Harness 宿主进程 | **完全受信**：持有用户完整环境、敏感密钥与主状态 | 对话请求、模型路由、持久化存储 |
+| **组合沙箱** | Harness 内部轻量隔离环境 | **受控执行**：只能调用框架开放的安全工具，无法越权搞破坏 | Pi Codemode（JS/WASM）、OpenAI PTC（托管 V8） |
+| **外部工具执行** | 底层独立环境 / 容器 | **默认不可信**：防止执行恶意系统命令或污染环境 | 本地 Bash 终端、外部 MCP 服务进程 |
 
-组合沙箱必须单独成层的逻辑：组合要同时拿到多个工具的中间结果，必须站在能调用所有工具的位置，也就是 agent loop 一侧；但它执行的是模型生成的代码，不能直接给 harness 的完整权限，所以用 JS/WASM 这类可分发、可隔离的运行时兜底。它比工具沙箱更可信（执行与状态都留在会话内），又比 harness 本身更受限（状态落在会话记录里，不落到文件系统）。
+如果直接在主循环里 `eval` 模型写的脚本，模型写错命令（如误删文件）会威胁宿主安全；如果把脚本直接扔到底层 Bash 容器里，它又无法直接调用 Harness 的内置接口。因此，Pi 与 OpenAI 都不约而同选择了**受限沙箱**方案：用隔离的轻量引擎（如 V8/WASM）运行脚本，既能安全编排所有已注册工具，又不会对宿主系统造成破坏。
 
-**信任位置决定状态位置**：Codemode 的状态保存在 session transcript 而不是文件系统，组合过程的中间结果因此成为一等会话状态——可审计、可随会话恢复（对照 [[persistent-agent-harness-design-patterns]] 的 tree 与 operation log 分离），而不是散落在临时文件里。OpenAI 是同一分层的两种产品化：PTC 的 V8 每次执行互相隔离，Sandbox 原语把不受信那一侧标准化成平台能力。
+## 取舍三：任务进度管理——从强制列 Todo 到依赖模型自主规划
 
-## 取舍三：补偿型脚手架——随模型退役还是保留
+在 Agent 演进过程中，框架给模型配置的任务记录工具发生了清晰分化：
 
-TodoWrite 原本补偿的是模型自管状态能力弱：长任务里模型容易丢线索，外部清单是一层外挂状态，每完成一步靠重读清单重新对齐「做到哪了、还剩什么」。这层外挂有三项持续成本——每次更新是一次工具调用往返，清单本身占用上下文，模型还要维护「内在计划」与「外部清单」两份状态并保持同步。Claude Code 的官方解释（2026-02，经 Tony Lee 转述）：Opus 4.5 能更长时间自主运行、更有效跟踪状态，小任务上外部清单从帮助变成开销。同步开销超过对齐收益时，工具退役。
+### 1. 撤除个人备忘清单（`TodoWrite` 退役）
+在早期模型（如 Claude 3 时代），由于模型长程记忆和规划能力较弱，容易做着做着就忘掉后续步骤。框架通常会注入 `TodoWrite` 工具，强制模型每一步都打卡更新清单。
+* **代价**：随着新模型（如 Opus 4.5、Sonnet 5）自身规划能力的大幅提升，这种强制打卡变成了负担——每次更新都会增加一次网络往返延迟，消耗上千 token，还会分散模型的思考精力。
+* **现状**：Claude Code 在较新的模型上默认关闭了 `TodoWrite` 工具（仅对老模型保留），直接交给模型在内部自主规划，让模型干活更快、更少分心。
 
-**退役的只是补偿部分**：Tasks 留下并强化的恰好是非补偿的部分——任务依赖元数据、跨会话共享的 Task List（`CLAUDE_CODE_TASK_LIST_ID`）。这些是协作结构，模型再强也不会自己长出来。Slash Commands → Skills 是同构拆分：progressive disclosure 是「模型不会自己找上下文」的补偿，被 Skills 自动装配上下文取代；SKILL.MD 引用其他文件形成的多步上下文链是协作资产，留下了。
+### 2. 保留并强化团队协作看板（`Tasks` 系统）
+撤除单 Agent 的个人 Todo 并不意味着任务系统没有价值，而是把职责切分得更清楚：
 
-两个工具的机械对比（官方 tools-reference 与 todo-tracking 文档，2026-10 查证）：
-
-| | TodoWrite | Tasks（TaskCreate / TaskGet / TaskUpdate / TaskList） |
+| 特性 | 个人备忘清单（`TodoWrite`） | 团队协作任务系统（`Tasks`） |
 | --- | --- | --- |
-| 工具形态 | 单工具，一次调用重写整张清单 | 四个工具：建 / 查 / 改 / 列，按任务 ID 增量更新 |
-| 数据模型 | 条目数组，状态 pending / in_progress / completed | 任务带 subject 与状态生命周期（completed 或 deleted 收尾），依赖与阻塞由 TaskUpdate 维护 |
-| 清单归属 | 会话内的自我对齐清单，只在本会话存在 | 共享任务清单：多会话、子 agent、agent teams 队友都可读写，`CLAUDE_CODE_TASK_LIST_ID` 让多个实例共享同一清单 |
-| 消费者 | 只有模型自己 | 模型之外的协调载体：其他会话认领工作、人查看进度 |
-| 默认状态 | 仍存在但默认关闭，`CLAUDE_CODE_ENABLE_TASKS=0` 可切回 | 有这组工具的会话里的默认 |
+| **解决的问题** | 弥补弱模型自己的记忆力和注意力不足 | 解决多个 Agent、主从进程或人与 Agent 之间的状态同步 |
+| **操作方式** | 每次调用必须重写全量数组，只在当前会话可见 | 按 Task ID 增量更新，包含依赖关系（Blocker）与状态生命周期 |
+| **消费者** | 只有模型自己看 | 其它 Sub-agent、并行会话认领任务，人类实时查看任务进度 |
+| **演进方向** | 随模型变聪明而退役（非必需） | 随多 Agent 并行协作的深入而持续强化（基础设施） |
 
-**门控比博客知道的走得更远**：changelog 显示 v2.1.233 起 TodoWrite 与 Task 工具组在 Opus 4.8、Sonnet 5、Fable 5、Mythos 5 及更新模型上整体不再提供；v2.1.268 收敛为现行规则——默认只提供给 Claude 3.x、Opus 4.0–4.7、Sonnet 4.0–4.6、Haiku 4.5，其余模型需 `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` 或 allowedTools 显式启用。官方给的理由与本页的补偿逻辑同向：「新模型无需书面清单即可跟踪多步工作，工具定义与提醒占用上下文」。两个例外值得注意：后台会话与云端会话在所有模型上保留这组工具；子 agent 仅当主会话有这组工具时才有，没有 Task 工具的 agent teams 队友改用消息而非共享任务清单协调。
+**实践启示**：在为 Agent 框架设计功能时，必须分清哪些工具只是帮弱模型记事的临时辅助（随着模型升级应及时撤除），哪些是真正的多实体协作基础设施（需要长期保留和沉淀）。
 
-**限定**：这条取舍的前提是绑定最新强模型。[[agent-harness-evolution-paradigm]] 里 HarnessX 的 inverse-scaling 结论（弱模型从 harness 改进中获益更大）说明对弱模型外部清单仍是净收益；「协作层保留」也要按门控来读——协作工具的价值没有变，但交互式会话里「谁默认拥有它」成了模型能力的函数。对 harness 维护者的操作含义：每个补偿型机制都记录它补偿的短板和退役条件——没有退出条件的补偿层会累积成模型不需要时也不肯走的遗产。
+## 取舍四：多 Agent 状态共享——本地文件系统还是云端平台会话
 
-## 取舍四：多 agent 共享状态——文件系统还是平台原语
+当多个 Agent 协作（如主 Agent 派发子 Agent）时，中间成果与任务进度存放在哪里？业界出现了两条鲜明路线：
 
-Claude Code 的落点是**文件系统**：Tasks 的依赖与阻塞存为任务间元数据，多个 session 和子 agent 通过文件系统协调，共享 Task List 的会话自动同步；Skills 侧 `agent:` 生成加载技能的子 agent、`context: fork` 克隆完整当前上下文给子 agent。这与 [[agent-team-roles-and-collaboration]] 的「文件系统是 agent 间的通信协议」同一方向，且更具体：跨会话共享状态不必发明新协议，任务清单落在文件系统上、由 harness 同步。
+1. **本地文件系统路线（Claude Code 等工具）**：
+   * 把任务元数据、协作清单直接保存在本地磁盘的文件目录中。
+   * **优势**：极度简洁透明，人和 Git 都能直接查看和编辑，不依赖外部后端服务，多会话通过统一的环境变量（如 `CLAUDE_CODE_TASK_LIST_ID`）直接挂载同一组文件。
+2. **云端托管会话路线（OpenAI Agent Server 等）**：
+   * 将多 Agent 状态、检查点与运行历史保存在云端统一的 Sessions 服务中。
+   * **优势**：长任务随时可以在后台挂起，数天后随时跨设备恢复继续执行；中间数据自带审计与回放能力，但与厂商的云服务深度绑定。
 
-OpenAI 的落点是**平台会话**：Sessions 提供长任务的检查点与恢复（几天后可继续），并与 Chat 后端会话融合为统一 API。Pi 的 harness-v2 用 lanes + append-only tree 解决同类问题（[[persistent-agent-harness-design-patterns]]）。
+这两条路线分别代表了“本地优先/开发者自控”与“全托管云平台”的不同取向，短期内将长期并存。
 
-三条路线解决的是同一问题——多 agent / 多会话的状态切分、共享与合并。文件系统路线不引入新协议、对用户可读可改；平台会话路线把恢复与审计做成默认能力。当前看不出收敛，更像是本地优先 harness 与平台 harness 各自的自然选择。
+## 取舍五：中立 Harness 还是厂商一体化全家桶
 
-## 取舍五：中立 harness 还是厂商 harness
+Harness 的最初价值在于通过适配层（Translation Layer）赋予用户选择权——可以自由切换 Claude、OpenAI、DeepSeek 等各类模型，保持本地工作流的独立性。
 
-[[agent-harness]] 的核心主张是 translation layer 带来用户自主权：换模型、数据本地、可定制。OpenAI 2026-04 的动作把张力摆上台面：Agents SDK 演进为 Agent Server（`singleDeploy` 让同一代码本地与云端运行），Harness / Sandbox / Sessions 成为厂商原语，Codex CLI 直接构建其上——harness 从「用户拥有的软件层」变成「平台提供的服务」，而厂商 harness 天然为自家模型优化。
-
-Pi 的应对值得记录：不是回避协议生态，而是把 MCP 接进核心、参与塑造它在小型 harness 里的用法（「影响一件事的最好方式是拥抱它」）。对中立 harness，协议层（MCP、[[agent-client-protocol]]）是少数能与厂商 harness 对齐的外部界面；放弃协议等于放弃话语权。
+但随着云厂商（如 OpenAI Agent Server、Codex CLI）把 Harness、沙箱和多 Agent 会话统统打包成一体化云端产品，用户在获得极佳开箱体验的同时，也面临着生态锁定的风险。
+像 Pi 等中立框架的应对策略是**拥抱并推动开放协议（如 MCP）**：通过打通标准工具协议，让中立 Harness 既能对接庞大的开源生态，又能保留灵活更换底层模型的核心自由。
 
 ## 实践启发
 
-- **组合优先在沙箱做**：与其在提示词里教模型逐个调用工具并阅读全部中间结果，不如把工具暴露给代码执行环境，让组合逻辑、并发和中间结果留在沙箱里；沙箱放受信侧、状态落会话记录，中间结果才可审计、可恢复。
-- **给补偿型脚手架记账**：记录每个机制补偿的短板与退役条件，模型升级后逐项复查。
-- **跨会话协作用文件系统**：共享任务清单、状态文件是多个会话 / 子 agent 协作的最小可行协议，不为此引入新通信机制。
-- **明确平台化边界**：使用厂商 harness（Agent Server、Codex）时确认哪些能力被锁在厂商侧；需要模型选择权和工作流可控性的部分，留在中立 harness。
+1. **避免在上下文里人肉拼装数据**：需要批量查询或处理大量数据时，优先提供代码沙箱让脚本在内部消化，只把过滤后的最终结果返给模型上下文。
+2. **警惕过度辅助变成性能累赘**：为模型增加辅助机制（如打卡清单、强制格式）时，要想清楚它到底是在帮模型还是在束缚模型；模型能力提升后，及时评估并清理过时的辅助开销。
+3. **协作状态优先复用简单载体**：如果是本地运行的多 Agent 任务，使用本地文件系统或任务状态文件作为协作媒介最易维护，无需过早引入复杂的中心化通信协议。
+4. **守住工作流的控制权**：根据业务需要明确边界——需要极致开箱体验的使用平台全托管能力，需要随时切换模型和保证数据隐私的核心链路，保留在中立 Harness 架构中。
 
 ## 时间线
 
-| 时间 | 事件 | 来源 |
+| 时间 | 事件 | 来源与背景 |
 | --- | --- | --- |
-| 2026-02-08（02-18 更新） | Claude Code 用 Tasks 替换 TodoWrite、用 Skills 替换 Slash Commands | Tony Lee 对官方变更的解读 |
-| 2026-04-15 | OpenAI 宣布 Agents SDK 演进为 Agent Server，新增 Harness / Sandbox / Sessions 原语与 Codex CLI | OpenAI 官方 |
-| 2026-09-29 | Pi 把 MCP 接入核心，介绍 Codemode 沙箱 | Earendil 官方 |
-
-## 保留判断
-
-- 「unhobbling」最初是二手解读，但官方文档后来给出同向理由（新模型无需书面清单、工具定义占上下文）；Tony Lee 文中未见于官方文档的细节，引用前以官方 tools-reference / env-vars 为准。
-- OpenAI Harness 处于 alpha，`agent.as_harness()` 等接口形态可能变化；appsec bug 减少 45%、修复速度 2.5 倍是 OpenAI 自述的早期信号，无外部验证。
-- 三份来源均有立场：Pi 是 harness 厂商（为拥抱 MCP 的决定辩护），OpenAI 是平台方（推广平台化），Tony Lee 是基于 changelog 的推断。
-- OpenAI 原文直连返回 403，raw 素材是 web reader 提取的重构版而非逐字副本，关键 API 示例保留原文。
+| 2026-02-08 | Claude Code 用 Tasks 替换 TodoWrite、用 Skills 替换 Slash Commands | 模型自主能力提升后撤除多余的单兵辅助工具（Tony Lee 转述官方说明） |
+| 2026-04-15 | OpenAI 宣布 Agents SDK 演进为 Agent Server，引入托管 Harness/Sandbox/Sessions | 厂商发力平台一体化，将运行时标准化为云端基础设施 |
+| 2026-09-29 | Pi 框架把 MCP 接入核心，并推出 Codemode 沙箱 | 探索中立框架下通过受限代码沙箱安全编排标准协议工具 |
 
 ## 相关页面
 
@@ -148,4 +146,4 @@ Pi 的应对值得记录：不是回避协议生态，而是把 MCP 接进核心
 - `raw/sources/2026-09-29-you-said-no-mcp.md` / [You Said No MCP! — Earendil，2026-09-29](https://earendil.com/posts/you-said-no-mcp/)
 - `raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md` / [Why Claude Code Dropped Todos and Slash Commands — Tony Lee，2026-02-08](https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/)
 - `raw/sources/2026-04-15-openai-agents-sdk-evolution.md` / [Agents SDK 的全新演进 — OpenAI，2026-04-15](https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/)
-- `raw/sources/2026-10-01-claude-code-task-tools-docs.md` / [Track todos — Claude Code 官方文档](https://code.claude.com/docs/en/agent-sdk/todo-tracking)、[Tools reference（task-tool availability）](https://code.claude.com/docs/en/tools-reference)、[CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- `raw/sources/2026-10-01-claude-code-task-tools-docs.md` / [Track todos — Claude Code 官方文档](https://code.claude.com/docs/en/agent-sdk/todo-tracking)、[Tools reference](https://code.claude.com/docs/en/tools-reference)、[CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)

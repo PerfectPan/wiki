@@ -54,9 +54,9 @@ Harness 是用户自主权的载体：
 
 代表性的开源 harness 包括 Pi、Claude Code、OpenCode、Codex、Hermes 等。
 
-### 5. 2026 秋的职责重构
+### 5. 当前的设计取舍
 
-这个层的职责在快速重新分配：工具组合从上下文移进代码沙箱（Pi Codemode、OpenAI PTC），为模型短板做补偿的脚手架随模型变强被拆除（Claude Code 用 Tasks/Skills 替换 TodoWrite/Slash Commands），协作与共享状态的原语在增厚，harness 本身也开始被厂商平台化（OpenAI Agent Server 的 Harness/Sandbox/Sessions）。梳理见 [[agent-harness-restructuring]]。
+2026 年 2 月至 9 月的三份来源（Claude Code、OpenAI、Pi）显示，harness 设计正在几个维度上连续取舍：工具组合从上下文移进代码沙箱、组合执行落在受信侧的受限沙箱、补偿型脚手架随模型退役而协作原语增厚、共享状态走文件系统或平台会话、中立 harness 与厂商平台化并存。逐维展开见 [[agent-harness-design-tradeoffs]]。
 
 ### 6. 与上层编排平台的边界
 
@@ -67,7 +67,7 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 - [[agent]]
 - [[code-agent]]
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
-- [[wiki/syntheses/ai/agent-harness-restructuring|Agent Harness 的职责重构]]
+- [[wiki/topics/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
 - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
 
 ## 来源指针

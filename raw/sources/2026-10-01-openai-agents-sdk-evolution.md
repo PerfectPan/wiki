@@ -2,6 +2,7 @@
 source: https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/
 type: blog
 author: OpenAI
+published: 2026-04-15
 fetched: 2026-10-01
 note: direct HTTP fetch returned 403; body recovered via web reader
 -->

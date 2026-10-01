@@ -12,18 +12,18 @@ tags:
   - mcp
   - claude-code
 source_refs:
-  - raw/sources/2026-10-01-you-said-no-mcp.md
+  - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
-  - raw/sources/2026-10-01-why-claude-code-dropped-todos-slash-commands.md
+  - raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md
   - https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/
-  - raw/sources/2026-10-01-openai-agents-sdk-evolution.md
+  - raw/sources/2026-04-15-openai-agents-sdk-evolution.md
   - https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/
 resource:
-  - raw/sources/2026-10-01-you-said-no-mcp.md
+  - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
-  - raw/sources/2026-10-01-why-claude-code-dropped-todos-slash-commands.md
+  - raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md
   - https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/
-  - raw/sources/2026-10-01-openai-agents-sdk-evolution.md
+  - raw/sources/2026-04-15-openai-agents-sdk-evolution.md
   - https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/
 ---
 
@@ -125,6 +125,6 @@ Pi 的应对值得记录：不是回避协议生态，而是把 MCP 接进核心
 
 ## 来源指针
 
-- `raw/sources/2026-10-01-you-said-no-mcp.md` / [You Said No MCP! — Earendil，2026-09-29](https://earendil.com/posts/you-said-no-mcp/)
-- `raw/sources/2026-10-01-why-claude-code-dropped-todos-slash-commands.md` / [Why Claude Code Dropped Todos and Slash Commands — Tony Lee，2026-02-08](https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/)
-- `raw/sources/2026-10-01-openai-agents-sdk-evolution.md` / [Agents SDK 的全新演进 — OpenAI，2026-04-15](https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/)
+- `raw/sources/2026-09-29-you-said-no-mcp.md` / [You Said No MCP! — Earendil，2026-09-29](https://earendil.com/posts/you-said-no-mcp/)
+- `raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md` / [Why Claude Code Dropped Todos and Slash Commands — Tony Lee，2026-02-08](https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/)
+- `raw/sources/2026-04-15-openai-agents-sdk-evolution.md` / [Agents SDK 的全新演进 — OpenAI，2026-04-15](https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/)

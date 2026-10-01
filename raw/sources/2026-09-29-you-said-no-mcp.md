@@ -1,6 +1,8 @@
 <!--
 source: https://earendil.com/posts/you-said-no-mcp/
 type: blog
+author: Earendil Engineering
+published: 2026-09-29
 fetched: 2026-10-01
 -->
 

@@ -68,6 +68,7 @@
   - [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/agent-harness|Agent Harness]]
+  - [[wiki/topics/ai/agent-harness-design-tradeoffs|Agent Harness 设计取舍]]
   - [[wiki/topics/ai/anthropic-messages-api|Anthropic Messages API]]
   - [[wiki/topics/ai/chat-completions|Chat Completions]]
   - [[wiki/topics/ai/gpu-time|gpu-time]]

@@ -159,6 +159,7 @@ PTC 的 hosted runtime 是隔离层，不是业务授权层。即使请求允许
 - [[mcp]]
 - [[llm-structured-output-reliability]]
 - [[coding-agent-shell-git-permissions]]
+- [[wiki/topics/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
 
 ## 来源指针
 

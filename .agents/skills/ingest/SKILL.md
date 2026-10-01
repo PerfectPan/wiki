@@ -19,7 +19,13 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 
 ## 第一步：定位素材
 
-来源已经被抓取并存入 `raw/sources/`。找到对应的文件：
+来源已经被抓取并存入 `raw/sources/`。如果还没抓取，按这个顺序选路径：
+
+1. 默认 `bin/wiki ingest <url>` 直抓。
+2. 直抓被反爬拦截（403）或落盘文件明显太脏（导航、订阅尾巴、粗体和行内代码丢失）时，改用会话侧 reader 工具（如 GLM 的 webReader MCP，是否可用取决于客户端）抓正文，存成临时文件后 `bin/wiki ingest <url> --file <路径>` 落盘。reader 返回的 JSON 直接喂 `--file` 即可，`title`、`author`、`publishedTime` 会自动写入头注释。`--file` 不绑定具体 reader，手动复制的正文文件同样适用。
+3. 站点提供 llms.txt 类端点时，可用它核对落盘正文是否完整；发现缺漏时以官方端点为准重存正文。
+
+找到对应的文件：
 - 博客/文档：`raw/sources/YYYY-MM-DD-主题.md`（提取正文后的 Markdown）
 - GitHub 仓库：`raw/sources/YYYY-MM-DD-仓库名.md`（目录结构 + 关键文件）
 - X 推文线程：`raw/sources/YYYY-MM-DD-主题.md`（线程全文）

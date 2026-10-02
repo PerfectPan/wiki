@@ -36,11 +36,11 @@ resource:
 
 网页动效描述要回答：谁发生变化、由什么触发、从什么状态变到什么状态，以及用户如何继续操作。本页以 Adrian Punk 的动效词典为分类入口，补充官方实现资料与可访问性要求，供设计说明和 AI 编程任务引用。
 
-**来源限制**：三篇 X 原文均无法直接读取，本次经转载阅读；未核对原始图片和视频。三篇出处、对应转载及阅读范围见[[raw/sources/2026-10-02-adrianpunk-web-motion-dictionary|合并阅读记录]]。下文明确标出的实现细节与范例由本库补充。
+**来源范围**：2026-10-02 已通过浏览器直接读取三篇 X Article 的正文与文字示例，核对系列结构、词条及使用方法；初次转载阅读记录保留在[[raw/sources/2026-10-02-adrianpunk-web-motion-dictionary|合并阅读记录]]。说明插图未逐张核验，也未在目标网页执行动效测试。下文明确标出的实现细节与范例由本库补充。
 
 ## 系列如何组织动效
 
-系列按四层分类：工具决定如何实现，触发决定何时开始，类型决定画面变化，UX 规则约束操作。工具举例包括 CSS、Motion、GSAP、Three.js、Lottie、Rive；它们的名称不能代替行为说明。[上篇转载](https://www.jxxy.net/ai/articles/adrianpunk-web-motion-dictionary-part1/)
+系列按四层分类：工具决定如何实现，触发决定何时开始，类型决定画面变化，UX 规则约束操作。工具举例包括 CSS、Motion、GSAP、Three.js、Lottie、Rive；它们的名称不能代替行为说明。[上篇原文](https://x.com/AdrianPunk115/status/2099485951701721585)
 
 | 篇目 | 阅读重点 |
 | --- | --- |
@@ -48,7 +48,7 @@ resource:
 | 中篇，17–36 | 文字变化、滚动空间、指针响应 |
 | 下篇，37–56 | 组件和加载状态、布局与页面变化，以及 UX 要求 |
 
-编号包含参数和使用规则，不能理解为 56 种独立动画。[中篇转载](https://www.jxxy.net/ai/articles/vibe-coding-web-motion-dictionary-2/)、[下篇转载](https://www.jxxy.net/ai/articles/adrianpunk115-vibe-coding-motion-dictionary-vol3/)
+编号包含参数和使用规则，不能理解为 56 种独立动画。[中篇原文](https://x.com/AdrianPunk115/status/2099772129478869309)、[下篇原文](https://x.com/AdrianPunk115/status/2100209733567430964)
 
 ## 把触发、类型和参数分开
 
@@ -66,7 +66,7 @@ resource:
 
 参数可核对 [CSS transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Transitions/Using) 与 [Motion transitions](https://motion.dev/docs/react-transitions)；滚动区别见 [Motion scroll](https://motion.dev/docs/react-scroll-animations)，布局与共享元素见 [Motion layout](https://motion.dev/docs/react-layout-animations)。
 
-中篇的 Magnetic button、Tilt card、Cursor follower 分别指按钮趋近指针、卡片随指针倾斜、装饰物跟随光标；仅写 Hover 无法确定是哪一种。描述这类效果时应补上作用范围、最大位移、离开后的回位，以及无悬停输入时的版本。[中篇转载](https://www.jxxy.net/ai/articles/vibe-coding-web-motion-dictionary-2/)
+中篇的 Magnetic button、Tilt card、Cursor follower 分别指按钮趋近指针、卡片随指针倾斜、装饰物跟随光标；仅写 Hover 无法确定是哪一种。描述这类效果时应补上作用范围、最大位移、离开后的回位，以及无悬停输入时的版本。[中篇原文](https://x.com/AdrianPunk115/status/2099772129478869309)
 
 ## 工具落实到哪些能力
 
@@ -81,7 +81,7 @@ resource:
 
 ## 动效必须保留的操作能力
 
-下篇把反馈、焦点与输入方式纳入描述。本库进一步按标准细化以下边界，避免把视觉示例直接当作组件实现要求。
+[下篇原文](https://x.com/AdrianPunk115/status/2100209733567430964)把反馈、焦点与输入方式纳入描述。本库进一步按标准细化以下边界，避免把视觉示例直接当作组件实现要求。
 
 1. **模态与非模态要分清。** 模态对话框打开后，背景不可交互，焦点进入内部，Tab 在内部移动，Escape 可关闭；关闭后通常回到触发者。初始焦点随内容和任务决定，破坏性确认可以先放在取消操作，长内容可以先聚焦标题。不能统一写“聚焦第一个按钮”。[WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
 2. **减少动态要改变实际运动。** 对非必要交互运动提供关闭方式或响应系统偏好，保留结果信息。Motion 的 `reducedMotion="user"` 可关闭其位移、缩放和布局动画，但自写指针循环仍需单独处理。[WCAG 2.3.3](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions.html)、[Motion accessibility](https://motion.dev/docs/react-accessibility)
@@ -113,6 +113,18 @@ Escape 和关闭按钮均可关闭，焦点返回原卡片；若卡片已被筛�
 
 描述是否完整，可以按对象、触发、起止状态、时序、结束或中断、替代操作逐项检查。完成代码后仍须在实际页面操作，核对返回位置、焦点和最终状态，不能用静态截图证明全部交互正确。
 
+## 把案例变成可复用的记录
+
+下篇第六节建议先亲手操作喜欢的页面，再保存案例，最后在自己的页面试一个局部。重点是记录行为与适用位置，而不只收藏一张好看的截图。[下篇原文](https://x.com/AdrianPunk115/status/2100209733567430964)
+
+可以按以下顺序整理，字段根据原文归纳：
+
+1. **操作并观察。** 试一次悬停、点击、滚动或展开，观察离开、返回和加载完成后停在哪里；同时查看键盘、触屏与减少动态的表现。
+2. **保存证据与说明。** 记录页面地址、作用对象、触发条件、画面变化、结束状态、替代操作，以及计划用在自己页面的哪个位置。截图记录外观，录屏辅助记录变化过程。
+3. **局部试用后决定。** 先在一个组件上尝试，确认内容可读、入口可操作、手机端可用，再决定是否保留。
+
+本库建议把“已观察”和“待验证”分开记：没有检查过的输入方式或系统偏好，不写成案例已经支持的能力。
+
 ## 相关页面
 
 - [[wiki/topics/frontend/ui-element-naming|UI 元素命名]]：先确认组件和状态的名字。
@@ -124,5 +136,5 @@ Escape 和关闭按钮均可关闭，焦点返回原卡片；若卡片已被筛�
 
 - [[raw/sources/2026-10-02-adrianpunk-web-motion-dictionary|三篇出处与阅读记录]]。
 - 作者 X：[上篇](https://x.com/AdrianPunk115/status/2099485951701721585)、[中篇](https://x.com/AdrianPunk115/status/2099772129478869309)、[下篇](https://x.com/AdrianPunk115/status/2100209733567430964)。
-- 本次可读转载：[上篇](https://www.jxxy.net/ai/articles/adrianpunk-web-motion-dictionary-part1/)、[中篇](https://www.jxxy.net/ai/articles/vibe-coding-web-motion-dictionary-2/)、[下篇](https://www.jxxy.net/ai/articles/adrianpunk115-vibe-coding-motion-dictionary-vol3/)。
+- 初次转载入口及后续原文核对范围保留在合并阅读记录中；本页系列内容已改用作者原文作为依据。
 - 官方技术与可访问性依据已就近链接；查阅日期为 2026-10-02。

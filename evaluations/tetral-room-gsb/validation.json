@@ -1,0 +1,219 @@
+{
+  "baseCommit": "e595104eaf5135287bf282553b87a14a71dd8c03",
+  "taskSha256": "6aa0ce486b995cdfda7cd0d0006c0ebb4f1ae6788bec5c71a8a120ae24fb423c",
+  "candidates": [
+    {
+      "candidate": "A",
+      "files": {
+        "index.md": "ee539a17999080995ec129624be3c11dd0686cec9c9de0cacecb1bd015ad76f3",
+        "raw/sources/2026-10-02-the-next-scaling-problem.md": "1e779acb23570b0f7f2db060e966fed87a62969479a4d1f8065103bcaf0cff59",
+        "wiki/syntheses/ai/cloud-agent-runtime-scaling.md": "4b99cc86c69e27409f1b1b3f3e8ae934573e0d31f776ca4d797a425e05d1772a",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md": "dc825fdd09992c4c0abdb9a540b5ff8e1138ad119ae7181a489575a40ee3f46b",
+        "wiki/topics/ai/agent-harness.md": "90adc64c962eedeb7591eca905de5ff9d6d18a04825b7264b63e2a4e91201c06"
+      },
+      "checks": [
+        {
+          "command": "bin/wiki check wiki/syntheses/ai/cloud-agent-runtime-scaling.md",
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": "bin/wiki check-jargon wiki/syntheses/ai/cloud-agent-runtime-scaling.md",
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": "bin/wiki check wiki/topics/ai/agent-harness.md",
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": "bin/wiki check-jargon wiki/topics/ai/agent-harness.md",
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": "bin/wiki check wiki/topics/ai/agent-harness-design-tradeoffs.md",
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": "bin/wiki check-jargon wiki/topics/ai/agent-harness-design-tradeoffs.md",
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": "git diff --check",
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "mainPageLines": 156,
+      "mainPageBodyCharacters": 5984,
+      "sourceLines": 796,
+      "sourceBytes": 44470,
+      "archiveWhitespaceFindings": [],
+      "gitDiffCheckScope": "Tracked changes only; untracked candidate files are included in the separate archive whitespace scan."
+    },
+    {
+      "candidate": "B",
+      "files": {
+        "index.md": "ee539a17999080995ec129624be3c11dd0686cec9c9de0cacecb1bd015ad76f3",
+        "raw/sources/2026-10-02-the-next-scaling-problem.md": "1e779acb23570b0f7f2db060e966fed87a62969479a4d1f8065103bcaf0cff59",
+        "wiki/syntheses/ai/cloud-agent-runtime-scaling.md": "1b49b556cb15c9e97f797e3d705b83ebb18b96e73364a6163236f843a9d1361e",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md": "a059e694001627af65cffda72de08ac7e62f54a5a531bdb956b2da33488c11a5",
+        "wiki/topics/ai/agent-harness.md": "51180b916f3583e38a7699de6a7505caa705d5ba74b5dd52d4614a75ac9335bb"
+      },
+      "checks": [
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/syntheses/ai/cloud-agent-runtime-scaling.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/syntheses/ai/cloud-agent-runtime-scaling.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/topics/ai/agent-harness.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/topics/ai/agent-harness.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": "git diff --check",
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "mainPageLines": 141,
+      "mainPageBodyCharacters": 5174,
+      "sourceLines": 796,
+      "sourceBytes": 44470,
+      "archiveWhitespaceFindings": [
+        {
+          "file": "wiki/syntheses/ai/cloud-agent-runtime-scaling.md",
+          "line": 95,
+          "note": "Trailing whitespace preserved verbatim from model output."
+        }
+      ],
+      "gitDiffCheckScope": "Tracked changes only; untracked candidate files are included in the separate archive whitespace scan."
+    },
+    {
+      "candidate": "C",
+      "files": {
+        "index.md": "32bd12f9221985236e41fab17bfe7ad2099e13ffe8d236a78b30a60064a4ef1e",
+        "raw/sources/2026-10-02-the-next-scaling-problem.md": "1e779acb23570b0f7f2db060e966fed87a62969479a4d1f8065103bcaf0cff59",
+        "wiki/syntheses/ai/cloud-agent-runtime-scaling.md": "e184189d1298739e2d43b16e3788a0e2363b78c7076b6e4f1a01af59cabc299e",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md": "8afe193625bdaa0894d4a4b3f6889479a44169ca8ea5f8e77c81a13c479a69ae",
+        "wiki/topics/ai/agent-harness.md": "e36a1eee86601e09daf7fb8105ec42a3104cdbe5d1a5259a1a32b9655913bb58"
+      },
+      "checks": [
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/syntheses/ai/cloud-agent-runtime-scaling.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/syntheses/ai/cloud-agent-runtime-scaling.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/topics/ai/agent-harness.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/topics/ai/agent-harness.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": "git diff --check",
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "mainPageLines": 110,
+      "mainPageBodyCharacters": 7172,
+      "sourceLines": 796,
+      "sourceBytes": 44470,
+      "archiveWhitespaceFindings": [],
+      "gitDiffCheckScope": "Tracked changes only; untracked candidate files are included in the separate archive whitespace scan."
+    }
+  ]
+}

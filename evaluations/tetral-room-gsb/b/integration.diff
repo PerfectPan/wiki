@@ -1,0 +1,64 @@
+diff --git a/index.md b/index.md
+index cf0026e..decb4a5 100644
+--- a/index.md
++++ b/index.md
+@@ -216,0 +217 @@
++  - [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]
+diff --git a/wiki/topics/ai/agent-harness-design-tradeoffs.md b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+index 7fa91d6..3f831b7 100644
+--- a/wiki/topics/ai/agent-harness-design-tradeoffs.md
++++ b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+@@ -7,2 +7,2 @@ created: 2026-10-01
+-updated: 2026-10-01
+-timestamp: 2026-10-01
++updated: 2026-10-02
++timestamp: 2026-10-02
+@@ -13,0 +14 @@ tags:
++  - cloud-runtime
+@@ -42 +43 @@ resource:
+-Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[agent-harness]]。本页聚焦一线框架（Claude Code、OpenAI、Pi）在实际工程落地中的五个关键取舍：
++Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[agent-harness]]。本页聚焦一线框架（Claude Code、OpenAI、Pi、Tetral）在实际工程落地中的六个关键取舍：
+@@ -50,0 +52 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
++| **云端执行宿主解耦** | 将 Harness 整体放进虚拟机沙箱导致容量绑定与恢复断裂 vs 解耦运行时 | 运行时只做无状态状态机推演，沙箱降级为按需外部资源，通过预写日志保证崩溃恢复 | Tetral（见 [[wiki/syntheses/ai/cloud-agent-runtime-scaling\|云端 Agent 的规模化架构]]） |
+@@ -112 +114,13 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
+-## 取舍五：中立 Harness 还是厂商一体化全家桶
++## 取舍六：云端多租户执行——沙箱绑定还是运行时解耦
++
++在将 Harness 迁移至云端多租户架构时，业界出现了两种截然不同的宿主设计：
++
++1. **沙箱即 Agent 模式（早期云端 Agent）**：
++   * 将包含模型交互、Prompt 装配与工具调用的完整 Agent 循环直接打包运行在虚拟机沙箱（如 E2B）内部。
++   * **代价**：沙箱的创建和销毁属于重型、高频操作，极易导致编排系统调度出现瓶颈；且会话状态受困于沙箱生命周期，节点宕机时上下文完全丢失，排障还必须直接接触包含用户私有数据的沙箱。同时，为发起推理请求，API 凭据不得不直接注入到非受信的沙箱内部。
++2. **运行时与沙箱解耦模式（如 Tetral）**：
++   * 把 Harness 拆分为两部分：负责纯状态机推演与请求装配的「无状态运行时（Runtime）」，以及提供操作系统执行环境的「外部沙箱服务（Sandbox Service）」。
++   * **机制**：计算机成为 Agent 调用的外部资源，而非运行宿主；运行时不持有任何数据库事务和外部调用，所有推进和工具调用在发出前必须通过预写日志（WAL）提交到独立的事务服务（Bridge）与事实存储（PostgreSQL）；凭据则由独立的模型网关在代理请求时动态注入。
++   * **收益**：沙箱按需延迟分配，不再与会话生命周期强绑定；运行时成为随时可替换的轻量计算节点，崩溃后替补节点可依据提交的事件流精准恢复上下文继续执行。详细分析见 [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]。
++
++## 取舍七：中立 Harness 还是厂商一体化全家桶
+@@ -131,0 +146 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++| 2026-09-06 | Tetral 提出把 runtime 移出沙箱架构 | 将计算机降级为按需外部资源，采用预写日志保障无状态运行时的高频替换与容灾 |
+@@ -136,0 +152 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]
+@@ -149,0 +166 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- `raw/sources/2026-10-02-the-next-scaling-problem.md` / [The Next Scaling Problem — Tetral，2026-09-06](https://tetral.ai/blog/the-next-scaling-problem/)
+diff --git a/wiki/topics/ai/agent-harness.md b/wiki/topics/ai/agent-harness.md
+index 6f0d759..031ca6f 100644
+--- a/wiki/topics/ai/agent-harness.md
++++ b/wiki/topics/ai/agent-harness.md
+@@ -7,2 +7,2 @@ created: 2026-08-20
+-updated: 2026-10-01
+-timestamp: 2026-10-01
++updated: 2026-10-02
++timestamp: 2026-10-02
+@@ -12,0 +13 @@ tags:
++  - cloud-runtime
+@@ -62,0 +64 @@ Harness 是用户自主权的载体：
++- **云端运行时的宿主解耦**：当 Harness 进入云端多租户服务时，传统把 Agent 循环整体打包进沙箱的做法面临调度高频震荡与容灾断裂；新兴架构把 Harness 抽象为只负责状态机推演的无状态运行时，将沙箱降级为按需调用的外部计算资源，通过预写日志（WAL）事务保证崩溃可恢复。
+@@ -64 +66 @@ Harness 是用户自主权的载体：
+-具体维度的案例与技术细节见 [[agent-harness-design-tradeoffs]]。
++具体维度的案例与技术细节见 [[agent-harness-design-tradeoffs]] 与 [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构]]。
+@@ -75,0 +78 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产
++- [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]
+@@ -81,0 +85,2 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产
++- `raw/sources/2026-10-02-the-next-scaling-problem.md`
++- https://tetral.ai/blog/the-next-scaling-problem/

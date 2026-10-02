@@ -4,8 +4,8 @@ description: Agent harness 是为 AI 模型提供运行环境的软件层，由 
 type: topic
 category: ai
 created: 2026-08-20
-updated: 2026-10-01
-timestamp: 2026-10-01
+updated: 2026-10-02
+timestamp: 2026-10-02
 tags:
   - agent
   - harness
@@ -13,9 +13,13 @@ tags:
 source_refs:
   - raw/sources/2026-08-20-what-is-a-harness.md
   - https://earendil.com/posts/what-is-a-harness/
+  - raw/sources/2026-10-02-the-next-scaling-problem.md
+  - https://tetral.ai/blog/the-next-scaling-problem/
 resource:
   - raw/sources/2026-08-20-what-is-a-harness.md
   - https://earendil.com/posts/what-is-a-harness/
+  - raw/sources/2026-10-02-the-next-scaling-problem.md
+  - https://tetral.ai/blog/the-next-scaling-problem/
 ---
 
 # Agent Harness
@@ -60,8 +64,9 @@ Harness 是用户自主权的载体：
 - **精简单步干预**：早期为了防止模型遗忘步骤而设计的单步记录工具（如强制更新 `TodoWrite` 任务列表），随着新模型长程规划能力的增强而逐步停用；框架转而专注于提供支持多 Agent 协同和依赖关系的任务系统。
 - **由代码完成中间数据处理**：组合调用多个工具时，不再把每次调用的完整原始数据都注入模型上下文，而是让模型生成一段脚本在沙箱中批量执行过滤与聚合，仅将最终结果返回给上下文。
 - **状态存储与生态分化**：多 Agent 协作状态是依托本地文件系统还是云端托管会话，以及选用跨模型的中立 Harness 还是云厂商全家桶，正在成为两条平行的工程路线。
+- **运行循环、记录和沙箱分别管理**：循环负责决定下一步，记录用于恢复任务，沙箱按需执行命令。Tetral 的设计把任务记录保存在运行进程和沙箱之外，希望在更换它们时仍能恢复任务。这是云端长任务的一种设计选择，并不意味着所有 Harness 都必须引入外部数据库或拆分服务。
 
-具体维度的案例与技术细节见 [[agent-harness-design-tradeoffs]]。
+具体维度的案例与技术细节见 [[agent-harness-design-tradeoffs]] 与 [[wiki/syntheses/ai/tetral-cloud-agent-runtime-architecture|Tetral 如何把 Agent 运行时移出沙箱]]。
 
 ### 6. 与上层编排平台的边界
 
@@ -73,9 +78,12 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 - [[code-agent]]
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
 - [[wiki/topics/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
+- [[wiki/syntheses/ai/tetral-cloud-agent-runtime-architecture|Tetral 如何把 Agent 运行时移出沙箱]]
 - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
 
 ## 来源指针
 
 - `raw/sources/2026-08-20-what-is-a-harness.md`
-- https://earendil.com/posts/what-is-a-harness/
+- [What is a harness? — Earendil](https://earendil.com/posts/what-is-a-harness/)
+- [raw/sources/2026-10-02-the-next-scaling-problem.md](../../../raw/sources/2026-10-02-the-next-scaling-problem.md)
+- [The Next Scaling Problem — Tetral Blog](https://tetral.ai/blog/the-next-scaling-problem/)

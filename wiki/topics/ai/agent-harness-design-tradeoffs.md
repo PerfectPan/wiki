@@ -1,11 +1,11 @@
 ---
 title: Agent Harness 的设计取舍
-description: 追踪主流 Agent Harness 在工程演进中的关键设计抉择：工具组合在沙箱还是上下文执行、单兵任务清单何时退役、多 Agent 状态共享走文件还是平台原语、中立运行时与云厂商一体化的边界。
+description: 讨论 Agent Harness 在工具组合、脚本隔离、任务管理、状态存储、平台依赖以及运行时与沙箱部署上的设计取舍。
 type: topic
 category: ai
 created: 2026-10-01
-updated: 2026-10-01
-timestamp: 2026-10-01
+updated: 2026-10-02
+timestamp: 2026-10-02
 tags:
   - agent
   - harness
@@ -22,6 +22,8 @@ source_refs:
   - https://code.claude.com/docs/en/agent-sdk/todo-tracking
   - https://code.claude.com/docs/en/tools-reference
   - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+  - raw/sources/2026-10-02-the-next-scaling-problem.md
+  - https://tetral.ai/blog/the-next-scaling-problem/
 resource:
   - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
@@ -33,21 +35,24 @@ resource:
   - https://code.claude.com/docs/en/agent-sdk/todo-tracking
   - https://code.claude.com/docs/en/tools-reference
   - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+  - raw/sources/2026-10-02-the-next-scaling-problem.md
+  - https://tetral.ai/blog/the-next-scaling-problem/
 ---
 
 # Agent Harness 的设计取舍
 
 ## 摘要
 
-Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[agent-harness]]。本页聚焦一线框架（Claude Code、OpenAI、Pi）在实际工程落地中的五个关键取舍：
+Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[agent-harness]]。本页以 Claude Code、OpenAI、Pi 与 Tetral 为例，讨论六个设计取舍：
 
-| 维度 | 痛点 / 矛盾 | 主流做法 / 演进方向 | 代表案例 |
+| 维度 | 痛点 / 矛盾 | 做法 / 设计选择 | 代表案例 |
 | --- | --- | --- | --- |
 | **工具组合方式** | 每次调用都把海量数据塞回上下文 vs 用代码在沙箱里批量执行 | 移进代码沙箱用脚本编排，只向模型返回最终结果 | Pi Codemode、OpenAI PTC |
 | **脚本执行环境** | 放在高权限主进程（不安全）vs 放在底层系统（缺接口）vs 独立沙箱 | 放在受控的轻量沙箱（能调内部工具，无系统破坏权限） | Pi JS/WASM、OpenAI 托管 V8 |
 | **任务进度管理** | 强制每步打卡写 Todo vs 依赖模型自主规划 | 撤除个人备忘清单（`TodoWrite`）；保留团队协作看板（`Tasks`） | Claude Code |
 | **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台偏好托管会话 | Claude Code vs OpenAI Agent Server |
 | **框架生态路线** | 保持模型中立与开放协议 vs 使用云厂商全家桶 | 中立框架靠标准协议（MCP）维持开放；厂商主打全托管一体化 | Pi vs OpenAI Agents SDK |
+| **沙箱与运行时绑定** | 将完整循环绑在沙箱导致运维和凭证负担 vs 拆分运行时与沙箱需承受分布式协调代价 | 分开保存任务记录并按需调用沙箱；需处理提交顺序、消息重试和旧实例失效 | Tetral |
 
 ## 取舍一：工具组合——直接经由上下文传递还是代码沙箱批量执行
 
@@ -116,6 +121,20 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户�
 但随着云厂商（如 OpenAI Agent Server、Codex CLI）把 Harness、沙箱和多 Agent 会话统统打包成一体化云端产品，用户在获得极佳开箱体验的同时，也面临着生态锁定的风险。
 像 Pi 等中立框架的应对策略是**拥抱并推动开放协议（如 MCP）**：通过打通标准工具协议，让中立 Harness 既能对接庞大的开源生态，又能保留灵活更换底层模型的核心自由。
 
+## 取舍六：运行时是否与执行沙箱绑定
+
+在构建云端 Agent 系统时，运行时与执行沙箱是否绑定是另一种架构选择：
+
+在第一代产品 Anoma 中，作者把整个 Agent 循环直接放进 E2B 虚拟机沙箱，将沙箱作为容量单位。这导致排障调试必须登录存有用户私有数据的虚拟机环境，模型 API Key 需要在外部单独架设代理网关，团队还必须自行管理沙箱的供给、并发复用与回收。
+
+在第二代设计 Tetral 中，作者选择将沙箱与 Agent 分开：Agent 是长期的共享服务，沙箱则是按需调用的外部资源。这种拆分带来了额外的工程代价：
+- **顺序提交与状态推进**：为了在计算 Pod 崩溃时不丢失或错乱操作，任何外部操作在派发前必须先向 PostgreSQL 提交调用声明；执行完成后结果提交入库，运行在 Pod 内存中的 reducer 才能依赖该结果计算下一个转移。
+- **消息投递与 fencing 检查**：租约超时不代表旧 Pod 已停止处理消息。系统用 binding generation 与 Kubernetes Pod UID 标识当前实例，未确认旧 Pod 已消失前，禁止重新派发它已经接受的投递，防止新旧实例同时处理。
+- **幂等回执**：同一调用声明使用稳定身份，重试时直接返回已有回执，从而避免重复提交同一声明。但协议无法让任意外部系统自动变成事务系统，不能承诺外部副作用绝对不重复。
+- **凭证边界**：在这种架构下，凭证不集中在 Harness 主进程内，而是由外层的 Gateway 校验 workload identity 并注入凭证，使明文密钥不进入计算 Pod 或沙箱。
+
+需要注意的是，Tetral 目前仅是运行在个人 k3s 集群上的 alpha 原型，多节点故障恢复与背压机制仍未经过生产验证。详细执行链路与三表存储设计见 [[wiki/syntheses/ai/tetral-cloud-agent-runtime-architecture|Tetral 如何把 Agent 运行时移出沙箱]]。
+
 ## 实践启发
 
 1. **避免在上下文里逐条拼装数据**：需要批量查询或处理大量数据时，优先提供代码沙箱让脚本在内部完成过滤与计算，只把处理后的最终结果返给模型上下文。
@@ -136,6 +155,7 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户�
 - [[wiki/topics/ai/agent-harness|Agent Harness]]
 - [[agent-harness-evolution-paradigm]]
 - [[persistent-agent-harness-design-patterns]]
+- [[wiki/syntheses/ai/tetral-cloud-agent-runtime-architecture|Tetral 如何把 Agent 运行时移出沙箱]]
 - [[openai-programmatic-tool-calling]]
 - [[mcp]]
 - [[claude-5-context-engineering]]
@@ -147,3 +167,4 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户�
 - `raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md` / [Why Claude Code Dropped Todos and Slash Commands — Tony Lee，2026-02-08](https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/)
 - `raw/sources/2026-04-15-openai-agents-sdk-evolution.md` / [Agents SDK 的全新演进 — OpenAI，2026-04-15](https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/)
 - `raw/sources/2026-10-01-claude-code-task-tools-docs.md` / [Track todos — Claude Code 官方文档](https://code.claude.com/docs/en/agent-sdk/todo-tracking)、[Tools reference](https://code.claude.com/docs/en/tools-reference)、[CHANGELOG](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md)
+- [raw/sources/2026-10-02-the-next-scaling-problem.md](../../../raw/sources/2026-10-02-the-next-scaling-problem.md) / [The Next Scaling Problem — Tetral Blog，2026-09-06](https://tetral.ai/blog/the-next-scaling-problem/)

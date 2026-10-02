@@ -17,14 +17,14 @@ source_refs:
   - https://x.com/Vercantez/status/2082138839888589200
   - https://www.camelai.com/blog/our-coding-agent-runs-in-a-cloudflare-durable-object-not-a-vm
   - https://camelai.com/blog/should-you-build-on-cloudflare
-  - https://github.com/qaml-ai/camelAI/tree/7e9aa1bc86cc33029d46109401ec989965e8c208
+  - https://github.com/qaml-ai/camelAI/tree/b75546e0b94917e16d0711c86f93a19fd53996e7
   - https://github.com/qaml-ai/camelAI/tree/07d9663ba4063bfa32573f0904b44718d966deac
 resource:
   - raw/sources/2026-10-02-camelai.md
   - https://x.com/Vercantez/status/2082138839888589200
   - https://www.camelai.com/blog/our-coding-agent-runs-in-a-cloudflare-durable-object-not-a-vm
   - https://camelai.com/blog/should-you-build-on-cloudflare
-  - https://github.com/qaml-ai/camelAI/tree/7e9aa1bc86cc33029d46109401ec989965e8c208
+  - https://github.com/qaml-ai/camelAI/tree/b75546e0b94917e16d0711c86f93a19fd53996e7
   - https://github.com/qaml-ai/camelAI/tree/07d9663ba4063bfa32573f0904b44718d966deac
 ---
 
@@ -40,13 +40,20 @@ resource:
 
 | 对象 | 固定版本 | 能说明什么 |
 | --- | --- | --- |
-| 文章同期实现 | `7e9aa1b`，2026-07-28 | Pi、AIChatAgent、动态 Worker 与文件系统如何配合 |
+| X 原帖 | 2026-07-28 16:19:18 UTC；北京时间 7 月 29 日 00:19:18 | 作者当时的三步迁移叙述 |
+| 发文前源码 | `b75546e`，2026-07-28 00:56:29 UTC | main 提交历史中最后一个发文前版本，核对当时的架构 |
 | 当前公开源码 | `07d9663`，2026-10-02 获取 | 迁出聊天执行后，应用与外部 runtime 的职责 |
 | 作者后续说明 | 2026-09-30 | 团队报告的迁移动机，不等于独立复现实验 |
 
-两个提交都已克隆并读核心代码，未运行应用、模型或容器。X 原帖正文不可直接读取，以同作者官网文章补充；同期提交不是生产版本证明，当前仓库也不等于线上部署状态。[合并阅读记录](../../../raw/sources/2026-10-02-camelai.md)。
+已直接读取 X 原帖完整正文，并对照同作者官网文章及后续更新；未逐张核对媒体，也未核对全部回复。两个源码版本均已取得并读核心代码，未运行应用、模型或容器。发文前快照不证明当时的生产版本，当前仓库也不等于线上部署状态。[原帖](https://x.com/Vercantez/status/2082138839888589200)、[合并阅读记录与快照订正](../../../raw/sources/2026-10-02-camelai.md)。
 
 ## 7 月方案：把循环、文件与 Linux 作业拆开
+
+原帖以 Claude Code harness 和自建 VM 服务为起点，按以下顺序描述迁移。这是作者对设计过程的叙述，下面的固定源码用于核对迁移后的实现。[原帖](https://x.com/Vercantez/status/2082138839888589200)。
+
+1. 用 Pi 底层库自建 harness，将 Agent 循环放进 DO，仍远程调用项目 VM。作者称这一步改善了响应延迟，但尚未解决每用户 VM 的成本。
+2. 去掉项目背后的常驻 VM，把文件放入 DO SQLite/R2，继续用 Artifacts 保存 Git 历史。
+3. 用 Code Mode JavaScript 和显式方法替代通用 Bash；构建与 notebook 仍交给 Linux 容器执行。
 
 ```mermaid
 flowchart LR
@@ -65,13 +72,13 @@ flowchart LR
     B --> S
 ```
 
-`ChatThreadDO` 继承 `AIChatAgent`，并通过 `createPiSession` 构造 Pi `Agent`。两者承担不同职责：Cloudflare 侧提供聊天流与恢复设施，Pi 侧运行模型和工具循环。同期依赖为 Pi `0.80.6`，不能将后来出现的 `pi-durable` 设计归入此实现。[继承与职责](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/chat-thread-do.ts#L574-L581)、[Pi 会话创建](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/chat-thread-do.ts#L5352-L5458)。
+`ChatThreadDO` 继承 `AIChatAgent`，并通过 `createPiSession` 构造 Pi `Agent`。两者承担不同职责：Cloudflare 侧提供聊天流与恢复设施，Pi 侧运行模型和工具循环。该版本依赖 Pi `0.80.6`，不能将后来出现的 `pi-durable` 设计归入此实现。[继承与职责](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/chat-thread-do.ts#L564-L571)、[Pi 会话创建](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/chat-thread-do.ts#L5275-L5381)、[依赖版本](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/package.json#L90-L98)。
 
-文件通过 `@cloudflare/shell` 的 Workspace 接入 SQLite 与 R2，应用配置的 inline threshold 为 **1,500,000 字节**。这让文件持久化与容器是否存活分开；阈值边界的具体分支属于外部库，本次未另行检验。[文件存储配置](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/workspace-filesystem-do.ts#L272-L300)。
+文件通过 `@cloudflare/shell` 的 Workspace 接入 SQLite 与 R2，应用配置的 inline threshold 为 **1,500,000 字节**。这让文件持久化与容器是否存活分开；阈值边界的具体分支属于外部库，本次未另行检验。[阈值定义](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/workspace-filesystem-do.ts#L12-L14)、[文件存储配置](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/workspace-filesystem-do.ts#L272-L300)。
 
-`js_exec` 用 Worker Loader 加载生成代码，给它 TOOLS、SECURE_FETCH 等选定服务绑定。连接方法在服务端添加认证，原始集成密钥不直接注入该执行环境。但它仍有网络和业务操作能力；自定义连接还存在可配置的同源限制，不能把“看不到原始密钥”写成绝对安全保证。[动态 Worker](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/chat-thread-do.ts#L1071-L1174)、[连接认证](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/connections-runtime.ts#L1694-L1755)。
+`js_exec` 用 Worker Loader 加载生成代码，给它 TOOLS、SECURE_FETCH 等选定服务绑定。连接方法在服务端添加认证，原始集成密钥不直接注入该执行环境。但它仍有网络和业务操作能力；自定义连接还存在可配置的同源限制，不能把“看不到原始密钥”写成绝对安全保证。[动态 Worker](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/chat-thread-do.ts#L1061-L1164)、[连接认证](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/connections-runtime.ts#L1578-L1639)。
 
-Linux 仍用于构建与 notebook。这里的“按需作业”不等于每次新建容器：构建按 org 复用，分析按 workspace/scope 保温复用；notebook 每次独立创建和清理工作目录。[构建实例选择](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/project-build-service.ts#L57-L72)、[分析实例复用](https://github.com/qaml-ai/camelAI/blob/7e9aa1bc86cc33029d46109401ec989965e8c208/workers/main/src/analysis-service.ts#L1065-L1084)。
+Linux 仍用于构建与 notebook。原帖将其描述为任务结束后关闭容器，但发文前代码按 org 复用构建容器，按 workspace/scope 保温复用分析容器；notebook 每次独立创建和清理工作目录。因此，本页用“按需作业”描述执行职责，不把它理解为每次新建或结束即销毁容器。[原帖](https://x.com/Vercantez/status/2082138839888589200)、[构建实例选择](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/project-build-service.ts#L57-L72)、[分析实例复用](https://github.com/qaml-ai/camelAI/blob/b75546e0b94917e16d0711c86f93a19fd53996e7/workers/main/src/analysis-service.ts#L1065-L1084)。
 
 ## 后续变化：迁出循环，保留产品能力
 
@@ -131,7 +138,7 @@ flowchart LR
 
 | 结论 | 主要证据 | 可信范围 |
 | --- | --- | --- |
-| 同期 DO 内运行 Pi | `7e9aa1b` 的 `chat-thread-do.ts` | 直接源码；不是生产部署证明 |
+| 发文前源码已在 DO 内运行 Pi | `b75546e` 的 `chat-thread-do.ts` | 直接源码；不是生产部署证明 |
 | 当前 DO 不再执行聊天 | `07d9663` 的 exporter 与 runtime 客户端 | 直接源码；仓库 AGENTS 中旧概述已落后 |
 | 持久文件与容器仍保留 | 两个版本的 filesystem/build/analysis 实现 | 本仓实现；Workspace 外部依赖未完整审计 |
 | 权限由服务端工具检查 | 当前 `agent-mcp.ts` | 已读范围；不是全面安全审计 |
@@ -153,4 +160,4 @@ flowchart LR
 - [用户提供的原帖](https://x.com/Vercantez/status/2082138839888589200)
 - [7 月作者文章及 September update](https://www.camelai.com/blog/our-coding-agent-runs-in-a-cloudflare-durable-object-not-a-vm)
 - [9 月后续迁移说明](https://camelai.com/blog/should-you-build-on-cloudflare)
-- [历史源码快照](https://github.com/qaml-ai/camelAI/tree/7e9aa1bc86cc33029d46109401ec989965e8c208)、[当前源码快照](https://github.com/qaml-ai/camelAI/tree/07d9663ba4063bfa32573f0904b44718d966deac)
+- [发文前源码快照](https://github.com/qaml-ai/camelAI/tree/b75546e0b94917e16d0711c86f93a19fd53996e7)、[当前源码快照](https://github.com/qaml-ai/camelAI/tree/07d9663ba4063bfa32573f0904b44718d966deac)

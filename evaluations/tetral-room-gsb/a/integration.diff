@@ -1,0 +1,43 @@
+diff --git a/index.md b/index.md
+index cf0026e..decb4a5 100644
+--- a/index.md
++++ b/index.md
+@@ -216,0 +217 @@
++  - [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]
+diff --git a/wiki/topics/ai/agent-harness-design-tradeoffs.md b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+index 7fa91d6..c758cbc 100644
+--- a/wiki/topics/ai/agent-harness-design-tradeoffs.md
++++ b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+@@ -49,2 +49,2 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
+-| **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台偏好托管会话 | Claude Code vs OpenAI Agent Server |
+-| **框架生态路线** | 保持模型中立与开放协议 vs 使用云厂商全家桶 | 中立框架靠标准协议（MCP）维持开放；厂商主打全托管一体化 | Pi vs OpenAI Agents SDK |
++| **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台演化出「Runtime 外置 + 数据库写前执行」协议 | Claude Code vs OpenAI Agent Server、Tetral |
++| **框架生态路线** | 保持模型中立与开放协议 vs 使用云厂商全家桶 | 中立框架靠标准协议（MCP）维持开放；部分开源系统选择 Fork 商业托管协议自建中立云运行时 | Pi vs OpenAI Agents SDK vs Tetral |
+@@ -106,3 +106,4 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
+-2. **云端托管会话路线（OpenAI Agent Server 等）**：
+-   * 将多 Agent 状态、检查点与运行历史保存在云端统一的 Sessions 服务中。
+-   * **优势**：长任务随时可以在后台挂起，数天后随时跨设备恢复继续执行；中间数据自带审计与回放能力，但与厂商的云服务深度绑定。
++2. **云端托管会话路线（OpenAI Agent Server、Tetral 等）**：
++   * 将多 Agent 状态、检查点与运行历史保存在云端统一的会话服务中。
++   * **进阶架构（状态外置与写前执行）**：在面向高并发的云原生架构中，会话状态进一步从执行沙箱中剥离，下沉为独立的关系数据库（如 PostgreSQL）。Agent Runtime 变为无状态计算节点，通过「写前执行」（Write-Ahead Execution）在派发外部操作前先行提交不可变状态与幂等标识，配合事务型发件箱实现可靠恢复（详见 [[cloud-agent-runtime-scaling]]）。
++   * **优势**：长任务随时可以在后台挂起，数天后随时跨设备恢复继续执行；中间数据自带审计与回放能力，但架构复杂度与系统间协调成本显著上升。
+@@ -117 +118,3 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
+-像 Pi 等中立框架的应对策略是**拥抱并推动开放协议（如 MCP）**：通过打通标准工具协议，让中立 Harness 既能对接庞大的开源生态，又能保留灵活更换底层模型的核心自由。
++面对这一局面，开发者开始探索两种对冲策略：
++1. **中立协议与轻量编排（Pi 路线）**：拥抱并推动开放工具协议（如 MCP），让中立 Harness 既能对接庞大的工具生态，又能保留灵活更换底层模型的核心自由。
++2. **Fork 商业托管规范并中立自研（Tetral 路线）**：直接 Fork 商业闭源方案的标准协议（如 Anthropic Managed Agents SDK），保持上层 SDK 与会话概念兼容，但在底层将 Runtime、网关、数据库与沙箱资源完全解耦，目标是支持自托管供应商与多种计算机实现的中立云端运行平台。
+@@ -131,0 +135 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++| 2026-09-06 | Tetral 提出解耦沙箱与 Runtime 的架构，开源 Fork 自 Managed Agents SDK 的中立云运行平台 | 探索高并发下状态外置、写前执行与可替换计算单元的云端伸缩路线 |
+@@ -136,0 +141 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]
+@@ -149,0 +155 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- `raw/sources/2026-10-02-the-next-scaling-problem.md` / [The Next Scaling Problem — Yang Li，2026-09-06，Tetral 博客](https://tetral.ai/blog/the-next-scaling-problem/)
+diff --git a/wiki/topics/ai/agent-harness.md b/wiki/topics/ai/agent-harness.md
+index 6f0d759..bc661b6 100644
+--- a/wiki/topics/ai/agent-harness.md
++++ b/wiki/topics/ai/agent-harness.md
+@@ -62 +62 @@ Harness 是用户自主权的载体：
+-- **状态存储与生态分化**：多 Agent 协作状态是依托本地文件系统还是云端托管会话，以及选用跨模型的中立 Harness 还是云厂商全家桶，正在成为两条平行的工程路线。
++- **状态存储与生态分化**：多 Agent 协作状态是依托本地文件系统还是云端托管会话，正在成为两条平行的工程路线。在云端托管路线中，进一步演进出把 Agent 运行环境（Runtime）与沙箱环境彻底解耦的架构：Agent 进程自身变为无状态计算单元，通过数据库写前提交保证崩溃恢复，沙箱则退化为按需懒加载的外部资源（详见 [[cloud-agent-runtime-scaling]]）。同时，框架选用跨模型的中立 Harness 还是云厂商全家桶的分化也在持续加剧。
+@@ -75,0 +76 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产
++- [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构：把 runtime 移出沙箱]]

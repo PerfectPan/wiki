@@ -1,0 +1,56 @@
+diff --git a/index.md b/index.md
+index cf0026e..57974be 100644
+--- a/index.md
++++ b/index.md
+@@ -214,0 +215 @@
++  - [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构]]
+diff --git a/wiki/topics/ai/agent-harness-design-tradeoffs.md b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+index 7fa91d6..ca51482 100644
+--- a/wiki/topics/ai/agent-harness-design-tradeoffs.md
++++ b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+@@ -7,2 +7,2 @@ created: 2026-10-01
+-updated: 2026-10-01
+-timestamp: 2026-10-01
++updated: 2026-10-02
++timestamp: 2026-10-02
+@@ -24,0 +25,2 @@ source_refs:
++  - raw/sources/2026-10-02-the-next-scaling-problem.md
++  - https://tetral.ai/blog/the-next-scaling-problem/
+@@ -35,0 +38,2 @@ resource:
++  - raw/sources/2026-10-02-the-next-scaling-problem.md
++  - https://tetral.ai/blog/the-next-scaling-problem/
+@@ -49,0 +54 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
++| **云端容量单元** | agent loop 住进沙箱（与沙箱同生共死）vs runtime 独立成无状态服务 | agent 移出沙箱成为可替换 runtime，状态进事务数据库，沙箱降级为懒分配的执行资源 | Tetral（E2B 时代的反思） |
+@@ -111,0 +117,2 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
++云端服务形态里出现了第三条实现路径：Tetral 把会话状态放进 PostgreSQL（事件表 `session_events` 加模型上下文投影 `session_messages`），agent 进程本身不持有任何持久状态，成为可随时替换的 runtime；每次外部效果先提交声明再执行（借 WAL 的排序规则），pod 消失后由替代进程从已提交记录重建线程。这相当于把「文件系统 vs 托管会话」的二选一改写成「事务数据库作唯一事实源 + 无状态计算单元」，代价是每个工具调用要多走一次提交与回执往返。该实现目前是一个人的 alpha 项目，未经过生产流量检验。系统设计细节见 [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构]]。
++
+@@ -131,0 +139 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++| 2026-09-06 | Tetral 发文：把 agent runtime 移出沙箱，围绕持久化 agent 工作重建云系统 | 云端容量单元从沙箱改为无状态 runtime；写前执行与持久投递协议（alpha 状态） |
+@@ -136,0 +145 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构]]
+@@ -149,0 +159 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- `raw/sources/2026-10-02-the-next-scaling-problem.md` / [The Next Scaling Problem — Tetral，2026-09-06](https://tetral.ai/blog/the-next-scaling-problem/)（云端容量单元、写前执行协议）
+diff --git a/wiki/topics/ai/agent-harness.md b/wiki/topics/ai/agent-harness.md
+index 6f0d759..f1fa98d 100644
+--- a/wiki/topics/ai/agent-harness.md
++++ b/wiki/topics/ai/agent-harness.md
+@@ -7,2 +7,2 @@ created: 2026-08-20
+-updated: 2026-10-01
+-timestamp: 2026-10-01
++updated: 2026-10-02
++timestamp: 2026-10-02
+@@ -15,0 +16,2 @@ source_refs:
++  - raw/sources/2026-10-02-the-next-scaling-problem.md
++  - https://tetral.ai/blog/the-next-scaling-problem/
+@@ -18,0 +21,2 @@ resource:
++  - raw/sources/2026-10-02-the-next-scaling-problem.md
++  - https://tetral.ai/blog/the-next-scaling-problem/
+@@ -61,0 +66 @@ Harness 是用户自主权的载体：
++- **云端容量单元与沙箱分离**：把 agent 搬上云时，不能以沙箱为容量单元——agent 是稳定的共享服务，沙箱集群是隔离、突发、用完即弃的资源，两条伸缩曲线不同。云端形态下 harness 演化为可替换的无状态 runtime：状态进事务数据库，凭据进网关，沙箱降级为按需调用的执行资源。判据是「凡是 owner、生命周期或伸缩模式不同的职责都移出进程」（Tetral 的实践）。
+@@ -64 +69 @@ Harness 是用户自主权的载体：
+-具体维度的案例与技术细节见 [[agent-harness-design-tradeoffs]]。
++具体维度的案例与技术细节见 [[agent-harness-design-tradeoffs]]；云端规模化架构的系统设计见 [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构]]。
+@@ -75,0 +81 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产
++- [[wiki/syntheses/ai/cloud-agent-runtime-scaling|云端 Agent 的规模化架构]]
+@@ -81,0 +88 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产
++- `raw/sources/2026-10-02-the-next-scaling-problem.md` / [The Next Scaling Problem — Tetral](https://tetral.ai/blog/the-next-scaling-problem/)（云端容量单元与 runtime 边界）

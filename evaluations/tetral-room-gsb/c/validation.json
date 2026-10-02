@@ -1,0 +1,77 @@
+{
+  "candidate": "C",
+  "files": {
+    "index.md": "32bd12f9221985236e41fab17bfe7ad2099e13ffe8d236a78b30a60064a4ef1e",
+    "raw/sources/2026-10-02-the-next-scaling-problem.md": "1e779acb23570b0f7f2db060e966fed87a62969479a4d1f8065103bcaf0cff59",
+    "wiki/syntheses/ai/cloud-agent-runtime-scaling.md": "e184189d1298739e2d43b16e3788a0e2363b78c7076b6e4f1a01af59cabc299e",
+    "wiki/topics/ai/agent-harness-design-tradeoffs.md": "8afe193625bdaa0894d4a4b3f6889479a44169ca8ea5f8e77c81a13c479a69ae",
+    "wiki/topics/ai/agent-harness.md": "e36a1eee86601e09daf7fb8105ec42a3104cdbe5d1a5259a1a32b9655913bb58"
+  },
+  "checks": [
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/syntheses/ai/cloud-agent-runtime-scaling.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/syntheses/ai/cloud-agent-runtime-scaling.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/topics/ai/agent-harness.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/topics/ai/agent-harness.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "mainPageLines": 110,
+  "mainPageBodyCharacters": 7172,
+  "sourceLines": 796,
+  "sourceBytes": 44470,
+  "archiveWhitespaceFindings": [],
+  "gitDiffCheckScope": "Tracked changes only; untracked candidate files are included in the separate archive whitespace scan."
+}

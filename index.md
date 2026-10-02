@@ -40,6 +40,7 @@
   - [[wiki/topics/frontend/suspense|Suspense]]
   - [[wiki/topics/frontend/svg|SVG]]
   - [[wiki/topics/frontend/transitions-dev|Transitions.dev]]
+  - [[wiki/topics/frontend/web-motion-vocabulary|网页动效词汇与描述方法]]
   - [[wiki/topics/frontend/ui-element-naming|UI 元素命名]]
   - [[wiki/topics/frontend/ui-design-styles|UI 设计风格]]
   - [[wiki/topics/frontend/use-effect|useEffect]]

@@ -123,4 +123,4 @@ Tetral 的工程思路在于把 Agent 的长期状态与临时计算环境解耦
 
 - [raw/sources/2026-10-02-the-next-scaling-problem.md](../../../raw/sources/2026-10-02-the-next-scaling-problem.md)（原文抓取存档）
 - [The Next Scaling Problem - Tetral Blog](https://tetral.ai/blog/the-next-scaling-problem/)
-- 相关页面：[[wiki/syntheses/ai/persistent-agent-harness-design-patterns|持久化 Agent Harness 的设计模式]]、[[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]
+- 相关页面：[[wiki/topics/ai/agent-harness|Agent Harness]]、[[wiki/topics/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]、[[wiki/syntheses/ai/persistent-agent-harness-design-patterns|持久化 Agent Harness 的设计模式]]、[[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]

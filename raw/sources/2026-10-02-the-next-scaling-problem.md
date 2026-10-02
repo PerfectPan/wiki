@@ -2,20 +2,11 @@
 source: https://tetral.ai/blog/the-next-scaling-problem/
 type: blog
 fetched: 2026-10-02
-note: body pre-fetched via in-session reader tool; direct fetch skipped
+title: The Next Scaling Problem
+author: Yang Li
+published: 2026-09-06
+note: reader-extracted article text; site navigation, duplicate contents, footer, playback controls and flattened SVG labels removed; original diagram descriptions, captions and step lists retained
 -->
-
-The Next Scaling Problem — Tetral  [Skip to content](#main-content)
-
-[![](/logo.svg)TETRAL](/)
-
-[GitHub](https://github.com/tetral-ai/tetral)[Docs](/docs/)[Blog](/blog/)[About](/about/)
-
-[Deploy](/docs/deploying/)Menu
-
-[GitHub](https://github.com/tetral-ai/tetral)[Docs](/docs/)[Blog](/blog/)[About](/about/)[Deploy](/docs/deploying/)
-
-[← Blog](/blog/)
 
 Sep 06, 2026
 
@@ -25,25 +16,6 @@ Scaling cloud agents by pulling the runtime out of the sandbox and rebuilding th
 
 Yang Li — building Tetral
 
-A space that continues into another space A frontal view through nested geometric chambers centered on one vanishing point as the camera continuously moves forward.
-
-On this page
-
-1.  [Scaling the wrong thing](#scaling-the-wrong-thing)
-2.  [Building the system, finding the runtime](#building-the-system-finding-the-runtime)
-3.  [The runtime boundary](#the-runtime-boundary)
-4.  [Write ahead of execution](#write-ahead-of-execution)
-5.  [Durable delivery](#durable-delivery)
-6.  [Calling the model](#calling-the-model)
-7.  [Computers as resources](#computers-as-resources)
-8.  [Scaling in two dimensions](#scaling-in-two-dimensions)
-9.  [A separate decision](#a-separate-decision)
-10.  [The next scaling problem](#the-next-scaling-problem)
-11.  [A durable participant](#a-durable-participant)
-12.  [Work that compounds](#work-that-compounds)
-13.  [Scaling the system around intelligence](#scaling-the-system-around-intelligence)
-14.  [From an alpha to an agent-native cloud](#from-an-alpha-to-an-agent-native-cloud)
-
 ## Scaling the wrong thing
 
 At the end of last year, I started building cloud agents with one goal: to scale them. By then I had spent months living in local coding agents, especially [Claude Code](https://www.anthropic.com/news/claude-3-7-sonnet) from its early research preview and later [Codex CLI](https://github.com/openai/codex). An agent looked like a program installed on a computer, surrounded by that computer’s files, shell, and tools.
@@ -52,62 +24,7 @@ At the end of last year, I started building cloud agents with one goal: to scale
 
 Using E2B did not remove the need to manage a sandbox fleet; more users still meant more sandboxes to provision, reuse, and reclaim, within the provider’s lifecycle constraints. Session history and traces stayed inside those sandboxes until cleanup, making debugging depend on [access to environments holding private user data](https://www.anthropic.com/engineering/managed-agents). Keeping API keys outside required a separate gateway to proxy model requests. We kept moving responsibilities out of the sandbox to make an agent inside it workable.
 
-Swipe or scroll horizontally to explore the full diagram →
-
 The first architecture begins with an entire agent loop inside one E2B sandbox. A control plane then appears outside it to manage sandbox capacity and proxy model traffic. Finally a web app connects users to that control plane, which still scales complete agent-sandbox bundles.
-
-**How the first app grew**01 · Agent in Sandbox02 · Control Plane03 · Product Surface
-
-product surface**Web app**users · tasks  
-streamed results
-
-**Control plane**control plane
-
-**Sandbox lifecycle**capacity · reuse  
-LRU eviction
-
-**Model Gateway**credentials  
-request · stream
-
-**Task state + events**session sync · files · product updates
-
-**E2B fleet**tasks A–C
-
-**E2B sandbox**task A
-
-**Agent loop**
-
-contextmodelresulttool call
-
-**Agent loop**
-
-contextmodelresulttool call
-
-filesystem · shell · tools
-
-**E2B sandbox**task B
-
-**Agent loop**
-
-contextmodelresulttool call
-
-**E2B sandbox**task C
-
-**Agent loop**
-
-contextmodelresulttool call
-
-The entire agent runs inside one E2B sandbox.The control plane manages sandbox capacity and model traffic, but every sandbox still carries a complete agent.The product talks through the control plane. Scaling the app still means scaling complete agent-sandbox bundles.
-
-Back
-
-01 / 03
-
-Next
-
-SandboxControl PlaneProduct
-
-Ⅱ Pause
 
 The first app grew in three layers: a complete agent inside E2B, a control plane for sandbox capacity and model traffic, and finally a product surface. The control plane scaled sandboxes, but every sandbox still carried an entire agent.
 
@@ -128,56 +45,6 @@ Separating them did not make sandbox scaling unnecessary; it made the sandbox on
 Separating the agent from its sandbox left a more precise question: how could the agent be abstracted into a service that scaled across concurrent sessions?
 
 The technical bet was to treat the agent as a runtime: a continuing program that interprets model output and gives the agent controlled access to models, networks, files, tools, subagents, and the external world. Claude Code and Codex already behaved as local runtimes. In the cloud, the same loop could become a replaceable compute unit only if its identity, state, and resources lived outside the process. That criterion defined the runtime boundary: every responsibility with a different owner, lifecycle, or scaling pattern had to move outside it.
-
-Swipe or scroll horizontally to explore the full diagram →
-
-Agent System
-
-deliverjobrequeststreamdeclareackresultinputevents
-
-agent processruntime
-
-sessions**S1****S2***…*
-
-active threads**T1****T2***…*
-
-thread loop**state****reducer****action**
-
-**provider integration****Gateway**
-
-formats · credentials  
-connections · streams
-
-**state + database protocol****Bridge + PostgreSQL**
-
-ownership · ordering  
-recovery · transactions
-
-**delivery****Queue**
-
-ordering · leases  
-retries · cancellation
-
-**computer lifecycle****Sandbox Service**
-
-activation · execution  
-replacement
-
-**product surfaces****Public API + Event Stream**
-
-accept work · expose records
-
-Back
-
-01 / 06 · Bundled
-
-Next
-
-BundledGatewayStateQueueComputersRuntime
-
-Ⅱ Pause
-
-**One process owns every responsibility**Provider integration, state, delivery, computer lifecycle, and product surfaces all sit inside the agent process.
 
 1.  **One process owns every responsibility.** Provider integration, state, delivery, computer lifecycle, and product surfaces all sit inside the agent process.
 2.  **Provider integration becomes Gateway.** Provider formats, credentials, connections, and streams move behind one normalized request boundary.
@@ -218,89 +85,7 @@ This protocol borrows [WAL’s ordering rule](https://www.postgresql.org/docs/cu
 
 Before dispatch, the runtime submits an immutable declaration with a stable identity to Bridge. Bridge verifies ownership and order, then commits the transition and its receipt in one transaction. Only after that acknowledgement may the runtime dispatch the operation. The stable identity is an idempotency key: retrying the same declaration returns its existing receipt instead of creating a second transition.
 
-Swipe or scroll horizontally to explore the full diagram →
-
-**Runtime Pod**one session · three stages of its loop
-
-**Stage 01**model request
-
-✓ received
-
-**committed context**
-
-*↓*
-
-**reducer**derive next action
-
-*↓*
-
-**request start**declare before call
-
-**Stage 02**tool calling
-
-✓ received
-
-**model output**
-
-*↓*
-
-**tool call**declare before dispatch
-
-*↓*
-
-**raw tool result**not yet in context
-
-**Stage 03**next loop
-
-✓ received
-
-**result committed**
-
-*↓*
-
-**turn complete**request ended + tools settled
-
-*↓*
-
-**next request**commit before call
-
-model request
-
-tool calling
-
-next loop
-
-next iteration → Stage 01
-
-runtime boundary
-
-**Bridge**verify owner + order → commit → receipt
-
-**01**idle
-
-**02**idle
-
-**03**idle
-
-**PostgreSQL**same session · records committed at each stage
-
-**01**
-
-**02**
-
-**03**
-
-01
-
-02
-
-03
-
-01 · Restore01 · Request02 · Tool call02 · Raw result03 · Close turn03 · Next turn
-
-◀ BackⅡ PauseNext ▶
-
-**01 · Restore**The runtime reconstructs the turn from records already committed in PostgreSQL.
+**01 · Restore** The runtime reconstructs the turn from records already committed in PostgreSQL.
 
 One session is shown at three stages of its loop. At each stage, the runtime sends its declaration through Bridge and waits for the commit receipt before advancing.
 
@@ -339,38 +124,6 @@ Consider a user message that arrives while no runtime pod is ready. In an [outbo
 The Queue job tells Bridge’s Job Runner that delivery still needs an attempt. The Inbox is the receiving-side record: it names the target thread and records whether the input is queued, being delivered, or accepted by a runtime.
 
 Once that transaction commits, the Public API returns `200`; delivery continues asynchronously, and `processed_at` is set only when the runtime commits the input into its target thread.
-
-Swipe or scroll horizontally to explore the full diagram →
-
-**Durable delivery**register together · deliver independently
-
-**Queue**available work
-
-**Queue Job 41**S1 · user inputACK ✓
-
-**Queue Job 18**S2 · agent mailACK ✓
-
-**Queue Job 07**S3 · user inputACK ✓
-
-**Job Runner**poll Queueleased Queue Job 41deliver input #41 to S1leased Queue Job 18deliver mail #18 to S2leased Queue Job 07deliver input #07 to S3
-
-**input #41**
-
-**mail #18**
-
-**input #07**
-
-**Runtime Inbox**delivery state
-
-**S1 · input #41**queueddeliveringaccepted ✓
-
-**S2 · mail #18**queueddeliveringaccepted ✓
-
-**S3 · input #07**queueddeliveringaccepted ✓
-
-three registrations create three Queue Jobs and three Inbox recordsRunner takes Queue Job 41Runner takes Queue Job 18Runner takes Queue Job 07Queue empty · all three deliveries accepted
-
-Ⅱ Pause
 
 Each registration transaction creates a Queue job and its Inbox record. The Job Runner takes the job, delivers the referenced input, advances the Inbox to accepted, and acknowledges the job.
 
@@ -426,79 +179,27 @@ Activation meant making a computer available for execution. Depending on its cur
 
 Queue advanced both dependencies. The first execution job ended after attaching the Bash execution to its activation, while the declaration remained `waiting_activation` in PostgreSQL. Concurrent calls could share that activation instead of starting competing computers. After activation and materialization, each logical execution returned to Queue as a new job.
 
-Swipe or scroll horizontally to explore the full diagram →
-
 One Bash tool call, execution 42, is committed through Bridge before it is scheduled. Sandbox Service discovers that its computer is cold, records the execution as waiting, activates the computer, requeues the same logical execution, runs Bash, stores the raw result, and returns it through Bridge. Bridge commits the tool result before the runtime continues.
 
-**One Bash call, one cold computer**execution #42
+**01 / 10** Runtime declares Bash #42.
 
-**Runtime**compute
+**02 / 10** Bridge commits the Tool Use and returns a receipt.
 
-**thread #42**reducer → Bash declarationtool result → reducer continues
+**03 / 10** Bridge records execution #42 and its first Queue Job.
 
-owns no durable state
+**04 / 10** An execution worker leases #42 and finds a cold computer.
 
-**Bridge**state boundary
+**05 / 10** Sandbox Service parks #42 on activation A7.
 
-1.  validate ownership
-2.  commit one transition
-3.  return its receipt
+**06 / 10** A lifecycle worker activates the computer.
 
-received
+**07 / 10** The same execution returns to Queue as generation 2.
 
-**Sandbox Service**computer lifecycle
+**08 / 10** The worker runs Bash and stores the raw result.
 
-**Execution worker**waiting for workleased #42 · generation 1leased #42 · generation 2
+**09 / 10** Runtime receives the stored result through Bridge.
 
-**Lifecycle worker**waiting for workactivating A7
-
-**Computer**coldactivatingready
-
-**PostgreSQL**authority
-
-**session log**—agent.tool\_useagent.tool\_result
-
-**execution #42**—pending · generation 1waiting\_activation · A7pending · generation 2raw result · unconsumedresult consumed
-
-**Queue**—execute #42 · g1activate A7execute #42 · g2
-
-**Bash #42**
-
-**agent.tool\_use**
-
-**receipt**
-
-**execute #42 · g1**
-
-**execute #42 · g1**
-
-**wait on A7**
-
-**activate A7**
-
-**A7 ready**
-
-**execute #42 · g2**
-
-**run Bash**
-
-**stdout · exit 0**
-
-**raw result**
-
-**tool result**
-
-**receipt**
-
-**01 / 10** Runtime declares Bash #42.**02 / 10** Bridge commits the Tool Use and returns a receipt.**03 / 10** Bridge records execution #42 and its first Queue Job.**04 / 10** An execution worker leases #42 and finds a cold computer.**05 / 10** Sandbox Service parks #42 on activation A7.**06 / 10** A lifecycle worker activates the computer.**07 / 10** The same execution returns to Queue as generation 2.**08 / 10** The worker runs Bash and stores the raw result.**09 / 10** Runtime receives the stored result through Bridge.**10 / 10** Bridge commits the Tool Result; the reducer may continue.
-
-Back
-
-01 / 10
-
-Next
-
-Ⅱ Pause
+**10 / 10** Bridge commits the Tool Result; the reducer may continue.
 
 Bash execution #42 reaches a cold computer. Sandbox Service parks the logical execution on activation A7, then returns it to Queue as a new generation after the computer is ready.
 
@@ -516,51 +217,7 @@ A workspace held long-lived resources such as files and memory. A session was on
 
 Threads shared a session without sharing context. Sessions shared a workspace without sharing execution history.
 
-Swipe or scroll horizontally to explore the full diagram →
-
 One session first expands from a root thread into two independent child threads. The view then pulls back to show three independent sessions in the same workspace. Each session can expand its own threads while selecting resources from the shared workspace.
-
-**One workspace, two dimensions**threads within a task · sessions across tasks
-
-workspace
-
-**Session A**one continuing task
-
-**root thread**state → reducer  
-action ↩
-
-**child T1**state → reducer  
-action ↩
-
-**child T2**state → reducer  
-action ↩
-
-**Session B**independent task
-
-**root thread**state → reducer  
-action ↩
-
-**child T1**state → reducer  
-action ↩
-
-**child T2**state → reducer  
-action ↩
-
-**Session C**independent task
-
-**root thread**state → reducer  
-action ↩
-
-**child T1**state → reducer  
-action ↩
-
-**child T2**state → reducer  
-action ↩
-
-**workspace resources**files · memory · repositories · credentials  
-agent version → tools · skills
-
-One task begins on one ordered thread.Child threads create independent paths within the task.Independent tasks become separate sessions.Every session can scale its own execution paths.
 
 Agent work scales in two dimensions: threads create independent execution paths within one task, while sessions create independent tasks over resources selected from the same workspace.
 
@@ -614,71 +271,7 @@ The reviewer returns only a risk level, the user authorization visible in contex
 
 Within one hot parent-runtime lifetime, later reviews can reuse one reviewer thread, which processes one review at a time. Overlapping reviews use temporary threads copied from its latest committed state, allowing parallel decisions without interleaving context histories.
 
-Swipe or scroll horizontally to explore the full diagram →
-
 Three tool calls arrive on one main thread. Each completed call first enters the Tool Gate. One review runs on the persistent reviewer thread. If another tool call needs review before it finishes, a temporary reviewer thread is copied from the persistent thread's latest committed state so both reviews can proceed in parallel. Every decision is committed to PostgreSQL before it returns to the Tool Gate for re-evaluation. Temporary threads close after their decisions settle; the persistent thread remains for later reviews.
-
-**A separate decision**one model stream · gate before review
-
-**main thread**streaming model output
-
-assistant draft
-
-**Tool call A***model call · A*
-
-`Bash  npm test`approval pendingTool Gate → allow
-
-**Tool call B***model call · B*
-
-`Write  release.md`approval pendingTool Gate → allow
-
-**Tool call C***model call · C*
-
-`Bash  npm publish`approval pendingTool Gate → deny
-
-**Tool Gate**policy → review\_requireddecision → allow / deny
-
-**reviewer workbench**
-
-platform-owned prompt
-
-**reviewer trunk***ready**reviewing A**A committed*
-
-last committed context
-
-**sidecar B***reviewing B*
-
-**sidecar C***reviewing C*
-
-**PostgreSQL**decision commit rail
-
-**A**allow
-
-**B**allow
-
-**C**deny
-
-committed receipt returns to the same call
-
-A
-
-B
-
-C
-
-allow A
-
-allow B
-
-deny C
-
-receipt A
-
-receipt B
-
-receipt C
-
-A complete tool call reaches the Tool Gate before review.Overlapping reviews fork from committed reviewer context.Each decision becomes authority only after its commit.Committed decisions return to the Tool Gate for one final evaluation.
 
 Each completed tool call first reaches the Tool Gate. One review continues on the main reviewer thread while overlapping reviews use temporary copies of its latest committed state. Every decision is committed before the Tool Gate evaluates the exact proposal again.
 
@@ -720,47 +313,7 @@ Adding communication or participants does not automatically improve collaboratio
 
 Tetral’s bet is adversarial review before synthesis. Before work enters the shared workspace, other agents must actively challenge its conclusions and evidence, not merely agree with them. A human then decides what is accepted. This scrutiny matters because accepted work becomes the basis for subsequent exploration: an unchecked mistake can propagate into everything built upon it. The workspace holds the work itself, together with the reasoning and evidence needed to review it. Agents explore many paths, but progress accumulates by [building on validated results](https://www.anthropic.com/research/formalizing-fermats-last-theorem), not by inheriting one another’s unexamined conclusions.
 
-Swipe or scroll horizontally to explore the full diagram →
-
 Two collaboration structures are compared. In the conversation-centered structure, three agents exchange messages in a shared channel while each retains a different working memory. In the artifact-centered structure, sessions begin from an accepted workspace version, produce independent proposals, review one another's artifacts, pass a candidate through human review, and merge the accepted result into the next workspace version.
-
-**What should become shared?**conversation coordinates · accepted artifacts compound
-
-**Conversation-centered**shared room
-
-**Agent A**A's memory
-
-**Agent B**B's memory
-
-**Agent C**C's memory
-
-**shared channel**A: try thisB: another ideaC: wait—why?
-
-Coordination spreads through messages.
-
-Each working memory keeps diverging.
-
-**Artifact-centered**review and admission
-
-**Workspace v12**accepted source of truth
-
-**Session A**independent path
-
-**Session B**independent path
-
-**Session C**independent path
-
-**proposal A**reviewed by B · C
-
-**proposal B**reviewed by A · C
-
-**proposal C**reviewed by A · B
-
-**human review**accept · reject · ask again
-
-**Workspace v13**one accepted result merged
-
-Chat can coordinate the work. Only admitted artifacts change what future agents trust.
 
 Two collaboration structures: shared conversation, and independent work admitted into a shared workspace.
 
@@ -801,36 +354,3 @@ The product direction is a hosted agent system service. Product teams should be 
 The implementation will diverge as those workloads become real. Services may merge, the runtime may move beyond Bun, storage may split, and the queue, Bridge, or Kubernetes topology may be replaced. Three bets remain: the agent is cloud native; the agent system, not only the model, must scale; and the runtime keeps the agent as the computational center while the system around it preserves continuity and control.
 
 Those bets are now concrete enough to test with other people. Tetral is open under the MIT license so product builders, infrastructure engineers, security researchers, and model providers can challenge its boundaries, implement new runtimes, connect new resources, and build products the current system did not anticipate. The thesis is now concrete enough to test in public. This alpha is the starting point for exploring the much larger space of an agent-native cloud.
-
-SHARE[Post on X](https://x.com/intent/post?url=https%3A%2F%2Ftetral.ai%2Fblog%2Fthe-next-scaling-problem%2F&text=The%20Next%20Scaling%20Problem)Copy link
-
-![](/logo.svg)Tetral is a self-hosted runtime for agent systems, in early development.
-
-[Read the docs](/docs/)[GitHub](https://github.com/tetral-ai/tetral)
-
-On this page
-
-1.  [Scaling the wrong thing](#scaling-the-wrong-thing)
-2.  [Building the system, finding the runtime](#building-the-system-finding-the-runtime)
-3.  [The runtime boundary](#the-runtime-boundary)
-4.  [Write ahead of execution](#write-ahead-of-execution)
-5.  [Durable delivery](#durable-delivery)
-6.  [Calling the model](#calling-the-model)
-7.  [Computers as resources](#computers-as-resources)
-8.  [Scaling in two dimensions](#scaling-in-two-dimensions)
-9.  [A separate decision](#a-separate-decision)
-10.  [The next scaling problem](#the-next-scaling-problem)
-11.  [A durable participant](#a-durable-participant)
-12.  [Work that compounds](#work-that-compounds)
-13.  [Scaling the system around intelligence](#scaling-the-system-around-intelligence)
-14.  [From an alpha to an agent-native cloud](#from-an-alpha-to-an-agent-native-cloud)
-
-[![](/logo.svg)TETRAL](/)An operating layer for agent systems. Runs in your cluster.
-
-PRODUCT[Docs](/docs/)[API Reference](/docs/reference/)[Deploy](/docs/deploying/)
-
-COMPANY[About](/about/)[Blog](/blog/)[hello@tetral.ai](mailto:hello@tetral.ai)
-
-ELSEWHERE[GitHub](https://github.com/tetral-ai/tetral)[RSS](/rss.xml)
-
-© 2026 TetralBuilt in the open.

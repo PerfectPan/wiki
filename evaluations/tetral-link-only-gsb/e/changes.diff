@@ -1,0 +1,8 @@
+diff --git a/index.md b/index.md
+index cf0026e..bf68ee5 100644
+--- a/index.md
++++ b/index.md
+@@ -83,0 +84 @@
++  - [[wiki/topics/ai/tetral|Tetral]]
+@@ -234,0 +236 @@
++  - [[wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries|云端 Agent 运行时与系统架构边界]]

@@ -1,0 +1,297 @@
+{
+  "baseCommit": "e595104eaf5135287bf282553b87a14a71dd8c03",
+  "taskSha256": "5f4d78779cae11e85748f27e12954fc0d25830931fbc9a9c653afb8837deb4a7",
+  "candidates": [
+    {
+      "candidate": "D",
+      "files": {
+        "index.md": "d6ca916042cfe6799be0c959565fedefb8b3caa9dd637403298419540c6b5eef",
+        "raw/sources/2026-10-02-the-next-scaling-problem.md": "fc820069cd1325a568f05539e74037e5a9772d6bbcc8cfa2ced28acecbe8439f",
+        "wiki/syntheses/ai/tetral-agent-runtime-architecture.md": "8e639351f13dbe4f00c1c1e25ded23cc1460c516d42e9a2d6fe21cd3e9cb6389"
+      },
+      "deleted": [],
+      "pages": [
+        {
+          "path": "wiki/syntheses/ai/tetral-agent-runtime-architecture.md",
+          "title": "Tetral Agent 运行时架构",
+          "new": true,
+          "lines": 272,
+          "bodyCharacters": 9761
+        }
+      ],
+      "sources": [
+        "raw/sources/2026-10-02-the-next-scaling-problem.md"
+      ],
+      "checks": [
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/syntheses/ai/tetral-agent-runtime-architecture.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/syntheses/ai/tetral-agent-runtime-architecture.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "excludedRuntimeCaches": [],
+      "archiveWhitespaceFindings": [
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 60
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 65
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 68
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 147
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 152
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 157
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 162
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 528
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 531
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 534
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 539
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 542
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 545
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 550
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 553
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 556
+        },
+        {
+          "path": "raw/sources/2026-10-02-the-next-scaling-problem.md",
+          "line": 559
+        },
+        {
+          "path": "wiki/syntheses/ai/tetral-agent-runtime-architecture.md",
+          "line": 138
+        },
+        {
+          "path": "wiki/syntheses/ai/tetral-agent-runtime-architecture.md",
+          "line": 144
+        },
+        {
+          "path": "wiki/syntheses/ai/tetral-agent-runtime-architecture.md",
+          "line": 208
+        },
+        {
+          "path": "wiki/syntheses/ai/tetral-agent-runtime-architecture.md",
+          "line": 211
+        },
+        {
+          "path": "wiki/syntheses/ai/tetral-agent-runtime-architecture.md",
+          "line": 214
+        }
+      ],
+      "gitDiffCheckScope": "Tracked changes only; archive whitespace scan also includes newly created Markdown files."
+    },
+    {
+      "candidate": "E",
+      "files": {
+        "index.md": "04e6fc1674220efa24b5b18adfdd082c91e48566bac48e4224a55a17012412f6",
+        "raw/sources/2026-09-06-the-next-scaling-problem.md": "88150f8efa9e35c34f7e1878530e3ce8ec53874bc46d55e76ce63b1f1100a970",
+        "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md": "57da7519d6e48c4897e24bc08972265bb74264b7d4a86ab76ffe9d009164863d",
+        "wiki/topics/ai/tetral.md": "82d79ba84bd10128de963175cb6d0ff97150297b38e2195fc375be7b43c42385"
+      },
+      "deleted": [],
+      "pages": [
+        {
+          "path": "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md",
+          "title": "云端 Agent 运行时与系统架构边界",
+          "new": true,
+          "lines": 110,
+          "bodyCharacters": 3474
+        },
+        {
+          "path": "wiki/topics/ai/tetral.md",
+          "title": "Tetral",
+          "new": true,
+          "lines": 131,
+          "bodyCharacters": 3760
+        }
+      ],
+      "sources": [
+        "raw/sources/2026-09-06-the-next-scaling-problem.md"
+      ],
+      "checks": [
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/topics/ai/tetral.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/topics/ai/tetral.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "excludedRuntimeCaches": [],
+      "archiveWhitespaceFindings": [
+        {
+          "path": "wiki/topics/ai/tetral.md",
+          "line": 39
+        },
+        {
+          "path": "wiki/topics/ai/tetral.md",
+          "line": 45
+        },
+        {
+          "path": "wiki/topics/ai/tetral.md",
+          "line": 50
+        },
+        {
+          "path": "wiki/topics/ai/tetral.md",
+          "line": 56
+        }
+      ],
+      "gitDiffCheckScope": "Tracked changes only; archive whitespace scan also includes newly created Markdown files."
+    },
+    {
+      "candidate": "F",
+      "files": {
+        "index.md": "e11106313b572775621ec7d55d0ac44b55cb9186893b352ee4f255237e4c285f",
+        "raw/sources/2026-10-02-the-next-scaling-problem.md": "1e779acb23570b0f7f2db060e966fed87a62969479a4d1f8065103bcaf0cff59",
+        "wiki/topics/ai/tetral.md": "d68c64c84f2ee6861d43e5cc3201a08a1e4fa85a958e319a7d8b0de3ecf4c607"
+      },
+      "deleted": [],
+      "pages": [
+        {
+          "path": "wiki/topics/ai/tetral.md",
+          "title": "Tetral 与 agent-native cloud 架构",
+          "new": true,
+          "lines": 142,
+          "bodyCharacters": 7007
+        }
+      ],
+      "sources": [
+        "raw/sources/2026-10-02-the-next-scaling-problem.md"
+      ],
+      "checks": [
+        {
+          "command": [
+            "bin/wiki",
+            "check",
+            "wiki/topics/ai/tetral.md"
+          ],
+          "exitCode": 0,
+          "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+        },
+        {
+          "command": [
+            "bin/wiki",
+            "check-jargon",
+            "wiki/topics/ai/tetral.md"
+          ],
+          "exitCode": 0,
+          "output": "用词检查完成: 1 个文件，0 个问题\n"
+        },
+        {
+          "command": [
+            "git",
+            "diff",
+            "--check"
+          ],
+          "exitCode": 0,
+          "output": ""
+        }
+      ],
+      "excludedRuntimeCaches": [],
+      "archiveWhitespaceFindings": [],
+      "gitDiffCheckScope": "Tracked changes only; archive whitespace scan also includes newly created Markdown files."
+    }
+  ]
+}

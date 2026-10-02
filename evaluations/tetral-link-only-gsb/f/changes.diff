@@ -1,0 +1,6 @@
+diff --git a/index.md b/index.md
+index cf0026e..8678bbd 100644
+--- a/index.md
++++ b/index.md
+@@ -84,0 +85 @@
++  - [[wiki/topics/ai/tetral|Tetral 与 agent-native cloud 架构]]

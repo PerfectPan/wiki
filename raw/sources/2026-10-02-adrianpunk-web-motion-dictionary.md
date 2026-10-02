@@ -35,4 +35,4 @@
 
 本库将它作为描述和查找动效的词汇入口。词条名称不是统一接口定义，具体行为仍须写出对象、起止状态、重复策略及替代方式；实际观感、性能与输入操作需要在目标页面验证。
 
-整理页：[[wiki/topics/frontend/web-motion-vocabulary|网页动效词汇与描述方法]]。
+整理页：[[wiki/topics/design/web-motion-vocabulary|网页动效词汇与描述方法]]。

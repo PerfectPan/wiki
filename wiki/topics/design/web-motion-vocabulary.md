@@ -2,7 +2,7 @@
 title: 网页动效词汇与描述方法
 description: 区分动效的工具、触发、画面变化与 UX 要求，并把网页效果写成可实现、可验收的行为描述
 type: topic
-category: frontend
+category: design
 created: 2026-10-02
 updated: 2026-10-02
 timestamp: 2026-10-02

@@ -1,0 +1,96 @@
+{
+  "candidate": "E",
+  "files": {
+    "index.md": "04e6fc1674220efa24b5b18adfdd082c91e48566bac48e4224a55a17012412f6",
+    "raw/sources/2026-09-06-the-next-scaling-problem.md": "88150f8efa9e35c34f7e1878530e3ce8ec53874bc46d55e76ce63b1f1100a970",
+    "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md": "57da7519d6e48c4897e24bc08972265bb74264b7d4a86ab76ffe9d009164863d",
+    "wiki/topics/ai/tetral.md": "82d79ba84bd10128de963175cb6d0ff97150297b38e2195fc375be7b43c42385"
+  },
+  "deleted": [],
+  "pages": [
+    {
+      "path": "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md",
+      "title": "云端 Agent 运行时与系统架构边界",
+      "new": true,
+      "lines": 110,
+      "bodyCharacters": 3474
+    },
+    {
+      "path": "wiki/topics/ai/tetral.md",
+      "title": "Tetral",
+      "new": true,
+      "lines": 131,
+      "bodyCharacters": 3760
+    }
+  ],
+  "sources": [
+    "raw/sources/2026-09-06-the-next-scaling-problem.md"
+  ],
+  "checks": [
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/topics/ai/tetral.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/topics/ai/tetral.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "excludedRuntimeCaches": [],
+  "archiveWhitespaceFindings": [
+    {
+      "path": "wiki/topics/ai/tetral.md",
+      "line": 39
+    },
+    {
+      "path": "wiki/topics/ai/tetral.md",
+      "line": 45
+    },
+    {
+      "path": "wiki/topics/ai/tetral.md",
+      "line": 50
+    },
+    {
+      "path": "wiki/topics/ai/tetral.md",
+      "line": 56
+    }
+  ],
+  "gitDiffCheckScope": "Tracked changes only; archive whitespace scan also includes newly created Markdown files."
+}

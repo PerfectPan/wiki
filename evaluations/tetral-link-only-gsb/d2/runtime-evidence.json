@@ -1,0 +1,47 @@
+{
+  "models": {
+    "glm": [
+      "glm-5.3"
+    ],
+    "gemini": [
+      "gemini-3.8-flash"
+    ]
+  },
+  "claudeAcpRuntimeVersion": "2.1.280",
+  "priorDClaudeAcpRuntimeVersion": "2.1.280",
+  "separateTerminalClaudeVersion": "2.1.285",
+  "successfulExplicitRepositoryReads": {
+    "glm": [
+      {
+        "rule": "schema",
+        "tool": "read",
+        "success": true,
+        "outputCharacters": 9628
+      },
+      {
+        "rule": "project",
+        "tool": "read",
+        "success": true,
+        "outputCharacters": 6108
+      }
+    ],
+    "gemini": [
+      {
+        "rule": "project",
+        "tool": "Read",
+        "success": true,
+        "outputCharacters": 5802
+      },
+      {
+        "rule": "schema",
+        "tool": "Read",
+        "success": true,
+        "outputCharacters": 9145
+      }
+    ]
+  },
+  "nativeGlobalRuleLoading": "Client-native loading is separate from Read tool calls. Full historical provider input was not retained, so absence of a successful explicit global-file read is not evidence of a missing native rule injection.",
+  "codexAndClaudeExpressionSectionsMatch": true,
+  "globalInstructionFilesAndClaudeSettingsUnchanged": true,
+  "permissionPolicyChanged": false
+}

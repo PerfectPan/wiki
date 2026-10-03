@@ -1,0 +1,55 @@
+diff --git a/index.md b/index.md
+index cf0026e..f71ea75 100644
+--- a/index.md
++++ b/index.md
+@@ -214,0 +215 @@
++  - [[wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries|云端 Agent 运行时与系统边界]]
+diff --git a/wiki/comparisons/ai/agent-output-checks.md b/wiki/comparisons/ai/agent-output-checks.md
+index 644ca3e..f832b74 100644
+--- a/wiki/comparisons/ai/agent-output-checks.md
++++ b/wiki/comparisons/ai/agent-output-checks.md
+@@ -37,0 +38 @@ resource:
++| Tetral Tool Gate（`approve_for_me`） | 结合工具策略、上下文与提案哈希派发独立审查线程 | 两阶段评估；审查结论先落库才授权，崩溃或不确定绝不默认放行（参见 [[cloud-agent-runtime-and-system-boundaries]]） |
+diff --git a/wiki/syntheses/ai/agent-native-system-interface-design.md b/wiki/syntheses/ai/agent-native-system-interface-design.md
+index 26333e7..8fd1579 100644
+--- a/wiki/syntheses/ai/agent-native-system-interface-design.md
++++ b/wiki/syntheses/ai/agent-native-system-interface-design.md
+@@ -146,0 +147 @@ Validation 也不等于真实正确。投资策略通过回测不代表未来有
++- [[cloud-agent-runtime-and-system-boundaries]]
+diff --git a/wiki/syntheses/ai/openseek-session-runtime-model.md b/wiki/syntheses/ai/openseek-session-runtime-model.md
+index e00007e..3e7770d 100644
+--- a/wiki/syntheses/ai/openseek-session-runtime-model.md
++++ b/wiki/syntheses/ai/openseek-session-runtime-model.md
+@@ -157,0 +158 @@ TUI 自己不跑 agent。它管理一个长生命周期 serve engine，向 stdin
++- [[cloud-agent-runtime-and-system-boundaries]]
+diff --git a/wiki/syntheses/ai/persistent-agent-harness-design-patterns.md b/wiki/syntheses/ai/persistent-agent-harness-design-patterns.md
+index b66292c..b25f4a9 100644
+--- a/wiki/syntheses/ai/persistent-agent-harness-design-patterns.md
++++ b/wiki/syntheses/ai/persistent-agent-harness-design-patterns.md
+@@ -130,0 +131 @@ Tree（对话）和 operation log（执行）是两种不同性质的状态：
++- **与云端系统的路线对比**：单机/中立框架（如 Pi）选择用文件系统加配对检查避开事务；而云端分布式运行时（如 Tetral）在把 agent 移出沙箱后，由于涉及网络队列、多 Pod 替换与独立授权门控，选择由统一的事务数据库（PostgreSQL）扮演单一权威，采用类似 WAL 的提前写入执行（Write-Ahead Execution）策略（参见 [[cloud-agent-runtime-and-system-boundaries]]）。
+@@ -138,0 +140 @@ Tree（对话）和 operation log（执行）是两种不同性质的状态：
++- [[wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries|云端 Agent 运行时与系统边界]]
+diff --git a/wiki/topics/ai/agent-harness-design-tradeoffs.md b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+index 7fa91d6..4b42289 100644
+--- a/wiki/topics/ai/agent-harness-design-tradeoffs.md
++++ b/wiki/topics/ai/agent-harness-design-tradeoffs.md
+@@ -49 +49 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
+-| **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台偏好托管会话 | Claude Code vs OpenAI Agent Server |
++| **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台偏好托管会话与统一事务权威（如 Tetral 移出沙箱由 PostgreSQL 统一协调） | Claude Code vs OpenAI Agent Server vs Tetral |
+@@ -106,3 +106,4 @@ Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer
+-2. **云端托管会话路线（OpenAI Agent Server 等）**：
+-   * 将多 Agent 状态、检查点与运行历史保存在云端统一的 Sessions 服务中。
+-   * **优势**：长任务随时可以在后台挂起，数天后随时跨设备恢复继续执行；中间数据自带审计与回放能力，但与厂商的云服务深度绑定。
++2. **云端托管会话路线（OpenAI Agent Server、Tetral 等）**：
++   * 将多 Agent 状态、检查点与运行历史保存在云端统一的会话服务或事务数据库中。
++   * **优势**：长任务随时可以在后台挂起，数天后跨设备恢复继续执行；中间数据自带审计与回放能力。例如 Tetral 将 agent loop 移出沙箱，采用 PostgreSQL 事务配合 write-ahead execution 记录状态变更，计算机仅作为按需延迟分配的资源（参见 [[cloud-agent-runtime-and-system-boundaries]]）。
++   * **代价**：依赖云端基础设施或全托管服务，架构复杂度较本地文件更高。
+@@ -138,0 +140 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户
++- [[cloud-agent-runtime-and-system-boundaries]]
+diff --git a/wiki/topics/ai/agent-harness.md b/wiki/topics/ai/agent-harness.md
+index 6f0d759..58edf69 100644
+--- a/wiki/topics/ai/agent-harness.md
++++ b/wiki/topics/ai/agent-harness.md
+@@ -75,0 +76 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产
++- [[wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries|云端 Agent 运行时与系统边界]]

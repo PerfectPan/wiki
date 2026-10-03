@@ -1,0 +1,53 @@
+{
+  "candidate": "F",
+  "files": {
+    "index.md": "e11106313b572775621ec7d55d0ac44b55cb9186893b352ee4f255237e4c285f",
+    "raw/sources/2026-10-02-the-next-scaling-problem.md": "1e779acb23570b0f7f2db060e966fed87a62969479a4d1f8065103bcaf0cff59",
+    "wiki/topics/ai/tetral.md": "d68c64c84f2ee6861d43e5cc3201a08a1e4fa85a958e319a7d8b0de3ecf4c607"
+  },
+  "deleted": [],
+  "pages": [
+    {
+      "path": "wiki/topics/ai/tetral.md",
+      "title": "Tetral 与 agent-native cloud 架构",
+      "new": true,
+      "lines": 142,
+      "bodyCharacters": 7007
+    }
+  ],
+  "sources": [
+    "raw/sources/2026-10-02-the-next-scaling-problem.md"
+  ],
+  "checks": [
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/topics/ai/tetral.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/topics/ai/tetral.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "output": ""
+    }
+  ],
+  "excludedRuntimeCaches": [],
+  "archiveWhitespaceFindings": [],
+  "gitDiffCheckScope": "Tracked changes only; archive whitespace scan also includes newly created Markdown files."
+}

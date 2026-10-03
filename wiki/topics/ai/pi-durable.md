@@ -4,8 +4,8 @@ description: Pi Durable 1.0.0 的原子提交、任务检查点、工具恢复�
 type: topic
 category: ai
 created: 2026-10-02
-updated: 2026-10-02
-timestamp: 2026-10-02
+updated: 2026-10-03
+timestamp: 2026-10-03
 tags:
   - agent
   - durability
@@ -161,7 +161,7 @@ flowchart LR
 
 Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义。Registry 是进程本地代码，Conversation 保存名称；重启时宿主重新安装定义。任务输入或 checkpoint 语义改变时需要升 version 并迁移；定义缺失、版本不兼容或迁移失败会使任务保持 blocked，而不是伪造执行成功。[扩展接口][extensions]、[调度器][scheduler]
 
-`beforeTool` 可检查、改参数或拒绝调用，但这是应用策略入口，不构成恶意 JavaScript 的沙箱。Environment 的文件和进程接口提供替换执行位置的能力；是否隔离目录、容器、网络和凭证仍由宿主实现。本库据此判断：适合把已有应用的 agent loop 变成可恢复执行，不能单靠这个包建立不可信代码执行服务。[工具实现][tool]、[环境接口][env]
+`beforeTool` 可检查、改参数或拒绝调用，但这是应用策略入口，不构成恶意 JavaScript 的沙箱。Environment 的文件和进程接口提供替换执行位置的能力；是否隔离目录、容器、网络和凭证仍由宿主实现。因此，Pi Durable 适合把已有应用的 agent loop 变成可恢复执行，不能单靠这个包建立不可信代码执行服务。[工具实现][tool]、[环境接口][env]
 
 ## 证据矩阵
 
@@ -172,8 +172,8 @@ Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义�
 | reopen 不自动派发，running 回到 pending | [Scheduler `open/resume`][scheduler]、[任务恢复测试][task-test] | 高；待办定义必须能解析 |
 | safe/safe 重放，否则 interrupted | [ToolTask `execute`][tool]、[工具恢复测试][tool-test] | 高；安全性是工具作者的声明 |
 | 外部单次生效依赖幂等实现 | [转账恢复测试 `service.calls / applied.size`][task-test] | 高；测试模拟外部服务，并非真实支付验证 |
-| 模型中断重发，已提交 partial 保留为 aborted | [Generation `request/convertPartial`][generation]、[恢复测试][generation-test] | 高；本次未接真实供应商 |
-| SQLite 使用事务；JSONL 采用 marker | [SQLite `commit`][sqlite]、[JSONL `commit/recover`][jsonl] | 高；没有做断电或磁盘损坏实验 |
+| 模型中断重发，已提交 partial 保留为 aborted | [Generation `request/convertPartial`][generation]、[恢复测试][generation-test] | 高；真实供应商的费用与重试行为仍由其接口语义决定 |
+| SQLite 使用事务；JSONL 采用 marker | [SQLite `commit`][sqlite]、[JSONL `commit/recover`][jsonl] | 高；事务原子性不等于断电或磁盘损坏后的数据保留保证 |
 | close 要等待非协作代码 | [lifecycle 的 stubborn handler 测试][lifecycle-test] | 高；不是强制隔离能力 |
 | portable 入口可以被宿主适配 | [源码依赖图检查][runtime-test] | 中高；不能据此声称已完成特定平台部署 |
 
@@ -184,7 +184,7 @@ Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义�
 3. **重放环境变化**：safe 工具恢复时可能遇到新 cwd、新实现和新服务配置。测试已经覆盖 cwd 变化；业务是否允许这种变化需自行定义。
 4. **费用与真实副作用**：工具和模型可能重新调用；需要外部幂等、可查询回执或人工处理未知结果。仅保存 requestId 不能覆盖这一层。
 5. **关闭和持久性**：非协作代码会拖住关闭；文件系统、数据库同步策略及主机故障会影响提交保留范围。
-6. **验证范围**：本次深入阅读代码与上游测试，但未运行上游测试、真实模型、Cloudflare 适配或故障注入。本文描述实现和已有测试意图，不报告生产可靠性指标。
+6. **生产可靠性**：源码与上游测试说明实现语义和测试覆盖范围；宿主环境中的真实模型调用、平台适配、存储故障与进程恢复仍需要部署验证，不能据此推导生产可靠性指标。
 
 ## 相关页面
 
@@ -194,7 +194,7 @@ Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义�
 
 ## 来源指针
 
-- [[raw/sources/2026-10-02-pi-durable|固定源码快照与阅读记录]]。
+- [[raw/sources/2026-10-02-pi-durable|固定源码快照与原始材料]]。
 - 下列源码链接全部固定到 `9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16`，不是随 main 漂移的引用。
 
 [readme]: https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md

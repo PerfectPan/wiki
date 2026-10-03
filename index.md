@@ -51,7 +51,7 @@
 - `design`
   - [[wiki/topics/design/interface-polish-details|界面质感细节]]
   - [[wiki/topics/design/print-editorial-design-terms|印刷与编辑设计术语]]
-  - [[wiki/topics/design/web-motion-vocabulary|网页动效词汇与描述方法]]
+  - [[wiki/topics/design/web-motion-vocabulary|网页动画描述方法]]
 - `architecture`
   - [[wiki/topics/architecture/opensumi-di|@opensumi/di]]
   - [[wiki/topics/architecture/technical-design|技术方案]]

@@ -1,0 +1,200 @@
+{
+  "candidate": "D2",
+  "baseCommit": "e595104eaf5135287bf282553b87a14a71dd8c03",
+  "files": {
+    "index.md": "8523202c4cc6c2f5bf531de98b760207ae84e97694474c0fe48d6cf8fa637d47",
+    "raw/sources/2026-10-03-the-next-scaling-problem.md": "5f9b361ccc854a973f31748741d57321a1e47a213cb298db4c55d53a072e10dc",
+    "wiki/comparisons/ai/agent-output-checks.md": "dfe0bdaf4f95c3e24e918a301f581f8e89bcdcd9a4ed8c4e034794d0a3ab804d",
+    "wiki/syntheses/ai/agent-native-system-interface-design.md": "d4cc2c47a17ed53a18599dc9b2f68a966c0841289eb307062e2598037ec96f77",
+    "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md": "a13b4e042aecc18fd396474f9eeff5cf7ada0d1f36b922fb76f88108e6dd801b",
+    "wiki/syntheses/ai/openseek-session-runtime-model.md": "3544c8cf487f506796b6af001d5bf112268ed3fa39c21d3494d85a37954f742d",
+    "wiki/syntheses/ai/persistent-agent-harness-design-patterns.md": "0b97a46e6a556a6b76b279d7cf2c1720e958a27d704054ecc1e11c052685b1b9",
+    "wiki/topics/ai/agent-harness-design-tradeoffs.md": "d33c3b7b112544192a02d9acf8f19c49f0aaf64e576b630698d53caf287e66a9",
+    "wiki/topics/ai/agent-harness.md": "3d2dcdf16326643e0395d692f162173e538b5262d1326b8134908c6313a3a6c5"
+  },
+  "pages": [
+    {
+      "path": "wiki/comparisons/ai/agent-output-checks.md",
+      "title": "Agent 输出检查：TTSR、权限规则与 PreToolUse hooks",
+      "new": false,
+      "lines": 63,
+      "bodyCharacters": 1840
+    },
+    {
+      "path": "wiki/syntheses/ai/agent-native-system-interface-design.md",
+      "title": "Agent Native 系统接口设计",
+      "new": false,
+      "lines": 156,
+      "bodyCharacters": 3345
+    },
+    {
+      "path": "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md",
+      "title": "云端 Agent 运行时与系统边界",
+      "new": true,
+      "lines": 176,
+      "bodyCharacters": 5848
+    },
+    {
+      "path": "wiki/syntheses/ai/openseek-session-runtime-model.md",
+      "title": "OpenSeek 会话与运行时模型",
+      "new": false,
+      "lines": 166,
+      "bodyCharacters": 5240
+    },
+    {
+      "path": "wiki/syntheses/ai/persistent-agent-harness-design-patterns.md",
+      "title": "持久化 Agent Harness 的设计模式",
+      "new": false,
+      "lines": 147,
+      "bodyCharacters": 3884
+    },
+    {
+      "path": "wiki/topics/ai/agent-harness-design-tradeoffs.md",
+      "title": "Agent Harness 的设计取舍",
+      "new": false,
+      "lines": 151,
+      "bodyCharacters": 5796
+    },
+    {
+      "path": "wiki/topics/ai/agent-harness.md",
+      "title": "Agent Harness",
+      "new": false,
+      "lines": 82,
+      "bodyCharacters": 1986
+    }
+  ],
+  "sources": [
+    "raw/sources/2026-10-03-the-next-scaling-problem.md"
+  ],
+  "checks": [
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/comparisons/ai/agent-output-checks.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/comparisons/ai/agent-output-checks.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/syntheses/ai/agent-native-system-interface-design.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/syntheses/ai/agent-native-system-interface-design.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/syntheses/ai/cloud-agent-runtime-and-system-boundaries.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/syntheses/ai/openseek-session-runtime-model.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/syntheses/ai/openseek-session-runtime-model.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/syntheses/ai/persistent-agent-harness-design-patterns.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/syntheses/ai/persistent-agent-harness-design-patterns.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/topics/ai/agent-harness-design-tradeoffs.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check",
+        "wiki/topics/ai/agent-harness.md"
+      ],
+      "exitCode": 0,
+      "output": "\n---\n校验完成: 1 个文件，0 个错误，0 个警告\n"
+    },
+    {
+      "command": [
+        "bin/wiki",
+        "check-jargon",
+        "wiki/topics/ai/agent-harness.md"
+      ],
+      "exitCode": 0,
+      "output": "用词检查完成: 1 个文件，0 个问题\n"
+    }
+  ],
+  "excludedRuntimeCaches": [],
+  "archiveWhitespaceFindings": [],
+  "candidateProseEditedByCoordinator": false
+}

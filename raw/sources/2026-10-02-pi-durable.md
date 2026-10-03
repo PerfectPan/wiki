@@ -1,23 +1,21 @@
 <!-- source: https://github.com/earendil-works/pi -->
-<!-- type: repository-review -->
-<!-- fetched: 2026-10-02 -->
+<!-- type: repository-summary -->
 <!-- commit: 9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16 -->
 
-# Pi Durable 1.0.0 源码阅读记录
+# Pi Durable 1.0.0 来源摘要
 
-## 范围
+## 版本与定位
 
 - 对象：`@earendil-works/pi-durable`，仓库 `earendil-works/pi` 的 `packages/durable`。
-- 固定快照：`9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16`，查阅日期 2026-10-02。
+- 固定快照：`9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16`。
 - 包版本与发布说明：1.0.0，CHANGELOG 标记 2026-10-01；README 明确标为 Experimental。
-- 方法：阅读 README、包定义、设计说明、核心实现和恢复测试；未安装依赖、运行上游测试或调用真实模型。
-- 与本库旧资料的关系：2026-08-20 的 harness-v2 是历史设计，本记录不将它当作当前实现。
+- 与旧 harness 的关系：2026-08-20 的 harness-v2 是历史设计，不代表 1.0.0 的实现。
 
-## 已核对的代码路径
+## 核心代码与机制
 
 下列路径均相对于固定快照的 `packages/durable/`；页末给出不可漂移的链接。
 
-| 入口或模块 | 已读内容与结论 |
+| 入口或模块 | 实现机制 |
 | --- | --- |
 | `src/harness/harness.ts` | Harness 继承 Session；Conversation 提交输入、配置 agent、fork、abort；关闭时等待调度器中的调用结束 |
 | `src/types.ts` | Conversation、Entry、Task、Submission、Document；Task checkpoint 为完整状态；Storage 接受原子写入批次 |
@@ -32,11 +30,11 @@
 | `src/storage/jsonl/storage.ts` | sidecar 先写、主文件 marker 后写；恢复按已提交 marker 重建；默认 fsync 关闭 |
 | `src/harness/types.ts`、`src/env/index.ts` | extension/registry、task、hook、tool、prompt section、环境和存储扩展；环境接口不是安全沙箱 |
 
-## 恢复测试提供了什么证据
+## 上游恢复测试用例
 
-| 测试文件与测试位置 | 观察到的断言 |
+| 测试文件与测试位置 | 覆盖内容 |
 | --- | --- |
-| `test/harness-tasks-recovery.test.ts`，`resumes an intent/effect/outcome task…` | 转账服务在恢复后被调用两次，但按 key 去重后只生效一次；幂等性来自模拟服务 |
+| `test/harness-tasks-recovery.test.ts`，`resumes an intent/effect/outcome task…` | 模拟转账服务在恢复后被调用两次，但按 key 去重后只生效一次；幂等性来自模拟服务 |
 | `test/harness-generation-recovery.test.ts`，`resends a request…` / `converts a committed partial…` | 中断请求重新发送；已提交 partial 转成 aborted assistant entry；使用已保存的请求选项 |
 | `test/harness-tools-recovery.test.ts`，`answers an unsafe tool…` / `reruns a tool only…` | unsafe 工具不自动重跑并返回部分输出；safe/safe 才重跑 |
 | 同上，`reruns a safe tool with the environment…` | 恢复后的 cwd 可以不同；工具被取消选择时不再执行 |
@@ -46,9 +44,9 @@
 | `test/sqlite-storage.test.ts`，`rolls SQL rows and sequence allocation back…` | SQL 行与序列号在一个事务内回滚 |
 | `test/storage-runtime-boundary.test.ts` | 检查包入口及 portable storage 的源码依赖图不引入 Node 内建模块；不是 Cloudflare 部署测试 |
 
-以上为阅读测试源码得到的覆盖说明，不是本次执行通过记录。
+这些用例表达预期恢复语义，不构成真实支付、特定平台部署或生产可靠性的证明。
 
-## 需要保留的限制
+## 实现边界
 
 - 一个 storage 由一个进程独占；不提供分布式租约或跨进程 owner 锁。SQLite 自身的事务锁不等于 Harness 的多实例所有权协调。
 - 提交原子性覆盖库内记录，不覆盖外部模型、文件、进程和网络副作用。副作用完成而结果未存储时仍有不确定窗口。

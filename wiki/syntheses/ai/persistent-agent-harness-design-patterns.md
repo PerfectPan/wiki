@@ -150,5 +150,5 @@ Tree（对话）和 operation log（执行）是两种不同性质的状态：
 
 - `raw/sources/2026-08-20-pi-harness-v2-design.md`
 - https://github.com/earendil-works/pi/blob/harness-v2/j4/packages/agent/docs/harness-v2.md
-- [[raw/sources/2026-10-02-pi-durable|Pi Durable 1.0.0 源码阅读记录]]
+- [[raw/sources/2026-10-02-pi-durable|Pi Durable 1.0.0 来源摘要]]
 - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/docs/spec.md

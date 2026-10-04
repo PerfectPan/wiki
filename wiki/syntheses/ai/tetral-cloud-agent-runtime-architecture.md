@@ -67,17 +67,17 @@ resource:
 
 在消息投递（durable delivery）方面，Public API 在一个事务中写入输入事件、Inbox 记录和 Queue 任务后立即返回 200。为了避免分布式租约超时导致的脑裂，系统结合 binding generation 与 Kubernetes Pod UID 作为 fencing token；只有 Kubernetes API 确认旧 Pod 已经销毁，Bridge 才会把已接受的投递收回并重新放回 Queue。
 
-### 3. 计算机如何作为外部资源按需调度？（原文第 7 节）
+### 3. 沙箱如何作为外部资源按需调度？（原文第 7 节）
 
-原文指出："A computer should be something the agent calls, not somewhere the agent lives."（计算机应当是 Agent 调用的外部资源，而不是 Agent 驻留的环境。）
+核心设计原则：**沙箱应当是 Agent 调用的外部工具，而不是 Agent 运行时的常驻宿主。**
 
 以 execution #42 的冷启动为例：
 1. Worker 派发执行时发现沙箱未激活，便将该逻辑执行挂起在对应的激活任务（activation A7）上，状态设为 `waiting_activation`。
-2. Sandbox Service 在派发前将执行绑定到当前的具体计算机实例，防止旧 Worker 错发指令到新实例。
+2. Sandbox Service 在派发前将执行绑定到当前的具体沙箱实例，防止旧 Worker 错发指令到新实例。
 3. 激活完成后，该执行以新的 generation 重新回到 Queue，并发的多次调用共享同一次激活。
 4. 执行完成后结果由 Sandbox Service 暂存，等待运行时通过 Bridge 结算，Pod 崩溃不会导致命令重新执行。
 
-作者说明当前实现采用 Daytona 虚拟机，这属于现阶段的工程选择，未来针对文件读写可使用虚拟文件系统，轻量任务可使用临时容器。
+作者说明当前实现采用 Daytona 虚拟机作为沙箱环境，未来可根据任务类型扩展（如文件操作用虚拟文件系统，轻量任务用临时容器）。
 
 ### 4. 凭证隔离与授权审查如何分离？（原文第 6、9 节）
 

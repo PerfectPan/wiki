@@ -61,7 +61,7 @@ Harness 是用户自主权的载体：
 - **由代码完成中间数据处理**：组合调用多个工具时，不再把每次调用的完整原始数据都注入模型上下文，而是让模型生成一段脚本在沙箱中批量执行过滤与聚合，仅将最终结果返回给上下文。
 - **状态存储与生态分化**：多 Agent 协作状态是依托本地文件系统还是云端托管会话，以及选用跨模型的中立 Harness 还是云厂商全家桶，正在成为两条平行的工程路线。
 
-具体维度的案例与技术细节见 [[wiki/syntheses/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]。
+具体维度的案例与技术细节见 [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]。
 
 ### 6. 与上层编排平台的边界
 
@@ -73,7 +73,7 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 - [[code-agent]]
 - [[wiki/topics/ai/tetral|Tetral]]
 - [[wiki/topics/ai/pi-durable|Pi Durable]]
-- [[wiki/syntheses/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
+- [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
 - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
 

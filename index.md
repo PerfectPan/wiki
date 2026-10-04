@@ -214,7 +214,7 @@
   - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
   - [[wiki/syntheses/ai/agent-proactive-context-management|Agent 主动上下文管理]]
   - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
-  - [[wiki/syntheses/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
+  - [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]
   - [[wiki/syntheses/ai/agent-native-system-interface-design|Agent Native 系统接口设计]]
   - [[wiki/syntheses/ai/claude-code-quality-regression-lessons|Claude Code 质量退化事故的产品与工程教训]]
   - [[wiki/syntheses/ai/claude-5-context-engineering|Claude 5 时代的上下文工程]]

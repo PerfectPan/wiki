@@ -121,7 +121,7 @@ sequenceDiagram
 
 - [[agent-harness]]
 - [[agent-orchestration-platform]]
-- [[wiki/syntheses/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
+- [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]
 - [[obelisk]]
 
 ## 来源指针

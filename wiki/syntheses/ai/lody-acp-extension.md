@@ -30,19 +30,19 @@ resource:
 
 ## 简答
 
-Lody 将所有扩展集中在 `acp-extension-core` 纯类型合约库中，保持标准协议骨架（会话连接、权限申请、工具调用、模式切换）不变，仅在产品侧语义上进行扩展：通过三层扩展策略（标准消息优先、`_meta.lody.*` 搭便车、`_lody/...` 命名空间自定义 RPC）补齐中途插话、长期目标、子 agent 可观测、用量记账与限流、移动端提问等标准 ACP 尚未覆盖的产品功能。
+Lody 将所有扩展集中在 `acp-extension-core` 纯类型库中，保持标准协议骨架（会话连接、权限申请、工具调用、模式切换）不变，仅在产品功能上进行扩展：通过三层扩展策略（优先复用标准消息、在 `_meta.lody.*` 中透传属性、必要时在 `_lody/...` 命名空间增加自定义 RPC）支持中途插话、长期目标、子 agent 可观测、用量记账与限流、移动端提问等标准 ACP 尚未覆盖的功能。
 
 ## 来源事实
 
 以下事实来自 `raw/sources/2026-09-30-lody-acp-extension-research.md` 以及只读仓库 `LodyAI/acp-extension-core`：
 
-### 1. 合约库定位与三层扩展策略
+### 1. 类型库定位与三层扩展策略
 
-扩展全部集中在 `acp-extension-core`（一个 836 行 TypeScript 的纯类型合约库，仅包含 4 个极轻量运行时辅助函数，旨在受内容安全策略 CSP 限制的浏览器渲染进程中运行）。扩展策略分为严格的三层（`acp-extension-core/README.md:28-43`）：
+扩展全部集中在 `acp-extension-core`（一个 836 行 TypeScript 的纯类型定义库，仅包含 4 个极轻量运行时辅助函数，旨在受内容安全策略 CSP 限制的浏览器渲染进程中运行）。扩展策略分为严格的三层（`acp-extension-core/README.md:28-43`）：
 
 1. **第一层：标准 ACP 能承载的一律使用标准消息**。例如 plan mode 完全复用标准 config 机制（`README.md:259-264`，"no separate Plan RPC"），通过标准 `session/set_config_option` 设置布尔配置项；`elicitation/create`、`session/fork` 同理。
-2. **第二层：`_meta.lody.*` 元数据搭便车**。在标准消息的元数据字段 `_meta.lody` 下附加产品属性。聚合类型 `LodySessionMeta`（`src/session.ts:161-176`）覆盖 `worktreeProject`、`forkAtTurn`、`steer`、`goalControl`、`toolName`、`activity`、`task`、`goal`、`notice`、`titleSource`、`messagePhase`、`usageScopeId` 以及提问增强（`noteFor`）等。
-3. **第三层：`_lody/...` 自定义 JSON-RPC 命名空间**。仅限标准 ACP 完全没有对应物的交互动作（`src/methods.ts:3-15`），包含 7 个请求方法与 4 个通知方法：
+2. **第二层：在 `_meta.lody.*` 元数据字段中透传属性**。在标准消息的元数据字段 `_meta.lody` 下附加产品属性。聚合类型 `LodySessionMeta`（`src/session.ts:161-176`）覆盖 `worktreeProject`、`forkAtTurn`、`steer`、`goalControl`、`toolName`、`activity`、`task`、`goal`、`notice`、`titleSource`、`messagePhase`、`usageScopeId` 以及提问增强（`noteFor`）等。
+3. **第三层：`_lody/...` 自定义 JSON-RPC 命名空间**。仅限标准 ACP 完全没有对应动作的场景（`src/methods.ts:3-15`），包含 7 个请求方法与 4 个通知方法：
    - 请求方法：`_lody/session/steer`、`_lody/session/goal`、`_lody/session/history/read`、`_lody/rate_limits/get`、`_lody/subagents/list`、`_lody/subagents/cancel`、`_lody/subagents/output`。
    - 通知方法：`_lody/subagents/event`、`_lody/session/usage_update`、`_lody/rate_limits/update`、`_lody/session/steer_applied`。
 
@@ -52,7 +52,7 @@ Lody 将所有扩展集中在 `acp-extension-core` 纯类型合约库中，保�
 
 ### 3. 仅有的四个运行时抽象
 
-为了保证在无 Node.js 环境的客户端界面与受限渲染进程中运行，合约库仅保留四个运行时逻辑：
+为了保证在无 Node.js 环境的客户端界面与受限渲染进程中运行，该类型库仅保留四个轻量运行时逻辑：
 - `supportsLodySubagentEvents()`：双边能力探测与版本匹配检查。
 - `SessionUsageAccumulator`（`src/usage.ts:80-134`）：按操作标识单调合并的用量记账账本，生成的快照独立脱钩（使用 `structuredClone`），进程重启即切换新的 `usageScopeId`。
 - `LodySubagentEmitter`（`src/subagent-emitter.ts:9-94`）：将底层原生 agent 标识映射为不透明的单次运行 `runId`，丢弃终止后的迟到输出，并将断开连接的运行标记为 `unknown` 与 `outputIncomplete: true`。
@@ -78,7 +78,7 @@ Lody 将所有扩展集中在 `acp-extension-core` 纯类型合约库中，保�
 - **场景**：主 Agent 在执行复杂任务时启动了子 Agent（Subagent）并行检索或编写子模块，客户端需要向用户呈现子 Agent 的实时思考、执行步骤和进度。
 - **标准 ACP 空洞**：标准 ACP 仅将子 Agent 视作普通的 `tool_call`。在工具调用返回之前，客户端与用户只能看到工具处于等待状态的加载图标，内部完全不透明。
 - **Lody 的补法**：双边协商 `subagentEvents` 能力后，通过通知方法 `_lody/subagents/event` 实时推送事件流（文本、思考、工具调用、计划更新）；配合三个管理方法 `_lody/subagents/{list,cancel,output}` 实现列表查看、手动取消和日志回读。
-- **设计取舍**：采用显式的弱保证设计（`README.md:15-17` 原话："no sequence numbers, replay guarantees, or cross-reconnect deduplication"）。由于真实网络可能经由移动端或 CRDT 协同中继，无法保证严格有序重放。合约明确规定观测数据丢失时状态直接置为 `unknown` 且标记 `outputIncomplete: true`，宁可暴露数据不完整，也不伪造执行结果，同时明确该事件丢失不代表 Agent 实际执行失败。
+- **设计取舍**：采用弱保证设计（`README.md:15-17` 原话："no sequence numbers, replay guarantees, or cross-reconnect deduplication"）。由于真实网络可能经由移动端或协同中继转发，无法保证严格有序重放。规范明确规定事件丢失时将状态直接设为 `unknown` 并标记 `outputIncomplete: true`，明确向界面暴露数据不完整，避免展示错误的执行结果，同时说明数据丢失不代表 Agent 实际执行失败。
 
 #### 案例 4：用量记账与限流（Usage & Rate Limits）
 - **场景**：团队共享和多端协同场景下，需要对各模型 Token 消耗、估算费用进行累计记账，并展示各个模型窗口的限流配额状态。
@@ -119,9 +119,9 @@ Lody 将所有扩展集中在 `acp-extension-core` 纯类型合约库中，保�
 
 ## 对个人/项目的启发
 
-1. **协议扩展的层级纪律**：在已有通用协议（如 LSP、MCP、ACP）上构建垂直产品时，应严格划分“原生承载”、“元数据增强（搭便车）”与“独立命令空间”。优先利用已有生命周期，避免过早发明自定义 RPC。
-2. **多端协同必须考虑无主 turn 约束**：设计 Agent 与客户端之间的控制调用约定，必须明确谁对长任务具有归属权。在任务控制不可达时，需要评估带外 RPC 与带内提示词流的协同方式。
-3. **真实网络下的状态坦诚**：分布式或弱网环境下，不要在协议层做出难以兑现的绝对有序承诺。将“未知 / 缺失（unknown / incomplete）”作为一等状态显式建模，优于强行保证一致性导致的界面假死或误判。
+1. **协议扩展的层级纪律**：在已有通用协议（如 LSP、MCP、ACP）上构建垂直产品时，应严格划分“原生承载”、“在 `_meta` 中透传属性”与“独立命名空间”。优先利用已有生命周期，避免过早发明自定义 RPC。
+2. **多端协同必须考虑无对应 prompt 的会话约束**：设计 Agent 与客户端之间的控制调用约定，必须明确谁对长任务具有归属权。在任务控制不可达时，需要评估带外 RPC 与带内提示词流的协同方式。
+3. **真实网络下的状态呈现**：分布式或弱网环境下，不要在协议层做出难以兑现的绝对有序承诺。将“未知 / 缺失（unknown / incomplete）”作为一等状态显式建模，优于强行保证一致性导致的界面假死或误判。
 
 ## 未决问题
 
@@ -141,7 +141,7 @@ Lody 将所有扩展集中在 `acp-extension-core` 纯类型合约库中，保�
 - 仓库内素材：[[raw/sources/2026-09-30-lody-acp-extension-research.md]]
 - [LodyAI 组织主页](https://github.com/LodyAI)
 - [Lody 主产品仓库](https://github.com/LodyAI/Lody)
-- [acp-extension-core 扩展合约仓库](https://github.com/LodyAI/acp-extension-core)
+- [acp-extension-core 扩展类型定义仓库](https://github.com/LodyAI/acp-extension-core)
   - `README.md:28-43`（三层扩展策略）
   - `README.md:115-141`（提问增强与 noteFor）
   - `README.md:186-202`（用量记账与 scopeId）

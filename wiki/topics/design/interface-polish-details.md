@@ -4,8 +4,8 @@ description: Jakub 的 11 个界面打磨细节：文本换行、同心圆角、
 type: topic
 category: design
 created: 2026-09-01
-updated: 2026-09-01
-timestamp: 2026-09-01
+updated: 2026-10-04
+timestamp: 2026-10-04
 tags:
   - design
   - ui
@@ -66,6 +66,7 @@ Jakub Krehel（design engineer）的界面打磨清单，核心论点：**好界
 
 ## 相关页面
 
+- [[wiki/topics/design/web-motion-vocabulary|网页动效词汇与描述方法]] —— 查找悬停、滚动和组件动效词汇，把状态变化、时序和中断写成明确需求
 - [[transitions-dev]] —— 动效参考库，与本文的动效组互补
 - [[ui-design-styles]] —— 风格坐标系；本文是跨风格的质感基线
 - [[ui-element-naming]] —— 元素层面的语言

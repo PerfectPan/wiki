@@ -312,7 +312,7 @@ flowchart LR
 - [[crdt-data-compression]]（DeltaDB 默认保留所有版本，代价压力就在这一类问题上）
 - [[agent-harness]]
 - [[code-agent]]
-- [[persistent-agent-harness-design-patterns]]
+- [[wiki/syntheses/ai/agent-harness-design-tradeoffs|Agent Harness 的设计取舍]]
 
 ## 来源指针
 

@@ -1,16 +1,17 @@
 ---
 title: Agent Harness 的设计取舍
-description: 追踪主流 Agent Harness 在工程演进中的关键设计抉择：工具组合在沙箱还是上下文执行、单兵任务清单何时退役、多 Agent 状态共享走文件还是平台原语、中立运行时与云厂商一体化的边界。
-type: topic
+description: 综合主流 Agent Harness 在工程演进中的关键设计抉择：工具组合沙箱化、单兵任务清单退役、多 Agent 协作状态载体、生态路线、持久化执行与故障恢复，以及云端运行时与易失沙箱的解耦。
+type: synthesis
 category: ai
 created: 2026-10-01
-updated: 2026-10-01
-timestamp: 2026-10-01
+updated: 2026-10-04
+timestamp: 2026-10-04
 tags:
   - agent
   - harness
-  - mcp
-  - claude-code
+  - runtime
+  - durability
+  - cloud-native
 source_refs:
   - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
@@ -22,6 +23,10 @@ source_refs:
   - https://code.claude.com/docs/en/agent-sdk/todo-tracking
   - https://code.claude.com/docs/en/tools-reference
   - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+  - raw/sources/2026-09-06-the-next-scaling-problem.md
+  - https://tetral.ai/blog/the-next-scaling-problem/
+  - raw/sources/2026-10-02-pi-durable.md
+  - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
 resource:
   - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
@@ -33,21 +38,27 @@ resource:
   - https://code.claude.com/docs/en/agent-sdk/todo-tracking
   - https://code.claude.com/docs/en/tools-reference
   - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
+  - raw/sources/2026-09-06-the-next-scaling-problem.md
+  - https://tetral.ai/blog/the-next-scaling-problem/
+  - raw/sources/2026-10-02-pi-durable.md
+  - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
 ---
 
 # Agent Harness 的设计取舍
 
 ## 摘要
 
-Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[agent-harness]]。本页聚焦一线框架（Claude Code、OpenAI、Pi）在实际工程落地中的五个关键取舍：
+Harness 的基础架构（System Prompt、Tools、Agent Loop、Translation Layer）参见 [[wiki/topics/ai/agent-harness|Agent Harness]]。本页综合主流框架（Claude Code、OpenAI、Pi、Tetral）在工程落地中的七个关键取舍：
 
-| 维度 | 痛点 / 矛盾 | 主流做法 / 演进方向 | 代表案例 |
+| 维度 | 矛盾与痛点 | 主流做法 / 演进方向 | 代表案例 |
 | --- | --- | --- | --- |
 | **工具组合方式** | 每次调用都把海量数据塞回上下文 vs 用代码在沙箱里批量执行 | 移进代码沙箱用脚本编排，只向模型返回最终结果 | Pi Codemode、OpenAI PTC |
 | **脚本执行环境** | 放在高权限主进程（不安全）vs 放在底层系统（缺接口）vs 独立沙箱 | 放在受控的轻量沙箱（能调内部工具，无系统破坏权限） | Pi JS/WASM、OpenAI 托管 V8 |
 | **任务进度管理** | 强制每步打卡写 Todo vs 依赖模型自主规划 | 撤除个人备忘清单（`TodoWrite`）；保留团队协作看板（`Tasks`） | Claude Code |
 | **多 Agent 状态存储** | 依托本地文件系统 vs 依赖云端平台会话原语 | 本地 CLI 偏好文件系统；云端平台偏好托管会话 | Claude Code vs OpenAI Agent Server |
 | **框架生态路线** | 保持模型中立与开放协议 vs 使用云厂商全家桶 | 中立框架靠标准协议（MCP）维持开放；厂商主打全托管一体化 | Pi vs OpenAI Agents SDK |
+| **持久化与故障恢复** | 进程崩溃丢状态 vs 分布式重放太重 | 区分库内原子提交（单进程事务、检查点）与外部副作用幂等（接口业务 key） | Pi Durable |
+| **云端运行时与沙箱解耦** | 循环与 VM 绑定成本高、凭据易泄露 vs 分布式状态协调代价 | 运行时做成无状态 Pod，沙箱降级为按需外部工具，凭证由网关统一注入 | Tetral |
 
 ## 取舍一：工具组合——直接经由上下文传递还是代码沙箱批量执行
 
@@ -116,12 +127,38 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户�
 但随着云厂商（如 OpenAI Agent Server、Codex CLI）把 Harness、沙箱和多 Agent 会话统统打包成一体化云端产品，用户在获得极佳开箱体验的同时，也面临着生态锁定的风险。
 像 Pi 等中立框架的应对策略是**拥抱并推动开放协议（如 MCP）**：通过打通标准工具协议，让中立 Harness 既能对接庞大的开源生态，又能保留灵活更换底层模型的核心自由。
 
+## 取舍六：持久化与崩溃恢复——单进程事务还是分布式重放
+
+当 Agent 执行长达数小时的任务时，进程中断或节点重启是必然发生的。如何恢复状态，业界形成了两种主要范式：
+
+1. **工作流引擎重放（如 Temporal / Cursor 模式）**：
+   - 依赖外部分布式工作流引擎，将每个工具调用包装为不可变的 Activity，重启时从第一步开始全量重演事件历史。
+   - **代价**：依赖较重的外部分布式协调服务，且重放长历史对存储和反序列化开销大。
+2. **进程内原子提交与检查点（如 Pi Durable 模式，参见 [[wiki/topics/ai/pi-durable|Pi Durable]]）**：
+   - 不搞复杂的跨节点重放，通过进程内的 `Session` 统一提交队列，将 Entry、Task 状态机检查点与 Document 变更在单次本地事务（如 SQLite BEGIN IMMEDIATE）中原子写入。
+   - 核心原则：**执行可并发，提交必须串行；一个存储后端必须由一个进程独占**。
+   - **外部副作用边界**：Harness 的崩溃恢复只能保证本地状态库的一致性，不能自动赋予外部系统事务能力。如果工具调用刚发出去进程就崩溃，重启后本地只有“已准备调用”记录。要实现真正的端到端一致，必须依赖业务端提供的稳定幂等 Key 或可查询回执。
+
+## 取舍七：云端运行时与沙箱解耦——常驻宿主还是按需工具
+
+在单机 CLI 时代，沙箱就是运行进程本身的容器（例如在虚拟机里跑 Node.js）。但走向云端服务时，继续把完整 Agent 循环绑在沙箱虚拟机中会产生严重架构瓶颈：
+
+* **传统瓶颈（如 Anoma 运行在 E2B、早期 camelAI 运行在 per-user VM）**：沙箱成为系统的容量单位。调度和扩缩容与沙箱生命周期耦合，沙箱启停极慢（冷启动秒级）；且模型 API 密钥必须穿透进沙箱，调试需要登录装有用户私有数据的虚拟机。
+* **解耦架构（如 Tetral 模式，参见 [[wiki/topics/ai/tetral|Tetral]]）**：
+  - **原则**：**沙箱应当是 Agent 调用的外部工具，而不是 Agent 运行时的常驻宿主。**
+  - **无状态计算运行时**：Agent 循环作为轻量无状态 Pod 运行，内部只跑纯函数 Reducer 计算下一步转移，随时可销毁或换机。
+  - **写前执行声明（Write-Ahead Execution）**：向沙箱派发任何命令前，必须先经由 Bridge 在 PostgreSQL 事务中登记调用声明并拿到回执；沙箱 Worker 异步执行后把结果入库，Reducer 才读取推进。
+  - **按需激活**：平时不常驻沙箱，模型产出 Bash 或代码执行指令时，Sandbox Service 才异步预热或激活虚拟机；并发请求共享同一代环境。
+  - **凭证网关隔离**：明文 API Key 留在外层模型网关，通过短期凭证注入，绝不流入无状态运行时与沙箱。
+
 ## 实践启发
 
 1. **避免在上下文里逐条拼装数据**：需要批量查询或处理大量数据时，优先提供代码沙箱让脚本在内部完成过滤与计算，只把处理后的最终结果返给模型上下文。
 2. **警惕过度辅助变成性能累赘**：为模型增加辅助机制（如打卡清单、强制格式）时，要想清楚它到底是在帮模型还是在束缚模型；模型能力提升后，及时评估并清理过时的辅助开销。
 3. **协作状态优先复用简单载体**：如果是本地运行的多 Agent 任务，使用本地文件系统或任务状态文件作为协作媒介最易维护，无需过早引入复杂的中心化通信协议。
 4. **守住工作流的控制权**：根据业务需要明确边界——需要极致开箱体验的使用平台全托管能力，需要随时切换模型和保证数据隐私的核心链路，保留在中立 Harness 架构中。
+5. **区分内部检查点与外部副作用**：不要迷信 Harness 的“自动恢复”能解决一切。对于涉及外部写操作的工具，必须显式设计业务幂等 Key 和状态查询机制。
+6. **云端沙箱轻量化与按需化**：在云端构建 Agent 服务时，尽早把长期状态和无状态运行时从重型虚拟机中剥离出来，沙箱只作为按需调度的执行工具。
 
 ## 时间线
 
@@ -129,17 +166,20 @@ Harness 的最初价值在于通过适配层（Translation Layer）赋予用户�
 | --- | --- | --- |
 | 2026-02-08 | Claude Code 用 Tasks 替换 TodoWrite、用 Skills 替换 Slash Commands | 模型自主能力提升后撤除多余的单兵辅助工具（Tony Lee 转述官方说明） |
 | 2026-04-15 | OpenAI 宣布 Agents SDK 演进为 Agent Server，引入托管 Harness/Sandbox/Sessions | 厂商发力平台一体化，将运行时标准化为云端基础设施 |
+| 2026-09-06 | Tetral 提出把运行时移出沙箱，采用 PostgreSQL WAL + 按需计算机 | 剥离虚拟机常驻开销，建立无状态运行时与预写执行机制 |
 | 2026-09-29 | Pi 框架把 MCP 接入核心，并推出 Codemode 沙箱 | 探索中立框架下通过受限代码沙箱安全编排标准协议工具 |
+| 2026-10-01 | Pi Durable 1.0.0 发布，支持单进程原子提交与任务检查点 | 确立基于本地事务的状态机持久化标准 |
 
 ## 相关页面
 
 - [[wiki/topics/ai/agent-harness|Agent Harness]]
-- [[agent-harness-evolution-paradigm]]
-- [[persistent-agent-harness-design-patterns]]
-- [[openai-programmatic-tool-calling]]
-- [[mcp]]
-- [[claude-5-context-engineering]]
-- [[agent-team-roles-and-collaboration]]
+- [[wiki/topics/ai/tetral|Tetral]]
+- [[wiki/topics/ai/pi-durable|Pi Durable]]
+- [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
+- [[wiki/topics/ai/openai-programmatic-tool-calling|OpenAI Programmatic Tool Calling]]
+- [[wiki/topics/ai/mcp|MCP]]
+- [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
+- [[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]
 
 ## 来源指针
 

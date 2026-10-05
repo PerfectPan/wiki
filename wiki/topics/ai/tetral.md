@@ -24,7 +24,7 @@ resource:
 
 ## 摘要
 
-Tetral 是由 Yang Li（Anoma 作者）发起并开源（MIT 协议）的云原生 Agent 运行时与系统服务框架。其核心主张是**「计算机应当是 Agent 调用的外部资源，而不是 Agent 运行所在的宿主容器」**（A computer should be something the agent calls, not somewhere the agent lives）。Tetral 将传统将整个 Agent 循环塞入沙箱虚拟机（如 E2B）的重耦合模式拆解，抽离出无状态、可随时替换的纯计算运行时（Runtime Pod），由外部独立的 Gateway、Bridge、PostgreSQL、Queue 与 Sandbox Service 共同保障持久化交付、预写执行（Write-Ahead Execution）、凭据隔离与按需沙箱调度。
+Tetral 是由 Yang Li（Anoma 作者）发起并开源（MIT 协议）的云原生 Agent 运行时框架。其核心原则是**「沙箱应当是 Agent 调用的外部工具，而不是 Agent 运行时的常驻宿主」**。Tetral 拆解了过去把整个 Agent 循环塞进虚拟机沙箱（如 E2B）的重耦合模式，抽离出无状态、可随时替换的纯计算运行时（Runtime Pod），由外部独立的 Gateway、Bridge、PostgreSQL、Queue 与 Sandbox Service 共同保障持久化状态存储、预写执行（Write-Ahead Execution）、凭据隔离与按需沙箱调度。
 
 ## 核心设计要点
 
@@ -63,7 +63,7 @@ flowchart TB
 
 - **Runtime**：纯计算宿主。通过 Bridge 加载 Thread 状态，运行纯函数 Reducer 派生下一步转移（调用模型、执行工具、等待或结束），本身不持有长效持久化状态，也不直接做数据库与网络 I/O。
 - **Bridge + PostgreSQL**：全局状态与事务权威。负责验证会话归属权与时序编号，原子提交状态转移并返回幂等回执（receipt）。
-- **Queue**：基于 PostgreSQL 事务 Outbox 模式构建的任务投递通道，管理任务租约（leases）、重试、取消与死信。
+- **Queue**：基于事务 Outbox 模式（在单次数据库事务中同时写入业务记录与待派发任务，保证任务投递与状态落盘一致）构建的投递通道，管理任务认领超时时间、失败重试、取消与死信队列。
 - **Gateway**：模型协议适配与凭据隔离边界。基于 Vercel AI SDK 归一化多厂商流式协议，管理 API Key 与 OAuth 自动刷新；明文密钥从不流入 Runtime Pod 或沙箱。
 - **Sandbox Service**：管理一次性执行环境（如 Daytona 驱动的虚拟机或微容器）的生命周期（创建、预热激活、挂载、销毁），按需懒分配。
 
@@ -85,7 +85,7 @@ sequenceDiagram
     B-->>R: 返回确认回执 (Receipt)
     Note over R,S: 只有拿到持久化回执后，才允许向外发起物理调用
     R->>Q: 入队执行任务
-    Q->>S: Worker 租约接取并执行
+    Q->>S: Worker 认领任务并执行
     S->>DB: 保存原始结果 (状态为未消费)
     R->>B: 提交 agent.tool_result
     B->>DB: 原子更新消息上下文，标记结果已消费
@@ -95,11 +95,11 @@ sequenceDiagram
 - 若网络超时或 RPC 丢失，重试相同标识直接返回已有的持久化回执，避免重复执行。
 - 节点崩溃时，替补 Pod 从 PostgreSQL 重建检查点状态，未提交的操作声明随故障进程作废，杜绝模糊状态默认转为已执行。
 
-### 3. 可持久化投递（Durable Delivery）与栅栏机制
+### 3. 可持久化投递（Durable Delivery）与隔离机制
 
 - **事务 Outbox 机制**：新输入（用户消息或 Agent 通信）到达时，在单次 PostgreSQL 事务中同时写入输入事件、目标 Thread 的 Inbox 记录和 Queue Job。提交成功即向调用端返回 200，随后异步调度。
 - **状态三阶段**：Inbox 记录跟踪 `queued`（已排队）、`delivering`（投递中）、`accepted`（已接取）。
-- **Pod 身份隔离（Fencing Tokens）**：结合 Kubernetes Pod UID 与绑定代次。只有当集群确认旧 Pod 已彻底终结，Bridge 才会释放租约重新入队，防止旧实例未停、新实例接手导致的并发混乱。
+- **Pod 身份隔离（Fencing Tokens）**：结合 Kubernetes Pod UID 与绑定代次。只有当集群确认旧 Pod 已彻底终结，Bridge 才会解除原实例的执行锁定并将任务重新入队，防止旧实例未停、新实例接手导致的并发混乱。
 
 ### 4. 沙箱作为按需资源（Computers as Resources）
 

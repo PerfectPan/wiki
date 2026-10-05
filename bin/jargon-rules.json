@@ -16,5 +16,11 @@
   { "term": "补偿型脚手架", "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单", "exceptions": [] },
   { "term": "补偿性脚手架", "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单", "exceptions": [] },
   { "term": "协作原语", "suggestion": "写明具体机制，例如任务依赖、消息频道或共享任务列表", "exceptions": [] },
-  { "term": "上下文接力", "suggestion": "写明数据如何传递，例如通过文件、工具返回值或会话接口", "exceptions": [] }
+  { "term": "上下文接力", "suggestion": "写明数据如何传递，例如通过文件、工具返回值或会话接口", "exceptions": [] },
+  { "term": "合约", "suggestion": "按语境使用接口定义、类型定义、调用约定或代码库", "exceptions": ["智能合约", "符合约定"] },
+  { "term": "搭便车", "suggestion": "写明具体透传机制，例如在现有消息元数据字段中携带属性", "exceptions": [] },
+  { "term": "状态坦诚", "suggestion": "写明具体处理方式，例如显式上报 unknown 状态或标记数据不完整", "exceptions": [] },
+  { "term": "矩阵", "suggestion": "写明具体对比表、对照表或分类清单", "exceptions": ["混淆矩阵", "转移矩阵", "CRF 转移矩阵"] },
+  { "term": "租约", "suggestion": "写明具体机制，例如有有效期的执行锁、超时重新分配或认领超时时间", "exceptions": [] },
+  { "term": "死信", "suggestion": "写明具体处理，例如重试多次失败后的隔离存储或无法投递的消息暂存区", "exceptions": [] }
 ]

@@ -21,5 +21,6 @@
   { "term": "搭便车", "suggestion": "写明具体透传机制，例如在现有消息元数据字段中携带属性", "exceptions": [] },
   { "term": "状态坦诚", "suggestion": "写明具体处理方式，例如显式上报 unknown 状态或标记数据不完整", "exceptions": [] },
   { "term": "矩阵", "suggestion": "写明具体对比表、对照表或分类清单", "exceptions": ["混淆矩阵", "转移矩阵", "CRF 转移矩阵"] },
-  { "term": "租约", "suggestion": "写明具体机制，例如有有效期的执行锁、超时重新分配或认领超时时间", "exceptions": [] }
+  { "term": "租约", "suggestion": "写明具体机制，例如有有效期的执行锁、超时重新分配或认领超时时间", "exceptions": [] },
+  { "term": "死信", "suggestion": "写明具体处理，例如重试多次失败后的隔离存储或无法投递的消息暂存区", "exceptions": [] }
 ]

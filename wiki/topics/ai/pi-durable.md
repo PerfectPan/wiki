@@ -131,7 +131,7 @@ SQLite 的事务实现在 [storage.ts][sqlite]，Node 策略在 [node.ts][sqlite
 
 - **取消等待**只停止当前等待者，不取消已接收工作。
 - **abort**先持久化标记，再通知正在运行的调用；标记沿前台 owner 关系传播，清理完成后写 terminal outcome。后台任务是默认传播和 idle 检查边界，可显式包含后台工作。
-- **close**停止接收新工作、发出取消信号并等待调用结束，不把所有任务写成已取消；后续可 reopen 恢复。忽略信号的 JavaScript 可能阻塞 close，强制终止需要宿主使用进程或 worker 隔离。
+- **close**：停止接收新工作、发出取消信号并等待当前正在运行的任务退出。如果某个工具函数没有监听取消信号（例如卡在死循环或未处理超时的请求），`close()` 会一直挂起等待；因为同一 JavaScript 进程内无法强行终止正在执行的函数，必须由外层宿主使用独立的 Worker 线程或直接杀死进程来强制终止。
 
 这些区别见 [ownership 测试][ownership-test]、[关闭测试][lifecycle-test] 与 [Scheduler][scheduler]。取消信号不撤销已发生的外部副作用。
 
@@ -174,7 +174,7 @@ Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义�
 | 外部单次生效依赖幂等实现 | [转账恢复测试 `service.calls / applied.size`][task-test] | 高；测试模拟外部服务，并非真实支付验证 |
 | 模型中断重发，已提交 partial 保留为 aborted | [Generation `request/convertPartial`][generation]、[恢复测试][generation-test] | 高；真实供应商的费用与重试行为仍由其接口语义决定 |
 | SQLite 使用事务；JSONL 采用 marker | [SQLite `commit`][sqlite]、[JSONL `commit/recover`][jsonl] | 高；事务原子性不等于断电或磁盘损坏后的数据保留保证 |
-| close 要等待非协作代码 | [lifecycle 的 stubborn handler 测试][lifecycle-test] | 高；不是强制隔离能力 |
+| close 无法强杀忽略取消信号的任务 | [lifecycle 的 stubborn handler 测试][lifecycle-test] | 高；库内无法跨调用栈强行终止函数，强制停止需靠宿主进程或 Worker 隔离 |
 | portable 入口可以被宿主适配 | [源码依赖图检查][runtime-test] | 中高；不能据此声称已完成特定平台部署 |
 
 ## 当前风险与未决问题
@@ -183,7 +183,7 @@ Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义�
 2. **独占所有权**：水平扩展和故障切换需要宿主保证一个 storage 同时只有一个活跃拥有者；不能因存储可并发访问就启动多个 Harness。
 3. **重放环境变化**：safe 工具恢复时可能遇到新 cwd、新实现和新服务配置。测试已经覆盖 cwd 变化；业务是否允许这种变化需自行定义。
 4. **费用与真实副作用**：工具和模型可能重新调用；需要外部幂等、可查询回执或人工处理未知结果。仅保存 requestId 不能覆盖这一层。
-5. **关闭和持久性**：非协作代码会拖住关闭；文件系统、数据库同步策略及主机故障会影响提交保留范围。
+5. **无法强制终止正在执行的函数**：调用 `close()` 时，如果某个工具函数内部没有监听取消信号（例如陷入无限循环或未设超时的网络请求），进程会一直挂起等待。Pi Durable 运行在单个 JavaScript 进程内，无法像操作系统 `kill -9` 那样强杀某一段函数代码；需要硬超时的场景，必须由宿主将工具放入独立的 Worker 线程或子进程中执行。
 6. **生产可靠性**：源码与上游测试说明实现语义和测试覆盖范围；宿主环境中的真实模型调用、平台适配、存储故障与进程恢复仍需要部署验证，不能据此推导生产可靠性指标。
 
 ## 相关页面

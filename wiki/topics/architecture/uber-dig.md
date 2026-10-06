@@ -22,7 +22,7 @@ resource:
 
 # uber/dig
 
-uber/dig 是 Go 语言生态中一个基于运行时反射（Reflection）的轻量级依赖注入库。它的核心工作机制是：开发者向容器注册一系列普通构造函数，dig 通过反射读取这些构造函数的入参类型与返回值类型，并在调用方请求目标对象时，自动按类型拓扑关系将依赖解析并组装完成。
+uber/dig 是 Go 语言生态中一个基于运行时反射（Reflection）的依赖注入库。它的核心工作机制是：开发者向容器注册一系列普通构造函数，dig 通过反射读取这些构造函数的入参类型与返回值类型，并在调用方请求目标对象时，自动按类型拓扑关系将依赖解析并组装完成。
 
 在本质上，dig 的整个自动解析与实例化流程，完全等价于开发者在程序入口处手写的以下三行装配代码：
 
@@ -123,7 +123,7 @@ function resolve(t: Type): unknown {
 
 ### dig.As 是「改为」按接口登记，而非「同时」登记
 
-理解 `dig.As` 的最关键事实在于：**它是将构造函数的产出「改为」按接口类型登记，绝不是「同时」登记两者**。
+理解 `dig.As` 的最关键事实在于：**它是将构造函数的产出「改为」按接口类型登记，并非「同时」登记两者**。
 
 dig 官方文档对此有明确的原话说明：
 > "values produced by constructors will be then available in the container as implementations of all of those interfaces, but not as the value itself."
@@ -149,10 +149,10 @@ c.Provide(func(db *gorm.DB) domain.TaskRepository {
 
 Go 语言在编译为可执行文件后，其二进制运行时中依然完整保留了函数的参数类型与返回值类型元数据，因此 dig 能够通过反射读出函数签名。
 
-而在 **TypeScript 中，所有类型系统信息在编译为 JavaScript 后会被彻底擦除（Type Erasure）**。在运行时，Node.js 或浏览器环境面对 `constructor(repo: TaskRepository)` 时，完全无法得知 `TaskRepository` 到底是什么类型。因此，TypeScript 生态要实现依赖注入只有两条路径：
+而在 **TypeScript 中，所有类型系统信息在编译为 JavaScript 后会被擦除（Type Erasure）**。在运行时，Node.js 或浏览器环境面对 `constructor(repo: TaskRepository)` 时，完全无法得知 `TaskRepository` 到底是什么类型。因此，TypeScript 生态要实现依赖注入只有两条路径：
 
 1. **装饰器机制 + `reflect-metadata`**：指示 TypeScript 编译器在编译期将有限的类型信息写入元数据（如 Inversify、tsyringe、NestJS 等框架所采用的方案）；但即使如此，面对复杂泛型或抽象接口时，依然必须由开发者手动附加 `@inject(TOKEN)` 字符串或显式令牌进行标识；
-2. **显式运行时令牌（Type Token）**：即 Effect 体系所采纳的现代函数式路线。Effect 中的 `Context.Service` 标签在运行时是一个真实存在的常量值对象，扮演着与 Go 中 `new(domain.TaskRepository)` 完全一致的类型令牌角色。在 Effect 用例中，`yield* TaskRepository` 即明确表示「我要获取该令牌绑定的具体实例」。一个程序所需要的全部依赖被完整捕获在类型签名 `Effect<Success, Error, Requirements>` 的第三个参数 `Requirements` 中，如果上层组装时遗漏了任何一个依赖，**在静态编译阶段就会直接报错拦截**。
+2. **显式运行时令牌（Type Token）**：即 Effect 体系所采纳的函数式路线。Effect 中的 `Context.Service` 标签在运行时是一个真实存在的常量值对象，扮演着与 Go 中 `new(domain.TaskRepository)` 完全一致的类型令牌角色。在 Effect 用例中，`yield* TaskRepository` 即明确表示「我要获取该令牌绑定的具体实例」。一个程序所需要的全部依赖被完整捕获在类型签名 `Effect<Success, Error, Requirements>` 的第三个参数 `Requirements` 中，如果上层组装时遗漏了任何一个依赖，**在静态编译阶段就会直接报错**。
 
 ### uber/dig 与 Effect 机制对比
 

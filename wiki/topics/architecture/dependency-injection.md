@@ -20,6 +20,8 @@ source_refs:
 - DI
 - https://www.amazon.com.br/Dependency-Injection-NET-Second-Seemann/dp/161729473X
 - [[opensumi-di|@opensumi/di]]
+- [[uber-dig|uber/dig]]：uber/dig 怎么按类型自动组装依赖，以及和 TS / Effect 的对照。
+- 依赖注入发生在组装根和应用层，聚合不注入依赖：见 [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate#聚合根不依赖仓储|聚合根不依赖仓储]]。
 - https://blog.codeminer42.com/dependency-injection-in-js-ts-part-1/
 	- 剥离的依赖是服务，使用服务的是容器
 	- 方便测试

@@ -57,6 +57,7 @@
   - [[wiki/topics/architecture/technical-design|技术方案]]
   - [[wiki/topics/architecture/ddd|DDD]]
   - [[wiki/topics/architecture/dependency-injection|Dependency Injection]]
+  - [[wiki/topics/architecture/uber-dig|uber/dig]]
   - [[wiki/topics/architecture/jwt|JWT]]
   - [[wiki/topics/architecture/oauth|OAuth]]
   - [[wiki/topics/architecture/otp|OTP]]
@@ -238,6 +239,8 @@
   - [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - `architecture`
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
+  - [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]
+  - [[wiki/syntheses/architecture/ddd-implementation-approaches|DDD 的实现方式与取舍]]
 - `career`
   - [[wiki/syntheses/career/hiring-search-and-standards|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/structured-interview-and-behavioral-probing|结构化面试与行为追问]]

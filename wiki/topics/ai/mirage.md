@@ -75,7 +75,7 @@ TypeScript 版在 `@struktoai/mirage-core` 中直接实现工作区、分发、�
 
 需要区分“使用 TypeScript SDK”和“执行 Python 代码”：Node 包里的 `LocalRuntime` 是一个可选执行环境，它仍会启动本机 Python，默认从 PATH 找 `python3`；此前阅读的 Python 版默认使用运行 Mirage 自身的解释器。选择 TS SDK 本身并不意味着会启动 Python。[TS LocalRuntime](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/runtime/python/local/runtime.ts#L16-L91)
 
-架构层面的取舍与适用条件见 [[wiki/syntheses/architecture/mirage-multi-backend-design|从 Mirage 学多后端工具的设计]]。
+架构层面的取舍与适用条件见 [[wiki/syntheses/architecture/unified-interface-capability-differences|统一接口应该隐藏哪些差异]]。
 
 ## 源码里值得学习的做法
 
@@ -122,6 +122,68 @@ TypeScript 对应调用是 `ws.vfs.read(path, { raw: true })`，测试同样区�
 **可以借鉴**：如果工具提供“先读取、再修改、再写回”，就必须区分展示格式和存储格式。否则，用来帮助 agent 理解的转换结果可能被当成原文写回，破坏原始文件。
 
 这几项做法比完整照搬一个虚拟 shell 更容易用于普通项目。它们解决的是具体问题：缓存不能绕过权限、过期请求不能污染缓存、快照不能承诺自己没保存的数据、展示内容不能冒充原始文件。
+
+## 实现结构与调用流程
+
+以下三图概括前文核对的 TypeScript 实现，分别表示包依赖、一次文件读取和两种操作的访问范围。
+
+### 包依赖
+
+```mermaid
+flowchart TD
+    N["Node 包：文件系统、系统挂载、解析器加载"] --> C["Core 包：Workspace、Dispatcher、缓存、快照"]
+    B["Browser 包：浏览器存储、解析器加载"] --> C
+    C --> V["BaseVFS 与操作接口"]
+    N --> NI["Node 环境的 VFS 实现"]
+    B --> BI["浏览器环境的 VFS 实现"]
+    NI -.-> V
+    BI -.-> V
+```
+
+Node 与浏览器分别装配环境相关能力，共用 core 中的工作区逻辑；箭头表示依赖关系。
+
+### 文件读取
+
+```mermaid
+sequenceDiagram
+    participant E as 文件操作入口
+    participant D as Dispatcher
+    participant P as 权限检查
+    participant C as 缓存
+    participant V as 后端读取
+    E->>D: read(path)
+    D->>P: 检查当前会话与路径
+    alt 拒绝
+        P-->>D: 拒绝原因
+        D-->>E: 返回错误
+    else 允许
+        P-->>D: 通过
+        D->>C: 查询可用缓存
+        alt 缓存可用
+            C-->>D: 内容
+        else 需要读取后端
+            D->>V: 读取对象
+            V-->>D: 内容与版本信息
+        end
+        D-->>E: 返回读取结果
+    end
+```
+
+图从已解析的文件路径开始，省略目录解析和输出限制，突出权限检查先于缓存返回。
+
+### 文件操作与代码执行的访问范围
+
+```mermaid
+flowchart LR
+    A[应用配置与调用] --> F[虚拟文件操作]
+    F --> D[Dispatcher 权限检查]
+    D --> M[已配置的挂载]
+    A --> L[选择 LocalRuntime 执行 Python]
+    L --> P[宿主 Python 子进程]
+    P --> H[宿主文件系统与环境变量]
+```
+
+图中的 LocalRuntime 特指 Node 包调用宿主 Python 的实现，不代表所有执行环境。各图依据见前文相应的源码链接。
 
 ## 相关页面
 

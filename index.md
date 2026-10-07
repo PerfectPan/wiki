@@ -66,6 +66,7 @@
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
   - [[wiki/topics/ai/agent|Agent]]
+  - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]
   - [[wiki/topics/ai/ai-slop|AI Slop]]
   - [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]

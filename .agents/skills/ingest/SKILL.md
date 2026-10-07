@@ -27,13 +27,11 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 2. 直抓被反爬拦截（403）或落盘文件明显太脏（导航、订阅尾巴、粗体和行内代码丢失）时，改用会话侧 reader 工具（如 GLM 的 webReader MCP，是否可用取决于客户端）抓正文，存成临时文件后 `bin/wiki ingest <url> --file <路径>` 落盘。reader 返回的 JSON 直接喂 `--file` 即可，`title`、`author`、`publishedTime` 会自动写入头注释。`--file` 不绑定具体 reader，手动复制的正文文件同样适用。
 3. 站点提供 llms.txt 类端点时，可用它核对落盘正文是否完整；发现缺漏时以官方端点为准重存正文。
 
-找到对应的文件：
-- 博客/文档：`raw/sources/YYYY-MM-DD-主题.md`（提取正文后的 Markdown）
-- GitHub 仓库：`raw/sources/YYYY-MM-DD-仓库名.md`（目录结构 + 关键文件）
-- X 推文线程：`raw/sources/YYYY-MM-DD-主题.md`（线程全文）
-- YouTube 视频：`raw/sources/YYYY-MM-DD-主题.md`（字幕转录）
+素材命名遵循 `SCHEMA.md` 的「原始素材命名」。先搜索是否已有同一对象的素材；新文件使用稳定的对象或主题名，必要时用 `bin/wiki ingest <url> --name <name>` 指定。日期与源码提交版本写进文件头。
 
-**同一对象只留一份素材**：一个库 / 站（如一个组件库及其官网多个页面）的多次抓取，落盘前合并为一份 `raw/sources/YYYY-MM-DD-<对象>.md`——文件名用对象名，不用 URL slug；页面级噪音（testimonials、导航、广告）在收录时剔除，不整站搬运、不按 URL / 页面拆多个文件。
+**同一对象只留一份素材**：同一库或站的多次读取合并到一份记录；已有素材先阅读，再按授权追加或修订。页面级噪音（导航、广告等）在收录时剔除，不按 URL / 页面拆文件。
+
+来源类型决定内容：博客或文档保留提取后的正文；仓库保存源码调研记录；推文保留线程；视频保留字幕转录。CLI 的仓库元信息输出只是阅读入口，不能当作已经完成源码分析。
 
 **不要把整站 HTML 存进 raw/sources/**。HTML 里全是 CSS/JS/SVG 噪音，只保留提取出的正文 .md 即可。
 
@@ -75,7 +73,14 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
    - 解决了什么问题
    - 可以借鉴的设计模式
 
-**禁止**：只基于目录结构和 README 做表面分析。必须引用具体的代码文件和接口来支撑结论。
+源码调研记录应能独立回答“这是什么、怎么运行、数据在哪里、为什么这样设计”。在同一份 raw 记录中写明：
+
+- 项目定位、读取的 commit、运行入口与主要模块职责；
+- 由已读源码支持的架构图，以及一条从输入到持久化或输出的核心调用链；
+- 关键数据对象、事实与派生索引的区别、扩展点和失败处理；
+- 关键结论对应的文件或符号，读过或运行过的测试，以及尚未验证的行为。
+
+图中的组件和箭头必须有源码依据；读过测试、运行测试和真实产品验证分别说明。CLI 生成的文件列表不能替代这些内容，也不复制整仓源码。
 
 ### X 推文线程
 
@@ -129,10 +134,10 @@ tags:
   - tag1
   - tag2
 source_refs:
-  - raw/sources/YYYY-MM-DD-主题.md
+  - raw/sources/example-topic.md
   - https://原始URL
 resource:
-  - raw/sources/YYYY-MM-DD-主题.md
+  - raw/sources/example-topic.md
   - https://原始URL
 ---
 ```
@@ -249,7 +254,7 @@ resource:
 
 仅在确有值得单独保存的内容时使用；不要把索引的一两句话扩写成 raw 文件。
 
-raw 评审文件（如 `raw/sources/YYYY-MM-DD-<topic>-review.md`）是分析素材后的中间产物，给后续写 wiki 页面提供事实基础。它不是正式 wiki 页面，但必须让人能读懂。
+raw 评审文件（如 `raw/sources/<topic>-review.md`）是分析素材后的中间产物，给后续写 wiki 页面提供事实基础。它不是正式 wiki 页面，但必须让人能读懂。
 
 **语言要求：**
 
@@ -272,7 +277,7 @@ raw 评审文件（如 `raw/sources/YYYY-MM-DD-<topic>-review.md`）是分析素
 **不要做的事：**
 
 - 不要把整站 HTML 爬进 raw/sources/。HTML 里全是 CSS/JS/SVG 噪音，提取正文存成 .md 就够了。
-- 不要按 URL / 页面为同一对象拆多个 raw 文件（一个库 / 站只留一份合并素材，命名 `YYYY-MM-DD-<对象>.md`）。
+- 不要按 URL / 页面为同一对象拆多个 raw 文件（一个库 / 站只留一份合并素材，命名见 `SCHEMA.md`）。
 - 不要为了显得专业而堆砌术语。能说清楚就用最简单的词。
 
 ## 第八步：更新导航

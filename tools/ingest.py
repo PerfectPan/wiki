@@ -6,7 +6,7 @@ ingest.py - 抓取网页并提取为 Markdown，存入 raw/sources/
   python3 tools/ingest.py <url> [--type blog|doc]
 
 输出:
-  raw/sources/YYYY-MM-DD-主题.md    (提取后的 Markdown)
+  raw/sources/<name>.md    (日期保存在来源头中)
 """
 
 import argparse
@@ -16,7 +16,8 @@ import re
 import sys
 from datetime import date
 from html.parser import HTMLParser
-from urllib.parse import urlparse
+from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
 
 
@@ -162,7 +163,7 @@ def analyze_github_repo(url: str) -> str:
 
     lines.append("")
     lines.append("## 说明\n")
-    lines.append("本文件只记录仓库元信息、关键文档指向和值得一看的文件列表。深入的代码分析应在临时目录中 clone 后进行，不存入 raw/sources/。")
+    lines.append("本文件是仓库阅读入口，尚未包含实现分析。整理时在临时目录读取源码，将定位、架构图、核心数据流、存储边界和源码依据补充到这份记录；不复制整仓源码。")
 
     return "\n".join(lines) + "\n"
 
@@ -171,21 +172,47 @@ def slugify(text: str, max_len: int = 60) -> str:
     """从文本生成文件名 slug，优先保留 ASCII"""
     # 移除非 ASCII 字符（中文等），只保留英文、数字、连字符
     text = re.sub(r"[^\x00-\x7f]", "", text)
-    text = re.sub(r"[^\w\s-]", "", text)
-    text = re.sub(r"[-\s]+", "-", text).strip("-")
-    return text[:max_len].lower()
+    text = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-")
+    return text[:max_len].rstrip("-").lower()
 
 
 def get_slug_from_url(url: str) -> str:
     """从 URL 提取 slug"""
-    path = urlparse(url).path.rstrip("/")
+    parsed = urlparse(url)
+    path = parsed.path.rstrip("/")
+    if is_github_repo(url):
+        return slugify(path.strip("/").split("/")[1].removesuffix(".git"))
+    if is_youtube_url(url) and parsed.path == "/watch":
+        return slugify(parse_qs(parsed.query).get("v", [""])[0])
     if path:
         last = path.split("/")[-1]
         # 去掉扩展名
         last = re.sub(r"\.[a-z]+$", "", last)
         if last:
             return slugify(last)
-    return "untitled"
+    return slugify(parsed.hostname or "")
+
+
+def source_path(sources_dir: Path, name: str) -> Path:
+    """原始素材只新增；日期命名的旧文件也需要先人工检查。"""
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", name):
+        die("无法生成合法文件名；请用 --name 指定英文小写、数字和连字符组成的名称（不含扩展名）")
+    target = sources_dir / f"{name}.md"
+    existing = ([target] if target.exists() else []) + sorted(
+        sources_dir.glob(f"[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-{name}.md")
+    )
+    if existing:
+        die(f"素材已存在，未覆盖: {', '.join(str(path) for path in existing)}。同一对象请审阅后合并；不同对象请用 --name 区分。")
+    return target
+
+
+def save_source(path: Path, content: str) -> None:
+    try:
+        # 排他创建同时保护检查路径之后出现的文件。
+        with path.open("x", encoding="utf-8") as stream:
+            stream.write(content)
+    except FileExistsError:
+        die(f"素材已存在，未覆盖: {path}")
 
 
 def extract_title(html: str) -> str:
@@ -545,6 +572,7 @@ def main():
     parser = argparse.ArgumentParser(description="抓取网页并存入 raw/sources/")
     parser.add_argument("url", help="网页 URL 或 GitHub 仓库 URL")
     parser.add_argument("--type", default="blog", choices=["blog", "doc", "repo", "video", "tweet"], help="来源类型")
+    parser.add_argument("--name", help="素材文件名，不含扩展名，使用英文小写和连字符")
     parser.add_argument("--file", help="预抓正文路径（Markdown，或含 content 字段的 JSON），给出时跳过直接抓取")
     parser.add_argument("--author", help="来源作者，写入头注释")
     parser.add_argument("--published", help="来源发布日期（YYYY-MM-DD），写入头注释")
@@ -552,117 +580,58 @@ def main():
 
     url = args.url
     source_type = args.type
-
-    # 确定保存路径
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sources_dir = os.path.join(repo_root, "raw", "sources")
-    os.makedirs(sources_dir, exist_ok=True)
-
-    today = date.today().isoformat()
-
-    # YouTube 视频：获取字幕
     if is_youtube_url(url):
-        print(f"YouTube 视频: {url}")
-        slug = get_slug_from_url(url)
-        base_name = f"{today}-{slug}"
-        md_path = os.path.join(sources_dir, f"{base_name}.md")
+        source_type = "video"
+    elif is_x_url(url):
+        source_type = "tweet"
+    elif is_github_repo(url):
+        source_type = "repo"
 
-        try:
-            transcript, title = fetch_youtube_transcript(url)
-            header = build_source_header(url, "video", title)
-            with open(md_path, "w", encoding="utf-8") as f:
-                f.write(header + f"# {title}\n\n" + transcript)
-            print(f"已保存字幕: {md_path}")
-        except Exception as e:
-            print(f"获取字幕失败: {e}")
-            header = build_source_header(url, "video", slug)
-            with open(md_path, "w", encoding="utf-8") as f:
-                f.write(header + f"# {slug}\n\n[获取字幕失败，请手动查看视频]({url})")
-            print(f"已保存占位文件: {md_path}")
+    sources_dir = Path(__file__).resolve().parent.parent / "raw" / "sources"
+    sources_dir.mkdir(parents=True, exist_ok=True)
+    name = args.name if args.name is not None else get_slug_from_url(url)
+    md_path = source_path(sources_dir, name)
+    meta = {}
+    note = None
 
-        print(f"\n类型: video")
-        return
-
-    # X 推文线程
-    if is_x_url(url):
-        print(f"X 推文: {url}")
-        slug = get_slug_from_url(url)
-        base_name = f"{today}-{slug}"
-        md_path = os.path.join(sources_dir, f"{base_name}.md")
-
-        try:
-            thread = fetch_x_thread(url)
-            header = build_source_header(url, "tweet", slug)
-            with open(md_path, "w", encoding="utf-8") as f:
-                f.write(header + thread)
-            print(f"已保存推文: {md_path}")
-        except Exception as e:
-            print(f"抓取失败: {e}")
-            header = build_source_header(url, "tweet", slug)
-            with open(md_path, "w", encoding="utf-8") as f:
-                f.write(header + f"[抓取失败，请手动复制推文内容]({url})")
-            print(f"已保存占位文件: {md_path}")
-
-        print(f"\n类型: tweet")
-        return
-
-    # GitHub 仓库：只存元信息和关键文档指向
-    if is_github_repo(url):
-        print(f"GitHub 仓库: {url}")
-        slug = get_slug_from_url(url)
-        base_name = f"{today}-{slug}"
-        md_path = os.path.join(sources_dir, f"{base_name}.md")
-
-        try:
-            print("正在获取仓库元信息...")
-            analysis = analyze_github_repo(url)
-            header = build_source_header(url, "repo", slug)
-            with open(md_path, "w", encoding="utf-8") as f:
-                f.write(header + analysis)
-            print(f"已保存仓库元信息: {md_path}")
-        except Exception as e:
-            die(f"获取仓库元信息失败: {e}")
-
-        print(f"\n类型: repo")
-        return
-
-    # 普通网页：优先使用预抓正文，否则抓取 HTML 并转 Markdown
     if args.file:
         print(f"使用预抓正文: {args.file}")
         body_md, meta = read_prefetched(args.file)
-        title = meta.get("title") or first_heading(body_md) or "untitled"
-        note = "body pre-fetched via in-session reader tool; direct fetch skipped"
+        title = meta.get("title") or first_heading(body_md) or name
+        note = "body pre-fetched; direct fetch skipped"
+    elif source_type == "video" and is_youtube_url(url):
+        try:
+            transcript, title = fetch_youtube_transcript(url)
+            body_md = f"# {title}\n\n{transcript}"
+        except Exception as error:
+            print(f"获取字幕失败: {error}")
+            title = name
+            body_md = f"# {title}\n\n[获取字幕失败，请手动查看视频]({url})"
+    elif source_type == "tweet" and is_x_url(url):
+        title = name
+        try:
+            body_md = fetch_x_thread(url)
+        except Exception as error:
+            print(f"抓取失败: {error}")
+            body_md = f"[抓取失败，请手动复制推文内容]({url})"
+    elif source_type == "repo" and is_github_repo(url):
+        print(f"正在获取仓库元信息: {url}")
+        title = name
+        body_md = analyze_github_repo(url)
     else:
         print(f"抓取: {url}")
         html = fetch(url)
         title = extract_title(html)
         body_md = html_to_markdown(html)
-        meta = {}
-        note = None
 
-    author = args.author or meta.get("author")
-    published = args.published or meta.get("published")
-
-    # 文件名日期优先用来源发布日期，未知时用抓取日
-    name_date = today
-    if published:
-        m = re.match(r"\d{4}-\d{2}-\d{2}", published)
-        if m:
-            name_date = m.group(0)
-
-    # 优先用 URL 的 slug，标题作为备选
-    slug = get_slug_from_url(url) or slugify(title)
-    base_name = f"{name_date}-{slug}"
-
-    md_path = os.path.join(sources_dir, f"{base_name}.md")
-
-    # 保存 Markdown（不保存原始 HTML，避免 CSS/JS/SVG 噪音）
-    body_md = body_md.rstrip() + "\n"
-    header = build_source_header(url, source_type, title, author=author, published=published, note=note)
-    with open(md_path, "w", encoding="utf-8") as f:
-        f.write(header + body_md)
+    header = build_source_header(
+        url, source_type, title,
+        author=args.author or meta.get("author"),
+        published=args.published or meta.get("published"),
+        note=note,
+    )
+    save_source(md_path, header + body_md.rstrip() + "\n")
     print(f"已保存 Markdown: {md_path}")
-
     print(f"\n标题: {title}")
     print(f"类型: {source_type}")
 

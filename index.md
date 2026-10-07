@@ -240,7 +240,7 @@
   - [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - `architecture`
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
-  - [[wiki/syntheses/architecture/unified-interface-capability-differences|统一接口应该隐藏哪些差异]]
+  - [[wiki/syntheses/architecture/unified-interface-capability-differences|从 S3 或网盘读取报表]]
   - [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]
   - [[wiki/syntheses/architecture/ddd-implementation-approaches|DDD 的实现方式与取舍]]
 - `career`
@@ -249,7 +249,6 @@
 - `design`
   - [[wiki/syntheses/design/ai-assisted-design-techniques|用 AI 做设计的几个技巧]]
 - `frontend`
-  - [[wiki/syntheses/frontend/frontend-resource-selection-criteria|前端组件与样式参考的收录标准]]
   - [[wiki/syntheses/frontend/pure-css-hand-drawn-annotations|纯 CSS 手绘标注的实现与布局边界]]
   - [[wiki/syntheses/frontend/svg-icon-auto-morph-implementation|SVG 图标自动 Morph 的实现路径]]
   - [[wiki/syntheses/frontend/event-loop-microtask-checkpoint|事件循环与 Microtask 检查点]]

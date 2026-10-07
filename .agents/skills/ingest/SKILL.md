@@ -39,6 +39,8 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 
 ## 第二步：分析素材
 
+收录前端组件库、视觉效果库或 CSS 参考站，或调整其分级时，先读 [references/frontend-resources.md](references/frontend-resources.md)。筛选操作规则留在 skill，Wiki 页面写资源内容与知识结论。
+
 在写 wiki 页面之前，先分析素材：
 
 ### 博客/文档

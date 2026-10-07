@@ -23,8 +23,9 @@
   { "term": "矩阵", "suggestion": "写明具体对比表、对照表或分类清单", "exceptions": ["混淆矩阵", "转移矩阵", "CRF 转移矩阵"] },
   { "term": "租约", "suggestion": "写明具体机制，例如有有效期的执行锁、超时重新分配或认领超时时间", "exceptions": [] },
   { "term": "死信", "suggestion": "写明具体处理，例如重试多次失败后的隔离存储或无法投递的消息暂存区", "exceptions": [] },
-  { "term": "张力", "suggestion": "写明具体的风险、取舍或冲突，例如“招得快和招得准之间要取舍”；小节标题用“风险与未决问题”", "exceptions": ["视觉张力", "表面张力"] },
+  { "term": "张力", "suggestion": "写明具体的风险、取舍或冲突，例如“招得快和招得准之间要取舍”", "exceptions": ["视觉张力", "表面张力"] },
   { "term": "裁决", "suggestion": "判定、决定，或写明以谁的结果为准", "exceptions": [] },
   { "term": "墙上时钟", "suggestion": "本机系统时间", "exceptions": [] },
-  { "term": "法定入口", "suggestion": "唯一入口", "exceptions": [] }
+  { "term": "法定入口", "suggestion": "唯一入口", "exceptions": [] },
+  { "term": "未决问题", "suggestion": "写明是尚未验证的行为、尚未决定的选择，还是已知限制，并说明具体事项", "exceptions": [] }
 ]

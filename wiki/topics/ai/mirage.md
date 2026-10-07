@@ -75,7 +75,7 @@ TypeScript 版在 `@struktoai/mirage-core` 中直接实现工作区、分发、�
 
 需要区分“使用 TypeScript SDK”和“执行 Python 代码”：Node 包里的 `LocalRuntime` 是一个可选执行环境，它仍会启动本机 Python，默认从 PATH 找 `python3`；此前阅读的 Python 版默认使用运行 Mirage 自身的解释器。选择 TS SDK 本身并不意味着会启动 Python。[TS LocalRuntime](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/runtime/python/local/runtime.ts#L16-L91)
 
-架构层面的取舍与适用条件见 [[wiki/syntheses/architecture/unified-interface-capability-differences|统一接口应该隐藏哪些差异]]。
+架构层面的取舍与适用条件见 [[wiki/syntheses/architecture/unified-interface-capability-differences|从 S3 或网盘读取报表]]。
 
 ## 源码里值得学习的做法
 

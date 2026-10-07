@@ -13,7 +13,6 @@ tags:
   - css
   - reference
 source_refs:
-  - wiki/syntheses/frontend/frontend-resource-selection-criteria.md
   - raw/sources/2026-10-07-lisse.md
   - raw/sources/2026-10-07-modern-css.md
   - https://corne.rs/
@@ -26,7 +25,6 @@ source_refs:
   - https://www.rareui.com/
   - https://transitions.dev/
 resource:
-  - wiki/syntheses/frontend/frontend-resource-selection-criteria.md
   - raw/sources/2026-10-07-lisse.md
   - raw/sources/2026-10-07-modern-css.md
   - https://corne.rs/
@@ -44,11 +42,7 @@ resource:
 
 ## 摘要
 
-这里收录写界面时可用的组件库、视觉效果库和 CSS 参考站。每项只写用途、分级和来源；具体评审保存在原始资料中。分级依据见 [[wiki/syntheses/frontend/frontend-resource-selection-criteria|前端组件与样式参考的收录标准]]。
-
-## 收录规则
-
-先确认候选的用途、使用方式、许可和主要限制，再把来源与评审写入 `raw/sources/`，按上述标准分级后加入一行。只读过官网的条目应注明未实测；没有足够材料的候选先保留在原始资料中。
+这里收录写界面时可用的组件库、视觉效果库和 CSS 参考站。每项只写用途、分级和来源；具体评审保存在原始资料中。
 
 ## 分级
 
@@ -57,8 +51,6 @@ resource:
 | 推荐 | 说明和许可清楚，有明确复用或学习价值。 |
 | 可参考 | 有具体用途，但仍有接入或使用限制需要核对。 |
 | 偏薄 | 仅在具有明确教学价值时保留，通常不建议直接采用。 |
-
-完整定义与核对要求见 [[wiki/syntheses/frontend/frontend-resource-selection-criteria|收录标准]]。
 
 ## 索引
 
@@ -81,29 +73,14 @@ resource:
 
 （暂无挂名条目。）
 
-## 明确不收
-
-- 无 raw 素材、只有 star 数或营销页的链接（先补素材再谈收录）
-- 纯 npm 重型框架组件库（MUI / Chakra 一类）——只当依赖使用时不构成收录；出现选型需求时走 comparison
-- `raw/sources/component-library.md`（旧 Logseq 遗留 4 行链接清单：ant-design/pro-editor、headlessui、fancycomponents）——未评审，停留在 raw
-
-## 候选池（待 raw 评审，慢慢收录）
-
-shadcn 生态动效组件站：Skiper UI、Aceternity UI、Magic UI、ReactBits、Animata、Origin UI、motion-primitives；旧清单遗留：ant-design/pro-editor、Headless UI、Fancy Components。
-
-每项进索引前需补齐：raw 素材 → 对照分级 → 在 PR body 写明分级理由。
-
 ## 相关页面
 
 - [[wiki/syntheses/frontend/shadcn-registry-component-distribution|shadcn Registry 组件分发模式]] —— 本索引多数条目依赖的分发机制
 - [[wiki/topics/frontend/transitions-dev|Transitions.dev]]
 - [[wiki/topics/design/interface-polish-details|界面质感细节]] —— 动效组的「可抄成品」入口
-- [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]] —— 同构先例（skill 领域）
-- [[SCHEMA.md|SCHEMA]] 收录页约定
 
 ## 来源指针
 
-- [[wiki/syntheses/frontend/frontend-resource-selection-criteria|前端组件与样式参考的收录标准]]
 - [[raw/sources/2026-10-07-lisse|Lisse 评审素材]]
 - [[raw/sources/2026-10-07-modern-css|Modern CSS 评审素材]]
 

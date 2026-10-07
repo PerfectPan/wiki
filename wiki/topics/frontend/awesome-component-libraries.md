@@ -62,7 +62,7 @@ resource:
 
 | 库 | 一句话 | 指针 |
 | --- | --- | --- |
-| **Anime.js** | 通用 JavaScript 动画编排，提供时间线、SVG 与布局动画，采用 MIT 许可；源码和 API 设计见主题页，对象接口已验证，浏览器接入未实测。 | [[wiki/topics/frontend/animejs\|topic]] · [官网](https://animejs.com/) |
+| **Anime.js** | 通用 JavaScript 动画编排，提供时间线、SVG 与布局动画，采用 MIT 许可；源码和 API 设计见主题页。 | [[wiki/topics/frontend/animejs\|topic]] · [官网](https://animejs.com/) |
 | **Transitions.dev** | product UI 微交互的 CSS 动效菜谱（modal / dropdown / badge / skeleton 等 20+）；`t-*` 命名 + `prefers-reduced-motion`，写微交互时的观感与 snippet 参考 | [[wiki/topics/frontend/transitions-dev|topic]] · `raw/sources/2026-07-26-transitions-dev.md` |
 
 ### 可参考

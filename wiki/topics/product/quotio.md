@@ -27,9 +27,9 @@ resource:
 
 Quotio 是一个开源的 AI 服务额度与账号管理工具，提供 macOS 界面和 Rust CLI（命令行工具），还可以管理本地 CLIProxyAPI 代理、为编码工具配置接入。macOS 产品要求 14 或以上，仓库使用 MIT 许可。[产品说明](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/README.md)、[许可](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/LICENSE)
 
-**额度统计的核心是读取各服务商已有的额度数据，再统一展示。** 对本文核对的 Claude、Codex、Antigravity 路径，Quotio 获取的是服务端返回的使用比例、额度窗口和重置时间；它不靠自行累加本机每次模型请求的 token 来推算订阅额度。源码也单独建模余额、消费量和 Codex 的 token 历史，这些指标不能混作同一个百分比。[数据模型](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/domain.rs#L40-L153)、[Codex 响应解析](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/providers/codex_api.rs#L1-L207)
+**额度统计的核心是读取各服务商已有的额度数据，再统一展示。** 在 Claude、Codex、Antigravity 的相关实现路径中，Quotio 获取的是服务端返回的使用比例、额度窗口和重置时间；它不靠自行累加本机每次模型请求的 token 来推算订阅额度。源码也单独建模余额、消费量和 Codex 的 token 历史，这些指标不能混作同一个百分比。[数据模型](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/domain.rs#L40-L153)、[Codex 响应解析](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/providers/codex_api.rs#L1-L207)
 
-以下依据 2026-10-07 读取的提交 `71f427f7488e592406104d98936ff142000383d7`，重点覆盖额度采集与展示，不代表每个已发布版本都采用这套实现。
+下文描述[源码快照 `71f427f`](https://github.com/nguyenphutrong/quotio/tree/71f427f7488e592406104d98936ff142000383d7)中的额度采集与展示实现；各已发布版本的实现可能不同。
 
 ## 谁采集，谁展示
 
@@ -39,7 +39,7 @@ Quotio 是一个开源的 AI 服务额度与账号管理工具，提供 macOS �
 
 图中的 UsageCache / Collector 属于 Rust 后端内部，负责选择缓存或调用服务商适配器；图将它们展开以说明职责，并非额外部署的服务。
 
-这张图限定在 macOS 本机额度监控路径。Quotio CLI 也能单独运行一次查询，复用采集与缓存代码；源码另有远程共享功能，本文没有审查其部署与权限配置，不能把“本机监听”推广成整个产品没有远程访问能力。[CLI 查询入口](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/usage.rs)、[共享模块](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/server/sharing.rs)
+这张图限定在 macOS 本机额度监控路径。Quotio CLI 也能单独运行一次查询，复用采集与缓存代码；产品还提供远程共享功能，运行边界随所用模式而不同。[CLI 查询入口](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/usage.rs)、[共享模块](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/server/sharing.rs)
 
 ## 额度具体从哪里来
 
@@ -96,11 +96,9 @@ macOS 界面约每三秒读取一次后端状态，这不等于每三秒向服�
 - macOS 管理的账号存储使用 Keychain；CLI 的 Linux 存储分支使用加密文件。原有 CLI / IDE 登录也可作为凭据来源，不能把所有账号都理解成由 Quotio 重新登录。[账号存储选择](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/accounts/vault.rs#L269-L323)、[Claude 读取链路](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/providers/catalog/oauth_primary.rs#L294-L423)
 - 本机 UI 与后端之间使用单独生成的认证 token；服务商凭据用于服务商请求，额度缓存保存规范化数据与失败信息。它们是不同用途的数据，不应把凭据复制到统计输出中。[本机认证启动](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/Packages/QuotioCore/Sources/QuotioInfrastructure/QuotioCLI/QuotioCLIServerProcess.swift#L80-L173)、[缓存结构](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/cache.rs#L63-L71)
 
-## 验证范围与限制
+## 使用限制
 
-本次阅读了实现和测试代码，未安装或运行 Quotio，未访问个人账号凭据，也未验证服务商线上接口是否仍接受这些请求。源码包含缓存恢复、部分失败保留和快照语义测试，本次未运行这些测试。[缓存测试](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/tests/cache.rs#L171-L225)、[快照测试](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/tests/contract.rs#L257-L343)
-
-可借鉴的是按服务商解析额度、保留独立窗口、标记采集时间与错误。需要持续维护的是 OAuth 和本机凭据格式、服务商接口字段、窗口含义；不能将源码中的端点当作稳定公开 API。图和结论的逐项核查位置见 [[raw/sources/quotio|源码证据记录]]。
+额度采集依赖服务商的 OAuth 和本机凭据格式、接口字段及窗口含义，这些变化需要由对应适配器持续跟进。源码中的端点不能视为服务商承诺稳定的公开 API，具体实现与来源见 [[raw/sources/quotio|源码证据记录]]。
 
 ## 相关页面
 

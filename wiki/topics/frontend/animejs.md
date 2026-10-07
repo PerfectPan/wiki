@@ -44,7 +44,7 @@ resource:
 
 Anime.js 是一个通用 JavaScript 动画库：调用者描述目标属性怎样随时间变化，库负责解析参数、推进时间、插值和写回属性。它既能更新网页元素，也能更新普通 JavaScript 对象；对象动画可以在 Node.js 中运行，DOM、布局和浏览器原生动画则需要浏览器能力。[目标解析](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/core/targets.js#L54-L61)、[运行环境选择](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/engine/engine.js#L41-L44)
 
-它的入口看起来简单，是因为复杂度被放在了参数归一化和共享的播放控制里。`animate()` 返回可控制的 `JSAnimation`，`createTimeline()` 返回编排多个动画的 `Timeline`；两者复用 `Timer` 的播放状态，再由 `Engine` 统一推进。本文依据 2026-10-07 clone 的源码提交 `01b81be1df6843ccfe0a71c0699a746bf740dd77`，该快照的 `package.json` 版本为 `4.5.0`，不把默认分支快照等同于所有已发布安装包。[JSAnimation](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/animation/animation.js#L216-L244)、[Timeline](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/timeline/timeline.js#L137-L164)
+它的入口看起来简单，是因为复杂度被放在了参数归一化和共享的播放控制里。`animate()` 返回可控制的 `JSAnimation`，`createTimeline()` 返回编排多个动画的 `Timeline`；两者复用 `Timer` 的播放状态，再由 `Engine` 统一推进。以下机制以版本标为 `4.5.0` 的[源码快照 `01b81be`](https://github.com/juliangarnier/anime/tree/01b81be1df6843ccfe0a71c0699a746bf740dd77)为依据。[JSAnimation](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/animation/animation.js#L216-L244)、[Timeline](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/timeline/timeline.js#L137-L164)
 
 ## 架构：哪些模块负责哪些事
 
@@ -163,11 +163,9 @@ flowchart TD
 | HTML 布局变化 | Anime.js `createLayout()` / Motion 的布局动画 | Anime.js 提供 `record()`、`animate()` 或 `update(callback)`；Motion React 使用 `layout` / `layoutId` 等组件声明 |
 | 直接使用已有动效图标 | Its Hover | 选择成品组件，底层依赖 React + Motion |
 
-当前源码已有 Auto Layout，不能用“Anime.js 没有布局动画”解释两者的差异。`layout.update(callback)` 会先记录布局、执行修改，再创建布局动画。以上是接口设计比较，本次未比较两库的性能或所有边界行为。[AutoLayout.update](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/layout/layout.js#L1590-L1612)、[Anime.js Layout](https://animejs.com/documentation/layout/)、[Motion 布局动画](https://motion.dev/docs/react-layout-animations)
+当前源码已有 Auto Layout，不能用“Anime.js 没有布局动画”解释两者的差异。`layout.update(callback)` 会先记录布局、执行修改，再创建布局动画。[AutoLayout.update](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/src/layout/layout.js#L1590-L1612)、[Anime.js Layout](https://animejs.com/documentation/layout/)、[Motion 布局动画](https://motion.dev/docs/react-layout-animations)
 
-## 验证范围与接入限制
-
-已对固定源码运行 6 组 Node.js 验证：属性参数覆盖、取消与恢复、按目标计算的值与延迟、时间线标签及前后跳转、Scope 清理、自定义属性适配器。它们验证本文对象动画的接口示例，不代表浏览器动画性能测试；未运行上游完整测试，也未实测 DOM、WAAPI、布局动画或 React 的完整接入。具体预期与结果见 [[raw/sources/animejs|源码核查记录]]。
+## 接入限制
 
 接入时仍需在元素可访问后创建 DOM 动画，并处理组件卸载和用户减少动态效果的偏好。Scope 可以提供媒体查询结果，如何降低或关闭动画由应用决定。MIT 许可允许复用，但包体、浏览器支持和性能要按实际功能验证。[React 集成](https://animejs.com/documentation/getting-started/using-with-react/)、[mediaQueries](https://animejs.com/documentation/scope/scope-parameters/mediaqueries/)、[许可](https://github.com/juliangarnier/anime/blob/01b81be1df6843ccfe0a71c0699a746bf740dd77/LICENSE.md)
 

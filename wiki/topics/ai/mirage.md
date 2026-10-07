@@ -11,6 +11,9 @@ tags:
   - filesystem
   - shell
 source_refs:
+  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/workspace/workspace.ts
+  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/workspace.ts
+  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/browser/src/workspace.ts
   - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/dispatcher/dispatcher.py
   - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/cache/manager.py
   - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/snapshot/drift.py
@@ -20,6 +23,9 @@ source_refs:
   - https://docs.mirage.strukto.ai/home/architecture
   - https://docs.mirage.strukto.ai/home/snapshot
 resource:
+  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/workspace/workspace.ts
+  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/workspace.ts
+  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/browser/src/workspace.ts
   - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/dispatcher/dispatcher.py
   - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/cache/manager.py
   - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/snapshot/drift.py
@@ -53,7 +59,7 @@ Mirage 把 S3、Slack、GitHub 等服务里的数据表示成目录和文件。�
 
 官方介绍页用一个反馈处理任务说明它的用途：agent 从 Slack 读取用户反馈和附件，到 GitHub 查找相关代码，再通过已注册的 Linear 命令创建 issue。文件读取和业务操作可以出现在同一套 shell 工具里；创建 issue 仍是 Linear 的业务命令，不是把任意文本写进目录就能自动完成。[官方示例](https://docs.mirage.strukto.ai/home/introduction#a-real-world-example)
 
-本页判断：当任务经常需要跨服务查资料时，这种统一访问方式值得了解；是否能简化实际项目，要看所需服务、操作和权限是否已被支持。本次除官方文档外，还静态阅读了 Python 实现与对应测试，代码固定在提交 `95a3a1f`；未运行 Mirage 示例或测试，未核对 TypeScript 实现是否完全一致。
+本页判断：当任务经常需要跨服务查资料时，这种统一访问方式值得了解；是否能简化实际项目，要看所需服务、操作和权限是否已被支持。本次除官方文档外，还静态阅读了 Python、TypeScript 的相关实现与测试，代码固定在提交 `95a3a1f`。下文四项机制已在两种实现中逐项核对，但未运行 Mirage 示例或测试，也未验证全部功能一致。
 
 ## 使用前需要知道的限制
 
@@ -63,15 +69,25 @@ Mirage 把 S3、Slack、GitHub 等服务里的数据表示成目录和文件。�
 - **快照不能恢复所有远端数据。** 它保存工作区配置、会话、历史及读过路径的缓存等内容，不保存未访问的文件。快照页的支持情况表明确区分各服务：S3 在有版本号时可以读取记录的版本，GitHub 支持内容变更检测但尚未接入 commit 固定，Google Drive 当前仍读实时内容。恢复工作区不等于回滚外部服务。[Snapshot & Replay](https://docs.mirage.strukto.ai/home/snapshot)
 - **远端请求仍有延迟和成本。** 缓存可以减少重复访问，但从服务获取新内容仍需调用其接口；统一路径本身不会消除这些请求。[Introduction](https://docs.mirage.strukto.ai/home/introduction)
 
+## TypeScript 版如何组织
+
+TypeScript 版在 `@struktoai/mirage-core` 中直接实现工作区、分发、缓存和快照逻辑，上述四项机制并不需要调用 Python 才能完成。`@struktoai/mirage-node` 与 `@struktoai/mirage-browser` 各自扩展 core 的 `Workspace`，装配所在环境需要的解析器和服务实现。[core 工作区](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/workspace/workspace.ts#L418-L479)、[Node 入口](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/workspace.ts#L16-L88)、[浏览器入口](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/browser/src/workspace.ts#L16-L70)
+
+需要区分“使用 TypeScript SDK”和“执行 Python 代码”：Node 包里的 `LocalRuntime` 是一个可选执行环境，它仍会启动本机 Python，默认从 PATH 找 `python3`；此前阅读的 Python 版默认使用运行 Mirage 自身的解释器。选择 TS SDK 本身并不意味着会启动 Python。[TS LocalRuntime](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/runtime/python/local/runtime.ts#L16-L91)
+
+架构层面的取舍与适用条件见 [[wiki/syntheses/architecture/mirage-multi-backend-design|从 Mirage 学多后端工具的设计]]。
+
 ## 源码里值得学习的做法
 
-以下是对 Python 实现的阅读判断。每项都区分“代码怎么做”和“可以借鉴什么”，对应测试仅作设计证据，不代表本次已经运行通过。
+以下以 Python 符号解释机制，并附上 TypeScript 中对应的实现。每项都区分“代码怎么做”和“可以借鉴什么”，对应测试仅作设计证据，不代表本次已经运行通过。
 
 ### 1. 从缓存返回数据之前，也要检查权限
 
 `Dispatcher._dispatch()` 先调用 `OpBoundary.admit()`，再初始化后端、查缓存或读取数据。因此，即使某个文件已经在缓存里，当前会话没有读取权限时也不能直接拿到它。只读挂载的写入拒绝同样发生在后端初始化之前。[分发顺序](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/dispatcher/dispatcher.py#L576-L635)、[权限检查入口](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/ops/boundary.py#L45-L69)
 
 测试刻意把缓存设成已有内容，再拒绝该路径的读取，并断言缓存查询根本没有发生；另一项测试确认只读写入被拒绝时，后端没有初始化。[缓存权限测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/tests/workspace/dispatcher/test_dispatcher.py#L115-L126)、[只读写入测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/tests/workspace/dispatcher/test_dispatcher.py#L514-L526)
+
+TypeScript 的 `Dispatcher` 同样先执行 `boundary.admit()` 再查缓存；测试对比有缓存、无缓存时受限会话的结果。[TS 分发器](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/dispatcher/dispatcher.ts#L458-L584)、[TS 权限测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/state_doors.test.ts#L2557-L2590)
 
 **可以借鉴**：缓存只负责减少读取成本，不能代替授权。给 agent 工具或带权限的资料库加缓存时，应保证从缓存和从原始服务取数据都受当前权限约束。
 
@@ -81,6 +97,8 @@ Mirage 把 S3、Slack、GitHub 等服务里的数据表示成目录和文件。�
 
 Mirage 的 `CacheManager` 用一个递增计数处理这类顺序问题：开始读取时记下 `_read_generation`，缓存失效时把这个数加一；读取完成后，只有计数未变、路径仍属于原来的挂载，才在锁内存入结果。[读取与回填](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/cache/manager.py#L562-L619)、[更新计数](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/cache/manager.py#L198-L207)
 
+TypeScript 的 `CacheManager.fill()` 也比较 `readGeneration`，并在 `withCacheMutation()` 中决定是否存入结果；测试同样允许本次读取返回旧值，但要求不留下缓存。[TS 实现](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/cache/manager.ts#L455-L495)、[TS 测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/cache/read_through.test.ts#L177-L186)
+
 **可以借鉴**：处理异步读取时，不仅要清除已有缓存，还要处理尚未返回的请求。这里防止的是旧结果重新进入缓存，**不是保证已经开始的读取一定返回新值**；测试明确允许那次读取返回 `old`，但要求缓存保持为空。[并发顺序测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/tests/cache/test_read_through.py#L204-L216)
 
 ### 3. 把“发现数据变了”和“取回旧数据”分开设计
@@ -89,6 +107,8 @@ Mirage 的 `CacheManager` 用一个递增计数处理这类顺序问题：开始
 
 `capture_fingerprints()` 还会处理后续写入：如果文件改过、却没有拿到新的有效标记，就删除旧记录；如果拿到新标记，就整体替换该条记录，避免把旧版本号和新内容标记拼在一起。对应测试覆盖了追加内容以及“先读后写”的情况。[实现与原因](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/snapshot/drift.py#L183-L308)、[标记更新测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/tests/workspace/snapshot/test_drift.py#L210-L251)
 
+TypeScript 的 `captureFingerprints()` 与 `installDriftState()` 对应这两步；S3 读取同样传递 `VersionId` 并记录响应中的内容标记。[TS 标记记录](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/snapshot/drift.ts#L228-L267)、[TS 恢复](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/snapshot/drift.ts#L126-L164)、[TS S3 读取](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/core/s3/read.ts#L46-L86)
+
 **可以借鉴**：保存 agent 会话时，要明确保存了哪些数据、哪些只记录了版本、哪些恢复后仍需读取实时内容。保存配置和操作历史，不等于保存了任务当时看到的整个外部世界。
 
 ### 4. 给 agent 看的内容，与修改时读回的原始内容分开
@@ -96,6 +116,8 @@ Mirage 的 `CacheManager` 用一个递增计数处理这类顺序问题：开始
 Mirage 允许按文件类型注册读取处理器，返回便于阅读的内容。`Ops.read(raw=True)` 则跳过这种转换，也不使用可能已经存了转换结果的文件缓存，直接请求原始内容。[读取接口](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/ops/ops.py#L404-L438)、[处理器选择](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/mount/mount.py#L947-L1027)
 
 测试把同一路径的原始内容设为 `STORED`，展示内容设为 `RENDERED`，缓存设为 `CACHED`，确认原始读取仍返回 `STORED`。[原始读取测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/tests/ops/test_raw_read.py#L47-L84)
+
+TypeScript 对应调用是 `ws.vfs.read(path, { raw: true })`，测试同样区分存储内容、展示内容和缓存。[TS 接口](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/ops/ops.ts#L300-L325)、[TS 测试](https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/ops/ops.test.ts#L446-L481)
 
 **可以借鉴**：如果工具提供“先读取、再修改、再写回”，就必须区分展示格式和存储格式。否则，用来帮助 agent 理解的转换结果可能被当成原文写回，破坏原始文件。
 

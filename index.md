@@ -239,6 +239,7 @@
   - [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - `architecture`
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
+  - [[wiki/syntheses/architecture/mirage-multi-backend-design|从 Mirage 学多后端工具的设计]]
 - `career`
   - [[wiki/syntheses/career/hiring-search-and-standards|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/structured-interview-and-behavioral-probing|结构化面试与行为追问]]

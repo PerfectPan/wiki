@@ -79,7 +79,7 @@ resource:
 
 ## 备用屏幕为什么看起来像“第二个 frame”
 
-Alternate screen buffer（备用屏幕缓冲区）是模拟器另外维护的一份字符网格。它不是视频的下一帧，也不是新开一个终端进程。可以分别修改两份显示内容，并切换当前显示哪一份；普通屏幕原来的内容因此不必被全屏程序的反复绘制覆盖。[教程的 Alternate Screen Buffer](https://how-terminals-work.vercel.app/#alternate-screen)、[xterm Alternate Screen Buffer](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h2-Alternate-Screen-Buffer)
+Alternate screen buffer（备用屏幕缓冲区）是模拟器另外维护的一份字符网格。它不是视频的下一帧，也不是新开一个终端进程。可以分别修改两份显示内容，并切换当前显示哪一份；普通屏幕原来的内容因此不必被全屏程序的反复绘制覆盖。[教程的 Alternate Screen Buffer](https://how-terminals-work.vercel.app/#alternate-screen)、[xterm Alternate Screen Buffer](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h2-The-Alternate-Screen-Buffer)
 
 以启动并退出 Vim 为例：
 

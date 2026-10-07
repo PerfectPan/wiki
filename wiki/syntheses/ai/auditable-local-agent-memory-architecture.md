@@ -98,6 +98,7 @@ AsterMem 是这一架构的早期实现案例：
 
 ## 相关页面
 
+- [[wiki/syntheses/ai/agent-memory-implementation|如何实现 Agent Memory]]：采集、存储、修订、撤回与验收的实现方法。
 - [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]：区分文件优先的设计目标与产品实际需要备份的数据库状态。
 - [[agent-proactive-context-management]]
 - [[claude-5-context-engineering]]

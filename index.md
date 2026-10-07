@@ -225,6 +225,7 @@
   - [[wiki/syntheses/ai/llm-101|大模型 101]]
   - [[wiki/syntheses/ai/mcp-sse-multi-instance-routing|MCP SSE 多实例路由策略]]
   - [[wiki/syntheses/ai/auditable-local-agent-memory-architecture|可审计的本地 Agent 记忆架构]]
+  - [[wiki/syntheses/ai/agent-memory-implementation|如何实现 Agent Memory]]
   - [[wiki/syntheses/ai/openseek-session-runtime-model|OpenSeek 会话与运行时模型]]
   - [[wiki/syntheses/ai/openseek-tool-protocol-and-evals|OpenSeek 工具协议与评测体系]]
   - [[wiki/syntheses/ai/openseek-architecture-overview|OpenSeek 项目架构总览]]

@@ -4,8 +4,8 @@ description: 如何用可编辑的事实层、带来源的画像层和混合检�
 type: synthesis
 category: ai
 created: 2026-07-29
-updated: 2026-08-02
-timestamp: 2026-08-02
+updated: 2026-10-07
+timestamp: 2026-10-07
 tags:
   - agent
   - memory
@@ -98,6 +98,7 @@ AsterMem 是这一架构的早期实现案例：
 
 ## 相关页面
 
+- [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]：区分文件优先的设计目标与产品实际需要备份的数据库状态。
 - [[agent-proactive-context-management]]
 - [[claude-5-context-engineering]]
 - [[rag-qa-pipeline]]

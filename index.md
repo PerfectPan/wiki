@@ -71,6 +71,7 @@
   - [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/agent-harness|Agent Harness]]
+  - [[wiki/topics/ai/rivet-agentos|Rivet agentOS：执行环境与持久会话]]
   - [[wiki/topics/ai/tetral|Tetral]]
   - [[wiki/topics/ai/pi-durable|Pi Durable]]
   - [[wiki/topics/ai/anthropic-messages-api|Anthropic Messages API]]
@@ -301,6 +302,7 @@
 - `ai`
   - [[wiki/comparisons/ai/chat-completions-vs-messages-vs-responses|LLM API 协议选型]]
   - [[wiki/comparisons/ai/workflow-vs-agent|Workflow vs Agent]]
+  - [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比：gbrain、memU、agentmemory 与 Letta]]
   - [[wiki/comparisons/ai/agent-output-checks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
 - `architecture`
   - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]

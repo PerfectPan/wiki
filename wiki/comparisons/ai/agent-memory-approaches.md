@@ -19,6 +19,7 @@ source_refs:
   - https://github.com/garrytan/gbrain
   - https://memu.pro/
   - https://www.agent-memory.dev/
+  - https://github.com/iii-hq/iii
   - https://www.letta.com/blog/context-repositories/
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
@@ -30,6 +31,7 @@ resource:
   - https://github.com/garrytan/gbrain
   - https://memu.pro/
   - https://www.agent-memory.dev/
+  - https://github.com/iii-hq/iii
   - https://www.letta.com/blog/context-repositories/
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
@@ -39,7 +41,12 @@ resource:
 
 ## 当前结论
 
-四者都保留跨会话信息，但主要分歧是**谁决定记什么、记录以什么为准、如何取回，以及谁负责纠错**。选择应从信息来源与维护方式出发，而不是只比较向量数据库或宣传的召回率。
+四者都保留跨会话信息，但各自侧重不同：
+
+- **Letta：文件与 Git。** agent 直接编辑记忆文件，用版本记录和按需读取组织上下文。
+- **agentmemory：开发会话采集。** 从工具调用和会话中保存开发过程，再组织召回。
+- **memU：由宿主提炼。** 已有 agent 判断记什么，服务负责存储和检索。
+- **gbrain：功能完整的知识库。** 围绕资料、事实、关系和后台整理持续积累知识。
 
 以下是基于 2026-10-07 文档与源码的采用判断，未安装产品或进行同条件评测：
 
@@ -87,57 +94,109 @@ flowchart TB
     end
 ```
 
-图概括的是主要路径，各自也有可选功能。依据见下文对应源码与文档；不能从某个产品有“图”或“向量”就推断默认路径已经启用它。
+图概括的是主要路径，各自也有可选功能，依据见下文对应源码与文档。不能从某个产品有“图”或“向量”就推断默认路径已经启用它。
 
 ### gbrain：知识管理覆盖面广，备份不止文件
 
-`createEngine` 支持 Postgres 与 PGLite；`BrainEngine` 包含页面、分块、来源、关系和时间线。`hybridSearch` 先取得词法与关系结果，再根据配置加入向量、融合与重排。模型生成的综合回答属于另一个可选能力。[engine-factory.ts][g-engine]、[hybrid.ts][g-search]
+gbrain 将存储、检索和生成答案分开：
 
-关键取舍是**文件可读与数据库必要性同时存在**：一部分知识可由 Markdown 重建，但数据库也保存未在文件中表达的事实、历史、授权、撤回与任务状态。只导出 Markdown 会丢失这部分恢复能力。[存储说明][g-record]
+- **存储**：`createEngine` 支持 Postgres 与 PGLite。`BrainEngine` 管理页面、分块、来源、关系和时间线。[engine-factory.ts][g-engine]
+- **检索**：`hybridSearch` 先做关键词文本检索和图关系检索，再根据配置加入向量、融合与重排。[hybrid.ts][g-search]
+- **生成答案**：可以额外启用模型，对检索结果作综合回答。[记忆边界][g-boundary]
 
-它适合把显式事实、资料和关系长期积累起来；自动采集与后台增强需要单独配置。关键词查询可以不配置模型 API，embedding、提取与综合则可能增加调用成本。`forget` 表示退出活动召回，不代表所有原始资料和备份已擦除。[记忆边界][g-boundary]
+备份时要同时考虑两部分数据：
+
+- Markdown 已表达的知识，可以用来重建相应索引。
+- 数据库独有的事实、历史、授权、撤回和任务状态，需要单独备份。
+
+只导出 Markdown 无法恢复全部状态。[存储说明][g-record]
+
+它适合长期积累明确的事实、资料和关系，自动采集与后台增强需要单独配置。关键词查询可以不配置模型 API，embedding、提取与综合回答则可能增加调用成本。
+
+`forget` 使事实不再参与后续召回，不代表原始资料和备份都已擦除。[记忆边界][g-boundary]
 
 ### memU：提炼在宿主，服务不生成总结
 
-当前 `MemoryService` 只组合存储和 embedding。adapter 将新会话准备成任务，由现有 agent 决定忽略、修订或新增 Markdown；`commit_results` 接收结果；下次任务通过 adapter 召回。生成式模型成本发生在宿主，不能把“服务不调用 chat”理解为整个流程不用模型。[service.py][m-service]、[README][m-readme]
+当前 `MemoryService` 只负责存储和 embedding。一次记忆更新按以下顺序完成：
 
-`progressive_retrieve` 这个名字容易误导：本次源码对 query 做一次 embedding，搜索片段，汇总命中的文件，并检索资源；没有多轮 LLM 判断“信息够不够”。模型对象是 `RecallFile`、`RecallFileSegment` 与 `Resource`，所以“Wiki / Markdown”描述的是可读内容形式，不代表底层只有文件。[agentic.py][m-agentic]、[models.py][m-models]
+1. adapter 把新会话准备成待处理任务。
+2. 现有 agent 判断是否忽略、修订或新增 Markdown。
+3. `commit_results` 接收并保存结果。
+4. 下次任务通过 adapter 召回。
 
-提交前先完成 embedding，可避免 provider 失败后留下部分写入；但后续多条存储操作没有统一事务回滚。评估批量更新时要区分这两个保证。[commit_results][m-agentic]
+生成式模型成本发生在宿主。“服务不调用 chat”不代表整个流程不用模型。[service.py][m-service]、[README][m-readme]
+
+`progressive_retrieve` 会对查询做一次 embedding，然后搜索片段、汇总命中的文件，并检索资源。它没有让 LLM 多轮判断“信息够不够”。[agentic.py][m-agentic]
+
+服务存储的是 `RecallFile`、`RecallFileSegment` 和 `Resource` 等数据对象。“Wiki / Markdown”描述的是内容形式，不能据此推断底层只有文件。[models.py][m-models]
+
+批量提交有两个不同的失败边界：
+
+- embedding 在写入前完成，模型服务失败时不会留下部分写入。
+- 后续存储操作没有统一事务回滚，存储中途失败仍可能留下部分更新。
+
+这两个保证需要分开评估。[commit_results][m-agentic]
 
 ### agentmemory：先捕获过程，再组织召回
 
-hooks 产生的事件进入 capture inbox，再调用 observe 保存会话 observation；重复事件与重试有单独状态。长期 `Memory` 还记录来源 observation、版本和替代关系。运行时通过 iii 的 `StateKV` 管理状态，不是直接维护一套 Git Markdown。[capture.ts][a-capture]、[types.ts][a-types]、[kv.ts][a-kv]
+agentmemory 分别保存开发过程、长期记忆和处理状态：
 
-默认逐条 observation 处理使用不调用生成式模型的表示；生成式压缩需要启用。keyless 配置以关键词召回为起点，本地 embedding 需另行启用并首次下载模型；配置和数据具备后可以使用向量、图等检索方式。[observe.ts][a-observe]、[README][a-readme]、[search.ts][a-search]
+- hooks 产生的事件先进入待处理队列（capture inbox），再由 observe 保存为会话记录（observation）。重复事件和重试另有状态记录。[capture.ts][a-capture]
+- 长期 `Memory` 记录来源 observation、版本和替代关系。[types.ts][a-types]
+- 底层微服务引擎（iii 运行时）提供状态存储，`StateKV` 是调用它的键值读写接口。它不是一套直接用 Git 管理的 Markdown 文件库。[kv.ts][a-kv]、[iii 介绍](https://github.com/iii-hq/iii#what-is-iii)
 
-**95.2% 不是回答准确率。** 项目报告测量 `recall_any@5`，只要求前五个结果出现任一正确来源会话；使用 BM25 加本地向量，没有生成答案或评判答案。它既不能证明多来源推理正确，也不能代表默认 keyless 配置。[评测定义][a-eval]
+启用哪些能力取决于配置：
+
+- 默认处理 observation 时不调用生成式模型，生成式压缩需要单独启用。[observe.ts][a-observe]
+- 未配置模型 API 密钥时，默认从关键词召回开始。
+- 本地 embedding 需要另行启用，并在首次使用时下载模型。[README][a-readme]
+- 配置和数据具备后，可以使用向量、图等检索方式。[search.ts][a-search]
+
+**95.2% 是来源会话检索命中率，不是回答准确率。** 这份报告的条件是：
+
+- 指标为 `recall_any@5`，前五个结果出现任一正确来源会话就算命中。
+- 使用 BM25 加本地向量检索。
+- 没有生成答案，也没有评判答案。
+
+因此，这个成绩既不能证明多来源推理正确，也不是默认未配置模型 API 密钥时的成绩。[评测定义][a-eval]
 
 ### Letta：普通文件操作与 Git 版本管理
 
 Context Repositories 的设计让 agent 用终端和文件工具维护记忆，通过目录与描述先定位、再读取。后台整理可在独立 worktree 中修改后合并。[原始博客](https://www.letta.com/blog/context-repositories/)
 
-当前 MemFS 文档与博客有一处值得保留的区别：**新结构把根目录文件常驻到系统提示词，旧 agent 使用 `system/`**；子目录用 `MEMORY.md` 索引按需读取。默认没有语义或向量索引；可选搜索扩展与会话历史搜索是另外的能力。[MemFS](https://docs.letta.com/concepts/memfs)
+当前 MemFS 文档区分了两种内容加载方式：
 
-云端 agent 的仓库由 Letta 托管，本地副本通过提交和推送同步；local-only agent 自行备份。每个 agent 默认有自己的 MemFS，跨会话保留不等于任意 agent 共享。后台 dreaming 的 agent 复核也不是人工审批。[MemFS](https://docs.letta.com/concepts/memfs)、[Memory & dreaming](https://docs.letta.com/configuration/memory)
+- **常驻内容**：新结构把根目录文件放进系统提示词，旧 agent 使用 `system/`。
+- **按需读取**：子目录通过 `MEMORY.md` 索引引导 agent 读取。
+
+默认没有语义或向量索引。可选搜索扩展与会话历史搜索属于另外的能力。[MemFS](https://docs.letta.com/concepts/memfs)
+
+同步与备份也取决于部署方式：
+
+- 云端 agent 的仓库由 Letta 托管，本地副本通过提交和推送同步。
+- local-only agent 在本机保存，由使用者负责备份。
+
+每个 agent 默认有自己的 MemFS，跨会话保留不等于任意 agent 共享。后台 dreaming 的 agent 复核也不是人工审批。[MemFS](https://docs.letta.com/concepts/memfs)、[Memory & dreaming](https://docs.letta.com/configuration/memory)
 
 ## 所有权、扩展和维护成本
 
+下表中的模型服务可以在本地运行，也可以由云厂商提供。
+
 | 维度 | gbrain | memU | agentmemory | Letta |
 | --- | --- | --- | --- | --- |
-| 运行位置与控制权 | 自管内容、数据库和 provider；远程 MCP 可共享 | 自托管 SQLite/Postgres，或 memU Cloud；宿主负责提炼 | 本地服务与状态；可配置外部 provider | 本地 checkout；云端仓库托管或 local-only |
+| 运行位置与控制权 | 自管内容、数据库和 模型服务；远程 MCP 可共享 | 自托管 SQLite/Postgres，或 memU Cloud；宿主负责提炼 | 本地服务与状态；可配置外部 模型服务 | 本地 checkout；云端仓库托管或 local-only |
 | 核心维护循环 | 写入资料/事实 → 索引与整理 → 召回/综合 → 修正 | prepare → 宿主编辑 → commit → retrieve | 捕获 → 去重与组织 → 索引 → 注入/查询 | 编辑/反思 → 提交/合并 → 常驻或按需读取 |
-| 扩展面 | CLI/MCP、engine、operation、模型 provider | TranscriptSource、host adapter、存储与 embedding provider | hooks、MCP/REST、provider、worker 函数 | 文件工具、记忆 skills、worktree、可选搜索 mod |
+| 扩展面 | CLI/MCP、engine、operation、模型服务 | TranscriptSource、host adapter、存储与 embedding 服务 | hooks、MCP/REST、模型服务、worker 函数 | 文件工具、记忆 skills、worktree、可选搜索 mod |
 | 主要成本 | DB 与后台任务运维；可选模型调用 | 宿主提炼、embedding、backend；Cloud 条款另核对 | 采集与索引资源；可选压缩/模型；宿主集成维护 | 主 agent 与 dreaming token；同步与仓库维护 |
 | 迁移与锁定风险 | 只迁 Markdown 会漏掉 DB 独有状态 | 可读正文仍需迁移记录、资源引用和配置 | observation、session、索引与集成需一起处理 | Git 内容易读；自动同步与上下文装载仍依赖运行时 |
 
-运行与扩展信息来自上文源码和官方文档；成本、迁移风险是基于组件依赖的工程判断。本次没有核实套餐报价，也不比较账单金额。
+运行与扩展信息来自上文源码和官方文档。成本与迁移风险是基于组件依赖的工程判断。本次没有核实套餐报价，也不比较账单金额。
 
 ## 结论与证据对照、尚未验证的行为
 
 | 结论 | 证据位置 | 置信度或限制 |
 | --- | --- | --- |
-| gbrain 有无 embedding 的不同召回分支 | `hybridSearch`；[源码][g-search] | 已读源码；未测实际 provider 降级 |
+| gbrain 有无 embedding 的不同召回分支 | `hybridSearch`；[源码][g-search] | 已读源码；未测模型服务 降级 |
 | Markdown 不是 gbrain 完整备份 | [system-of-record][g-record] 与 [memory-boundaries][g-boundary] | 官方明确；未恢复数据库 |
 | memU 由宿主提炼，服务仅 embedding 与存储 | `MemoryService`、`commit_results`；[源码][m-service] | 已读实现；未验证宿主定时任务 |
 | memU 当前检索不是多轮生成式判断 | `progressive_retrieve`；[源码][m-agentic] | 已读分支与结果结构 |
@@ -145,7 +204,13 @@ Context Repositories 的设计让 agent 用终端和文件工具维护记忆，�
 | 95.2% 是来源会话召回，不是 QA | [LongMemEval 报告][a-eval] / Setup、Methodology | 指标定义明确；未独立复现 |
 | Letta 常驻目录规则已区别新旧 agent | [MemFS](https://docs.letta.com/concepts/memfs) / Memory structure | 当前官方文档；未测迁移 |
 
-没有统一数据集、相同模型、相同 token 预算和相同隐私约束下的四方结果，因此不作效果排名。真正试用时应检查：新会话自动召回、中文与混合语言查询、旧事实修正、跨项目误召回、撤回后的索引一致性，以及完整备份恢复。安装命令成功或某次 CLI 查询命中，都不能替代这些结果。
+没有统一数据集、模型、token 预算和隐私约束下的四方结果，因此不作效果排名。试用时至少检查：
+
+- **日常召回**：新会话是否自动取回所需内容，中文与混合语言查询是否有效。
+- **纠错与隔离**：旧事实修正是否生效，是否误取其他项目的记忆。
+- **撤回与恢复**：撤回后索引是否一致，完整备份能否恢复。
+
+安装成功或某次 CLI 查询命中，都不能替代这些验证。
 
 ## 来源记录与相关页面
 

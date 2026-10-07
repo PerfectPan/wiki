@@ -37,11 +37,21 @@ resource:
 
 ## 它解决什么问题
 
-Rivet agentOS 给 coding agent 提供受控的文件、进程、网络和工具执行环境，并提供会话与恢复接口。它适合回答“agent 在哪里执行代码，能访问什么，下一次如何继续”。截至 2026-10-07，官方仍标为 beta；本文核对文档，未运行 SDK 或验证隔离强度。[介绍](https://rivet.dev/agentos/docs/)、[安全模型](https://rivet.dev/agentos/docs/security-model/)
+Rivet agentOS 是进程内运行的受控沙箱，通过 V8 执行 JavaScript，通过 WebAssembly 执行 Shell 与核心工具。它用虚拟内核提供文件、进程和网络接口，不是启动完整 Linux 操作系统的系统虚拟机。[架构](https://rivet.dev/agentos/docs/architecture/)、[限制](https://rivet.dev/agentos/docs/limitations/)
+
+它为 coding agent 解决三个问题：
+
+- **在哪里执行**：提供文件、进程、网络和工具执行能力。
+- **能访问什么**：限制 agent 可使用的宿主能力。
+- **下次怎样继续**：通过会话与恢复接口取回已保存的状态。
+
+截至 2026-10-07，官方仍标为 beta。本文核对文档，未运行 SDK 或验证隔离强度。[介绍](https://rivet.dev/agentos/docs/)、[安全模型](https://rivet.dev/agentos/docs/security-model/)
 
 ## 系统结构
 
-下面按 Actor 部署画出主要组件；embedded 使用相同的 VM 能力，但生命周期由应用负责。官方的 VM 是虚拟内核与受控执行器组成的环境，不能据名称推断它是一台可安装任意软件的完整 Linux 主机。[架构](https://rivet.dev/agentos/docs/architecture/)、[限制](https://rivet.dev/agentos/docs/limitations/)
+下图展示 Actor 部署的主要组件。embedded 使用相同的 VM 能力，但生命周期由应用负责。
+
+这里的 VM 由虚拟内核与受控执行器组成，不能安装任意 Linux 软件。[架构](https://rivet.dev/agentos/docs/architecture/)、[限制](https://rivet.dev/agentos/docs/limitations/)
 
 ```mermaid
 flowchart TB
@@ -90,7 +100,13 @@ sequenceDiagram
     V->>A: prompt 时按需恢复 adapter
 ```
 
-图中“增量事件”没有持久序号；已完成消息才被整理为持久更新。若 prompt 是否送达无法确定，系统不会自动重发。恢复优先使用 adapter 支持的 ACP `session/load`，否则用有限的持久历史启动新 adapter session。[Sessions & Persistence](https://rivet.dev/agentos/docs/architecture/sessions-persistence/)、[Persistence & Sleep](https://rivet.dev/agentos/docs/persistence/)
+阅读这个流程时需要区分三点：
+
+- 实时增量事件没有持久序号，已完成消息才会整理为持久更新。
+- 如果无法确认 prompt 是否送达，系统不会自动重发。
+- 恢复时优先调用 adapter 支持的 [[wiki/topics/ai/agent-client-protocol|ACP（Agent Client Protocol）]] `session/load`。不支持时，用有限的持久历史启动新的 adapter session。
+
+这些行为来自 [Sessions & Persistence](https://rivet.dev/agentos/docs/architecture/sessions-persistence/) 和 [Persistence & Sleep](https://rivet.dev/agentos/docs/persistence/)。
 
 | 状态 | Actor 休眠后 |
 | --- | --- |
@@ -99,11 +115,13 @@ sequenceDiagram
 | 未完成消息增量、实时订阅、内存挂载 | 不保留 |
 | VM 内 cron 定义 | 不保留；不能据此推断持久调度已经配置 |
 
-以上依据持久化文档。`destroy` 会删除相应持久数据，与 `sleep` 不同；这里描述的是文档约定，未做故障注入验证。
+以上依据持久化文档。`destroy` 会删除相应持久数据，与 `sleep` 不同。这里描述的是文档约定，未做故障注入验证。
 
 ## 扩展能力与权限边界
 
-Host function 把带 Zod 输入定义的宿主函数变成 VM 内的 CLI，也可由 guest JavaScript 调用。这样业务 API 和凭据可以留在宿主，agent 只接触输入与结果；已有第三方服务也可通过 session 配置的 MCP 接入。[Host Functions](https://rivet.dev/agentos/docs/host-functions/)
+Host function 使用 Zod 定义宿主函数的参数和校验规则。agentOS 为它生成 VM 内的 CLI 入口，也允许 guest JavaScript 调用。
+
+业务 API 和凭据可以留在宿主，agent 只接触输入与结果。已有第三方服务也可通过 session 配置的 MCP 接入。[Host Functions](https://rivet.dev/agentos/docs/host-functions/)
 
 ```mermaid
 flowchart LR
@@ -116,17 +134,25 @@ flowchart LR
     App --> Function
 ```
 
-有两个不同的检查位置：内核约束 guest 能做什么；agent 的工具审批决定某次工具使用是否获准。配置由可信应用提供，所以任意用户能否修改配置仍由应用控制。宿主 `execute()` 拥有宿主权限，输入类型正确不代表业务授权正确。[Security Model](https://rivet.dev/agentos/docs/security-model/)、[Host Functions](https://rivet.dev/agentos/docs/host-functions/)
+权限检查有两层：
 
-持久数据库可能以明文保存会话环境、MCP 凭据、prompt 和工具结果；当前文档不承诺自动加密或脱敏。数据库与备份也属于需要保护的运行数据。[存储说明](https://rivet.dev/agentos/docs/architecture/sessions-persistence/)
+- 内核约束 guest 能做什么。
+- agent 的工具审批决定某次工具使用是否获准。
+
+应用负责控制谁能修改这些配置。宿主 `execute()` 拥有宿主权限，所以参数类型校验之后，还需要检查调用者是否有权执行相应业务操作。[Security Model](https://rivet.dev/agentos/docs/security-model/)、[Host Functions](https://rivet.dev/agentos/docs/host-functions/)
+
+持久数据库可能以明文保存会话环境、MCP 凭据、prompt 和工具结果。当前文档不承诺自动加密或脱敏，因此也需要保护数据库与备份。[存储说明](https://rivet.dev/agentos/docs/architecture/sessions-persistence/)
 
 ## 采用判断与限制
 
-基于上述文档，适合优先评估 agentOS 的场景是：给 agent 应用提供隔离执行环境，同时需要会话、文件和用户连接的持续存在。已有应用希望自行管理生命周期时评估 embedded；需要分布式状态和自动休眠唤醒时评估 Actor 部署。
+基于上述文档，agentOS 适合需要隔离执行环境，并持续保存会话、文件和用户连接的应用。部署方式按承担的职责选择：
 
-当前不能安装任意原生二进制或使用 apt/yum；Docker、文件监听和硬件访问也有限制。需要完整 Linux 的工作负载要评估外部 sandbox，其费用和生命周期应另算。[Limitations](https://rivet.dev/agentos/docs/limitations/)
+- 希望应用自行管理生命周期，评估 embedded。
+- 需要分布式状态和自动休眠唤醒，评估 Actor 部署。
 
-成本判断应包括运行资源、持久存储、模型请求和外部 sandbox；本次没有测量吞吐、延迟或账单。部署接口和恢复语义会产生迁移成本，这是选型判断，不是官方性能结论。
+当前不能安装任意原生二进制或使用 apt/yum。Docker、文件监听和硬件访问也有限制。需要完整 Linux 的工作负载应评估外部沙箱，并单独考虑其费用和生命周期。[Limitations](https://rivet.dev/agentos/docs/limitations/)
+
+估算成本时应包含运行资源、持久存储、模型请求和外部沙箱。更换部署接口与恢复方式也可能增加迁移工作。这些是选型判断，本次没有测量吞吐、延迟或实际账单。
 
 ## 结论与证据对照
 

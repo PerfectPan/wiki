@@ -31,19 +31,42 @@ resource:
 
 ## 问题与综合结论
 
-怎样让一个用户在多个 coding agent 中保留项目事实，并能追溯、纠正和撤回？先建立有来源和适用范围的权威记录，再实现有预算的召回、版本检查与完整验收；向量检索和自动提炼按实际缺口逐步加入。
+Agent Memory 的核心是让事实可追溯、可纠正，并在需要时取回。实现时先抓住三步：
 
-本文综合 gbrain、memU、agentmemory 的固定源码快照及 Letta MemFS 文档，资料日期为 2026-10-07。各项机制的证据见文中链接与 raw 记录；下面的字段、接口和组合方式是设计建议，未实现或运行这套建议系统。产品取舍见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]。
+1. **分开保存事实与索引。** 明确以哪份事实记录为准，保留来源和适用范围。
+2. **让索引可以重建。** 关键词和向量索引都从事实记录生成，损坏后能重新生成。
+3. **按 token 预算召回。** 返回内容不得超过给定预算，并在返回前核对记录是否仍然有效。
+
+在此基础上，再实现修订、撤回和自动提炼等维护操作。
+
+本文综合 gbrain、memU、agentmemory 的固定源码快照及 Letta MemFS 文档，资料日期为 2026-10-07。机制依据见文中链接与 raw 记录。下面的字段、接口和组合方式是设计建议，尚未实现或运行验证。产品取舍见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]。
 
 ## 1. 先确定保存的对象
 
-将输入分成三类：会话事件记录“发生过什么”；长期事实记录“以后仍应遵守什么”；可复用步骤记录“遇到同类任务怎样做”。当前任务做到哪一步可以作为会话交接，但不要自动提升为永久规则。agentmemory 的 observation/Memory 分离、memU 的 memory/skill 分轨和 gbrain 的记忆边界分别提供了这些设计依据。[数据类型][a-types]、[memU 模型][m-models]、[记忆边界][g-boundary]
+将输入分成三类：
 
-第一版可从明确的“记住这个”与用户纠正开始，等写入、纠错和召回可验证后再自动读取会话。自动提炼时先生成候选，附原始消息或工具结果位置，由宿主 agent 或后台任务决定是否写入；同一事件只处理一次。这样能复用 memU 的 prepare/commit 分离和 agentmemory 的事件去重方法。[prepare/commit][m-pipeline]、[事件采集][a-capture]
+- **会话事件**：记录发生过什么，以及当前任务做到哪一步。
+- **长期事实**：记录以后仍然适用的项目约定、决定和用户偏好。
+- **可复用步骤**：记录遇到同类任务时怎样做。
+
+任务进度可以用于交接，但不应自动变成永久规则。agentmemory 将过程记录与长期记忆分开，memU 将 memory 和 skill 按类别管理，gbrain 则区分长期知识与临时运行状态。[数据类型][a-types]、[memU 模型][m-models]、[记忆边界][g-boundary]
+
+第一版可从明确的“记住这个”和用户纠正开始。验证写入、纠错和召回后，再加入自动会话提炼：
+
+1. 从新会话中提出候选记忆，并附原始消息或工具结果的位置。
+2. 由宿主 agent 或后台任务判断是否值得保存。
+3. 写入时按事件身份去重，避免重试产生重复记忆。
+
+这分别借鉴了 memU 的 prepare/commit 分离和 agentmemory 的事件去重方法。[prepare/commit][m-pipeline]、[事件采集][a-capture]
 
 ## 2. 选一份权威记录，索引从它派生
 
-若重点是人工编辑与 Git 审阅，可以选 Markdown；若重点是多个 agent 并发写入、条件更新与过滤，可以选 SQLite 起步。无论选哪种，都要明确索引损坏后从哪里重建，以及哪些历史与撤回状态必须另外备份。文件与数据库同时参与时，不能只写“以文件为准”就省略恢复规则。[gbrain 存储说明][g-record]、[Letta MemFS](https://docs.letta.com/concepts/memfs)
+先明确以哪份数据为准，再选择存储形式：
+
+- 重点是人工编辑与 Git 审阅，可以选 Markdown。
+- 重点是多个 agent 写入、条件更新与过滤，可以从 SQLite 起步。
+
+无论选哪种，都要说明索引损坏后从哪里重建，以及哪些历史与撤回状态需要另外备份。文件与数据库同时参与时，还要明确两者不一致后的恢复办法。[gbrain 存储说明][g-record]、[Letta MemFS](https://docs.letta.com/concepts/memfs)
 
 ```mermaid
 flowchart TB
@@ -76,27 +99,64 @@ flowchart TB
 | `status`、`supersedes` | 标明生效、被替代或撤回，以及替代了哪条记录 |
 | `valid_until` | 只有确有有效期的信息才填写，不能假设所有事实永久有效 |
 
-例如“项目 A 改用 pnpm”应带项目范围与用户纠正来源，并替代 A 中旧的 npm 记录；不能把项目 B 的 npm 约定一起失效。不同项目适用不同规则不属于冲突。版本、来源和替代关系可参考 agentmemory 的 `Memory`，范围和撤回则参考 gbrain。[Memory 定义][a-types]、[记忆边界][g-boundary]
+例如，用户说“项目 A 改用 pnpm”时：
+
+1. 记录适用范围是项目 A，并保存这次纠正的来源。
+2. 用新记录替代 A 中旧的 npm 约定。
+3. 保留项目 B 的 npm 约定，不把不同项目的规则当成冲突。
+
+版本、来源和替代关系可参考 agentmemory 的 `Memory`，范围和撤回则参考 gbrain。[Memory 定义][a-types]、[记忆边界][g-boundary]
 
 ## 4. 把写入、修订和撤回做成明确操作
 
-建议先提供 `remember`、`recall`、`revise`、`forget` 四个操作。写入返回记录 ID 和版本；修订带预期版本，过期时先重新读取；重试带事件 ID 或请求 ID；撤回返回活动记忆已失效的结果。SQLite 方案中把记录更新与待索引任务放进同一事务，再异步生成向量，失败可以重试而不会丢掉正文。
+建议先提供四个操作：
 
-这是对 gbrain 的持久请求与修订检查、agentmemory 的 capture inbox 的简化应用。不要为了“用向量”让记住一句明确事实必须等待外部 embedding 成功；memU 当前先 embedding 再写入的做法则适合接受这种可用性取舍的系统。[gbrain 写入边界][g-record]、[capture inbox][a-capture]、[memU 提交][m-agentic]
+- `remember`：保存记忆，返回记录 ID 和版本。重试沿用事件 ID 或请求 ID，避免重复写入。
+- `recall`：按当前任务和适用范围检索，返回正文与来源。
+- `revise`：携带预期版本修改记录。版本已变化时，先重新读取。
+- `forget`：让记录失效，并返回撤回结果，使它不再参与后续检索。
 
-“忘记”还要区分停止召回与物理清除。前者让记录失效并更新索引；后者需要说明原始日志、Git 历史、远端和备份的处理范围，不能用删掉一个索引条目代替。[gbrain 边界][g-boundary]
+SQLite 方案可以按以下顺序保存记忆：
+
+1. 在同一事务中写入记录和待索引任务。
+2. 事务成功后，异步生成向量。
+3. 向量生成失败时重试待处理任务，保留已保存的正文。
+
+这是对 gbrain 的持久请求与修订检查、agentmemory 的 capture inbox 的简化应用。先保存正文，可以让明确的事实写入不受 embedding 服务故障影响。memU 当前采用先 embedding 再写入的顺序，选择这种方式就需要接受模型服务失败时无法完成写入的限制。[gbrain 写入边界][g-record]、[capture inbox][a-capture]、[memU 提交][m-agentic]
+
+“忘记”需要区分两种结果：
+
+- **停止召回**：让记录失效并更新索引。
+- **物理清除**：说明原始日志、Git 历史、远端和备份分别怎样处理。只删除索引条目不能代表这些副本已经清除。
+
+两者的区别见 [gbrain 记忆边界][g-boundary]。
 
 ## 5. 检索先解决范围和预算
 
-先按身份与项目限制候选，再做关键词检索；确有同义表达漏召回时加入向量检索。合并结果后去重，去掉失效或被替代的记录，优先保留与任务相关且来源明确的内容，按 token 预算截取。结果返回记录 ID、版本、时间、正文和来源，agent 可以继续读取完整证据。[gbrain 检索][g-search]、[agentmemory 检索][a-search]
+检索可以按以下顺序实现：
 
-会话启动只加载少量稳定规则和最近交接；具体问题再按需检索。Letta 的常驻文件与目录索引、agentmemory 的 `mem::context` 预算组装提供了两种可借鉴的实现。不要把 top-k 当作上下文预算：五篇长文也可能挤占当前任务。[MemFS](https://docs.letta.com/concepts/memfs)、[context.ts][a-context]
+1. 按身份与项目限制候选范围。
+2. 先做关键词检索。确有同义表达漏召回时，再加入向量检索。
+3. 合并结果并去重，排除失效或被替代的记录。
+4. 优先保留与任务相关、来源明确的内容，按 token 预算截取。
+5. 返回记录 ID、版本、时间、正文和来源，让 agent 能继续读取完整证据。
+
+相关实现见 [gbrain 检索][g-search]、[agentmemory 检索][a-search]。
+
+会话启动时只加载少量稳定规则和最近交接，遇到具体问题再按需检索。Letta 的常驻文件与目录索引、agentmemory 的 `mem::context` 预算组装提供了两种可借鉴的实现。[MemFS](https://docs.letta.com/concepts/memfs)、[context.ts][a-context]
+
+不要把 top-k 当作上下文预算：五篇长文也可能挤占当前任务。
 
 ## 6. 后台维护与前台工作分开
 
-前台记住用户明确纠正的事实；后台再整理重复内容、提炼技能、处理过期记录和更新索引。后台写入也要检查版本，不能覆盖前台刚接受的纠正。文件方案可以用 Letta 的独立 worktree；数据库方案可以用待处理任务和修订号。[Letta dreaming](https://docs.letta.com/configuration/memory)、[gbrain 写入边界][g-record]
+按是否影响当前交互分配工作：
 
-外部网页或工具输出中的指令只作为待分析内容，不应因为被保存为“记忆”就获得改变权限或工具配置的能力；自动写入范围与业务操作权限分别控制。[gbrain 记忆边界][g-boundary]
+- **前台**：及时保存用户明确纠正的事实。
+- **后台**：整理重复内容、提炼技能、处理过期记录和更新索引。
+
+后台写入也要检查版本，避免覆盖前台刚接受的纠正。文件方案可以参考 Letta 的独立 worktree，数据库方案可以使用待处理任务和修订号。[Letta dreaming](https://docs.letta.com/configuration/memory)、[gbrain 写入边界][g-record]
+
+外部网页或工具输出中的指令只作为待分析内容。系统不应因为将它们保存为记忆，就允许其修改权限或工具配置。自动写入范围与业务操作权限应分别控制。[gbrain 记忆边界][g-boundary]
 
 ## 7. 用完整闭环验收
 
@@ -107,12 +167,18 @@ flowchart TB
 | 同一个事件重试两次 | 不产生两条重复记忆 |
 | 查询另一个项目 | 不把原项目私有事实注入上下文 |
 | 撤回后重建索引 | 已撤回内容不会因旧来源重导入而恢复生效 |
-| provider 不可用或后台中断 | 能说明哪些写入已持久保存、哪些任务尚未完成 |
+| 模型服务不可用或后台中断 | 能说明哪些写入已持久保存、哪些任务尚未完成 |
 | 导出后在隔离目录恢复 | 恢复正文、来源、修订与撤回状态，而不只是搜索结果 |
 
-把召回证据是否齐全与最终回答是否正确分开测量，另记录无关记忆比例、上下文 token、延迟与调用成本。先做几十条贴近实际工作的案例，再决定是否需要图关系、自动技能提炼或复杂重排；agentmemory 的检索评测也说明单个 recall 数字不能覆盖完整闭环。[评测方法][a-eval]
+评测分别记录三类结果：
 
-对当前文件优先 Wiki，可以先保留正文、frontmatter、来源指针和 PR，补按需检索与来源回查；已有结构已经覆盖内容维护，不必同时接入四套记忆系统。相关设计目标见 [[wiki/syntheses/ai/auditable-local-agent-memory-architecture|可审计的本地 Agent 记忆架构]]。
+- 召回质量：需要的证据是否齐全，无关记忆占多少。
+- 回答质量：最终回答是否正确，是否采用了最新事实。
+- 使用成本：占用多少上下文 token，延迟和模型调用成本是多少。
+
+先做几十条贴近实际工作的案例，再决定是否增加图关系、自动技能提炼或复杂重排。agentmemory 的评测也说明，单个 recall 数字不能代替整条流程的验证。[评测方法][a-eval]
+
+对当前文件优先 Wiki，可以沿用正文、frontmatter、来源指针和 PR，先补充按需检索与来源回查。已有结构已经覆盖内容维护，不必同时接入四套记忆系统。相关设计目标见 [[wiki/syntheses/ai/auditable-local-agent-memory-architecture|可审计的本地 Agent 记忆架构]]。
 
 ## 数据边界：本地保存之后，内容还会去哪里
 
@@ -123,19 +189,19 @@ flowchart LR
     Store --> Recall["按当前任务检索"]
     Recall --> Context["宿主 agent 的上下文"]
     Context --> Model["宿主模型：可能在云端"]
-    Store -. 启用后 .-> Provider["embedding、提取、重排等 provider"]
+    Store -. 启用后 .-> Provider["模型服务：embedding、提取、重排"]
     Store -. 配置后 .-> Remote["共享服务、Git remote 或备份"]
     User["用户控制范围、修正和删除"] --> Capture
     User --> Store
 ```
 
-这是对四种方案共同数据路径的归纳，并非每种产品都启用所有箭头。gbrain 的[记忆边界][g-boundary]明确区分本地存储、云 provider 与宿主模型；memU 的 service 与 agentmemory 的 provider 配置也支持这个区分。
+这是对四种方案共同数据路径的归纳，并非每种产品都启用所有箭头。图中的模型服务可以在本地运行，也可以由云厂商提供。gbrain 的[记忆边界][g-boundary]区分了本地存储、云模型服务与宿主模型，memU 和 agentmemory 的配置也体现了这些不同的数据去向。
 
 具体需要区分三件事：
 
-1. **记录有来源，不等于事实正确。** 模型可能误读来源；召回时仍要核对时间、修订和适用项目。
-2. **逻辑分类，不等于访问隔离。** gbrain 的 source 不能隔离共享本地文件或数据库凭据的调用者；memU 的 scope 过滤也不能替代服务认证。[gbrain 边界][g-boundary]、[memU service][m-service]
-3. **撤回召回，不等于彻底删除。** 原始日志、Git 历史、远程副本和备份是独立对象；这是由各自存储方式推得的治理要求，不声称它们已经统一实现擦除。
+1. **记录有来源，不等于事实正确。** 模型可能误读来源，召回时仍要核对时间、修订和适用项目。
+2. **逻辑分类，不等于访问隔离。** gbrain 用数据源标识（source）区分知识归属，但它无法隔离共享本地文件或数据库凭据的调用者。memU 的 scope 过滤也不能替代服务认证。[gbrain 边界][g-boundary]、[memU service][m-service]
+3. **停止召回，不等于彻底删除。** 原始日志、Git 历史、远程副本和备份需要分别处理。这是根据存储方式提出的要求，不代表产品已经统一实现擦除。
 
 ## 设计建议与证据
 
@@ -143,7 +209,7 @@ flowchart LR
 | --- | --- | --- |
 | 提炼与持久提交分开，成功后再推进处理状态 | memU `prepare/commit`；[源码][m-pipeline] | 可借鉴顺序，不能据此推断整批写入具有原子性 |
 | 事件去重、持久请求和修订检查分别处理 | agentmemory [capture][a-capture] 与 gbrain [存储说明][g-record] | 是跨系统综合建议，未验证统一实现 |
-| 撤回同时影响正文状态与派生索引 | [[raw/sources/gbrain#撤回为何需要修改多个对象\|gbrain 撤回实现]] | 停止活动召回与物理擦除是不同结果 |
+| 撤回同时影响正文状态与派生索引 | [[raw/sources/gbrain#撤回为何需要修改多个对象\|gbrain 撤回实现]] | 停止后续召回与物理擦除是不同结果 |
 | 常驻少量规则，其他内容按需读取并限制预算 | [Letta MemFS](https://docs.letta.com/concepts/memfs)、[agentmemory context][a-context] | 实际召回质量与 token 用量需在目标宿主测量 |
 
 ## 来源与相关页面

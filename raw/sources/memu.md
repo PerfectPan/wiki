@@ -7,9 +7,15 @@
 
 ## 这是什么
 
-memU 把已有 coding agent 的会话变成可共享的 memory 和 skill。它不要求为记忆提炼另建一个持续对话的模型服务：宿主 agent 阅读会话与旧记忆，生成或修改 Markdown；Python 服务保存结果、生成 embedding，并在未来任务中检索。官网的 Cloud 与本地部署通过同一组 backend 能力对接 adapter。
+memU 把已有 coding agent 的会话变成可共享的 memory 和 skill，按以下职责分工：
 
-这种分工把“内容是否值得保留”留给已经理解任务的 agent，把存取机制放到较小的服务里。代价是自动提炼与召回是否真正发生，依赖每个宿主的日志、定时任务和指令接入；只跑通 Python service 不代表整条流程已经工作。[README][readme]
+- 宿主 agent 阅读会话与旧记忆，判断内容是否值得保留，并生成或修改 Markdown。
+- Python 服务保存结果、生成 embedding，并为未来任务提供检索。
+- Cloud 与本地部署通过同一组 backend 接口供 adapter 调用。
+
+记忆提炼由已有 agent 完成，不需要另建一个持续对话的模型服务。
+
+这种分工把“内容是否值得保留”留给已经理解任务的 agent，把存取机制放到较小的服务里。代价是自动提炼与召回是否真正发生，依赖每个宿主的日志、定时任务和指令接入。只跑通 Python service 不代表整条流程已经工作。[README][readme]
 
 ## 架构与运行位置
 
@@ -28,13 +34,20 @@ flowchart TB
     Store --> Models["RecallFile、RecallFileSegment、Resource"]
 ```
 
-`AgenticMemoryBackend` 只要求列出记忆、提交结果和检索三个能力。`MemoryService` 组合数据库与 embedding client；Cloud 的传输细节可以在另一实现中处理，host adapter 不必知道 SQL。[backend 接口][backend]、下表的 `service.py`。
+`AgenticMemoryBackend` 只要求列出记忆、提交结果和检索三个能力。`MemoryService` 组合数据库与 embedding client。Cloud 的传输细节可以在另一实现中处理，host adapter 不必知道 SQL。[backend 接口][backend]、下表的 `service.py`。
 
 ## 一次提炼如何变成持久记录
 
 `prepare` 按宿主日志格式找出新会话，生成 agent 可读取的工作文件，并分页取回已有记忆到本地。它保留上次成功提交的快照，把本次扫描游标先存为待确认状态。agent 可以不写、修改旧文件，或生成新文件。
 
-`commit` 比较本地结果与已提交快照，将差异转成 `recall_files` 和资源记录，调用 backend；成功后才更新快照和会话游标，最后清理工作文件。中断前没有提交成功的结果仍能在下次处理，避免只因“已扫描”就跳过尚未保存的知识。[bridging/pipeline.py][pipeline]
+`commit` 按以下顺序保存结果：
+
+1. 比较本地结果与已提交快照，将差异转成 `recall_files` 和资源记录。
+2. 调用 backend，提交这些记录。
+3. 成功后更新快照和会话游标。
+4. 最后清理工作文件。
+
+中断前没有提交成功的结果，下次仍可继续处理。系统不会只因“已扫描”就跳过尚未保存的知识。[bridging/pipeline.py][pipeline]
 
 ```mermaid
 sequenceDiagram
@@ -54,7 +67,14 @@ sequenceDiagram
     H->>H: 更新快照与游标，再清理临时任务
 ```
 
-服务先做 planning 和 embedding，再进入写入步骤。相同文本复用向量请求；未变的内容无需重新 embedding。这个顺序避免 embedding 失败造成半批写入，但每个 repository 操作各自提交，存储中途失败仍可能留下部分更新；源码没有把整个流程包装成一个数据库事务。[agentic.py][agentic]
+服务先计划变更并完成 embedding，再写入存储。它会复用相同文本的向量请求，未变内容无需重新 embedding。
+
+这个顺序提供的保证有明确范围：
+
+- embedding 失败时，尚未开始写入。
+- 进入存储阶段后，每个 repository 操作各自提交。中途失败仍可能留下部分更新。
+
+整个流程没有统一的数据库事务回滚。[agentic.py][agentic]
 
 ## 数据对象与更新语义
 
@@ -74,13 +94,25 @@ sequenceDiagram
 2. 只读取这些片段所属的文件，以命中片段的最高分作为文件分数。
 3. 查询 workspace track 的资源，返回片段、文件和资源三组结果。
 
-这条路径没有让 LLM 多轮判断是否继续搜索，也没有独立对整份文件再次排名。SQLite 的 segment repository 使用 Python 范围扫描和余弦相似度；Postgres 可以使用 pgvector。二者接近的是接口语义，不应推断大数据量下性能相同。[agentic.py][agentic]、[segment 接口][segments]、[SQLite 实现][sqlite]
+这条路径没有让 LLM 多轮判断是否继续搜索，也没有独立对整份文件再次排名。SQLite 的 segment repository 使用 Python 范围扫描和余弦相似度。Postgres 可以使用 pgvector。二者接近的是接口语义，不应推断大数据量下性能相同。[agentic.py][agentic]、[segment 接口][segments]、[SQLite 实现][sqlite]
 
 ## 扩展与适用边界
 
-新增宿主主要实现 `TranscriptSource` 的发现、读取与分类，再接入共享 pipeline；新增存储实现相应 repository；替换 embedding 则通过 client 配置。库配置默认可以是内存存储，CLI 与 host 安装另有默认配置，使用库时必须明确选持久 backend。[settings.py][settings]
+扩展点按职责分开：
 
-可读文件、范围过滤和 Cloud 跨设备共享是三个不同能力：文件内容方便审阅；`where` 只约束查询；谁能代表某个用户读写，仍要由调用层保证。对于需要显式撤回历史事实、审核后台改写或处理并发修订的应用，还需检查这些规则如何在宿主与 backend 间实现，不能仅由 `commit_results` 接口推断它们存在。
+- **接入新宿主**：实现 `TranscriptSource` 的发现、读取与分类，再接入共享处理流程。
+- **增加存储后端**：实现相应 repository。
+- **更换 embedding 服务**：修改 client 配置。
+
+库配置默认可以使用内存存储，CLI 与宿主安装另有默认值。直接使用库时，应明确选择持久存储后端。[settings.py][settings]
+
+三项能力需要分别判断：
+
+- 文件内容是否方便审阅。
+- `where` 是否把查询限制在正确范围。
+- 调用层是否验证了谁能代表某个用户读写。
+
+撤回历史事实、审核后台改写和处理并发修订，也需要检查宿主与 backend 的具体做法。不能仅根据 `commit_results` 接口就推断这些能力都已实现。
 
 ## 当前实现
 
@@ -99,13 +131,13 @@ sequenceDiagram
 - 不做 chat 调用不代表没有模型调用：embedding 仍是写入与检索的一部分；宿主提炼也消耗模型资源。
 - 可读 Markdown 是内容形式，不代表复制一个目录就能恢复完整数据库。
 - `commit_results` 把 embedding 失败移到写入之前，但源码明确没有为整个批量存储提供统一回滚，不能称为完整原子事务。
-- Cloud 和自托管的数据路径不同；自托管 SQLite/Postgres 仍需核对 embedding provider。`where` 是 scope 过滤接口，不能单凭此接口证明多租户鉴权。
+- Cloud 和自托管的数据路径不同；自托管 SQLite/Postgres 仍需核对 embedding 服务。`where` 是 scope 过滤接口，不能单凭此接口证明多租户鉴权。
 
 ## 验证入口
 
-阅读 `tests/test_agentic.py` 的重新提交后 segment 更新案例；还定位了 embedding 失败不写入、scope 校验等案例。测试使用替代 embedding，未在本次运行。README 的 adapter 支持表存在平台差异，不能从 CLI 可用推断任意桌面 agent 都已自动召回。
+阅读 `tests/test_agentic.py` 的重新提交后 segment 更新案例。还定位了 embedding 失败不写入、scope 校验等案例。测试使用替代 embedding，未在本次运行。README 的 adapter 支持表存在平台差异，不能从 CLI 可用推断任意桌面 agent 都已自动召回。
 
-具体回归例子把 `likes coffee` 改成 `likes tea`，再检查召回片段不包含旧文本；另有测试确认正文和描述均未变时不重复 embedding。这些验证针对单次服务行为；并发提交、跨设备同步和真实宿主主动检索仍需另外验收。
+具体回归例子把 `likes coffee` 改成 `likes tea`，再检查召回片段不包含旧文本。另有测试确认正文和描述均未变时不重复 embedding。这些验证针对单次服务行为。并发提交、跨设备同步和真实宿主主动检索仍需另外验收。
 
 [readme]: https://github.com/NevaMind-AI/memU/blob/2c050bc9681a4c0aff1af211a000e73d14f33356/README.md
 [backend]: https://github.com/NevaMind-AI/memU/blob/2c050bc9681a4c0aff1af211a000e73d14f33356/src/memu/agentic_backend.py

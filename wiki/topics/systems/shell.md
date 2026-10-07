@@ -1,15 +1,23 @@
 ---
 title: Shell
+description: Shell 语法与脚本笔记，并链接终端、TTY、PTY 的职责说明。
 type: topic
 category: systems
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-10-07
+timestamp: 2026-10-07
 tags:
   - shell
 source_refs:
   - raw/sources/shell.md
+  - https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html
+resource:
+  - raw/sources/shell.md
+  - https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html
 ---
 # Shell
+
+Shell 是命令解释器和脚本语言，可以交互执行，也可以读取脚本或管道。终端模拟器负责输入输出，TTY 提供内核终端接口，shell 使用这些接口解析并执行命令；具体关系见 [[wiki/topics/systems/terminal|Terminal：终端、TTY 与 Shell]]。[Bash 定义](https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html)
 
 - Syntax Cheat Sheet:
 	- \$@ - 所有参数的列表，如 "\$@" 用 " 括起来的情况，以 "\$1", "\$2", ... "\$n" 的形式输出所有参数

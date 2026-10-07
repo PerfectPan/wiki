@@ -27,5 +27,6 @@
   { "term": "裁决", "suggestion": "判定、决定，或写明以谁的结果为准", "exceptions": [] },
   { "term": "墙上时钟", "suggestion": "本机系统时间", "exceptions": [] },
   { "term": "法定入口", "suggestion": "唯一入口", "exceptions": [] },
-  { "term": "未决问题", "suggestion": "写明是尚未验证的行为、尚未决定的选择，还是已知限制，并说明具体事项", "exceptions": [] }
+  { "term": "未决问题", "suggestion": "写明是尚未验证的行为、尚未决定的选择，还是已知限制，并说明具体事项", "exceptions": [] },
+  { "term": "权威记录", "suggestion": "写明具体是以哪份数据或底稿为准，例如“真实底稿”、“以它为准的数据”", "exceptions": [] }
 ]

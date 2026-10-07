@@ -12,6 +12,8 @@ tags:
   - awesome
   - catalog
 source_refs:
+  - https://www.tastelab.xyz/
+  - raw/sources/taste-skill.md
   - wiki/syntheses/ai/skill-engineering-artifact-protocol.md
   - raw/sources/2026-08-06-bento-slides-skill-review.md
   - raw/sources/2026-05-12-ai-cli-skill-review.md
@@ -21,6 +23,8 @@ source_refs:
   - raw/sources/2026-09-22-handdraw-style-prompter-review.md
   - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
 resource:
+  - https://www.tastelab.xyz/
+  - raw/sources/taste-skill.md
   - wiki/syntheses/ai/skill-engineering-artifact-protocol.md
   - raw/sources/2026-08-06-bento-slides-skill-review.md
   - raw/sources/2026-05-12-ai-cli-skill-review.md
@@ -61,6 +65,7 @@ resource:
 
 | Skill | 一句话 | 指针 |
 | --- | --- | --- |
+| **Taste（TasteLab）** | 用浏览器截图与 DOM 数值整理设计参数和取舍，交付 Markdown + JSON 并检查；依赖 Playwright MCP，设计意图仍属推断，许可文件与部分检查标准待核对。 | [官网](https://www.tastelab.xyz/) · [SKILL.md](https://github.com/senlindesign/taste-skill/blob/6dce223f2f5665d3636ca9a44ec3a7aa1322a9b8/SKILL.md) · [[raw/sources/taste-skill\|核查]] |
 | **ai-cli** | 工具边界与 `-o` 防二进制污染 stdout 有 gotcha；默认协议 / 成本 / 失败 / 负例仍薄 | [[ai-cli]] · [[raw/sources/2026-05-12-ai-cli-skill-review.md\|评审]] |
 
 ### 偏薄
@@ -79,6 +84,7 @@ resource:
 
 ## 来源指针
 
+- [TasteLab](https://www.tastelab.xyz/)、[[raw/sources/taste-skill|Taste skill 源码核查]]。
 - `raw/sources/2026-09-01-hallmark-skill-review.md`
 - `raw/sources/2026-09-01-mono-color-skill-review.md`
 - `raw/sources/2026-08-06-bento-slides-skill-review.md`

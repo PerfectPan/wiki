@@ -59,7 +59,7 @@ Agent Memory 的核心是让事实可追溯、可纠正，并在需要时取回�
 
 这分别借鉴了 memU 的 prepare/commit 分离和 agentmemory 的事件去重方法。[prepare/commit][m-pipeline]、[事件采集][a-capture]
 
-## 2. 选一份权威记录，索引从它派生
+## 2. 明确以哪份数据为准，搜索索引由它生成
 
 先明确以哪份数据为准，再选择存储形式：
 
@@ -73,8 +73,8 @@ flowchart TB
     Input["用户纠正、消息、工具结果"] --> Capture["采集：限制范围、事件去重、保存来源"]
     Capture --> Candidate["宿主 agent 或后台任务提炼候选"]
     Candidate --> Writer["写入：校验范围、版本与替代关系"]
-    Writer --> Record["权威记录：Markdown 或数据库"]
-    Record --> Index["派生索引：关键词；按需加入向量"]
+    Writer --> Record["以它为准的数据：Markdown 或数据库"]
+    Record --> Index["生成的索引：关键词；按需加入向量"]
     Query["当前任务、身份、项目、token 预算"] --> Retrieve["过滤后检索与排序"]
     Index --> Retrieve
     Retrieve --> Check["回查记录状态与版本"]
@@ -84,7 +84,9 @@ flowchart TB
     Agent -->|明确纠正或新事实| Writer
 ```
 
-这个图增加了“返回前回查记录”一步：即使索引更新滞后，也不返回已经撤回或被替代的版本。它是针对异步索引的设计建议，依据是 gbrain 撤回时同时处理事实与派生内容的做法，见 [[raw/sources/gbrain#撤回为何需要修改多个对象|gbrain 撤回链路]]。
+图中增加了“返回前回查记录”一步。即使索引还没更新，也不返回已经撤回或被替代的记录。
+
+这个设计参考了 gbrain 的撤回流程：撤回一条事实时，也处理根据这条事实生成的内容。具体实现见 [[raw/sources/gbrain#撤回为何需要修改多个对象|gbrain 撤回链路]]。
 
 ## 3. 让每条记忆可定位、可纠正
 
@@ -209,7 +211,7 @@ flowchart LR
 | --- | --- | --- |
 | 提炼与持久提交分开，成功后再推进处理状态 | memU `prepare/commit`；[源码][m-pipeline] | 可借鉴顺序，不能据此推断整批写入具有原子性 |
 | 事件去重、持久请求和修订检查分别处理 | agentmemory [capture][a-capture] 与 gbrain [存储说明][g-record] | 是跨系统综合建议，未验证统一实现 |
-| 撤回同时影响正文状态与派生索引 | [[raw/sources/gbrain#撤回为何需要修改多个对象\|gbrain 撤回实现]] | 停止后续召回与物理擦除是不同结果 |
+| 撤回时同步处理正文状态与生成的搜索索引 | [[raw/sources/gbrain#撤回为何需要修改多个对象\|gbrain 撤回实现]] | 停止后续召回与物理擦除是不同结果 |
 | 常驻少量规则，其他内容按需读取并限制预算 | [Letta MemFS](https://docs.letta.com/concepts/memfs)、[agentmemory context][a-context] | 实际召回质量与 token 用量需在目标宿主测量 |
 
 ## 来源与相关页面

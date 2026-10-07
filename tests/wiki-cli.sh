@@ -60,6 +60,7 @@ assert_contains "$help_output" "check"
 
 # ingest 命令：抓取来源（本地文件不抓取，直接返回）
 "$CLI" ingest deep-research-report.md >/dev/null
+python3 "$ROOT/tests/ingest.test.py"
 
 # check 命令：对合法页面应返回 0
 check_output="$("$CLI" check wiki/topics/ai/mcp.md 2>&1)" || true

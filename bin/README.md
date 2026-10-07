@@ -23,10 +23,15 @@ bin/wiki prompts check
 ```bash
 bin/wiki ingest <url>                                        # 直抓并转 Markdown 存入 raw/sources/
 bin/wiki ingest <url> --file <path>                          # 用预抓正文落盘，跳过直抓
+bin/wiki ingest <url> --name <object-or-topic>               # 指定稳定名称，不含扩展名
 bin/wiki ingest <url> --file <path> --author <name> --published <date>
 ```
 
-`--file` 接受 Markdown 文件，或含 `content` / `markdown` / `body` 字段的 JSON（例如会话侧 web reader 工具的返回值）；JSON 里的 `title`、`author`、`publishedTime` 会自动提取写入头注释。文件名日期用来源发布日期（`--published` 或 JSON 的 `publishedTime`），未知时用抓取当天。`--file` 不绑定具体 reader，手动复制的正文文件同样适用；直抓路径保持不变，作为没有 reader 工具时的兜底。何时直抓、何时走 reader 的流程引导见 `.agents/skills/ingest/SKILL.md`。
+`--file` 接受 Markdown 文件，或含 `content` / `markdown` / `body` 字段的 JSON（例如会话侧 web reader 工具的返回值）；JSON 里的 `title`、`author`、`publishedTime` 会自动提取写入头注释。此选项对所有来源类型都跳过直接抓取，手动保存的正文或源码调研记录也可使用。
+
+文件保存为 `raw/sources/<name>.md`，发布日期与抓取日期只写入来源头。未指定 `--name` 时，从 URL 的末段推导名称；GitHub 使用仓库名，YouTube watch 链接使用视频 ID，站点首页使用域名。自动名称不够明确时使用 `--name`，命名规则见 `SCHEMA.md` 的「原始素材命名」。
+
+若目标文件或对应的旧日期前缀文件已存在，CLI 报错且不覆盖；同一对象先阅读已有素材再合并，不同对象用不同名称。最终写入使用排他创建，避免并发抓取覆盖。CLI 的 GitHub 直抓结果只是仓库阅读入口；完整实现分析由 `.agents/skills/ingest/SKILL.md` 指导完成。
 
 ## Wiki 用词检查
 

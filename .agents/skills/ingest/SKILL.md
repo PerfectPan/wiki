@@ -17,23 +17,23 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 本次输入：
 - 来源：`{{INPUT}}`
 
+开始整理来源、选择 raw/topic/synthesis/comparison 或改写正文前，先读 [页面类型与写作参考](references/page-writing.md)。
+
 ## 第一步：判断是否需要保存素材
 
 如果只是 awesome 收录，阅读来源后一两句话就能写清用途、分级和主要限制，按 [references/resource-catalogs.md](references/resource-catalogs.md) 直接更新索引并附来源链接，不创建 raw 文件，也不为它另开知识页。仍须完成相关检查与校验。
 
-需要保留原文摘录、较长分析或验证记录时，再把素材存入 `raw/sources/`。抓取按以下顺序选择路径：
+需要独立回查来源与核查证据时，再保存 raw 记录。抓取结果用于阅读和核对，最终内容按写作参考组织。抓取按以下顺序选择路径：
 
 1. 默认 `bin/wiki ingest <url>` 直抓。
 2. 直抓被反爬拦截（403）或落盘文件明显太脏（导航、订阅尾巴、粗体和行内代码丢失）时，改用会话侧 reader 工具（如 GLM 的 webReader MCP，是否可用取决于客户端）抓正文，存成临时文件后 `bin/wiki ingest <url> --file <路径>` 落盘。reader 返回的 JSON 直接喂 `--file` 即可，`title`、`author`、`publishedTime` 会自动写入头注释。`--file` 不绑定具体 reader，手动复制的正文文件同样适用。
 3. 站点提供 llms.txt 类端点时，可用它核对落盘正文是否完整；发现缺漏时以官方端点为准重存正文。
 
-找到对应的文件：
-- 博客/文档：`raw/sources/YYYY-MM-DD-主题.md`（提取正文后的 Markdown）
-- GitHub 仓库：`raw/sources/YYYY-MM-DD-仓库名.md`（目录结构 + 关键文件）
-- X 推文线程：`raw/sources/YYYY-MM-DD-主题.md`（线程全文）
-- YouTube 视频：`raw/sources/YYYY-MM-DD-主题.md`（字幕转录）
+素材命名遵循 `SCHEMA.md` 的「原始素材命名」。先搜索是否已有同一对象的素材；新文件使用稳定的对象或主题名，必要时用 `bin/wiki ingest <url> --name <name>` 指定。日期与源码提交版本写进文件头。
 
-**同一对象只留一份素材**：一个库 / 站（如一个组件库及其官网多个页面）的多次抓取，落盘前合并为一份 `raw/sources/YYYY-MM-DD-<对象>.md`——文件名用对象名，不用 URL slug；页面级噪音（testimonials、导航、广告）在收录时剔除，不整站搬运、不按 URL / 页面拆多个文件。
+**同一对象只留一份素材**：同一库或站的多次读取合并到一份记录；已有素材先阅读，再按授权追加或修订。页面级噪音（导航、广告等）在收录时剔除，不按 URL / 页面拆文件。
+
+网页正文、仓库文件、推文和视频字幕用于核对事实。CLI 的仓库元信息输出只是阅读入口，不能当作已经完成源码分析。
 
 **不要把整站 HTML 存进 raw/sources/**。HTML 里全是 CSS/JS/SVG 噪音，只保留提取出的正文 .md 即可。
 
@@ -75,7 +75,9 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
    - 解决了什么问题
    - 可以借鉴的设计模式
 
-**禁止**：只基于目录结构和 README 做表面分析。必须引用具体的代码文件和接口来支撑结论。
+分析完成后，按 [页面类型与写作参考](references/page-writing.md) 分配内容：核查证据留在 raw，完整对象说明与架构图写入 topic，通用方法写入 synthesis，选型判断写入 comparison。
+
+图中的组件和箭头必须有源码依据。CLI 生成的文件列表不能替代实现分析，也不复制整仓源码。
 
 ### X 推文线程
 
@@ -129,10 +131,10 @@ tags:
   - tag1
   - tag2
 source_refs:
-  - raw/sources/YYYY-MM-DD-主题.md
+  - raw/sources/example-topic.md
   - https://原始URL
 resource:
-  - raw/sources/YYYY-MM-DD-主题.md
+  - raw/sources/example-topic.md
   - https://原始URL
 ---
 ```
@@ -245,35 +247,7 @@ resource:
 4. 中文书写，保留清晰的英文术语
 5. 不要改写或删除 raw/ 中的原始资料
 
-### raw 评审文件的写法
-
-仅在确有值得单独保存的内容时使用；不要把索引的一两句话扩写成 raw 文件。
-
-raw 评审文件（如 `raw/sources/YYYY-MM-DD-<topic>-review.md`）是分析素材后的中间产物，给后续写 wiki 页面提供事实基础。它不是正式 wiki 页面，但必须让人能读懂。
-
-**语言要求：**
-
-- 说人话，不要自造黑话。不要用「产物协议（事实）」「核心机制（事实）」「主观判据可枚举化」「反默认失败的负例清单」这类只有自己懂的词。用直白的话描述：它交付什么、怎么做的、有哪些坑。
-- 如果素材里有术语（比如 Recipe Manifest、Quality Gate），直接用，但要在第一次出现时用一句话解释它是什么。
-- 不要用教条式标题。标题写清楚这节在说什么就行，比如「它交付什么」「几个容易踩的坑」「怎么验收」，而不是「产物协议」「gotchas」「质量门」。
-- 事实和判断分开。事实来自素材，判断是你的分析，不要混在一起。
-
-**结构建议：**
-
-1. 基本信息（名称、仓库、版本、定位、访问日期）
-2. 它做什么 / 交付什么
-3. 核心做法（怎么实现的）
-4. 容易踩的坑（gotchas）—— 模型会稳定犯的错
-5. 怎么验收 / 有没有 evals
-6. 对照判据的打分（如果有判据页）
-7. 收录建议
-8. 风险和限制
-
-**不要做的事：**
-
-- 不要把整站 HTML 爬进 raw/sources/。HTML 里全是 CSS/JS/SVG 噪音，提取正文存成 .md 就够了。
-- 不要按 URL / 页面为同一对象拆多个 raw 文件（一个库 / 站只留一份合并素材，命名 `YYYY-MM-DD-<对象>.md`）。
-- 不要为了显得专业而堆砌术语。能说清楚就用最简单的词。
+各类页面的正文组织和语言要求见 [页面类型与写作参考](references/page-writing.md)。raw 只按独立证据价值保留，不重复撰写 topic 的完整说明。
 
 ## 第八步：更新导航
 

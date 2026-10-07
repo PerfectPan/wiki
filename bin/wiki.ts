@@ -3,7 +3,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { execSync } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { runJargonCheck } from "./check-jargon.ts";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,7 +14,7 @@ const HELP_TEXT = `wiki CLI
 
 用法:
   bin/wiki help
-  bin/wiki ingest <url> [--file <path>] [--author <name>] [--published <date>]
+  bin/wiki ingest <url> [--name <slug>] [--file <path>] [--author <name>] [--published <date>]
   bin/wiki check [path]
   bin/wiki check-jargon [path | --staged | --base <ref>]
   bin/wiki prompts <list|search|show|check> [...]
@@ -632,7 +632,7 @@ function main(argv: string[]): void {
   }
 
   if (command === "ingest") {
-    const VALUE_FLAGS = ["--file", "--author", "--published"] as const;
+    const VALUE_FLAGS = ["--name", "--file", "--author", "--published"] as const;
     const parts = [...rest];
     const flags: string[] = [];
     for (const name of VALUE_FLAGS) {
@@ -657,15 +657,14 @@ function main(argv: string[]): void {
         if (source.includes("github.com")) type = "repo";
         else if (source.includes("youtube.com") || source.includes("youtu.be")) type = "video";
         else if (source.includes("x.com") || source.includes("twitter.com")) type = "tweet";
-        const extra = flags.map((v, i) => (i % 2 === 0 ? ` ${v}` : ` "${v}"`)).join("");
-        execSync(`python3 "${script}" "${source}" --type ${type}${extra}`, {
+        execFileSync("python3", [script, source, "--type", type, ...flags], {
           stdio: "inherit",
         });
       } catch (e) {
         die(`抓取失败: ${(e as Error).message}`);
       }
     } else if (flags.length > 0) {
-      die("--file/--author/--published 只配合 URL 来源使用");
+      die(`${VALUE_FLAGS.join("/")} 只配合 URL 来源使用`);
     }
     return;
   }

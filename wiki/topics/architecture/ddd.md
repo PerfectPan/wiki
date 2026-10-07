@@ -25,6 +25,11 @@ source_refs:
 - 方法论：DomainDD-> TypeDD-> TestDD-> Impl
 - Remesh：为复杂 Web App 服务的 DDD 框架设计
 
+## 延伸阅读与综合理解
+
+- [[ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]：系统梳理限界上下文语义边界、聚合一致性边界、facade 暴露机制、分层依赖方向以及聚合根与仓储的解耦协作关系。
+- [[ddd-implementation-approaches|DDD 的实现方式与取舍]]：评估 Seedwork、框架、架构测试与 decider 等落地路径，厘清分布式仓储设计、前后端模型共用、Effect 定位以及基础库中的 DDD 取舍。
+
 ## Source Pointers
 
 - `raw/sources/ddd.md`

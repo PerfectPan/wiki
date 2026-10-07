@@ -65,6 +65,7 @@
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
   - [[wiki/topics/ai/agent|Agent]]
+  - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]
   - [[wiki/topics/ai/ai-slop|AI Slop]]
   - [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
@@ -244,6 +245,7 @@
 - `design`
   - [[wiki/syntheses/design/ai-assisted-design-techniques|用 AI 做设计的几个技巧]]
 - `frontend`
+  - [[wiki/syntheses/frontend/frontend-resource-selection-criteria|前端组件与样式参考的收录标准]]
   - [[wiki/syntheses/frontend/pure-css-hand-drawn-annotations|纯 CSS 手绘标注的实现与布局边界]]
   - [[wiki/syntheses/frontend/svg-icon-auto-morph-implementation|SVG 图标自动 Morph 的实现路径]]
   - [[wiki/syntheses/frontend/event-loop-microtask-checkpoint|事件循环与 Microtask 检查点]]

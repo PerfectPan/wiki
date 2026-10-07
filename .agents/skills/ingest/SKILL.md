@@ -39,7 +39,7 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 
 ## 第二步：分析素材
 
-新增或更新 awesome / curated list 类资源索引，或调整条目分级时，先读 [references/resource-catalogs.md](references/resource-catalogs.md)。筛选操作规则留在 skill，Wiki 页面写资源内容与知识结论。
+新增或更新 awesome / curated list 类资源索引，或调整条目分级时，先读 [references/resource-catalogs.md](references/resource-catalogs.md) 的通用标准，再按其中的指针读取主分类与用途对应的领域补充。筛选操作规则留在 skill，Wiki 页面写资源内容与知识结论。
 
 在写 wiki 页面之前，先分析素材：
 

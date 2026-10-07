@@ -35,22 +35,9 @@ Quotio 是一个开源的 AI 服务额度与账号管理工具，提供 macOS �
 
 当前 macOS 程序以 SwiftUI 构建界面，启动随应用附带的 Rust `quotio serve` 子进程。该进程在 `127.0.0.1` 的动态端口提供接口，Swift 通过 `QuotioCLIBackend` 读取快照、发起刷新。额度采集由这个后端承担，与被管理的 CLIProxyAPI 模型代理是不同职责。[组件装配](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/macos/Quotio/App/CompositionRoot.swift#L85-L110)、[子进程启动](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/Packages/QuotioCore/Sources/QuotioInfrastructure/QuotioCLI/QuotioCLIServerProcess.swift#L80-L173)
 
-```mermaid
-flowchart LR
-    subgraph Local[本机：额度监控]
-        UI[macOS SwiftUI 界面] <-->|带认证的本机 HTTP| Host[Rust quotio serve]
-        Host --> Adapter[服务商适配器]
-        Native[本机工具的已登录凭据] --> Adapter
-        Vault[Quotio 账号存储] --> Adapter
-        Adapter <--> Cache[额度快照缓存]
-        Adapter <-->|标准输入输出| Codex[Codex app-server]
-    end
-    subgraph Remote[服务商]
-        API[账号额度接口]
-    end
-    Adapter <-->|携带对应账号凭据的 HTTPS 请求| API
-    Codex <-->|查询账号限额| API
-```
+![Quotio 的本机界面、Rust 额度采集与缓存、账号凭据及服务商边界](../../../raw/assets/quotio-architecture.png)
+
+图中的 UsageCache / Collector 属于 Rust 后端内部，负责选择缓存或调用服务商适配器；图将它们展开以说明职责，并非额外部署的服务。
 
 这张图限定在 macOS 本机额度监控路径。Quotio CLI 也能单独运行一次查询，复用采集与缓存代码；源码另有远程共享功能，本文没有审查其部署与权限配置，不能把“本机监听”推广成整个产品没有远程访问能力。[CLI 查询入口](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/usage.rs)、[共享模块](https://github.com/nguyenphutrong/quotio/blob/71f427f7488e592406104d98936ff142000383d7/apps/cli/src/server/sharing.rs)
 

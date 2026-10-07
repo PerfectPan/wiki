@@ -1,6 +1,6 @@
 ---
 title: Rivet agentOS：执行环境与持久会话
-description: Rivet agentOS 如何隔离代码、接入宿主能力、保存会话，以及它与长期 Agent 记忆的分工
+description: Rivet agentOS 如何隔离代码、接入宿主能力、保存会话，以及 embedded 与 Actor 部署的取舍
 type: topic
 category: ai
 created: 2026-10-07
@@ -12,7 +12,7 @@ tags:
   - sandbox
   - persistence
 source_refs:
-  - raw/sources/2026-10-07-rivet-agentos.md
+  - raw/sources/rivet-agentos.md
   - https://rivet.dev/agentos/docs/
   - https://rivet.dev/agentos/docs/architecture/
   - https://rivet.dev/agentos/docs/quickstart-embedded/
@@ -22,7 +22,7 @@ source_refs:
   - https://rivet.dev/agentos/docs/host-functions/
   - https://rivet.dev/agentos/docs/limitations/
 resource:
-  - raw/sources/2026-10-07-rivet-agentos.md
+  - raw/sources/rivet-agentos.md
   - https://rivet.dev/agentos/docs/
   - https://rivet.dev/agentos/docs/architecture/
   - https://rivet.dev/agentos/docs/quickstart-embedded/
@@ -38,8 +38,6 @@ resource:
 ## 它解决什么问题
 
 Rivet agentOS 给 coding agent 提供受控的文件、进程、网络和工具执行环境，并提供会话与恢复接口。它适合回答“agent 在哪里执行代码，能访问什么，下一次如何继续”。截至 2026-10-07，官方仍标为 beta；本文核对文档，未运行 SDK 或验证隔离强度。[介绍](https://rivet.dev/agentos/docs/)、[安全模型](https://rivet.dev/agentos/docs/security-model/)
-
-**会话持久化与长期记忆需要分开理解。** 保存文件和对话事件能帮助恢复工作，却没有定义哪些事实值得保留、如何纠正过期结论、下次该召回什么。后者见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]；这是依据两类系统职责作出的区分。
 
 ## 系统结构
 
@@ -124,7 +122,7 @@ flowchart LR
 
 ## 采用判断与限制
 
-基于上述文档，适合优先评估 agentOS 的场景是：给 agent 应用提供隔离执行环境，同时需要会话、文件和用户连接的持续存在。只想让已有本地 coding agent 记住偏好时，直接评估 memory 工具更符合问题范围。
+基于上述文档，适合优先评估 agentOS 的场景是：给 agent 应用提供隔离执行环境，同时需要会话、文件和用户连接的持续存在。已有应用希望自行管理生命周期时评估 embedded；需要分布式状态和自动休眠唤醒时评估 Actor 部署。
 
 当前不能安装任意原生二进制或使用 apt/yum；Docker、文件监听和硬件访问也有限制。需要完整 Linux 的工作负载要评估外部 sandbox，其费用和生命周期应另算。[Limitations](https://rivet.dev/agentos/docs/limitations/)
 
@@ -139,13 +137,11 @@ flowchart LR
 | 保存文件和完成历史，不保存整个运行进程 | Persistence & Sleep / What persists | 官方明确；adapter 恢复效果需逐个验证 |
 | 持久事件与实时增量不同 | Sessions & Persistence / Session event log | 官方明确；未测中断和重放 |
 | 宿主函数扩展会引入宿主权限 | Host Functions / Security | 官方明确；业务授权属于应用职责 |
-| 不能由会话持久化推断长期知识管理 | 上述持久化文档与记忆方案的职责比较 | 本文判断；不声称平台永远不会增加 memory 功能 |
 
-完整来源链接与核对记录见 [[raw/sources/2026-10-07-rivet-agentos]]。
+完整来源链接与核对记录见 [[raw/sources/rivet-agentos]]。
 
 ## 相关页面
 
 - [[wiki/topics/ai/agent-harness|Agent Harness]]
 - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
 - [[wiki/topics/ai/pi-durable|Pi Durable]]
-- [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]

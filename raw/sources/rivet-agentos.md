@@ -5,6 +5,35 @@
 - 范围：官方文档阅读记录；未运行 SDK、故障恢复测试或隔离测试。
 - 以下是改写后的事实笔记，不是原文快照；不保存导航和宣传指标。
 
+## 它交付什么
+
+agentOS 是运行 coding agent 与生成代码的受控环境：应用创建 VM，配置软件、文件挂载、网络和宿主能力，再打开 session 发送 prompt。嵌入式入口由应用管理身份与生命周期；Actor 入口由 Rivet 提供持久状态、休眠唤醒和客户端连接。两种入口共用 VM 能力，但运维责任不同。
+
+## 组件怎样协作
+
+```mermaid
+flowchart LR
+    App["可信应用"] --> Host["Embedded handle 或 Rivet Actor"]
+    Host --> Sidecar["可信 sidecar 与虚拟内核"]
+    Guest["Guest：agent 与生成代码"] -->|系统调用| Sidecar
+    Sidecar --> FS["虚拟文件系统与已配置挂载"]
+    Sidecar --> Net["受限网络与虚拟进程"]
+    Sidecar --> DB["配置的 SQLite：文件和会话状态"]
+    Sidecar --> Functions["宿主函数：业务 API"]
+```
+
+这个图来自下表 Architecture 与 Security Model，属于官方文档架构，不是本次源码审计。关键是 guest 只请求能力，由 sidecar 检查和执行；client 传入的挂载、凭据与权限配置属于可信输入，应用仍需限制谁能配置它们。
+
+## 一次会话跨休眠继续的条件
+
+完整用户输入先保存，再交给 adapter；已完成的消息进入持久事件流。休眠时 VM、进程与实时增量结束；唤醒重建 VM，再读取持久文件和历史。读取历史不要求先启动 adapter；继续 prompt 才按需恢复它。投递结果不确定时，文档不承诺自动重发。
+
+这解释了两个易错点：恢复的是已保存的状态，不是原进程内存；embedded 若没有配置持久数据库，也不能套用 Actor 的默认恢复承诺。实际 adapter 的恢复效果需要逐个验证。
+
+## 扩展的代价
+
+Host function 将输入定义映射为 guest CLI 或 JavaScript 调用，但 `execute()` 在宿主权限下运行；因此应暴露具体业务操作，而不是把任意宿主命令作为通用函数。外部 sandbox 能补充完整 Linux 工作负载，同时增加另一套文件一致性、连接和生命周期问题。以上分别依据 Host Functions 与 Limitations，未验证具体 sandbox 集成。
+
 ## 核对位置
 
 | 来源 | 位置 | 核对到的事实 |
@@ -18,7 +47,5 @@
 | [Limitations](https://rivet.dev/agentos/docs/limitations/) | Software registry / Lightweight Linux kernel | 不支持任意 Linux 二进制、apt/yum、Docker、inotify/fs.watch 或 GPU；完整 Linux 工作负载需外部 sandbox。 |
 
 ## 判断与待验证项
-
-文档描述的是运行环境与恢复能力，不能据此推断已实现长期知识提炼、过期事实纠正或跨 agent 语义召回。能写文件只提供了实现 memory 的存储条件。
 
 采用前应在目标 adapter 上验证 sleep/wake、进程中断、权限请求恢复、prompt 投递不确定时的处理，以及外部 sandbox 挂载后的文件一致性。性能宣传和安全性均未独立复现。

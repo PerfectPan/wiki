@@ -1,11 +1,11 @@
 ---
 title: Awesome Agent Skills
-description: 经判据审过的 Agent Skill 薄索引：推荐 / 可参考 / 偏薄，链到评审与范式页，不镜像全文
+description: 按推荐、可参考、偏薄收录 Agent skill，附用途、来源与相关分析。
 type: topic
 category: ai
 created: 2026-08-06
-updated: 2026-09-22
-timestamp: 2026-09-22
+updated: 2026-10-07
+timestamp: 2026-10-07
 tags:
   - skills
   - agent
@@ -34,33 +34,15 @@ resource:
 
 ## 摘要
 
-这是本 wiki 的 **Skill 收录索引**，不是判据正文，也不是全网镜像。
+这里收录具有使用或学习价值的外部 Agent skill，每项保留用途、分级和来源。理解 skill 的设计方法，可阅读 [[skill-engineering-artifact-protocol|Skill 的交付内容与结果检查]]。
 
-- **判据**只在 [[skill-engineering-artifact-protocol]]：产物协议、路由 description、gotcha、QA、manifest、负例等。
-- **本页**只收「过线或有教学价值」的条目：一句话价值 + 分级 + 指针。
-- 未过判据的链接堆、摘录 → `raw/sources/`，不进本表。
-
-命名用 Awesome，语义是 **curated list**，不是 star 排行榜。
-
-## 收录规则
-
-每条候选至少能回答：
-
-1. **触发**：何时该加载（description 场景，不是功能广告）
-2. **产物协议**：最终交什么、谁消费
-3. **硬 gotcha**：模型会稳定踩的坑
-4. **验收**：结构 / 语义怎么验（可弱，但不能为零）
-5. **分级理由**：推荐 / 可参考 / 偏薄
-
-流程：`候选 → raw 评审笔记 → 对照判据分级 → 本页加一行`。产品本身另开 topic 时与 Skill 条目解耦。
-
-### 分级
+## 分级
 
 | 级 | 含义 |
 | --- | --- |
-| **推荐** | 强产物协议 + 高价值 gotcha；可当工程范例或长期安装 |
-| **可参考** | 有真实约束，但缺默认协议 / QA / 负例中的多项 |
-| **偏薄** | 基本是 README 摘要；仅作反例或起点，默认不装 |
+| **推荐** | 交付内容和结果检查清楚，包含值得借鉴的具体做法 |
+| **可参考** | 有明确用途，但执行限制、结果检查等说明不完整 |
+| **偏薄** | 只适合作为起点或反例，不建议直接安装 |
 
 ## 索引
 
@@ -85,16 +67,9 @@ resource:
 
 （暂无单独挂名条目。判据页用 ai-cli 说明「可用但不老练」时，可下沉到本级。）
 
-## 明确不收
-
-- 仅人格 / 文风、无产物协议的 prompt 包
-- 无 description 路由、无 gotcha 的命令备忘
-- 未写 raw 评审、只有 star 数或营销页的链接
-- 本仓库自己的 agent 工作流（统一走 `bin/wiki`，不进 Skill 市场镜像）
-
 ## 相关页面
 
-- [[skill-engineering-artifact-protocol]] — 唯一判据源
+- [[skill-engineering-artifact-protocol]] — Skill 设计方法与案例
 - [[hand-drawn-style-explainer-video-constraints]] — 两个手绘类案例的域内综合
 - [[ai-slop]] — hallmark 反模式的语义层归纳
 - [[bento]] — bento-slides 背后的单文件 slides 产品

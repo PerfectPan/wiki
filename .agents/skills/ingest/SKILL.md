@@ -17,9 +17,11 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 本次输入：
 - 来源：`{{INPUT}}`
 
-## 第一步：定位素材
+## 第一步：判断是否需要保存素材
 
-来源已经被抓取并存入 `raw/sources/`。如果还没抓取，按这个顺序选路径：
+如果只是 awesome 收录，阅读来源后一两句话就能写清用途、分级和主要限制，按 [references/resource-catalogs.md](references/resource-catalogs.md) 直接更新索引并附来源链接，不创建 raw 文件，也不为它另开知识页。仍须完成相关检查与校验。
+
+需要保留原文摘录、较长分析或验证记录时，再把素材存入 `raw/sources/`。抓取按以下顺序选择路径：
 
 1. 默认 `bin/wiki ingest <url>` 直抓。
 2. 直抓被反爬拦截（403）或落盘文件明显太脏（导航、订阅尾巴、粗体和行内代码丢失）时，改用会话侧 reader 工具（如 GLM 的 webReader MCP，是否可用取决于客户端）抓正文，存成临时文件后 `bin/wiki ingest <url> --file <路径>` 落盘。reader 返回的 JSON 直接喂 `--file` 即可，`title`、`author`、`publishedTime` 会自动写入头注释。`--file` 不绑定具体 reader，手动复制的正文文件同样适用。
@@ -39,7 +41,7 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 
 ## 第二步：分析素材
 
-新增或更新 awesome / curated list 类资源索引，或调整条目分级时，先读 [references/resource-catalogs.md](references/resource-catalogs.md) 的通用标准，再按其中的指针读取主分类与用途对应的领域补充。筛选操作规则留在 skill，Wiki 页面写资源内容与知识结论。
+新增或更新 awesome / curated list 类资源索引，或调整条目分级时，先读 [references/resource-catalogs.md](references/resource-catalogs.md) 的通用标准，再按其中的索引表读取目标 awesome 的专属标准。筛选操作规则留在 skill，Wiki 页面写资源内容与知识结论。
 
 在写 wiki 页面之前，先分析素材：
 
@@ -138,7 +140,7 @@ resource:
 规则：
 - `description`：面向人和 agent 的一句话摘要，必须写
 - `tags`：1-5 个英文小写短词，表达横向主题
-- `source_refs` 和 `resource`：指向 raw/sources 里的素材和原始 URL
+- `source_refs` 和 `resource`：指向实际采用的来源 URL，以及存在的 raw 素材；简短收录可只列来源 URL
 - `created`/`updated`/`timestamp`：用今天的日期
 
 ## 第六步：写正文
@@ -244,6 +246,8 @@ resource:
 5. 不要改写或删除 raw/ 中的原始资料
 
 ### raw 评审文件的写法
+
+仅在确有值得单独保存的内容时使用；不要把索引的一两句话扩写成 raw 文件。
 
 raw 评审文件（如 `raw/sources/YYYY-MM-DD-<topic>-review.md`）是分析素材后的中间产物，给后续写 wiki 页面提供事实基础。它不是正式 wiki 页面，但必须让人能读懂。
 

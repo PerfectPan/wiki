@@ -163,7 +163,7 @@ def analyze_github_repo(url: str) -> str:
 
     lines.append("")
     lines.append("## 说明\n")
-    lines.append("本文件是仓库阅读入口，尚未包含实现分析。整理时在临时目录读取源码，将定位、架构图、核心数据流、存储边界和源码依据补充到这份记录；不复制整仓源码。")
+    lines.append("本记录只包含仓库元信息和文件链接，尚未核对具体实现。")
 
     return "\n".join(lines) + "\n"
 

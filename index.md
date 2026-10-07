@@ -240,7 +240,6 @@
   - [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - `architecture`
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
-  - [[wiki/syntheses/architecture/unified-interface-capability-differences|从 S3 或网盘读取报表]]
   - [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]
   - [[wiki/syntheses/architecture/ddd-implementation-approaches|DDD 的实现方式与取舍]]
 - `career`

@@ -4,12 +4,14 @@ description: 记录模型使用中的具体问题、处理技巧和适用范围�
 type: topic
 category: ai
 created: 2026-09-15
-updated: 2026-09-15
-timestamp: 2026-09-15
+updated: 2026-10-08
+timestamp: 2026-10-08
 tags:
   - llm
   - agent
   - gemini
+  - claude-code
+  - cache
   - performance
 source_refs:
   - https://github.com/promptfoo/promptfoo
@@ -17,17 +19,21 @@ source_refs:
   - raw/sources/2026-09-15-googlecloudtech-gemini-flash.md
   - https://x.com/GoogleCloudTech/article/2099507349828350285
   - https://code.claude.com/docs/en/hooks
+  - raw/sources/claude-code-multi-agent-token-audit.md
+  - https://code.claude.com/docs/en/prompt-caching
 resource:
   - https://github.com/promptfoo/promptfoo
   - https://www.promptfoo.dev/docs/providers/custom-script/
   - raw/sources/2026-09-15-googlecloudtech-gemini-flash.md
   - https://x.com/GoogleCloudTech/article/2099507349828350285
   - https://code.claude.com/docs/en/hooks
+  - raw/sources/claude-code-multi-agent-token-audit.md
+  - https://code.claude.com/docs/en/prompt-caching
 ---
 
 # 模型使用与常见问题
 
-按模型记录实际使用中的问题、可尝试的处理办法和适用范围。外部经验注明来源，亲自验证后再补充结果。
+按模型或工具记录实际使用中的问题、可尝试的处理办法和适用范围。外部经验注明来源，亲自验证后再补充结果。
 
 ## Gemini
 
@@ -175,11 +181,30 @@ Promptfoo 的 [自定义脚本接口](https://www.promptfoo.dev/docs/providers/c
 
 先用少量真实任务找出 Gemini 适合承担的工作，再扩大用例集。文中的两个示例不足以证明所有任务都适合相同分工。
 
+## Claude Code
+
+### 叫回闲置的 subagent 会整段重写缓存
+
+**适用范围：Claude Code 用 subagent 分多轮完成任务（实现、复审、修改、rebase）。状态：自行统计一次约一天的多 agent 开发任务的 transcript 验证。**
+
+协调者让写代码的 subagent 交付后等 review，再用 SendMessage 叫回它修问题或 rebase。subagent 的缓存只保留 5 分钟（主会话在订阅额度内是 1 小时），等 review 往往超过 5 分钟，被叫回后的第一次请求要按写入价把整个上下文重写一遍，之后每次请求还要重读这份已经很大的上下文。1M 上下文的模型接近 1M 才自动压缩，subagent 的上下文常涨到 700k～900k，这个问题更明显。
+
+这次任务里，被叫回的后续轮次输入侧花费 $298，比各自第一轮的 $203 还多；缓存过期后的整段重写约占总额 20%。计价方式和统计方法见 [[token-usage-and-billing]]。
+
+处理办法：
+
+- **叫回前先看成本**：从 transcript 取它最后一次请求的上下文大小和时间，判断缓存是否已过期，再比较两种做法。续用约等于剩余请求数 × 当前上下文，缓存已过期时再加一次整段重写；新开约等于剩余请求数 × 新上下文（简报、交接说明、要重读的文件），再加重新熟悉代码的请求。上下文大、缓存已过期、下一步又是一整轮工作时，新开通常便宜几倍；缓存还热的几次请求以内的追问，续用更划算。
+- **派发时要交接说明**：预计有后续轮次的任务，要求交付里附上改动、决定和遗留问题，新开的 agent 从这份说明和 diff 接手。
+- **控制复审轮次**：只在阻止合入的问题修复后复审，复审只核对这些修复，每轮新开 reviewer。这次任务里有个 reviewer 被同一会话叫回 7 轮，写缓存占它输入花费的一半以上。
+- **不急着把 TTL 改成 1 小时**：社区实测把所有 subagent 改成 1 小时后总花费上升 8.6%。按这次的数据估算，全部改成 1 小时净省约 7%，只改 reviewer 约 2%，都不如改用法；确实需要隔一段时间再叫回的 agent，可在它的定义里单独设置 `experimental.cacheTtl`。
+
 ## 相关页面
 
 - [[agent-harness]]
 - [[code-agent]]
+- [[token-usage-and-billing]]
 
 ## 来源指针
 
 - [Google Cloud Tech：Gemini Flash 与 Claude 协作](https://x.com/GoogleCloudTech/article/2099507349828350285)；[阅读摘要](../../../raw/sources/2026-09-15-googlecloudtech-gemini-flash.md)
+- `raw/sources/claude-code-multi-agent-token-audit.md`（多 agent 任务的账单拆分）；[How Claude Code uses prompt caching](https://code.claude.com/docs/en/prompt-caching)

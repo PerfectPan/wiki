@@ -138,70 +138,13 @@ Claude 一列是作者记录的输入形状与说明，Pi 一列对应公开源�
 
 Pi 扩展负责工具调用和窗口管理，WebView 负责显示内容和执行页面脚本。
 
-```mermaid
-flowchart TB
-  P[Pi 对话与模型]
-  subgraph H[Node.js 中的 Pi 扩展]
-    E[index.ts 工具与流事件入口]
-    G[guidelines.ts 按模块组合说明]
-    S[WidgetSession 管理窗口和内容]
-    R[RpcHost 分派已注册方法]
-    F[SVG 导出与系统适配]
-    E --> G
-    E --> S
-    S --> R
-    R --> F
-  end
-  subgraph W[Glimpse WebView 窗口]
-    B[bridge 接收内容和 RPC 响应]
-    M[morphdom 更新 root]
-    J[最终内容到达后运行脚本]
-    B --> M --> J
-  end
-  P -->|visualize_read_me 和 show_widget| E
-  E -->|工具文本结果| P
-  R -->|content 消息| B
-  B -->|svg.copy 或 svg.save| R
-  U[用户] -->|调参数和查看图表| M
-  F --> O[剪贴板或保存对话框]
-```
+![两个工具的配合：read_me 返回设计说明，模型生成代码后交给 show_widget 显示，交互留在窗口内。](../../../raw/assets/pi-generative-ui-tools.png)
 
 扩展运行在 Pi 的 Node.js 进程中。终端负责对话和工具状态，窗口负责图表、滑块和动画；`WidgetSession` 管理窗口与内容更新，页面侧用 `morphdom` 修改 DOM（文档对象模型）。[窗口与 RPC 初始化](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/session.ts#L31-L55)
 
 ## 一次图表生成怎样完成
 
-```mermaid
-sequenceDiagram
-  participant P as Pi 模型事件
-  participant E as 扩展入口
-  participant G as 设计说明
-  participant S as WidgetSession
-  participant W as WebView runtime
-  P->>E: visualize_read_me，选择模块
-  E->>G: getGuidelines(modules)
-  G-->>E: 公共规则与模块规则
-  E-->>P: 工具结果中的设计说明文本
-  P->>P: 根据规则生成 widget_code
-  P->>E: toolcall_start(show_widget)
-  E->>S: 创建窗口和运行时
-  W-->>S: ready
-  loop 工具参数逐步到达
-    P->>E: toolcall_delta
-    E->>S: onChunk(widget_code)
-    S->>W: 合并更新后发送 content，final=false
-    W->>W: morphdom 更新 DOM
-  end
-  P->>E: toolcall_end
-  E->>S: onComplete(完整 HTML)
-  S->>W: content，final=true
-  par 窗口中的脚本初始化
-    W->>W: 按顺序等待外部脚本，再运行后续脚本
-  and 工具执行结束
-    E->>S: execute 复用已完成的 session
-    E-->>P: 返回 rendered 文本
-  end
-  Note over P,W: 页面脚本完成没有单独回执，工具返回不证明图表已正确显示
-```
+![流式显示过程：读取规则、生成参数、逐步更新 DOM、交付完整 HTML；页面脚本初始化与工具返回分别进行。](../../../raw/assets/pi-generative-ui-streaming.png)
 
 源码把连续更新按 150ms 的窗口合并，只保留最新 HTML，跳过过短或完全相同的内容；最终内容会取消待发定时器，并带 `final=true`。页面先用 `morphdom` 修改现有节点，随后在最终内容到达时重建脚本元素，依次等待外部脚本加载，避免初始化代码先于 Chart.js 等依赖执行。[内容生命周期](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/session.ts#L57-L91)、[DOM 与脚本执行](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/runtime/morph.ts#L14-L71)
 

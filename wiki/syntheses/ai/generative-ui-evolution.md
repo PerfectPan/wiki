@@ -69,28 +69,7 @@ MCP Apps 由工具服务声明 HTML 资源，宿主读取它，在隔离的 ifra
 
 三条路线的执行位置和消息通道如下：
 
-```mermaid
-flowchart TB
-  subgraph P[Pi 自由生成代码]
-    PL[模型生成 HTML 和脚本] --> PW[WebView 中的 DOM 与脚本]
-    PW -->|仅注册的 RPC 方法| PH[Node.js 扩展]
-    PH --> PF[复制或保存 SVG]
-  end
-  subgraph M[MCP Apps 宿主集成]
-    MS[服务端 UI 资源与工具] --> MH[聊天宿主]
-    MH --> MP[不同源的 sandbox proxy]
-    MP --> MV[受 CSP 限制的 View iframe]
-    MV -->|JSON-RPC| MP
-    MP -->|转发消息| MH
-    MH -->|检查工具可见性与权限后调用| MS
-  end
-  subgraph C[组件描述路线]
-    CL[模型生成 JSON] --> CV[结构校验与允许的组件目录]
-    CV --> CR[应用自有 renderer]
-    CR --> CA[应用定义的事件处理器]
-    CA --> CB[业务后端鉴权与持久化]
-  end
-```
+![三条工程路线：Pi 生成代码，MCP Apps 负责宿主集成，A2UI 与 json-render 使用组件描述；业务后端以虚线标为应用设计建议。](../../../raw/assets/generative-ui-approaches.png)
 
 图的 Pi 和 MCP Apps 部分来自各自实现或规范；组件描述部分把 A2UI 的校验循环、json-render 的 catalog 与本文建议的业务权限边界合在一起，是应用设计示意。[Pi RPC](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/rpc.ts#L38-L69)、[MCP Apps sandbox](https://github.com/modelcontextprotocol/ext-apps/blob/82221c0c8ce7661efa6771c9d461511b1650495f/specification/2026-01-26/apps.mdx#L470-L487)、[A2UI 校验循环](https://github.com/a2ui-project/a2ui/blob/db4306536438df46e4f0443b9c4ec0d5f1a42dc4/specification/v0_9_1/docs/a2ui_protocol.md#L781-L816)
 
@@ -104,7 +83,7 @@ A2UI 稳定版已有动作事件，候选版又在扩展双向函数调用；不
 
 ## 对应用开发的取舍
 
-- 临时解释以读为主时，先把内容生成、加载失败、关闭和导出做好。自由 HTML 的灵活性伴随着脚本隔离、外部依赖和视觉验收成本；Pi 的实现可作为机制参考。
+- 如果界面用于解释概念或数据，例如拖动滑块观察复利变化，可以让页面直接重算图表。开发重点是图表正常显示、加载失败时提示原因，以及关闭窗口和保存结果。需要把用户选择交给 agent 继续处理时，再增加相应的消息通道。Pi 的显示实现可作为参考，使用自由 HTML 还需处理脚本隔离和外部依赖。
 - 对接多个支持 MCP Apps 的聊天宿主时，采用资源、消息和权限的公开规范，保留纯文本工具结果。服务端保管业务数据，宿主承担展示隔离和调用控制；适配成本取决于宿主支持范围，规范本身不提供统一数据存储。
 - 已有产品组件和明确业务操作时，把目录与校验放在应用端。A2UI 偏向可跨传输与渲染器的消息协议，json-render 偏向应用内的描述生成与渲染；两者都要求应用维护组件实现、状态持久化和动作权限，不能仅靠提示词完成这些工作。
 

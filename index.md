@@ -66,6 +66,7 @@
   - [[wiki/topics/architecture/sso|SSO]]
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
+  - [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：流式图形窗口与执行边界]]
   - [[wiki/topics/ai/agent|Agent]]
   - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]
   - [[wiki/topics/ai/ai-slop|AI Slop]]
@@ -215,6 +216,7 @@
 
 - 综合理解页放在 `wiki/syntheses/`
 - `ai`
+  - [[wiki/syntheses/ai/generative-ui-evolution|生成式 UI 的社区演进与工程边界]]
   - [[wiki/syntheses/ai/agent-driven-wiki-maintenance|Agent 驱动 Wiki 的维护流程]]
   - [[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]
   - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]

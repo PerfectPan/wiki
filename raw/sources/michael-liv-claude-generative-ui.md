@@ -25,7 +25,7 @@
 
 ## 固定源码位置
 
-以下链接均固定到 `d1abf2c`，已阅读相应实现，而非仅依据 README。
+以下链接均固定到 `d1abf2c`。
 
 | 核查对象 | 位置 | 观察 |
 | --- | --- | --- |
@@ -41,16 +41,23 @@
 | 运行时打包 | [build.mjs:28–54](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/build.mjs#L28-L54) | esbuild 打包页面代码，脚本内嵌到 HTML；此 shell 未声明 CSP |
 | 清理 | [index.ts:239–245](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/index.ts#L239-L245) | Pi session shutdown 时关闭仍管理的窗口 |
 
-## 测试与本次核查范围
+## 验证范围
 
 - 已阅读 `tests/session.test.ts`、`tests/integration.test.ts` 及 CI 配置；未安装或运行 Pi/Glimpse，未执行上游测试，未复现窗口启动耗时或视觉效果。
 - [CI 配置](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.github/workflows/test.yml#L9-L65) 覆盖三个系统与 Node 20/22，但 Linux/Windows 安装跳过 native build。不能写成所有原生窗口都已验收。
 - [集成测试入口](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/tests/integration.test.ts#L7-L15) 在原生二进制缺失且没有强制开关时跳过。这里记录测试的覆盖条件，不报告测试通过。
 - 未检查底层 Glimpse 的全部沙箱、网络或平台权限实现；“扩展 shell 未声明 CSP”的观察不延伸为“底层没有任何隔离”。
-- 原文经 Wiki CLI 直抓用于阅读。正文提取存在导航残留和破损 Markdown fence，因此本任务新建的最终 raw 记录只保留核查位置与结论边界，不提交整篇抓取正文或作者提取的设计提示词。
 
 ## RSS 来源核对
 
 2026-10-08 检查原文 HTML：`rel="alternate"`、`type="application/rss+xml"` 的链接与导航 RSS 链接均指向 [https://michaellivs.com/rss.xml](https://michaellivs.com/rss.xml)。该 URL 返回 HTTP 200，Content-Type 为 `application/xml`，channel title 为 `/dev/michael`，包含 41 个 item。
 
 目标文章的 item link/guid 为 `https://michaellivs.com/blog/reverse-engineering-claude-generative-ui/`，pubDate 为 `Fri, 13 Mar 2026 00:00:00 GMT`。rss-summary 的真实解析器通过 `feeds test --url ... --name '/dev/michael' --tags 'Articles,Blog'` 返回 41 items；此验证不发送摘要。
+
+## 工具接口与设计说明
+
+- [index.ts:14–36](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/index.ts#L14-L36)：ReadMeParams 只有必填 modules 数组；ShowWidgetParams 的必填字段为 i_have_seen_read_me、title、widget_code，width/height/floating 可选。没有 loading_messages，没有 minItems、正数范围或 snake_case 正则。
+- [index.ts:111–130](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/index.ts#L111-L130)：读取说明的模型提示与执行返回；content.text 直接使用 getGuidelines 的结果，details 记录模块。
+- [index.ts:146–217](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/index.ts#L146-L217)：显示工具的适用场景、前置调用说明、代码片段要求和当前返回结构。
+- [guidelines.ts:25–84](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/guidelines.ts#L25-L84) 与 [775–801](https://github.com/Michaelliv/pi-generative-ui/blob/d1abf2cb38fbf54c4b91d06677c700193d495887/.pi/extensions/generative-ui/guidelines.ts#L775-L801)：公共设计规则、五类模块和共享章节去重。
+- 原文 Part 1 报告 Claude show_widget 的四个字段，包含 1–4 条 loading_messages；Part 4 的记录使用 visualize:read_me。

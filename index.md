@@ -66,7 +66,7 @@
   - [[wiki/topics/architecture/sso|SSO]]
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
-  - [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：流式图形窗口与执行边界]]
+  - [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：read_me 与 show_widget 工具设计]]
   - [[wiki/topics/ai/agent|Agent]]
   - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]
   - [[wiki/topics/ai/ai-slop|AI Slop]]

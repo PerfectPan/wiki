@@ -29,21 +29,23 @@ resource:
 
 ## 当前理解
 
+Michael Liv 原文最值得复用的机制是：先通过 `read_me` 给模型提供按任务组织的设计说明，再通过 `show_widget` 接收生成的代码。两个工具的输入、返回和模块组成见 [[wiki/topics/ai/pi-generative-ui|read_me 与 show_widget 工具设计]]。
+
 生成式 UI（用户界面）已经从“生成一段能显示的 HTML”发展出多条工程路线：自由生成代码并放进受控运行环境；为工具界面统一宿主通信；把模型输出限制为应用认识的组件、数据和动作。它们解决不同问题，不能按一条替代关系排序。
 
-截至 2026-10-08，Michael Liv 的复现项目确有后续版本，社区也有持续发布的规范和实现。但 MCP Apps 在原文之前就已正式发布；A2UI 和 json-render 的发展也不能归因于这篇文章。下面把发布时间、版本状态和设计判断分开。[Pi 发布记录](https://github.com/Michaelliv/pi-generative-ui/releases/tag/v0.3.0)、[MCP Apps 发布公告](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/)、[A2UI 版本状态](https://a2ui.org/)、[json-render releases](https://github.com/vercel-labs/json-render/releases/tag/v0.21.0)
+截至 2026-10-08，Michael Liv 的复现项目确有后续版本，社区也有持续发布的规范和实现。但 MCP Apps 在原文之前就已正式发布；A2UI 和 json-render 的发展也不能归因于这篇文章。[Pi 发布记录](https://github.com/Michaelliv/pi-generative-ui/releases/tag/v0.3.0)、[MCP Apps 发布公告](https://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/)、[A2UI 版本状态](https://a2ui.org/)、[json-render releases](https://github.com/vercel-labs/json-render/releases/tag/v0.21.0)
 
-## 已核实的进展
+## 版本与进展
 
 | 对象 | 时间或快照 | 能确认的变化 |
 | --- | --- | --- |
 | Claude 自生成视觉内容 | 2026-03-12 发布；公告补记 2026-04-22 加入 Cowork | 在对话中生成和修改图表。帮助文档还列出复制图片、下载 HTML/SVG、保存为 artifact 等保留方式；默认临时内容与持久产物仍有区别 |
 | pi-generative-ui | 原文 2026-03-13；最新公开 release `v0.3.0`，2026-06-03 | 运行时拆分、跨平台、SVG 导出、外部脚本顺序加载；取消交互结果返回 agent，保留窗口内交互 |
 | MCP Apps | 2026-01-26 规范列为 Stable；SDK 最新 release `v2.0.3`，2026-09-25 | 工具关联 `ui://` 资源，宿主通过 iframe 与消息协议承载界面。SDK 的 2.x 版本不能写成协议已发布“v2” |
-| A2UI | 核查时官网列 `v0.9.1` 为 Current，`v1.0` 为 Candidate；源码固定 `db43065` | `v0.9.1` 统一 MIME 类型并调整 surface ID 使用规则。`v1.0` 候选源码继续发展双向函数调用与组件目录组合，不能当成稳定接口 |
+| A2UI | 官网列 `v0.9.1` 为 Current，`v1.0` 为 Candidate；源码固定 `db43065` | `v0.9.1` 统一 MIME 类型并调整 surface ID 使用规则。`v1.0` 候选源码继续发展双向函数调用与组件目录组合，不能当成稳定接口 |
 | json-render | 最新公开 release `v0.21.0`，2026-09-18；源码固定 `3ad3818` | 用 catalog 定义可用组件和动作，JSON 补丁流逐步构建界面；该版继续修复 React 流式渲染，并新增 TanStack Start renderer |
 
-表中依据：[Claude 公告](https://claude.com/resources/articles/claude-builds-visuals)、[视觉内容帮助文档](https://support.claude.com/en/articles/13979539-custom-visuals-in-chat-and-cowork)、[Pi release](https://github.com/Michaelliv/pi-generative-ui/releases/tag/v0.3.0)、[MCP Apps release](https://github.com/modelcontextprotocol/ext-apps/releases/tag/v2.0.3)、[A2UI v1.0 状态](https://github.com/a2ui-project/a2ui/blob/db4306536438df46e4f0443b9c4ec0d5f1a42dc4/specification/v1_0/README.md#L1-L7)、[json-render release](https://github.com/vercel-labs/json-render/releases/tag/v0.21.0)。日期表示公告或发布，不代表本次在产品账号中的验收时间。
+表中依据：[Claude 公告](https://claude.com/resources/articles/claude-builds-visuals)、[视觉内容帮助文档](https://support.claude.com/en/articles/13979539-custom-visuals-in-chat-and-cowork)、[Pi release](https://github.com/Michaelliv/pi-generative-ui/releases/tag/v0.3.0)、[MCP Apps release](https://github.com/modelcontextprotocol/ext-apps/releases/tag/v2.0.3)、[A2UI v1.0 状态](https://github.com/a2ui-project/a2ui/blob/db4306536438df46e4f0443b9c4ec0d5f1a42dc4/specification/v1_0/README.md#L1-L7)、[json-render release](https://github.com/vercel-labs/json-render/releases/tag/v0.21.0)。
 
 ## 从一张可调参数的图表看工程问题
 
@@ -65,7 +67,7 @@ Pi 的 DOM 差异更新解决“内容逐步出现且少闪烁”；MCP Apps 则
 
 MCP Apps 由工具服务声明 HTML 资源，宿主读取它，在隔离的 iframe 中渲染，并用 JSON-RPC 消息交换数据。规范还允许发送 `tool-input-partial` 展示进度，但明确禁止依靠部分参数执行关键操作。规范开放不意味着每个宿主都支持所有能力，仍要做能力协商和宿主适配。[资源与权限定义](https://github.com/modelcontextprotocol/ext-apps/blob/82221c0c8ce7661efa6771c9d461511b1650495f/specification/2026-01-26/apps.mdx#L263-L286)、[部分参数通知](https://github.com/modelcontextprotocol/ext-apps/blob/82221c0c8ce7661efa6771c9d461511b1650495f/specification/2026-01-26/apps.mdx#L1120-L1142)
 
-下面只比较有公开证据的执行位置与限制。它不是 Claude 私有实现图，也不表示三者使用同一消息格式。
+三条路线的执行位置和消息通道如下：
 
 ```mermaid
 flowchart TB
@@ -106,11 +108,11 @@ A2UI 稳定版已有动作事件，候选版又在扩展双向函数调用；不
 - 对接多个支持 MCP Apps 的聊天宿主时，采用资源、消息和权限的公开规范，保留纯文本工具结果。服务端保管业务数据，宿主承担展示隔离和调用控制；适配成本取决于宿主支持范围，规范本身不提供统一数据存储。
 - 已有产品组件和明确业务操作时，把目录与校验放在应用端。A2UI 偏向可跨传输与渲染器的消息协议，json-render 偏向应用内的描述生成与渲染；两者都要求应用维护组件实现、状态持久化和动作权限，不能仅靠提示词完成这些工作。
 
-以上是基于已读机制的设计判断，不是性能、成本或成功率跑分。各路线的模型生成费用取决于具体模型和输出量，不能由框架功能表推出哪一种更便宜。协议版本和组件实现带来的迁移成本，也不能仅用“开源”一词消除。
+模型生成费用取决于具体模型和输出量，迁移成本取决于协议版本、组件实现与宿主集成。这些取舍需要结合应用需求判断。
 
 ## 相关页面
 
-- [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：流式图形窗口与执行边界]]
+- [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：read_me 与 show_widget 工具设计]]
 - [[wiki/topics/ai/mcp|MCP]]
 - [[wiki/syntheses/frontend/same-origin-iframe-sandbox-design|同源 iframe 沙箱设计]]
 - [[wiki/syntheses/frontend/interactive-ui-accessibility-baseline|交互式 UI 的可访问性基线]]

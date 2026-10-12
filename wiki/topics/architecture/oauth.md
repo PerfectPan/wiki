@@ -156,10 +156,16 @@ GitHub CLI（`gh`）、AWS CLI、Vercel CLI 等官方第一方工具访问自研
 
 #### Web 登录态收敛（Cookie/Session）vs CLI 直接持有 Token
 
-这一差异解释了为什么 Web 应用与命令行工具在 OAuth 落地形态上截然不同：
+这一差异解释了为什么 Web 应用与命令行工具在 OAuth 落地形态上截然不同，并揭示了 Web 为何坚决避免前端直接轮询持有外部 Token：
 
-- **第一方 Web 场景（SSO 登录态收敛）**：在拥有业务后端的典型 Web 应用中，浏览器天然具备受保护的 Cookie 容器。用户在统一认证中心（如飞书、Okta）完成授权后，重定向回调直接抵达业务后端；后端使用 `code` 向认证中心换取 Access Token 并提取用户信息后，**随即收敛为业务系统自身的原生登录态（向浏览器植入自有的 Session ID Cookie）**。前端浏览器与业务后端始终基于第一方 Session 通信，OAuth 仅作为外部身份提供商（IdP），浏览器本身无感知且无需存储外部 Access Token；
-- **终端 CLI / 桌面工具场景**：CLI 缺乏业务后端代持凭据，亦无浏览器的自动 Cookie 管理容器。CLI 程序身兼调用方与执行宿主，因此必须通过设备码（Device Flow）将 Access Token 领回本地，并依赖系统级安全存储（钥匙串或受限文件）自行管理令牌的持久化与刷新。
+- **第一方 Web 场景（SSO 登录态收敛与 XSS 隔离）**：
+  在拥有自建后端的 Web 应用中，如果让前端 JavaScript 直接持有外部 Access Token 并存入 `localStorage`，页面将完全暴露在 XSS（跨站脚本注入）或第三方 npm 依赖投毒的致命风险下（恶意脚本可轻易窃取存储的明文 Token）。
+  因此 Web 标准架构强制要求：用户授权后回调重定向至业务后端；后端使用 `code` 向认证中心换取 Access Token 并提取用户信息后，**随即收敛为业务系统自身的原生登录态（向浏览器植入带有 `HttpOnly; Secure; SameSite` 标志的 Session ID Cookie）**。前端脚本物理上无法读取 `HttpOnly` Cookie，构筑起抵御 XSS 窃据的安全防火墙。前端浏览器与业务后端始终基于第一方 Session 通信，OAuth 仅作为外部身份提供商（IdP），浏览器本身无感知且无需存储外部 Access Token；
+- **同设备 302 重定向 vs 跨设备扫码轮询的本质差异**：
+  * **同设备秒级回路**：在同浏览器中，302 重定向利用浏览器底层原生网络栈秒级无缝完成跳转与授权确认，无需用户跨设备操作，且完全消除无谓的高并发 HTTP 空轮询开销；
+  * **电脑端扫码登录的轮询本质**：飞书/微信电脑网页端扫码登录虽然前端在轮询，但这属于**跨设备（Cross-device）交互**——电脑屏幕无法自扫，必须由手机 App 充当物理生物识别（指纹/人脸）设备。前端轮询换回的仅是临时登录票据（Ticket），业务后端验证后依然立即收敛为第一方的 `HttpOnly` Cookie，外部平台的 Access Token 绝不在前端裸奔；
+- **终端 CLI / 桌面工具场景**：
+  CLI 缺乏独立业务后端为其代持凭据，亦无浏览器的自动 Cookie 管理容器。CLI 程序身兼调用方与执行宿主，因此必须通过设备码（Device Flow）将 Access Token 领回本地，并依赖操作系统级安全存储（macOS Keychain 或受限文件）自行管理令牌的持久化与刷新。
 
 针对非个人交互型客户端、需要在后台无人类干预常驻运行的计算节点（如 Agent、CI Runner、Kubernetes 节点），则进一步演进为独立的机器资产开户自举范式，详见 [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]。
 

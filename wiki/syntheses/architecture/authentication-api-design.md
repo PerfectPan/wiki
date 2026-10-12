@@ -4,8 +4,8 @@ description: 对照 Session、单 JWT 与双 Token，定义登录、请求认证
 type: synthesis
 category: architecture
 created: 2026-09-27
-updated: 2026-09-27
-timestamp: 2026-09-27
+updated: 2026-10-12
+timestamp: 2026-10-12
 tags:
   - auth
   - jwt
@@ -36,6 +36,14 @@ resource:
 同样是登录接口，Session、单 JWT 和 AT + RT 在服务端保存的状态、续期依据和退出效果不同。本页逐一设计这些接口，不要求每种方案都实现全部端点。
 
 这是**自有同源 Web 应用的设计示例**，不是运行中的服务。路径、JSON、错误码和期限是应用选择，不是 OAuth 标准要求。注册、密码找回、MFA 与第三方登录先完成身份验证，再按所选方案创建登录态；它们自身的验证流程不在本页展开。App、CLI 或跨站部署需要调整凭证传输和存储，不能直接照搬浏览器 Cookie 设置。
+
+### 第三方身份向第一方登录态收敛的设计准则
+
+在实际工程中，无论 Web 系统接入了飞书、微信、Google 还是 GitHub 等第三方 OAuth/OIDC 认证源，均应遵循**“外部凭据仅在后端交接，前端始终收敛为自研业务第一方会话”**的设计原则：
+
+1. **防御 XSS 凭据窃取**：前端 JavaScript 缺乏受操作系统内核保护的安全钥匙串，若让前端直接持有长效 Access Token 并存储在 `localStorage`，页面将完全暴露在 XSS（跨站脚本注入）或第三方依赖投毒的致命风险下；而服务端签发的 `HttpOnly; Secure; SameSite` Cookie 在浏览器内核层面阻断了前端脚本读取，构筑起底层安全隔离墙；
+2. **一方业务边界纯粹性**：业务系统内部的 API 交互与租户鉴权必须完全基于自研服务的一方身份（自有 Session ID 或业务 JWT）流转，外部第三方平台的 Access Token 仅在后端作为外部数据代理凭据使用，严禁穿透至前端或污染自有业务调用链；
+3. **与无头客户端（CLI）的架构分流**：缺乏独立业务服务代持凭据、亦无浏览器 Cookie 容器的无头 CLI / 桌面工具（如 `lark-cli`），则直接通过设备码流程（RFC 8628）获取 Token 并由操作系统钥匙串加密持久化，两类客户端按运行宿主环境遵循不同的凭据架构，详见 [[wiki/topics/architecture/oauth|OAuth]] 与 [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]。
 
 ## 三种方案的整体流程
 

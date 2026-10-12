@@ -66,6 +66,9 @@
   - [[wiki/topics/architecture/sso|SSO]]
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
+  - [[wiki/topics/ai/botmux|Botmux：在飞书中使用本地 Coding CLI]]
+  - [[wiki/topics/ai/botmux-session-runtime|Botmux 会话运行时]]
+  - [[wiki/topics/ai/botmux-team-federation|Botmux 团队联邦与身份鉴权]]
   - [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：read_me 与 show_widget 工具设计]]
   - [[wiki/topics/ai/agent|Agent]]
   - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]
@@ -246,6 +249,7 @@
   - [[wiki/syntheses/ai/Plan Mode：如何规划，以及哪些决定需要人参与|Plan Mode：如何规划，以及哪些决定需要人参与]]
   - [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - `architecture`
+  - [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
   - [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]
   - [[wiki/syntheses/architecture/ddd-implementation-approaches|DDD 的实现方式与取舍]]

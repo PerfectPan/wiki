@@ -112,11 +112,12 @@ sequenceDiagram
   Note over D,A: 设备开始在后台按 interval 轮询 POST /token
   U->>A: 用户在手机或电脑浏览器打开 verification_uri，输入 user_code
   U->>A: 用户完成身份验证并确认授权
-  D->>A: 轮询请求: POST /token (grant_type=device_code, device_code)
+  D->>A: 轮询请求: POST /token (grant_type=device_code, device_code, client_id)
   A-->>D: 签发 access_token (+ refresh_token)
 ```
 
 要点：
+- 轮询请求必须携带 `client_id`（公开客户端）或完成客户端认证（机密客户端），授权服务器据此校验 `device_code` 是否归属于发起申请的同一应用，防止其他非法应用冒领令牌（RFC 8628 §3.4）；
 - 设备在后台以 `interval`（通常为 5 秒）轮询，未确认前服务器返回 `authorization_pending` 错误码；
 - 轮询过快返回 `slow_down`，设备必须增加等待间隔；
 - `user_code` 采用适合人类短时记忆和输入的字符集（通常 8 位，去除了容易混淆的 `0/O`、`1/I` 等字符）。

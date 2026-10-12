@@ -147,6 +147,20 @@ GitHub CLI（`gh`）、AWS CLI、Vercel CLI 等官方第一方工具访问自研
 3. **支持控制台一键独立吊销（Revocation Kill-Switch）**：所有已授权的 CLI 终端均列在用户的应用管理列表中。一旦某台开发机丢失或失控，用户可在网页端单独吊销该终端的访问令牌，无需重置人类主账号密码；
 4. **跨私有化实例通用适配**：标准 OAuth 抽象使得同一套 CLI 二进制能够无缝连接公有云服务与企业私有化部署实例（如 GitHub Enterprise Server），底层认证协议完全统一。
 
+#### 企业级 CLI 的双身份模型：以飞书 lark-cli 为例
+
+在现代企业协作生态中，官方工具（如 `lark-cli`）进一步演进出 **Bot 身份（机器凭证）与 User 身份（人类凭证）并存的双身份架构**：
+
+- **Bot 身份（自动化底座）**：通过在本地初始化配置企业自建应用的 `appId`（即 `client_id`）与 `appSecret`，CLI 可直接向开放平台申请 `tenant_access_token`，代表机器人身份执行通用业务调用（如发送群卡片、监听 Webhook、执行自动化构建）；
+- **User 身份（敏感个人资产操作）**：当 CLI 需要代用户读写私人日程、个人云文档或待办清单时，企业风控机制严格禁止机器人在无人类确认的情况下越权探测。CLI 随即触发 `lark-cli auth login` 唤起 RFC 8628 设备码流程，由员工在手机飞书上扫码完成带外显式授权，获取 `user_access_token` 并加密持久化至本地安全钥匙串（macOS Keychain），实现人机权能的精准隔离。
+
+#### Web 登录态收敛（Cookie/Session）vs CLI 直接持有 Token
+
+这一差异解释了为什么 Web 应用与命令行工具在 OAuth 落地形态上截然不同：
+
+- **第一方 Web 场景（SSO 登录态收敛）**：在拥有业务后端的典型 Web 应用中，浏览器天然具备受保护的 Cookie 容器。用户在统一认证中心（如飞书、Okta）完成授权后，重定向回调直接抵达业务后端；后端使用 `code` 向认证中心换取 Access Token 并提取用户信息后，**随即收敛为业务系统自身的原生登录态（向浏览器植入自有的 Session ID Cookie）**。前端浏览器与业务后端始终基于第一方 Session 通信，OAuth 仅作为外部身份提供商（IdP），浏览器本身无感知且无需存储外部 Access Token；
+- **终端 CLI / 桌面工具场景**：CLI 缺乏业务后端代持凭据，亦无浏览器的自动 Cookie 管理容器。CLI 程序身兼调用方与执行宿主，因此必须通过设备码（Device Flow）将 Access Token 领回本地，并依赖系统级安全存储（钥匙串或受限文件）自行管理令牌的持久化与刷新。
+
 针对非个人交互型客户端、需要在后台无人类干预常驻运行的计算节点（如 Agent、CI Runner、Kubernetes 节点），则进一步演进为独立的机器资产开户自举范式，详见 [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]。
 
 ## access_token 的三种实现

@@ -98,6 +98,7 @@ sequenceDiagram
 | **Kubernetes Worker 节点** | Master 节点生成的 24 小时 `Bootstrap Token` | `kubeadm join --token <token>` | 签署正式节点客户端证书并保存于 `kubelet.conf` | 与 API Server 维持持久管理流 |
 | **AWS Systems Manager** | AWS 控制台生成的 `Activation Code + ID` | `amazon-ssm-agent -register` | 写入本地持久化的 IAM 实例凭证 | 与 AWS 消息通道维持控制长连接，支持网页终端直连 |
 | **Tailscale 节点组网** | 网页控制台生成的 `Pre-Auth Key` | `tailscale up --authkey <key>` | 本地安全状态存储专有 `Node Key` | 建立虚拟私网 WireGuard 隧道与 DERP 中继连接 |
+| **飞书 lark-cli 工具** | 终端展示二维码与 8 位设备码（RFC 8628） | 手机飞书扫码显式授权（`lark-cli auth login`） | 本地钥匙串加密持久化 `user_access_token` | 与开放平台交互，Bot 机器凭证与 User 人类凭证双身份分层 |
 
 ## 远程控制与流量倒灌的实现机制
 

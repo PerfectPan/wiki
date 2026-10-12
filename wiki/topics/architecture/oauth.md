@@ -97,16 +97,40 @@ sequenceDiagram
 
 RFC 9700（OAuth 2.0 安全最佳实践）已明确弃用隐式模式，推荐所有场景统一采用授权码流程。
 
-### 设备码流程
+### 设备码流程（RFC 8628）
 
-设备先向授权服务器申请 `device_code` 和一个短的 `user_code`，把 `user_code` 和验证网址展示给用户；用户在手机或电脑浏览器上打开网址、输入 `user_code` 并同意；设备在后台按 `interval` 轮询 token 接口，直到拿到 token 或 `device_code` 过期。设备本身不需要接收回调。
+用于无法直接运行浏览器或接收本地 HTTP 回调的客户端（如智能电视、机房 SSH 终端、路由器等）：
+
+```mermaid
+sequenceDiagram
+  participant D as 设备 / CLI (无浏览器)
+  participant A as 授权服务器
+  participant U as 用户外部浏览器
+  D->>A: POST /device/code (client_id, scope)
+  A-->>D: device_code, user_code (如 9A2B-3C4D), verification_uri, interval
+  D->>D: 在终端/屏幕展示 user_code 与验证网址
+  Note over D,A: 设备开始在后台按 interval 轮询 POST /token
+  U->>A: 用户在手机或电脑浏览器打开 verification_uri，输入 user_code
+  U->>A: 用户完成身份验证并确认授权
+  D->>A: 轮询请求: POST /token (grant_type=device_code, device_code)
+  A-->>D: 签发 access_token (+ refresh_token)
+```
+
+要点：
+- 设备在后台以 `interval`（通常为 5 秒）轮询，未确认前服务器返回 `authorization_pending` 错误码；
+- 轮询过快返回 `slow_down`，设备必须增加等待间隔；
+- `user_code` 采用适合人类短时记忆和输入的字符集（通常 8 位，去除了容易混淆的 `0/O`、`1/I` 等字符）。
 
 ### 命令行（CLI）与无头环境的授权演进
 
-现代命令行工具与无头设备为了避免在终端中保存人类主账号密码，主要收敛为两种无密授权模式：
+历史早期工具（如旧版 `git`、旧版 `docker login`）曾在终端中直接要求输入用户名与主账号密码，但该做法在现代安全工程中已被彻底弃用：一方面主密码容易残留在终端历史（`~/.bash_history`）、控制台输出或进程环境中，扩大了泄露面；另一方面现代企业普遍接入了 SSO、企业微信/飞书扫码与多因素认证（2FA/MFA），纯黑框终端无法交互式处理复杂的现代认证流程。
+
+现代命令行工具收敛为两种无密授权架构：
 
 - **桌面环境（本地回环 Web Flow）**：如 GitHub CLI（`gh auth login`）在具备图形界面的开发机上运行时，先在本地监听临时回环端口（如 `http://127.0.0.1:<port>/callback`），调起系统默认浏览器打开授权页；用户点击授权后，浏览器直接重定向至本地回环端口自动完成 code 交接与令牌兑换，全程无需用户手动输入代码；
 - **无头/远程环境（设备码 Device Flow）**：在通过 SSH 远程连接的服务器、Docker 容器或无界面设备中，因无法接收本地浏览器重定向，程序自动退回设备码流程（RFC 8628），在终端打印短码并引导用户在外部浏览器中完成带外确认。
+
+针对非个人交互型客户端、需要在后台无人类干预常驻运行的计算节点（如 Agent、CI Runner、Kubernetes 节点），则进一步演进为独立的机器资产开户自举范式，详见 [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]。
 
 ## access_token 的三种实现
 

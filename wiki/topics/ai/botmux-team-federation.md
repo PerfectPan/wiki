@@ -60,6 +60,21 @@ Botmux 的跨部署组队让多台机器上的独立飞书机器人发现队友�
 
 在传统联邦中，每个团队由发起者的 Hub 节点集中管理，不同团队可由不同部署托管，且单个部署支持加入多个 Hub。中心平台模式则将名册与组群的权威管理收拢至独立服务，开发机通过长连接获取最新团队视图。两种路线的团队关系均映射至本地团队信任表进行鉴权。[Hub 存储][federation-store]、[多 Hub membership][membership]、[平台信任表][platform-store]
 
+### 三种部署形态的鉴权哲学对比
+
+Botmux 在不同演进阶段支持三种完全不同的鉴权范式，体现了从单机本地权限向云端解耦代理的演进路径：
+
+| 维度 | 单机纯本地 (Local Standalone) | 传统联邦 (Hub/Spoke Federation) | 中心化平台 (Central Platform) |
+| :--- | :--- | :--- | :--- |
+| **信任根源** | 本地操作系统的文件与进程权限 | 两台开发机本地生成的共享随机密钥 (PSK) | 云端平台权威认证与用户目录服务 |
+| **凭据存储** | `~/.botmux/dashboard-token` (0700权限) | 本地 `deployments.json` 与 `membership.json` | 本地存储 `machineToken`，平台管理用户态 |
+| **人类登录方式** | 终端运行 `botmux dashboard` 吐出带 `?t=` 魔法链接 | 访问本地 Dashboard，同单机模式 | 在中心平台网页登录（SSO/飞书扫码），由平台反向代理 |
+| **机器通信凭据** | 无网络外部通信 | `inviteCode` + `syncToken` + `delegationToken` | `machineToken`（仅用于出站双向长连接隧道） |
+| **本地账号体系** | **无账号**（认本地文件密钥即 owner） | **无账号**（完全基于点对点对称密钥比对） | **无账号**（开发机直接消费平台代理注入的 Header 角色断言） |
+| **核心设计取舍** | 极简单机使用，零外部网络与数据库依赖 | 局域网/私网点对点自治，不依赖中心化服务器 | 人机解耦、支持穿透 NAT 远程访问、支持集中资产审计 |
+
+更广泛的分布式系统节点置备与凭据自举模型，参见 [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]。
+
 ### 部署与网络方向
 
 ```mermaid

@@ -249,6 +249,7 @@
   - [[wiki/syntheses/ai/Plan Mode：如何规划，以及哪些决定需要人参与|Plan Mode：如何规划，以及哪些决定需要人参与]]
   - [[wiki/syntheses/ai/lody-acp-extension|Lody 在 ACP 之上的协议扩展]]
 - `architecture`
+  - [[wiki/syntheses/architecture/machine-identity-and-agent-provisioning|机器身份与 Agent 节点自举授权范式]]
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
   - [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]
   - [[wiki/syntheses/architecture/ddd-implementation-approaches|DDD 的实现方式与取舍]]

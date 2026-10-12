@@ -4,8 +4,8 @@ description: OAuth 2.0 的角色、授权方式（授权码 + PKCE、客户端�
 type: topic
 category: architecture
 created: 2026-04-12
-updated: 2026-09-26
-timestamp: 2026-09-26
+updated: 2026-10-12
+timestamp: 2026-10-12
 tags:
   - oauth
   - auth
@@ -88,9 +88,25 @@ sequenceDiagram
 - `state` 用来确认回调是自己发起的，防止伪造的回调（CSRF）。
 - PKCE（RFC 7636）：客户端先生成随机的 `code_verifier`，授权请求里带它的哈希 `code_challenge`，换 token 时带原值。即使 `code` 被截获，没有 `code_verifier` 也换不到 token。原本为没有 secret 的公开客户端（App、SPA）设计。RFC 9700 规定公开客户端必须用，机密客户端推荐用。
 
+### 为什么必须使用授权码（code）换取令牌？
+
+如果不通过中间的短期授权码，而是在用户同意后直接把长效 `access_token` 放在重定向 URL 中返回（即早期 OAuth 2.0 的隐式模式 Implicit Flow）：
+
+1. **前端传输暴露面过大**：重定向 URL 中的长效令牌会完整暴露在浏览器地址栏、写入系统浏览历史，并可能随外链跳转通过 HTTP `Referer` 头或前端第三方脚本泄露给不受信方；
+2. **缺乏客户端身份核验**：直接在前端发 token 无法验证接收方的真实身份。通过授权码流程，真正的令牌仅在应用后端与授权服务器之间的安全信道（Server-to-Server）中兑换，结合机密客户端的 `client_secret` 或公开客户端的 PKCE（`code_verifier`），能够有效防御令牌被仿冒客户端窃取。
+
+RFC 9700（OAuth 2.0 安全最佳实践）已明确弃用隐式模式，推荐所有场景统一采用授权码流程。
+
 ### 设备码流程
 
 设备先向授权服务器申请 `device_code` 和一个短的 `user_code`，把 `user_code` 和验证网址展示给用户；用户在手机或电脑浏览器上打开网址、输入 `user_code` 并同意；设备在后台按 `interval` 轮询 token 接口，直到拿到 token 或 `device_code` 过期。设备本身不需要接收回调。
+
+### 命令行（CLI）与无头环境的授权演进
+
+现代命令行工具与无头设备为了避免在终端中保存人类主账号密码，主要收敛为两种无密授权模式：
+
+- **桌面环境（本地回环 Web Flow）**：如 GitHub CLI（`gh auth login`）在具备图形界面的开发机上运行时，先在本地监听临时回环端口（如 `http://127.0.0.1:<port>/callback`），调起系统默认浏览器打开授权页；用户点击授权后，浏览器直接重定向至本地回环端口自动完成 code 交接与令牌兑换，全程无需用户手动输入代码；
+- **无头/远程环境（设备码 Device Flow）**：在通过 SSH 远程连接的服务器、Docker 容器或无界面设备中，因无法接收本地浏览器重定向，程序自动退回设备码流程（RFC 8628），在终端打印短码并引导用户在外部浏览器中完成带外确认。
 
 ## access_token 的三种实现
 

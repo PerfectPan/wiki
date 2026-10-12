@@ -115,20 +115,20 @@ sequenceDiagram
   Note over U,S: 通过可信渠道交付 Hub 地址和邀请码
   S->>S: 生成 delegationToken
   S->>H: join：邀请码、机器人清单、callback、delegationToken
-  H->>H: 消费邀请码，生成 syncToken，保存 deployment
+  H->>H: 消费邀请码，生成 syncToken，保存 Spoke 节点记录
   H-->>S: teamId、syncToken
-  S->>S: 保存 membership 和两份 token
-  S->>H: sync / roster / group：syncToken
-  H->>H: 精确匹配已保存 deployment token
-  H->>S: 反向委托：delegationToken
-  S->>S: 精确匹配已保存 membership token
+  S->>S: 保存 membership 与两份 token
+  S->>H: 日常状态同步 / 查询名册 / 申请建群 (携带 syncToken)
+  H->>H: 核对已保存的 Spoke 节点 syncToken
+  H->>S: 反向委托建群 / 补齐负责人 (携带 delegationToken)
+  S->>S: 核对已保存的 membership delegationToken
 ```
 
-联邦信任机制基于本地存储的共享随机密钥（Shared Secret）：
+传统联邦完全不依赖任何外部中心平台或用户账号体系，交互围绕本地生成的三类共享随机密钥（Shared Secret）展开：
 
-- **邀请码**：Hub 生成的随机字符串，默认单次消费且 24 小时内有效，用于 Spoke 首次入队兑换接入凭据；[邀请码][invite]
-- **`syncToken`**：Hub 在 Spoke 成功入队后签发的 24 字节随机 secret，Spoke 后续同步状态、拉取名册与看板时提交，Hub 比对本地持久化记录完成鉴权；[syncToken][federation-store]
-- **`delegationToken`**：Spoke 入队时生成的反向授权 secret，Hub 在触发反向建群或补充负责人时作为 Bearer 凭据向 Spoke 回调提交，Spoke 比对本地 membership 记录予以授权。[反向 token 匹配][membership]
+- **邀请码 (`inviteCode`) —— 一次性入场券**：Hub 本地生成的随机字符串（默认单次消费且 24 小时有效），仅供 Spoke 首次加入团队时兑换身份；[邀请码][invite]
+- **同步令牌 (`syncToken`) —— 访问 Hub 的长期身份证**：Hub 在 Spoke 成功入队后签发的 24 字节随机 secret；Spoke 后续定期向 Hub 报心跳（`/sync`）、拉取团队名册（`/roster`）以及发起组群（`/group`）时均在请求头中携带此令牌，Hub 比对本地持久化记录完成鉴权；[syncToken][federation-store]
+- **反向委托令牌 (`delegationToken`) —— 反向调用的授权凭证**：Spoke 入队时本地生成的反向密钥；当 Hub 需要反向要求 Spoke 调用本地机器人创建飞书群或补齐负责人时，Hub 向 Spoke 回调出示此令牌，Spoke 比对本地 membership 记录予以授权。[反向 token 匹配][membership]
 
 接口调用使用 HTTP `Authorization: Bearer <secret>` 传递凭证，鉴权机制为本地精确字符串比对。相关架构概念见 [[wiki/topics/architecture/oauth|OAuth]] 和 [[wiki/topics/architecture/jwt|JWT]]。
 
@@ -208,6 +208,12 @@ sequenceDiagram
 4. 后续本机以 Bearer `machineToken` 请求 `/v1/machine/*` 接口，并在控制与数据隧道连接建立时透传该凭证。[绑定请求与响应][bind]、[绑定字段][binding]
 
 因此机器凭证来自平台绑定接口的签发结果。平台服务端的具体鉴权算法、证书体系与撤销逻辑需依据平台具体实现确定。[机器请求][machine-call]、[隧道 token 透传][tunnel-connect]
+
+这一流程体现了分布式系统中标准的**节点开户自举范式（Machine Provisioning & Enrollment Pattern）**：
+
+- **人机身份与生命周期解耦**：人类在网页端完成企业 SSO 登录，仅充当该机器资产入网的“授权担保人”；开户完成后，开发机持有专属的 `machineToken` 独立长驻运行。即便人类离职或修改主账号密码，这台机器作为团队资产依然正常运行，避免了直接依赖人类个人 Access Token 导致的连带停摆；
+- **设备指纹绑定与最小权限**：开户请求强制上报本地生成的 `machineId`，平台将机器令牌与具体物理/虚拟机实例绑定；`machineToken` 仅具备隧道连接与团队状态同步的最小权限，防止人类主账号的全局权限扩散至执行机环境；
+- **避免长期密钥流经人类剪贴板**：人类剪贴板仅流转几分钟即作废的一次性临时 code，真正的长效凭证由平台在 HTTP 响应中直接写入开发机的本地配置文件，降低了长期密码被随意粘入聊天软件或记事本的泄露风险。
 
 ### 公开客户端能证明的接口边界
 

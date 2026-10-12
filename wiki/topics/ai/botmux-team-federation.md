@@ -24,7 +24,6 @@ source_refs:
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/platform/bind.ts
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard/request-identity.ts
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/im/lark/event-dispatcher.ts
-  - https://github.com/deepcoldy/botmux/pull/1259
 resource:
   - raw/sources/botmux.md
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard/federation-api.ts
@@ -37,7 +36,6 @@ resource:
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/platform/bind.ts
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard/request-identity.ts
   - https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/im/lark/event-dispatcher.ts
-  - https://github.com/deepcoldy/botmux/pull/1259
 ---
 # Botmux 团队联邦与平台鉴权
 
@@ -193,7 +191,7 @@ sequenceDiagram
 
 ## 平台绑定、机器认证与人的登录
 
-公开 `botmux` 不把平台后端打入包内。隧道仅在存在本机绑定时启动，未绑定不阻塞本机机器人运行。依赖列表没有 `@botmux/platform`，客户端通过 HTTP 和 WebSocket 接入。公开 PR #1259 也把平台侧变更指向独立非公开后端。这证明该后端不在这份公开主仓，不证明它以后永远不开源。[包依赖][package]、[可选隧道][optional-tunnel]、[公开 PR][platform-pr]
+公开主仓中的平台集成是可选客户端：隧道仅在存在本机绑定时启动，未绑定不阻塞本机机器人运行。客户端通过 HTTP 和 WebSocket 调用配置的平台地址。本文只描述公开代码中的接口与本机行为，不推定平台服务端的具体实现。[可选隧道][optional-tunnel]、[绑定实现][bind]、[团队接口][machine-client]
 
 ### 绑定材料不是 machineToken
 
@@ -256,7 +254,7 @@ sequenceDiagram
 ## 来源指针
 
 - [[raw/sources/botmux]]：来源版本、历史问题与核查记录。
-- 下列源码链接均固定到本文提交；PR 只用于确认公开描述的后端边界，不替代执行代码。
+- 下列源码链接均固定到本文提交。
 
 [multi-bot]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/docs-site/docs/zh/multi-bot.mdx#L13-L50
 [dashboard-token]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/docs-site/docs/zh/dashboard.md#L13-L29
@@ -285,7 +283,6 @@ sequenceDiagram
 [permissions]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/im/lark/event-dispatcher.ts#L1964-L2206
 [leave]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard/federation-spoke-api.ts#L704-L725
 [delegate]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard/federation-api.ts#L319-L468
-[package]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/package.json#L73-L116
 [optional-tunnel]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard.ts#L8644-L8669
 [bind]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/platform/bind.ts#L18-L123
 [binding]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/platform/binding.ts#L11-L88
@@ -301,4 +298,3 @@ sequenceDiagram
 [login-url]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/core/dashboard-url.ts#L310-L337
 [request-identity]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard/request-identity.ts#L169-L258
 [oauth-callback]: https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/dashboard.ts#L3907-L3944
-[platform-pr]: https://github.com/deepcoldy/botmux/pull/1259

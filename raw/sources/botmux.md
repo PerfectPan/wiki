@@ -107,3 +107,16 @@
 - 没有读取 Botmux 个人配置、账号凭据或运行中的会话数据库；没有验证跨机故障恢复、安全攻击或真实平台登录。
 - 未重新查询 npm dist-tag 或当前 GitHub latest。公开客户端能证明的接口与不能证明的平台服务端实现分开说明。
 - Wiki 的格式检查、链接检查、提交签名与 CI 属于本次交付验证，记录在 PR，不作为 Botmux 功能测试结果。
+
+## 配图来源与核对
+
+以下四张图来自 2026-10-10 讨论期间生成并保留的图片。本机会话与团队协作图原样收录；完整架构图修正 Session key 标注，Web Terminal 图修正远程入口的引用，其余内容沿用原图。图像用于说明上方公开源码快照的组件关系，不作为独立技术证据；生成提示词与画风对比不收录。
+
+| 图片 | 正文位置 | 本次核对范围 |
+| --- | --- | --- |
+| [完整架构](../assets/botmux-full-architecture-corrected.png) | Botmux 总览 | 团队目录与消息通道分离，Worker / tmux 进程边界，Session 与 transcript 分离，两条回复路径 |
+| [本机会话](../assets/botmux-session-runtime.png) | 会话运行时 | Adapter / Backend 职责，终端输出与原生历史分离，Worker 换代与 CLI 重接 |
+| [团队协作](../assets/botmux-team-collaboration.png) | 团队联邦 | 目录同步和飞书任务方向，部署之间不共享模型上下文与工作目录 |
+| [Web Terminal](../assets/botmux-web-terminal-corrected.png) | 总览的 Web Terminal 章节 | 代理到 Worker 再到 tmux 的输入输出、共享 CLI 与读写权限；Dashboard 前门和远程入口由正文补充 |
+
+四张图均已查看并核对文字与箭头方向，未发现内部仓库标识、地址或真实凭据。只收录能由本文件公开来源支持的图片。

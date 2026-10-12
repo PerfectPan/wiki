@@ -49,36 +49,7 @@ CLI Adapter 和 Backend Driver 都是 Worker 内使用的模块，不是另两�
 
 这个版本的默认值始终是 `tmux`。只有显式选择 `BACKEND_TYPE=pty` 或 per-bot `backendType: 'pty'` 才使用 PTY（伪终端）后端，tmux 不可用不会自动降级为 PTY。普通 managed tmux 实际选择 `TmuxPipeBackend`，不是让 Worker 作为 CLI 的 PTY 父进程。[默认值](https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/config.ts#L51-L65)、[后端选择](https://github.com/deepcoldy/botmux/blob/a5bff44b7d8676e316d5969d928eb21ee1b48024/src/adapters/backend/session-backend-selector.ts#L557-L579)
 
-```mermaid
-flowchart LR
-  F[飞书事件与 API]
-  D[Daemon 进程]
-  S[(SQLite：Session)]
-  subgraph W[Session Worker 进程]
-    C[输入队列与结果桥]
-    A[CLI Adapter]
-    B[Backend Driver]
-    C --> A --> B
-  end
-  subgraph T[独立 tmux server]
-    subgraph P[tmux session 内的 pane]
-      L[真实 agent CLI]
-      X[botmux send 辅助命令]
-      L --> X
-    end
-  end
-  H[(CLI 原生 transcript)]
-  F -->|消息| D
-  D <-->|读写| S
-  D -->|IPC：输入与控制| C
-  B -->|tmux 输入命令| L
-  L -->|pipe-pane → FIFO| B
-  L -->|写原生历史| H
-  H -->|读取 final| C
-  C -->|final_output IPC| D
-  D -->|桥接回复| F
-  X -->|普通 send：直接 API| F
-```
+![本机会话运行：Daemon 管理会话，Session Worker 使用 CLI Adapter 和 Backend Driver 操作独立 tmux server 中的 CLI，SQLite 保存会话，CLI transcript 保存原生历史。](../../../raw/assets/botmux-session-runtime.png)
 
 图中的 FIFO（命名管道）是终端输出通道；CLI 原生 transcript（会话记录）是独立磁盘数据。两者都不是 SQLite Session 行。`botmux send` 的直连箭头仅表示普通、非 read-isolation 配置；隔离路径有 host-side 代理，见下文。
 

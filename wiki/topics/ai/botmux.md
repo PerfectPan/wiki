@@ -39,17 +39,9 @@ Botmux 运行在开发机或服务器上，把飞书消息交给已有的 AI 编
 
 ## 产品边界与一次使用过程
 
-下图只描述本地 CLI 路线。远端 Runner 和 API 型适配器有独立执行路径，不能把所有后端都画成一个本地 tmux 进程。[适配范围][adapters]、[Remote Runner 协议][remote]
+下图汇总跨机器协作、单机默认 tmux 会话、持久数据和两条回复路径。图中的“完整”指本次讨论的主链路，不覆盖所有后端：远端 Runner 和 API 型适配器有独立执行路径，不能把所有后端都画成一个本地 tmux 进程。[适配范围][adapters]、[Remote Runner 协议][remote]
 
-```mermaid
-flowchart LR
-    User["用户：飞书私聊或群话题"] --> Feishu["飞书消息与卡片服务"]
-    Feishu --> Botmux["本机 Botmux：鉴权、路由、会话管理"]
-    Botmux --> CLI["本机 Coding CLI：模型调用与工具执行"]
-    CLI --> Files["工作目录与开发工具"]
-    Botmux -->|进度与回复| Feishu
-    Browser["浏览器：Dashboard / Web Terminal"] <-->|HTTP / WebSocket| Botmux
-```
+![Botmux 完整架构：团队目录与飞书消息协作、Daemon 和 Session Worker、独立 tmux server、SQLite 与 CLI transcript，以及两条回复路径。](../../../raw/assets/botmux-full-architecture-corrected.png)
 
 一次典型使用过程是：
 
@@ -110,16 +102,11 @@ Dashboard 是配置和会话管理界面；Agent Workbench 是其中面向会话
 
 ### 浏览器的输入怎样到达 CLI
 
-下面是经 Dashboard 打开的默认托管 tmux 路线。直接终端链接可以从 bot 级代理进入，不必经过 Dashboard。[Dashboard 前门][terminal-front]、[bot 级代理][terminal-proxy]、[浏览器连接][terminal-browser]
+下图展示直接终端链接进入 bot 级代理后的默认托管 tmux 路线。经 Dashboard 打开时，浏览器先经过 Dashboard 终端前门，再转到同一个 bot 级代理；代理按 sessionId 找到 Worker 的 HTTP / WebSocket 服务端口。[Dashboard 前门][terminal-front]、[bot 级代理][terminal-proxy]、[浏览器连接][terminal-browser]
 
-```mermaid
-flowchart LR
-    Browser["浏览器 xterm.js"] <-->|WebSocket| Dashboard["Dashboard 终端前门"]
-    Dashboard <-->|本机转发| Proxy["bot daemon 的 terminal-proxy"]
-    Proxy <-->|按 sessionId 找 worker 端口| Worker["session worker 的 HTTP / WS 服务"]
-    Worker <-->|输入与终端字节| Backend["TmuxPipeBackend"]
-    Backend <-->|tmux 命令 / pipe-pane 与 FIFO| Pane["tmux pane 中的 CLI"]
-```
+![Web Terminal：浏览器经过终端代理连接 Session Worker，输入经 tmux 命令进入同一个 CLI，画面经 pipe-pane 和 FIFO 返回。](../../../raw/assets/botmux-web-terminal-corrected.png)
+
+图中未展开的远程入口，见 [[wiki/topics/ai/botmux-team-federation#部署与网络方向|平台隧道与本机 Dashboard 的连接方向]]。
 
 WebSocket（浏览器与服务端的双向连接）承载终端输入和输出。**worker 仍然参与**：它检查写权限，再把输入交给后端；只读浏览器也不能随意改变共享 pane 的尺寸。默认路线不是每打开一个网页就新建一个 CLI，也不是把终端控制全部交给浏览器。[输入与尺寸检查][terminal-input]
 

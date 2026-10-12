@@ -25,9 +25,9 @@ resource:
 
 ## 它是什么
 
-Botmux 运行在开发机或服务器上，把飞书消息交给已有的 AI 编程命令行工具（Coding CLI），管理它们的会话、输入和回复，并提供浏览器终端。以本地 Claude Code / Codex 为例，模型调用、工具执行和 agent 循环仍由 CLI 负责，Botmux 负责飞书接入与外部编排；它不是另一个模型，也不要求把原有 CLI 工作流重写成飞书应用。[项目定位][position]
+Botmux 运行在开发机或服务器上，把飞书消息接入已有的 AI 编程命令行工具（Coding CLI），负责管理会话生命周期、输入调度和消息投递，并提供浏览器终端访问。以本地 Claude Code 与 Codex 为例，模型调用、工具循环和上下文维护完全由原生 CLI 处理，Botmux 在外侧提供飞书长连接路由、多会话隔离与外部编排，复用本地已有的 CLI 环境与配置。[项目定位][position]
 
-本文沉淀 2026 年 7 月至 10 月的讨论。实现固定到 **2026-10-08 的 `a5bff44`**，不是对阅读时最新版本的声明。该提交比当时核对的正式 tag `v3.36.0` 多两个提交，主线实现、已发布版本和本机实际部署必须分开判断。来源与核查记录见 [[raw/sources/botmux|Botmux 证据底稿]]。
+本文内容基于 **2026-10-08 源码快照 `a5bff44`**（比正式版本 `v3.36.0` 增加持久主入口协调器与优先私聊等提交）。完整证据与核查记录见 [[raw/sources/botmux|Botmux 证据底稿]]。
 
 ## 阅读路径
 
@@ -51,7 +51,7 @@ Botmux 运行在开发机或服务器上，把飞书消息交给已有的 AI 编
 4. 进度卡、终端画面和最终回答分别通过对应通道呈现。
 5. 用户在同一话题追问，必要时进入 Web Terminal 操作 CLI 的原生界面。
 
-这里最容易误解的是第 4 步：**终端有输出不等于已经发送最终回复**。普通模式可以由 CLI 调用 `botmux send` 主动发消息；支持的 CLI 还可通过原生会话记录提取最终回答。触发条件、去重和回合归属见 [[wiki/topics/ai/botmux-session-runtime|输入、输出与最终回复链路]]。
+在第 4 步中，Botmux 支持两种独立的回复路径：一是 CLI 中的 agent 主动调用辅助命令 `botmux send` 发出消息；二是 Worker 从受支持 CLI 的原生会话记录（transcript）中提取最终回答统一发卡。这让终端画面的流式更新与最终结论的消息投递保持解耦。具体触发条件与去重机制见 [[wiki/topics/ai/botmux-session-runtime|输入、输出与最终回复链路]]。
 
 ## 为什么它可能比直接开 CLI 方便
 
@@ -96,40 +96,22 @@ Botmux 运行在开发机或服务器上，把飞书消息交给已有的 AI 编
 
 正常 onboarding 会把 owner 加入 `allowedUsers`。把 bot 拉进群本身不等于授权；`allowedChatGroups` 放开的是群内所有成员的对话权，不是只允许管理员讲话。[权限分层][permissions]、[配置字段][permission-config]、[CLI 与终端配置][cli-config]
 
-## Dashboard 与 Web Terminal 不要混为一个入口
+## Web 终端与管理工作台
 
-Dashboard 是配置和会话管理界面；Agent Workbench 是其中面向会话列表、终端与网页预览的工作区；Web Terminal 则呈现某个会话的终端字节流，并在获准时提交输入。它们不是三个独立的模型会话。[Workbench 说明][workbench]
+Dashboard 是 Botmux 的图形化管理界面，内置的 Agent Workbench 提供会话列表、终端监视与网页预览；Web Terminal 则承载具体某个会话的终端字节流，支持查看输出与直接接管输入。[Workbench 说明][workbench]
 
 ### 浏览器的输入怎样到达 CLI
 
-下图展示直接终端链接进入 bot 级代理后的默认托管 tmux 路线。经 Dashboard 打开时，浏览器先经过 Dashboard 终端前门，再转到同一个 bot 级代理；代理按 sessionId 找到 Worker 的 HTTP / WebSocket 服务端口。[Dashboard 前门][terminal-front]、[bot 级代理][terminal-proxy]、[浏览器连接][terminal-browser]
+经 Dashboard 打开终端时，浏览器连接先经过 Dashboard 终端前门，再转到 bot 级代理，代理按 `sessionId` 定位到对应 Session Worker 暴露的 HTTP / WebSocket 服务端口。在直接打开终端链接时，请求则直达 bot 级代理。[Dashboard 前门][terminal-front]、[bot 级代理][terminal-proxy]、[浏览器连接][terminal-browser]
 
 ![Web Terminal：浏览器经过终端代理连接 Session Worker，输入经 tmux 命令进入同一个 CLI，画面经 pipe-pane 和 FIFO 返回。](../../../raw/assets/botmux-web-terminal-corrected.png)
 
-图中未展开的远程入口，见 [[wiki/topics/ai/botmux-team-federation#部署与网络方向|平台隧道与本机 Dashboard 的连接方向]]。
+双向 WebSocket 连接建立后，**Session Worker 统一管控 I/O 权限与终端行为**：它校验写入权限后才把输入通过 tmux 命令转交给后端，并限制只读端随意改变共享窗口尺寸。终端画面则通过 `pipe-pane` 经 FIFO 管道持续推回。浏览器断开时，默认仅清理该客户端的代理连接，后台的 CLI 与 tmux 会话持续运行。[输入与尺寸检查][terminal-input]、[断开处理][terminal-close]
 
-WebSocket（浏览器与服务端的双向连接）承载终端输入和输出。**worker 仍然参与**：它检查写权限，再把输入交给后端；只读浏览器也不能随意改变共享 pane 的尺寸。默认路线不是每打开一个网页就新建一个 CLI，也不是把终端控制全部交给浏览器。[输入与尺寸检查][terminal-input]
+### 访问权限与网络条件
 
-只读表示不能输入，不表示匿名可读。此快照的 HTTP 页面与 WebSocket 握手都检查读权限，需要有效只读 / 写入凭据，或经过 Dashboard / 平台前门认证的身份。文档站中“只读链接无凭证即可查看”的旧表述与该实现不一致，应以实际认证路径为准。[读权限检查][terminal-read-auth]
-
-浏览器断开时，默认共享连接只移除该客户端和代理连接，不直接杀死 CLI。代码另有按客户端创建 tmux attach PTY 的可选分支，不能把该分支画成所有会话的默认实现。[断开处理][terminal-close]
-
-### 不同 token 的有效期与用途
-
-| 凭据 / 授权 | 本文快照的语义 |
-| --- | --- |
-| Dashboard 管理 token，URL 中常见 `t` | 本地持久保存，没有统一的时间到期字段；显式轮换会使旧值失效 |
-| 会话终端写入 token，URL 中常见 `token` | 由本机秘密与 sessionId 计算，worker 重启不必导致它变化；持有它与持有普通只读链接不同 |
-| 工作台签发的只读 grant | 绑定会话、认证会话与 worker 代次，有效时间受身份到期和最多 10 分钟共同限制 |
-| 工作台接管输入的 lease（有到期时间的独占输入权） | 是独立的临时控制资格，文档默认 5 分钟，不等于所有 Dashboard token 都只有 5 分钟有效 |
-
-依据：[Dashboard token 存取][dashboard-token]、[终端写入 token][terminal-write-token]、[只读 grant][terminal-read-grant]、[接管说明][workbench]。这些机制属于固定版本，不应用它们直接解释其他版本的一张错误截图。
-
-“飞书消息能往返”和“手机能打开终端”有不同网络条件：飞书事件使用机器向飞书建立的长连接；Web Terminal 需要浏览器能访问暴露出来的 HTTP / WebSocket 地址。默认生成局域网地址时，换成手机蜂窝网络可能不可达。仅设置 `WEB_EXTERNAL_HOST` 只改变公布的地址，不能替代实际的路由、转发与访问控制。[消息连接检查][event-connection]、[终端远程访问][terminal-network]
-
-源码中的 Dashboard / bot 终端代理和 worker 默认监听并非一律限定在 loopback（本机回环地址）。即使浏览器只使用 `127.0.0.1`，也应另查服务监听和防火墙范围，不能由访问地址推断服务只对本机开放。[监听配置][terminal-listen]、[worker 监听][worker-listen]
-
-遇到“访问链接已失效”时，应先区分 Dashboard 登录凭据、终端写入 token、会话是否存在，以及服务是否可达。对同一条失效链接换一个浏览器，不能修复服务端的认证失败。可以在运行 Botmux 的机器上用 `botmux dashboard` 取得该版本支持的入口；该命令通常读取现有凭据，不等于每执行一次都轮换 token。带凭据链接应视为访问凭据，不应保存进公开笔记。[Dashboard 入口][workbench-entry]、[token 存取][dashboard-token]
+- **权限验证**：终端页面与 WebSocket 握手均要求读权限（通过 `viewToken`、短时只读 grant 或 Dashboard 登录态）；直接向终端输入则需要携带基于本地密钥生成的写入 `token` 或在 Workbench 中申请的独占输入 lease（默认有效 5 分钟）。[读权限检查][terminal-read-auth]、[终端写入 token][terminal-write-token]、[接管说明][workbench]
+- **网络条件差异**：飞书消息往返依赖机器向飞书网关建立的单向长连接出站，而 Web Terminal 需要浏览器能直接访问开发机暴露的 HTTP/WebSocket 端口。若处于异地或移动网络，需配置反向代理、内网穿透或使用平台隧道模式。[消息连接检查][event-connection]、[终端远程访问][terminal-network]
 
 ## 讨论期间值得保留的版本变化
 

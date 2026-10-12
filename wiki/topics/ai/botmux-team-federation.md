@@ -47,18 +47,18 @@ Botmux 的跨部署组队让多台机器上的独立飞书机器人发现队友�
 
 ![跨机器协作：团队目录同步名册、群与有限状态，任务和结果通过共享飞书群传递；两个部署分别保留自己的 Session、CLI 和工作目录。](../../../raw/assets/botmux-team-collaboration.png)
 
-## 两种中心，不是两套任务执行器
+## 两种组队中心与架构模型
 
 | 维度 | 传统 Dashboard 联邦 | 中心平台团队 |
 | --- | --- | --- |
-| 中心是谁 | 创建团队的成员部署，其 Dashboard 充当 Hub | 独立平台服务，不是任意成员 Dashboard |
-| 成员如何接入 | 部署用邀请码注册为 Spoke | 机器绑定平台，负责人加入平台团队并选择加入团队的 bot |
-| 团队状态 | Hub 保存远端广告、群关系及共享看板 | 本机接收平台权威 `team-sync` 团队视图 |
-| 主要同步方向 | Spoke 主动上报并按需拉取 | 本机建立控制连接，上报状态，平台沿连接推送 |
-| 跨机任务 | 飞书群中显式点名对方 bot | 同样经过飞书，不是平台直接启动远端 CLI |
-| 公开实现 | Hub/Spoke 入队、同步、名册与组群执行代码 | 平台客户端、隧道客户端、团队同步和本机权限判断 |
+| 团队中心 | 由创建团队的成员部署托管，其 Dashboard 充当 Hub | 独立的中心平台服务，统一管理团队名册 |
+| 成员接入方式 | 部署通过输入邀请码注册为 Spoke | 开发机绑定平台，团队成员主动声明加入团队的机器人 |
+| 团队状态维护 | Hub 汇聚各成员广播的机器人广告、群关系与共享看板 | 开发机接收平台权威下发的 `team-sync` 团队全量视图 |
+| 同步交互模型 | Spoke 定期主动上报并按需拉取名册与看板 | 本机主动建立控制隧道，保持长连接并接收平台推送 |
+| 跨机任务流转 | 共享飞书群中显式 @ 目标机器人调度执行 | 同样完全通过飞书群传递，各机独立在本地执行 |
+| 开源代码范围 | 包含完整的 Hub/Spoke 注册、同步、名册管理与组群执行实现 | 包含平台客户端、隧道连接、团队全量同步与本地信任校验 |
 
-传统联邦并非完全无中心：每个团队依赖托管它的 Hub，但不同团队可由不同部署托管，一套部署也可加入多个 Hub。平台路线则把团队权威集中到独立服务。两种来源进入同一套本机团队信任判断，不代表接口或撤销语义相同。[Hub 存储][federation-store]、[多 Hub membership][membership]、[平台信任表][platform-store]
+在传统联邦中，每个团队由发起者的 Hub 节点集中管理，不同团队可由不同部署托管，且单个部署支持加入多个 Hub。中心平台模式则将名册与组群的权威管理收拢至独立服务，开发机通过长连接获取最新团队视图。两种路线的团队关系均映射至本地团队信任表进行鉴权。[Hub 存储][federation-store]、[多 Hub membership][membership]、[平台信任表][platform-store]
 
 ### 部署与网络方向
 
@@ -124,9 +124,13 @@ sequenceDiagram
   S->>S: 精确匹配已保存 membership token
 ```
 
-邀请码是随机入队凭证，不是公钥。`syncToken` 是 Hub 生成的 24 字节随机 secret，`delegationToken` 是 Spoke 生成的另一份随机 secret。验证是查询保存的字符串，不是用公钥验证签名，也不是解析 JWT（JSON Web Token）。这里“签发”仅指生成并交付，不表示密码学签名。[邀请码][invite]、[syncToken][federation-store]、[反向 token 匹配][membership]
+联邦信任机制基于本地存储的共享随机密钥（Shared Secret）：
 
-Bearer 是“持有凭证即可调用”的使用方式，不是 token 格式或签名算法。随机共享 secret、对称 MAC（消息认证码）和非对称签名必须分开理解。本实现的联邦 token 是第一种，不能因为带 Bearer 就叫 OAuth，也不能因为经过编码就叫 JWT。相关概念见 [[wiki/topics/architecture/oauth|OAuth]] 和 [[wiki/topics/architecture/jwt|JWT]]。
+- **邀请码**：Hub 生成的随机字符串，默认单次消费且 24 小时内有效，用于 Spoke 首次入队兑换接入凭据；[邀请码][invite]
+- **`syncToken`**：Hub 在 Spoke 成功入队后签发的 24 字节随机 secret，Spoke 后续同步状态、拉取名册与看板时提交，Hub 比对本地持久化记录完成鉴权；[syncToken][federation-store]
+- **`delegationToken`**：Spoke 入队时生成的反向授权 secret，Hub 在触发反向建群或补充负责人时作为 Bearer 凭据向 Spoke 回调提交，Spoke 比对本地 membership 记录予以授权。[反向 token 匹配][membership]
+
+接口调用使用 HTTP `Authorization: Bearer <secret>` 传递凭证，鉴权机制为本地精确字符串比对。相关架构概念见 [[wiki/topics/architecture/oauth|OAuth]] 和 [[wiki/topics/architecture/jwt|JWT]]。
 
 | 请求 | 接收方实际读取的凭据 | 验证后做什么 |
 | --- | --- | --- |
@@ -152,15 +156,14 @@ Spoke 同步请求同时传 Bearer 和 body token，但 Hub 的 `/sync` 实际�
 
 平台心跳默认每 30 秒上报。`team-sync` 经控制连接到达后，本机验证数据形状和 rev，完整替换平台团队表，并用 `platform:<teamId>` 前缀替换团队群镜像，不覆盖旧联邦群。表中有 bot union ID、真人成员 union ID 和群 ID，实际参与授权，不只是展示缓存。[心跳周期][heartbeat]、[接收与上报][tunnel-sync]、[完整替换][platform-store]
 
-## 组群不等于保证所有对象入群
+## 跨部署协作组群与负责人邀请机制
 
-传统组群先验证所选 app ID 在团队名册中。远端 bot 没有 owner union ID 会被跳过，全部跳过则失败。邀请人集合由操作者和可加入 bot 的负责人组成，按 union ID 去重。Spoke 发起时，Hub 从 `syncToken` 对应的部署记录取操作者，不采信请求 body 任意指定的操作者。[选择与负责人][group-core]、[操作者来源][group-api]
+传统联邦在组建协作群时遵循以下规则：
 
-Creator 只从所选 bot 中挑本地在线、具有飞书传输的 bot，不是任意 Hub bot。无飞书身份的 `apiOnly` bot 不能创建群或成为飞书群成员。普通远端 bot 可入群，但不直接由 Hub 冒用其应用身份当 Creator。[Creator 筛选][creator]
-
-机器人按 app ID 加群，负责人按 union ID 逐人邀请。飞书应用可见范围与添加权限仍然有效，一个负责人失败不应阻断其他负责人。Hub 可委托该负责人的部署，用已入群的本地 bot 补人，最终仍失败的 ID 返回给调用者。群已创建与邀请完整是两件事。[飞书建群][chat-create]、[逐人邀请][owner-invite]、[反向补人][add-owners]
-
-没有本地 Creator 时，Hub 可回调拥有所选 bot 的 Spoke 自己建群。回调超时后不换下一部署继续建，防止对方已建群但响应丢失导致重复。成功群关系保存在 Hub，之后由同步下发，成为本机团队群。[委托与超时][group-core]
+1. **成员合法性校验**：所选机器人的 `appId` 必须存在于团队名册中，且远端机器人需具备有效的 owner union ID。若由 Spoke 发起请求，Hub 从 `syncToken` 对应的持久化部署记录中提取操作者身份，不直接采信请求体中自报的调用者身份。[选择与负责人][group-core]、[操作者来源][group-api]
+2. **群主 (Creator) 选取**：Creator 仅从所选机器人中筛选具备飞书传输能力且当前在线的本地机器人，无法由无飞书传输的 `apiOnly` 机器人或远端机器人直接创建飞书群。[Creator 筛选][creator]
+3. **逐人加群与补齐**：机器人依据 `appId` 加入，各机器人的负责人依据 `unionId` 逐一邀请。单个负责人的添加失败不会阻塞其他成员；Hub 还可向对应 Spoke 发起反向委托，利用其本地机器人补齐未入群的负责人。[飞书建群][chat-create]、[逐人邀请][owner-invite]、[反向补人][add-owners]
+4. **反向建群委托**：当 Hub 本地没有可用的 Creator 时，Hub 会回调具备该机器人的 Spoke 本地建群。委托具备单次超时保护，避免网络抖动导致重复创建多个协作群。[委托与超时][group-core]
 
 ## 一次跨机任务真正经过哪里
 
@@ -195,13 +198,16 @@ sequenceDiagram
 
 公开主仓中的平台集成是可选客户端：隧道仅在存在本机绑定时启动，未绑定不阻塞本机机器人运行。客户端通过 HTTP 和 WebSocket 调用配置的平台地址。本文只描述公开代码中的接口与本机行为，不推定平台服务端的具体实现。[可选隧道][optional-tunnel]、[绑定实现][bind]、[团队接口][machine-client]
 
-### 绑定材料不是 machineToken
+### 平台绑定流程与 machineToken 签发
 
-本机先解码平台生成的 `{u, t}` 绑定材料：`u` 是平台地址，`t` 是绑定 code。随后向该平台 `POST /api/bind {code, machineId}`，从响应读取并保存 `machineToken`。本机随机生成的是初始 machine ID，不是 machineToken。[绑定请求与响应][bind]
+开发机接入平台的具体流程为：
 
-因此，“机器凭证来自谁”的公开证据答案是：来自所绑定平台的 `/api/bind` 响应，不是飞书消息 API 返回，不是客户端硬编码。内部如何签发、验签、设定有效期与撤销，必须看对应平台服务端，不能只从客户端注释推定算法。[绑定字段][binding]、[绑定实现][bind]
+1. 本机解析平台下发的 `{u, t}` 绑定凭据（包含平台 URL 与一次性临时 code）；
+2. 本机向平台发送 `POST /api/bind {code, machineId}` 请求完成绑定；
+3. 平台校验通过后返回 `machineToken`，开发机将其持久化至本地；
+4. 后续本机以 Bearer `machineToken` 请求 `/v1/machine/*` 接口，并在控制与数据隧道连接建立时透传该凭证。[绑定请求与响应][bind]、[绑定字段][binding]
 
-后续本机以 Bearer machineToken 调 `/v1/machine/*`，控制和数据隧道则将它作为 URL 参数透传。客户端不解码或验签这份机器 token。保护 query 的访问日志也是平台部署需要处理的凭据保密条件。[机器请求][machine-call]、[隧道 token 透传][tunnel-connect]
+因此机器凭证来自平台绑定接口的签发结果。平台服务端的具体鉴权算法、证书体系与撤销逻辑需依据平台具体实现确定。[机器请求][machine-call]、[隧道 token 透传][tunnel-connect]
 
 ### 公开客户端能证明的接口边界
 

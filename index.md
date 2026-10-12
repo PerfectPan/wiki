@@ -66,6 +66,9 @@
   - [[wiki/topics/architecture/sso|SSO]]
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
+  - [[wiki/topics/ai/botmux|Botmux：在飞书中使用本地 Coding CLI]]
+  - [[wiki/topics/ai/botmux-session-runtime|Botmux 会话运行时]]
+  - [[wiki/topics/ai/botmux-team-federation|Botmux 团队联邦与身份鉴权]]
   - [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：read_me 与 show_widget 工具设计]]
   - [[wiki/topics/ai/agent|Agent]]
   - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]

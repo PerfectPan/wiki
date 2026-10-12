@@ -53,7 +53,7 @@ Botmux 的跨部署组队让多台机器上的独立飞书机器人发现队友�
 | --- | --- | --- |
 | 团队中心 | 由创建团队的成员部署托管，其 Dashboard 充当 Hub | 独立的中心平台服务，统一管理团队名册 |
 | 成员接入方式 | 部署通过输入邀请码注册为 Spoke | 开发机绑定平台，团队成员主动声明加入团队的机器人 |
-| 团队状态维护 | Hub 汇聚各成员广播的机器人广告、群关系与共享看板 | 开发机接收平台权威下发的 `team-sync` 团队全量视图 |
+| 团队状态维护 | Hub 汇聚各成员上报的机器人声明信息、群关系与共享看板 | 开发机接收平台权威下发的 `team-sync` 团队全量视图 |
 | 同步交互模型 | Spoke 定期主动上报并按需拉取名册与看板 | 本机主动建立控制隧道，保持长连接并接收平台推送 |
 | 跨机任务流转 | 共享飞书群中显式 @ 目标机器人调度执行 | 同样完全通过飞书群传递，各机独立在本地执行 |
 | 开源代码范围 | 包含完整的 Hub/Spoke 注册、同步、名册管理与组群执行实现 | 包含平台客户端、隧道连接、团队全量同步与本地信任校验 |
@@ -96,8 +96,8 @@ flowchart TB
 
 1. A、B 分别配置自己的飞书应用、CLI 登录和本地工作目录，各自管理自己的 Dashboard。部署 owner 和 bot owner 的身份用于组群时邀请负责人。
 2. A 在本机 Dashboard 创建团队，生成该团队的邀请码，通过可信渠道把 Hub 地址和邀请码交给 B，不共享 A 的 Dashboard 管理链接。
-3. B 在自己的 Dashboard 输入地址和邀请码。本机 `join-remote` 读取部署身份和 bot 广告，生成反向 `delegationToken`，将它与 callback 地址一同提交给 A 的 `/api/federation/join`。
-4. A 消费邀请码、拒绝自加入、清洗广告并登记部署，生成 `syncToken` 返回。公开的 `deploymentId` 重复时返回 409，不重新返回该部署原有 token。
+3. B 在自己的 Dashboard 输入地址和邀请码。本机 `join-remote` 读取部署身份与自报机器人清单（bots 列表），生成反向 `delegationToken`，将它与 callback 地址一同提交给 A 的 `/api/federation/join`。
+4. A 消费邀请码、拒绝自加入、清洗校验自报机器人元数据并登记部署，生成 `syncToken` 返回。公开的 `deploymentId` 重复时返回 409，不重新返回该部署原有 token。
 5. B 保存 `{hubUrl, teamId, syncToken, deploymentId, delegationToken}`。后续同步和查询使用这里的凭证，不要求 B 浏览器持有 A 的管理 token。
 6. 在团队名册中选择 bot 建群，检查 bot 和负责人实际入群结果。随后在群中点名 bot 做小任务，才算走到了执行链路。
 
@@ -114,7 +114,7 @@ sequenceDiagram
   H-->>U: 随机码，默认 24 小时、单次使用
   Note over U,S: 通过可信渠道交付 Hub 地址和邀请码
   S->>S: 生成 delegationToken
-  S->>H: join：邀请码、部署广告、callback、delegationToken
+  S->>H: join：邀请码、机器人清单、callback、delegationToken
   H->>H: 消费邀请码，生成 syncToken，保存 deployment
   H-->>S: teamId、syncToken
   S->>S: 保存 membership 和两份 token
@@ -135,7 +135,7 @@ sequenceDiagram
 | 请求 | 接收方实际读取的凭据 | 验证后做什么 |
 | --- | --- | --- |
 | `POST /join` | body 中的 `inviteCode` | 消费邀请，注册部署并换发 `syncToken` |
-| `POST /sync` | body 中的 `syncToken` | 更新该部署广告和心跳，返回团队群 ID |
+| `POST /sync` | body 中的 `syncToken` | 更新该部署的机器人列表与心跳，返回团队群 ID |
 | `GET /roster`、`GET /team-board` | Bearer，兼容自定义头和 query token | 查询 token 所属团队的名册或看板 |
 | `POST /group`、`/team-sessions`、`/team-board-move` | 仅标准 Authorization Bearer | 请求组群、上报裁剪会话或修改共享看板 |
 | Hub → Spoke 委托 | 仅标准 Bearer `delegationToken` | 验证本机 membership，执行有限建群/补人操作 |
@@ -150,7 +150,7 @@ Spoke 同步请求同时传 Bearer 和 body token，但 Hub 的 `/sync` 实际�
 | 传统团队看板 | 仅团队群内最多 200 条裁剪会话，活跃优先 | Hub 保存各部署最近一次报告及共享看板位置 | CLI 终端、正文、完整上下文、磁盘或仓库 |
 | 平台控制连接 | bot 概要、成员关系、版本和已应用 `teamSyncRev`，另含 Dashboard token 与网络候选 | `team-sync {rev, teams}` 的本机完整团队视图 | 此消息定义中没有完整 CLI 会话、文件或模型上下文 |
 
-传统同步默认每两分钟尽力执行。Hub 名册把本地 bot 和远端广告聚合，五分钟未同步的远端标为 `stale`，不直接删除。`stale` 只是广告心跳陈旧，不证明飞书投递失败或 CLI 不健康。[同步 timer][sync-timer]、[名册聚合][roster]
+传统同步默认每两分钟尽力执行。Hub 名册把本地 bot 和远端上报的机器人聚合，五分钟未同步的远端标为 `stale`，不直接删除。`stale` 仅表示节点心跳陈旧，不证明飞书投递失败或 CLI 不健康。[同步 timer][sync-timer]、[名册聚合][roster]
 
 看板会话行含 session ID、bot、CLI、状态、标题、chat ID、scope、adopt 和最后消息时间。Hub 白名单清洗标题至 200 字符。虽然没有正文，标题和 owner 等元数据仍可能透露任务信息，不能描述成“团队间零数据共享”。[裁剪和单独上报][sync-spoke]、[Hub 白名单][board-sanitize]
 
@@ -242,10 +242,10 @@ sequenceDiagram
 
 ### 源码呈现的风险边界
 
-1. **成员广告不是独立核身。** 入队和同步会清洗字段并保存自报 bot、owner 和 callback，这些入口不向飞书验证广告所有权。token 证明调用者持有部署接入凭证，不证明硬件身份、真人身份或能力标签真实。飞书消息 sender 的身份另由事件提供。[入队][join-hub]、[token 匹配][federation-store]
+1. **成员自报信息不构成独立核身。** 入队和同步会清洗字段并保存自报 bot、owner 和 callback，这些接口不向飞书反向核验机器人所有权。token 证明调用者持有部署接入凭证，不证明硬件身份、真人身份或能力标签真实。飞书消息 sender 的身份另由事件提供。[入队][join-hub]、[token 匹配][federation-store]
 2. **链路和文件要保护 secret。** 联邦允许 HTTP，callback 默认构造成 HTTP，token 在双方 JSON 存储中保存，这些写入步骤没有静态加密。公网或不可信链路应使用 TLS（传输层安全协议）或加密私网，不能把允许 HTTP 当安全保证。[注册地址][join-spoke]、[Hub 存储][federation-store]、[Spoke 存储][membership]
 3. **回调目的地址受成员输入影响。** Hub 接收 callback 时只筛 HTTP(S) 前缀，随后向该地址发带 token 的 POST。相关入口没有目的主机允许列表，因此存在条件性的服务端请求伪造（SSRF）风险边界。能影响什么取决于 Hub 网络与目标服务，这不是漏洞利用实测。[callback 登记][join-hub]、[发出委托][group-core]
-4. **同名 app ID 会影响组群元数据。** 名册先列本地 bot 再追加远端广告，组群按 app ID 建 Map，后写覆盖前写。获准成员自报重复 app ID 可影响 owner 与跳过判断。它不等于伪造飞书真实消息 sender。[名册顺序][roster]、[组群 Map][group-core]
+4. **同名 app ID 会影响组群元数据。** 名册先列出本地 bot，再追加远端节点声明的 bot；组群时按 app ID 建立 Map，后写入的数据会覆盖前者。若已入队成员上报了重复的 app ID，会影响负责人与跳过判断。它不等于伪造飞书真实消息 sender。[名册顺序][roster]、[组群 Map][group-core]
 5. **退出不等于所有信任立即撤销。** Hub 的 syncToken 记录无到期字段，查找只做匹配，删除记录才使 token 失配。Spoke 退队即使通知失败也删除本地 membership，`hubRevoked: false` 不能当作 Hub 已撤销，还须处理学习表和其他本地授权。[Hub 记录][federation-store]、[退队处理][leave]
 
 反向委托是有限建群和负责人操作，不是通用远程 shell：建群要求包含本地 bot，补人只允许本部署或 bot owner。不过补人 `chatId` 来自 Hub，接收入口没有将它绑定到团队建群记录，持有 delegationToken 的 Hub 仍是高信任对象。[委托边界][delegate]

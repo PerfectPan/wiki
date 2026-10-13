@@ -33,6 +33,28 @@ bin/wiki ingest <url> --file <path> --author <name> --published <date>
 
 若目标文件或对应的旧日期前缀文件已存在，CLI 报错且不覆盖；同一对象先阅读已有素材再合并，不同对象用不同名称。最终写入使用排他创建，避免并发抓取覆盖。CLI 的 GitHub 直抓结果只是仓库阅读入口；完整实现分析由 `.agents/skills/ingest/SKILL.md` 指导完成。
 
+直抓拿到的正文少于 80 个字符时会直接报错退出。风控页和需要 JS 渲染的空壳都会被解成几乎空的 Markdown，这种情况不再写一个看起来成功的空文件。
+
+### B 站视频
+
+```bash
+bin/wiki ingest <B站视频 URL> [--name <slug>] [--capture <json>] [--slides] [--language zh]
+```
+
+B 站的视频页、字幕接口和播放地址接口都有风控，直连通常返回 412。这条路径的流程是：先在浏览器会话里取一次元信息和播放地址，存成 JSON 用 `--capture` 传回来；工具负责下载音频、在本地转录（mlx-whisper）、修掉转录里的解码循环，结果写进 `raw/sources/`。加 `--slides` 会再把一份幻灯片缩略图总览写进 `raw/assets/`。
+
+`--capture` 的 JSON 可以写成 `{ "meta": { bvid, cid, title, owner, duration }, "data": <playurl 接口返回体> }`，也可以直接就是 playurl 的返回体（含 `code` / `data` / `dash`）。没传 `--capture` 时会先试直连；被拦下时报错，并打印一段可以在浏览器会话里直接跑的取数脚本。
+
+分步命令（下载、转录、抽帧可以分开跑，也可以只用其中一步）：
+
+```bash
+python3 tools/video.py streams <B站视频 URL> [--capture <json>] --out <目录>
+python3 tools/video.py transcribe <音频或视频文件> --out-dir <目录> [--language zh]
+python3 tools/video.py slides <视频文件> --out-dir <目录> [--interval 60] [--frames 330,570]
+```
+
+`slides` 默认每 60 秒抽一帧、拼成 5x5 的缩略图总览，用来先看清整场讲了哪些页；`--frames` 再对指定时间点取整帧，用来读表格和数字。抽出来的帧先落在临时目录，只把正文真正引用的复制进 `raw/assets/`。
+
 ## Wiki 用词检查
 
 ```bash

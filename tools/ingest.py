@@ -1,24 +1,49 @@
 #!/usr/bin/env python3
 """
-ingest.py - 抓取网页并提取为 Markdown，存入 raw/sources/
+ingest.py - 抓取来源并存入 raw/sources/
 
 用法:
-  python3 tools/ingest.py <url> [--type blog|doc]
+  python3 tools/ingest.py <url> [--type blog|doc|video]
+  python3 tools/ingest.py <url> --name <文件名> [--author <作者>] [--published <日期>]
+  python3 tools/ingest.py <url> --file <预抓正文>            # 会话侧 reader 抓到正文时用
+  python3 tools/ingest.py <B站视频 URL> [--capture <JSON>] [--slides]
+
+B 站视频走 tools/video.py：下载音频、本地转录、修掉解码循环，--slides 再存一份
+幻灯片缩略图总览到 raw/assets/。被风控拦下时先用浏览器会话取播放地址，用 --capture 传回来。
 
 输出:
   raw/sources/<name>.md    (日期保存在来源头中)
 """
 
 import argparse
+import importlib.util
 import json
 import os
 import re
+import shutil
 import sys
+import tempfile
 from datetime import date
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import parse_qs, urlparse
 from urllib.request import Request, urlopen
+
+
+def _load_video_module():
+    """tools/video.py 不在包路径里，按文件加载，避免污染 sys.path。"""
+    spec = importlib.util.spec_from_file_location("wiki_video", Path(__file__).with_name("video.py"))
+    module = importlib.util.module_from_spec(spec)
+    # dataclass 解析类型时要能在 sys.modules 里找到本模块。
+    sys.modules["wiki_video"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+video = _load_video_module()
+
+# 直抓网页时，正文短于这个长度就认为是风控页或需要 JS 渲染的空壳。
+MIN_DIRECT_BODY_CHARS = 80
 
 
 def die(message: str) -> None:
@@ -481,6 +506,59 @@ def is_youtube_url(url: str) -> bool:
     return parsed.netloc in ("www.youtube.com", "youtube.com", "youtu.be")
 
 
+def is_bilibili_url(url: str) -> bool:
+    """判断是否是 B 站视频 URL（带 BV 号的视频页）"""
+    return "bilibili.com" in urlparse(url).netloc and video.parse_bvid(url) is not None
+
+
+def guard_direct_body(body_md: str, url: str) -> str:
+    """直抓得到的正文过短时不落盘。
+
+    风控页和需要 JS 渲染的空壳都会被解成几乎空的 Markdown；以前会写一个空文件
+    并报「已保存」，看起来成功了，但后面还得人工发现并清理。
+    """
+    visible = re.sub(r"[#*`>\s\-\[\]()]", "", body_md)
+    if len(visible) < MIN_DIRECT_BODY_CHARS:
+        die(
+            f"直抓的正文只有 {len(visible)} 个字符，可能是风控页或需要 JS 渲染：{url}\n"
+            "改用会话侧 reader 工具抓正文后 --file 传入；B 站视频可以走 tools/video.py 的流程。"
+        )
+    return body_md
+
+
+def bilibili_video_body(
+    title: str,
+    info: dict,
+    cues: list,
+    report: dict,
+    sheet_names: list[str],
+) -> str:
+    """拼出 B 站视频素材的正文：头注释 + 按段落整理的转录稿。"""
+    duration = int(info.get("duration") or 0)
+    lines = [
+        f"# {title}",
+        "",
+        "<!--",
+        "本文件由 tools/ingest.py 调用 tools/video.py 生成：下载音频后在本地转录，没有人工逐句校对。",
+        f"讲者 / 发布账号：{info.get('owner') or '未知'}",
+    ]
+    if duration:
+        lines.append(f"时长：{duration // 60} 分 {duration % 60} 秒")
+    if sheet_names:
+        lines.append("幻灯片缩略图总览：" + "、".join(f"raw/assets/{name}" for name in sheet_names))
+    lines += [
+        "幻灯片是这类分享的事实层：表格、数字和标题以幻灯片为准，转录只作旁证。",
+        "转写里的专有名词可能有识别误差，写作前用幻灯片或公开资料核对。",
+    ]
+    for repair in report.get("repairs", []):
+        state = "已局部重跑补回" if repair["ok"] else "重跑也没有补回，保留原样"
+        lines.append(
+            f"解码循环 {video.format_clock(repair['start'])}–{video.format_clock(repair['end'])}：{state}"
+        )
+    lines += ["-->", "", video.paragraph_markdown(cues).rstrip(), ""]
+    return "\n".join(lines) + "\n"
+
+
 def fetch_youtube_transcript(url: str) -> tuple[str, str]:
     """用 yt-dlp 获取 YouTube 视频字幕，返回 (transcript, title)"""
     import subprocess
@@ -576,11 +654,16 @@ def main():
     parser.add_argument("--file", help="预抓正文路径（Markdown，或含 content 字段的 JSON），给出时跳过直接抓取")
     parser.add_argument("--author", help="来源作者，写入头注释")
     parser.add_argument("--published", help="来源发布日期（YYYY-MM-DD），写入头注释")
+    parser.add_argument("--capture", help="浏览器会话里取到的元信息和播放地址 JSON（B 站）")
+    parser.add_argument("--slides", action="store_true", help="给 B 站视频再存一份幻灯片缩略图总览到 raw/assets/")
+    parser.add_argument("--language", default="zh", help="转录语言，默认 zh")
     args = parser.parse_args()
 
     url = args.url
     source_type = args.type
-    if is_youtube_url(url):
+    if is_bilibili_url(url):
+        source_type = "video"
+    elif is_youtube_url(url):
         source_type = "video"
     elif is_x_url(url):
         source_type = "tweet"
@@ -599,6 +682,34 @@ def main():
         body_md, meta = read_prefetched(args.file)
         title = meta.get("title") or first_heading(body_md) or name
         note = "body pre-fetched; direct fetch skipped"
+    elif source_type == "video" and is_bilibili_url(url):
+        work_dir = Path(tempfile.mkdtemp(prefix="wiki-video-"))
+        try:
+            info = video.resolve_streams(url, Path(args.capture) if args.capture else None)
+        except video.FetchBlocked as error:
+            hint = f"\n\n{video.browser_hint(video.parse_bvid(url))}" if error.needs_browser else ""
+            die(f"{error}{hint}")
+        title = info.get("title") or name
+        print(f"B 站视频: {title}")
+        try:
+            media = video.download(info["audio_url"], work_dir / "audio.m4s")
+            sheet_names: list[str] = []
+            if args.slides:
+                video_path = video.download(info["video_url"], work_dir / "video.m4s")
+                assets_dir = sources_dir.parent / "assets"
+                assets_dir.mkdir(parents=True, exist_ok=True)
+                for index, sheet in enumerate(
+                    video.contact_sheets(video_path, work_dir / "slides"), start=1
+                ):
+                    asset = assets_dir / f"{name}-slides-{index}.png"
+                    shutil.copyfile(sheet, asset)
+                    sheet_names.append(asset.name)
+            print("正在本地转录（mlx-whisper，首次会下载模型）…")
+            cues, report = video.transcribe_with_repair(media, work_dir, language=args.language)
+        except video.FetchBlocked as error:
+            die(str(error))
+        print(f"转录 {len(cues)} 段，已修掉 {len(report.get('repairs', []))} 处解码循环")
+        body_md = bilibili_video_body(title, info, cues, report, sheet_names)
     elif source_type == "video" and is_youtube_url(url):
         try:
             transcript, title = fetch_youtube_transcript(url)
@@ -622,7 +733,7 @@ def main():
         print(f"抓取: {url}")
         html = fetch(url)
         title = extract_title(html)
-        body_md = html_to_markdown(html)
+        body_md = guard_direct_body(html_to_markdown(html), url)
 
     header = build_source_header(
         url, source_type, title,

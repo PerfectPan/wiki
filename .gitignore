@@ -1,6 +1,7 @@
 .omx/
 .worktrees/
 .DS_Store
+__pycache__/
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/workspaces.json

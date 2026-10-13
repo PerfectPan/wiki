@@ -15,13 +15,13 @@ const HELP_TEXT = `wiki CLI
 用法:
   bin/wiki help
   bin/wiki ingest <url> [--name <slug>] [--file <path>] [--author <name>] [--published <date>]
-  bin/wiki ingest <B站视频 URL> [--capture <json>] [--slides] [--language <lang>]
+  bin/wiki ingest <B站视频 URL> [--capture <json>] [--cookies-from-browser chrome] [--slides] [--frames 330,570] [--no-subs]
   bin/wiki check [path]
   bin/wiki check-jargon [path | --staged | --base <ref>]
   bin/wiki prompts <list|search|show|check> [...]
 
 命令:
-  ingest    抓取来源并存入 raw/sources/；--file 喂入预抓正文；B 站视频走本地转录（见 bin/README.md）
+  ingest    抓取来源并存入 raw/sources/；--file 喂入预抓正文；B 站视频优先用字幕，必要时本地转录（见 bin/README.md）
   check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
   check-jargon  检查 Wiki 用词，报告位置与修改建议
   prompts   提示词库：列表、搜索、打印原文、校验（见 prompts/README.md）
@@ -633,8 +633,8 @@ function main(argv: string[]): void {
   }
 
   if (command === "ingest") {
-    const VALUE_FLAGS = ["--name", "--file", "--author", "--published", "--capture", "--language"] as const;
-    const FLAG_ONLY = ["--slides"] as const;
+    const VALUE_FLAGS = ["--name", "--file", "--author", "--published", "--capture", "--language", "--cookies-from-browser", "--frames"] as const;
+    const FLAG_ONLY = ["--slides", "--no-subs"] as const;
     const parts = [...rest];
     const flags: string[] = [];
     for (const name of VALUE_FLAGS) {

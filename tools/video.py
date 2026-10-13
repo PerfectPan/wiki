@@ -2,17 +2,19 @@
 """
 video.py - 把视频来源整理成转录稿和幻灯片抽帧。
 
-目前主要面向 B 站视频：B 站的视频页、字幕和播放地址接口都有风控，被拦下时
-需要先在浏览器会话里取一次播放地址，再用 --capture 喂回来。转录和抽帧都在本地做。
+B 站接入交给 yt-dlp（它负责 wbi 签名、画质、cookie 和重试）；拿不到时再用浏览器会话
+取一次播放地址、通过 --capture 喂回来。字幕优先，没有字幕再下载音频做本地转录。
 
 用法:
-  python3 tools/video.py streams <视频页 URL> [--capture <json>] [--out <目录>]
+  python3 tools/video.py probe <视频页 URL> [--capture <json>] [--cookies-from-browser chrome] [--out <目录>]
+  python3 tools/video.py fetch <视频页 URL> [同上] [--no-subs] [--video]
   python3 tools/video.py transcribe <音频或视频文件> --out-dir <目录> [--language zh]
   python3 tools/video.py slides <视频文件> --out-dir <目录> [--interval 60] [--frames 330,570]
 
 产物:
-  <目录>/meta.json        来源元信息（标题、作者、时长）
-  <目录>/streams.json     可下载的音频、视频流地址
+  <目录>/meta.json        来源元信息（标题、作者、时长、字幕情况）
+  <目录>/subtitle.srt     官方字幕（有的话）
+  <目录>/audio.m4a        音频（没有字幕时）
   <目录>/transcript.srt   转录（绝对时间戳）
   <目录>/transcript.md    按段落整理的转录稿，每段带起始时间
   <目录>/*.png            缩略图总览或指定时间点的整帧
@@ -21,6 +23,7 @@ video.py - 把视频来源整理成转录稿和幻灯片抽帧。
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import re
 import shutil
@@ -29,7 +32,7 @@ import sys
 import time
 from dataclasses import dataclass
 from pathlib import Path
-from urllib.error import HTTPError, URLError
+from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 BROWSER_UA = (
@@ -37,8 +40,8 @@ BROWSER_UA = (
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
 BILIBILI_REFERER = "https://www.bilibili.com/"
-VIEW_API = "https://api.bilibili.com/x/web-interface/view"
 PLAYURL_API = "https://api.bilibili.com/x/player/wbi/playurl"
+SUBTITLE_LANGUAGES = ("zh-Hans", "zh-CN", "zh", "zh-Hant", "zh-TW", "en")
 DEFAULT_MODEL = "mlx-community/whisper-large-v3-turbo"
 DEFAULT_LANGUAGE = "zh"
 REPAIR_MARGIN_SECONDS = 5.0
@@ -69,14 +72,14 @@ def parse_bvid(url: str) -> str | None:
 
 
 def browser_hint(bvid: str | None = None, cid: str | None = None) -> str:
-    """直连被拦下时，给一段可以在浏览器会话里直接跑的取数脚本。"""
+    """连 yt-dlp 也拿不到时，给一段可以在浏览器会话里直接跑的取数脚本。"""
     bvid = bvid or "<BV 号>"
     query = (
         f"https://api.bilibili.com/x/player/wbi/playurl?bvid={bvid}"
         f"&cid={cid or '<cid>'}&fnval=16&fnver=0&fourk=1"
     )
     return (
-        "B 站直连被风控拦下（页面和接口都会返回 412）。用浏览器会话取一次播放地址：\n"
+        "yt-dlp 也没拿到内容。如果这是风控，可以在浏览器会话里直接取一次播放地址：\n"
         f"  1) 打开 https://www.bilibili.com/video/{bvid}/ ，等页面加载完；\n"
         "  2) 在页面上下文里执行（例如 browser-harness 的 js()）：\n"
         "     window.__INITIAL_STATE__.videoData 取 { bvid, cid, title, owner:{name}, duration }；\n"
@@ -222,8 +225,16 @@ def apply_repairs(
 # --- 网络 ---------------------------------------------------------------------
 
 
+def shorten(url: str, limit: int = 110) -> str:
+    """媒体地址很长（带一堆签名参数），报错时截短一点。"""
+    return url if len(url) <= limit else f"{url[:limit]}…"
+
+
 def http_bytes(url: str, referer: str | None = None, attempts: int = 3) -> bytes:
-    """带浏览器 UA 取内容；B 站的媒体地址还会检查 Referer。"""
+    """带浏览器 UA 取内容；B 站的媒体地址还会检查 Referer。
+
+    除了 HTTP 错误，还会碰到连接被直接断开的情况：同一种失败会重试几次。
+    """
     headers = {"User-Agent": BROWSER_UA, "Accept-Language": "zh-CN,zh;q=0.9"}
     if referer:
         headers["Referer"] = referer
@@ -234,25 +245,14 @@ def http_bytes(url: str, referer: str | None = None, attempts: int = 3) -> bytes
                 return response.read()
         except HTTPError as error:
             if error.code == 412:
-                raise FetchBlocked(f"HTTP 412（风控）：{url}", needs_browser=True) from error
+                raise FetchBlocked(f"HTTP 412（风控）：{shorten(url)}", needs_browser=True) from error
             last_error = error
-        except URLError as error:
+        except (OSError, http.client.HTTPException) as error:
+            # URLError 和 RemoteDisconnected 都在这里：B 站 CDN 会直接断连。
             last_error = error
         if attempt + 1 < attempts:
             time.sleep(1.5 * (attempt + 1))
-    raise FetchBlocked(f"请求失败：{url}（{last_error}）", needs_browser=True)
-
-
-def http_json(url: str, referer: str | None = None) -> dict:
-    try:
-        payload = json.loads(http_bytes(url, referer=referer).decode("utf-8", errors="replace"))
-    except json.JSONDecodeError as error:
-        raise FetchBlocked(f"接口没有返回 JSON（可能被风控拦下）：{url}", needs_browser=True) from error
-    if isinstance(payload, dict) and payload.get("code") not in (0, None):
-        raise FetchBlocked(
-            f"接口返回错误码 {payload.get('code')}: {payload.get('message')}", needs_browser=True
-        )
-    return payload
+    raise FetchBlocked(f"请求失败：{shorten(url)}（{last_error}）", needs_browser=True)
 
 
 def pick_audio(dash: dict) -> dict:
@@ -309,40 +309,205 @@ def from_capture(capture: Path, url: str) -> dict:
     }
 
 
-def resolve_streams(url: str, capture: Path | None = None) -> dict:
-    """拿到标题、时长和可下载的音频、视频地址。"""
+def subtitle_languages(info: dict) -> list[str]:
+    """列出 yt-dlp 这一趟能看到哪些字幕（人工字幕和自动字幕分开）。"""
+    languages: list[str] = []
+    for key in ("subtitles", "automatic_captions"):
+        for language in (info.get(key) or {}):
+            if language != "danmaku" and language not in languages:
+                languages.append(language)
+    return languages
+
+
+# 记住真正能用的那个 yt-dlp 入口：同一次运行里要跑好几次命令，
+# 没必要每次都先撞一遍旧版本。
+_PREFERRED_YTDLP: list[str] | None = None
+
+
+def ytdlp_candidates() -> list[list[str]]:
+    """候选入口：先用 PATH 里的 yt-dlp，再用 uvx 拉的最新版。"""
+    if _PREFERRED_YTDLP:
+        return [list(_PREFERRED_YTDLP)]
+    candidates: list[list[str]] = []
+    if shutil.which("yt-dlp"):
+        candidates.append(["yt-dlp"])
+    if shutil.which("uvx"):
+        candidates.append(["uvx", "--from", "yt-dlp", "yt-dlp"])
+    if not candidates:
+        raise FetchBlocked(
+            "B 站接入需要 yt-dlp：brew install yt-dlp，或装 uv 后用 uvx --from yt-dlp 运行。"
+        )
+    return candidates
+
+
+def looks_like_risk_control(text: str) -> bool:
+    """判断 yt-dlp 的报错是不是 B 站风控（旧版本常见）。"""
+    lowered = text.lower()
+    return "412" in text or "风控" in text or "risk" in lowered or "precondition failed" in lowered
+
+
+def run_ytdlp(
+    arguments: list[str],
+    *,
+    cookies_from_browser: str | None = None,
+    attempts: int = 3,
+) -> subprocess.CompletedProcess:
+    """跑 yt-dlp，带重试。
+
+    到 B 站的连接会间歇性出现 SSL 中断，所以同一条命令会多跑几次。安装版过旧时
+    B 站会返回 412，碰到这种情况直接换成 uvx 拉的最新版再试。真的被风控拦下时
+    把 needs_browser 置上，让调用方提示去浏览器会话取数。
+    """
+    retries = ["--retries", "5", "--fragment-retries", "5", "--extractor-retries", "3"]
+    candidates = ytdlp_candidates()
+    if cookies_from_browser:
+        arguments = [*arguments, "--cookies-from-browser", cookies_from_browser]
+
+    result: subprocess.CompletedProcess | None = None
+    for index, base in enumerate(candidates):
+        command = base + retries + arguments
+        for attempt in range(attempts):
+            result = subprocess.run(command, capture_output=True, text=True)
+            if result.returncode == 0:
+                global _PREFERRED_YTDLP
+                _PREFERRED_YTDLP = list(base)
+                return result
+            tail = (result.stderr or "").strip()
+            if looks_like_risk_control(tail):
+                break
+            if attempt + 1 < attempts:
+                time.sleep(2.0 * (attempt + 1))
+        if index + 1 < len(candidates):
+            print("yt-dlp 没成功，改用 uvx 拉最新版再试一遍…", file=sys.stderr)
+    tail = "\n".join(((result.stderr if result else "") or "").strip().split("\n")[-3:])
+    raise FetchBlocked(f"yt-dlp 失败：{tail}", needs_browser=looks_like_risk_control(tail))
+
+
+def ytdlp_info(url: str, cookies_from_browser: str | None = None) -> dict:
+    """取元信息（不下载）：标题、作者、时长、可见的字幕语言。"""
+    result = run_ytdlp(
+        ["--dump-single-json", "--skip-download", "--no-playlist", url],
+        cookies_from_browser=cookies_from_browser,
+    )
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as error:
+        raise FetchBlocked(f"yt-dlp 没有返回 JSON：{error}") from error
+
+
+def resolve_streams(
+    url: str,
+    capture: Path | None = None,
+    cookies_from_browser: str | None = None,
+) -> dict:
+    """拿到标题、时长、字幕可用情况和下载方式。
+
+    默认交给 yt-dlp（它负责 wbi 签名、画质和重试）；yt-dlp 也拿不到时，
+    用浏览器会话存下来的 --capture JSON 走人工路径。
+    """
     bvid = parse_bvid(url)
     if not bvid:
         raise FetchBlocked(f"URL 里没有 BV 号：{url}")
     if capture:
         return from_capture(capture, url)
-    view = http_json(f"{VIEW_API}?bvid={bvid}", referer=f"{BILIBILI_REFERER}video/{bvid}/")
-    data = view.get("data") or {}
-    if not data.get("cid"):
-        raise FetchBlocked(f"没有取到 cid：{bvid}", needs_browser=True)
-    playurl = http_json(
-        f"{PLAYURL_API}?bvid={bvid}&cid={data['cid']}&fnval=16&fnver=0&fourk=1",
-        referer=f"{BILIBILI_REFERER}video/{bvid}/",
-    )
-    dash = (playurl.get("data") or {}).get("dash") or {}
-    owner = data.get("owner") or {}
+    info = ytdlp_info(url, cookies_from_browser)
     return {
-        "bvid": bvid,
-        "cid": str(data["cid"]),
-        "title": data.get("title", ""),
-        "owner": owner.get("name", ""),
-        "duration": data.get("duration", 0),
-        "audio_url": pick_audio(dash).get("baseUrl", ""),
-        "video_url": pick_video(dash).get("baseUrl", ""),
-        "source": "api",
+        "bvid": info.get("id") or bvid,
+        "cid": str(info.get("cid") or ""),
+        "title": info.get("title") or "",
+        "owner": info.get("uploader") or info.get("channel") or "",
+        "duration": info.get("duration") or 0,
+        "subtitles": subtitle_languages(info),
+        "audio_url": "",
+        "video_url": "",
+        "source": "yt-dlp",
     }
 
 
+def fetch_media(
+    url: str,
+    out_dir: Path,
+    *,
+    kind: str = "audio",
+    info: dict | None = None,
+    cookies_from_browser: str | None = None,
+) -> Path:
+    """下载音频或视频。yt-dlp 路径交给 yt-dlp，capture 路径直接抓流地址。"""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    info = info or {}
+    if info.get("source") == "capture":
+        key = "audio_url" if kind == "audio" else "video_url"
+        if not info.get(key):
+            raise FetchBlocked(f"capture 里没有 {kind} 地址。")
+        return download(info[key], out_dir / f"{kind}.m4s")
+    selector = "bestaudio" if kind == "audio" else "bestvideo"
+    template = str(out_dir / f"{kind}.%(ext)s")
+    arguments = ["-f", selector, "--no-playlist"]
+    if kind == "audio":
+        arguments += ["-x", "--audio-format", "m4a"]
+    arguments += ["-o", template, url]
+    run_ytdlp(arguments, cookies_from_browser=cookies_from_browser)
+    produced = sorted(out_dir.glob(f"{kind}.*"), key=lambda path: path.stat().st_mtime)
+    if not produced:
+        raise FetchBlocked(f"yt-dlp 没有产出 {kind} 文件：{out_dir}")
+    return produced[-1]
+
+
+def fetch_subtitles(
+    url: str,
+    out_dir: Path,
+    *,
+    cookies_from_browser: str | None = None,
+    languages: tuple[str, ...] = SUBTITLE_LANGUAGES,
+) -> tuple[list[Cue], str] | None:
+    """先试官方字幕。没有就返回 None，让调用方回落到本地转录。"""
+    out_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        run_ytdlp(
+            [
+                "--write-subs",
+                "--write-auto-subs",
+                "--sub-langs",
+                ",".join(languages),
+                "--sub-format",
+                "srt",
+                "--convert-subs",
+                "srt",
+                "--skip-download",
+                "--no-playlist",
+                "-o",
+                str(out_dir / "subs.%(ext)s"),
+                url,
+            ],
+            cookies_from_browser=cookies_from_browser,
+        )
+    except FetchBlocked as error:
+        # 没登录时会报「字幕只有登录后才可用」，这也是正常情况；按没有字幕往下走。
+        print(f"字幕这一步没有成功，按没有字幕处理：{error}", file=sys.stderr)
+        return None
+    produced = sorted(out_dir.glob("*.srt"))
+    if not produced:
+        return None
+
+    def rank(path: Path) -> int:
+        for index, language in enumerate(languages):
+            if language in path.name:
+                return index
+        return len(languages)
+
+    chosen = min(produced, key=rank)
+    cues = parse_srt(chosen.read_text(encoding="utf-8", errors="replace"))
+    if not cues:
+        return None
+    language = next((code for code in languages if code in chosen.name), chosen.stem)
+    return cues, language
+
+
 def download(url: str, path: Path, referer: str = BILIBILI_REFERER) -> Path:
-    """下载媒体流。B 站的 CDN 偶发 SSL 中断，这里重试几次。"""
+    """下载媒体流。媒体地址带签名和时限，取到后尽快用（过期会 403）。"""
     payload = http_bytes(url, referer=referer, attempts=3)
     if not payload:
-        raise FetchBlocked(f"下载到 0 字节：{url}")
+        raise FetchBlocked(f"下载到 0 字节：{shorten(url)}")
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_bytes(payload)
     return path
@@ -573,28 +738,92 @@ def parse_timestamps(value: str) -> list[float]:
     return [float(item) for item in re.split(r"[,\s]+", value.strip()) if item]
 
 
-def command_streams(args: argparse.Namespace) -> None:
-    out_dir = Path(args.out)
+def probe_or_die(args: argparse.Namespace) -> dict:
     try:
-        info = resolve_streams(args.url, Path(args.capture) if args.capture else None)
+        return resolve_streams(
+            args.url,
+            Path(args.capture) if args.capture else None,
+            args.cookies_from_browser,
+        )
     except FetchBlocked as error:
         hint = f"\n\n{browser_hint(parse_bvid(args.url))}" if error.needs_browser else ""
         die(f"{error}{hint}")
+
+
+def describe(info: dict) -> list[str]:
+    duration = int(info.get("duration") or 0)
+    lines = [
+        f"标题: {info.get('title') or '(未知)'}",
+        f"作者: {info.get('owner') or '(未知)'}",
+    ]
+    if duration:
+        lines.append(f"时长: {duration // 60} 分 {duration % 60} 秒")
+    lines.append(f"取数方式: {info.get('source')}")
+    if info.get("source") == "capture":
+        lines.append(
+            f"capture 流: 音频{'有' if info.get('audio_url') else '无'}；视频{'有' if info.get('video_url') else '无'}"
+        )
+    elif "subtitles" in info:
+        available = info["subtitles"]
+        lines.append(f"可见字幕: {', '.join(available) if available else '没有（未登录时通常拿不到）'}")
+    return lines
+
+
+def write_meta(out_dir: Path, info: dict) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "meta.json").write_text(
-        json.dumps({key: info[key] for key in ("bvid", "cid", "title", "owner", "duration", "source")},
-                   ensure_ascii=False, indent=2),
-        encoding="utf-8",
-    )
-    (out_dir / "streams.json").write_text(
-        json.dumps({"audio_url": info["audio_url"], "video_url": info["video_url"]}, indent=2),
-        encoding="utf-8",
-    )
-    print(f"标题: {info['title']}")
-    print(f"作者: {info['owner']}")
-    print(f"时长: {int(info['duration']) // 60} 分 {int(info['duration']) % 60} 秒")
-    print(f"音频流: {'有' if info['audio_url'] else '无'}；视频流: {'有' if info['video_url'] else '无'}")
-    print(f"已写入: {out_dir / 'meta.json'}、{out_dir / 'streams.json'}")
+    payload = {
+        key: info.get(key)
+        for key in ("bvid", "cid", "title", "owner", "duration", "source", "subtitles")
+        if info.get(key) is not None
+    }
+    path = out_dir / "meta.json"
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return path
+
+
+def command_probe(args: argparse.Namespace) -> None:
+    info = probe_or_die(args)
+    for line in describe(info):
+        print(line)
+    print(f"已写入: {write_meta(Path(args.out), info)}")
+
+
+def command_fetch(args: argparse.Namespace) -> None:
+    info = probe_or_die(args)
+    out_dir = Path(args.out)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for line in describe(info):
+        print(line)
+    print(f"已写入: {write_meta(out_dir, info)}")
+
+    subtitles = None
+    if not args.no_subs and info.get("source") != "capture":
+        subtitles = fetch_subtitles(
+            args.url, out_dir / "subs", cookies_from_browser=args.cookies_from_browser
+        )
+    if subtitles:
+        cues, language = subtitles
+        (out_dir / "subtitle.srt").write_text(render_srt(cues), encoding="utf-8")
+        print(f"拿到官方字幕（{language}），{len(cues)} 段；不需要转录，下一步直接写正文")
+    else:
+        print("没有可用字幕，下一步下载音频做本地转录")
+        media = fetch_media(
+            args.url,
+            out_dir,
+            kind="audio",
+            info=info,
+            cookies_from_browser=args.cookies_from_browser,
+        )
+        print(f"音频: {media}")
+    if args.video:
+        video_path = fetch_media(
+            args.url,
+            out_dir,
+            kind="video",
+            info=info,
+            cookies_from_browser=args.cookies_from_browser,
+        )
+        print(f"视频: {video_path}")
 
 
 def command_transcribe(args: argparse.Namespace) -> None:
@@ -631,11 +860,25 @@ def main(argv: list[str]) -> None:
     parser = argparse.ArgumentParser(description="视频来源转录与抽帧")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    streams = subparsers.add_parser("streams", help="解析元信息和媒体流地址")
-    streams.add_argument("url", help="B 站视频页 URL")
-    streams.add_argument("--capture", help="浏览器会话里取到的 JSON（元信息 + playurl 返回体）")
-    streams.add_argument("--out", default=".", help="输出目录")
-    streams.set_defaults(handler=command_streams)
+    def add_source_options(sub: argparse.ArgumentParser) -> None:
+        sub.add_argument("url", help="B 站视频页 URL")
+        sub.add_argument("--capture", help="浏览器会话里取到的 JSON（元信息 + playurl 返回体）")
+        sub.add_argument(
+            "--cookies-from-browser",
+            help="把浏览器登录态传给 yt-dlp（如 chrome），登录后能拿到字幕和更高画质",
+        )
+
+    probe = subparsers.add_parser("probe", help="只看元信息和字幕情况，不下载")
+    add_source_options(probe)
+    probe.add_argument("--out", default=".", help="输出目录")
+    probe.set_defaults(handler=command_probe)
+
+    fetch = subparsers.add_parser("fetch", help="下载字幕，或下载音频（必要时再下视频）")
+    add_source_options(fetch)
+    fetch.add_argument("--out", default=".", help="输出目录")
+    fetch.add_argument("--no-subs", action="store_true", help="跳过字幕，直接下载音频")
+    fetch.add_argument("--video", action="store_true", help="同时下载视频（抽帧用）")
+    fetch.set_defaults(handler=command_fetch)
 
     transcribe = subparsers.add_parser("transcribe", help="转录并修掉解码循环")
     transcribe.add_argument("media", help="音频或视频文件")

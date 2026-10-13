@@ -1,9 +1,11 @@
 import importlib.util
+import http.client
 import json
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parent.parent
@@ -147,6 +149,70 @@ class VideoTest(unittest.TestCase):
             broken.write_text("not json", encoding="utf-8")
             with self.assertRaises(video.FetchBlocked):
                 video.from_capture(broken, "https://www.bilibili.com/video/BV1Myez6LEKc/")
+
+    def test_subtitle_languages_skips_danmaku_and_dedupes(self):
+        info = {
+            "subtitles": {"zh-Hans": [{}], "en": [{}], "danmaku": [{}]},
+            "automatic_captions": {"zh-Hans": [{}], "zh-Hant": [{}]},
+        }
+        self.assertEqual(video.subtitle_languages(info), ["zh-Hans", "en", "zh-Hant"])
+        self.assertEqual(video.subtitle_languages({}), [])
+
+    def test_fetch_media_uses_capture_urls_without_ytdlp(self):
+        with tempfile.TemporaryDirectory() as temp:
+            out_dir = Path(temp)
+            called: list[str] = []
+
+            def fake_download(url, path, **kwargs):
+                called.append(url)
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_bytes(b"media")
+                return path
+
+            info = {"source": "capture", "audio_url": "https://example.com/audio", "video_url": ""}
+            with patch.object(video, "download", side_effect=fake_download), \
+                 patch.object(video, "run_ytdlp", side_effect=AssertionError("capture 路径不应调用 yt-dlp")):
+                media = video.fetch_media("https://www.bilibili.com/video/BV1Myez6LEKc/", out_dir, info=info)
+            self.assertEqual(called, ["https://example.com/audio"])
+            self.assertEqual(media.name, "audio.m4s")
+
+    def test_fetch_media_without_urls_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            with self.assertRaises(video.FetchBlocked):
+                video.fetch_media("https://example.com", Path(temp), info={"source": "capture"})
+
+    def test_http_bytes_retries_transient_disconnects(self):
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return False
+
+            def read(self):
+                return b"payload"
+
+        calls: list[str] = []
+
+        def fake_urlopen(request, timeout=None):
+            calls.append(request.full_url)
+            if len(calls) == 1:
+                raise http.client.RemoteDisconnected("remote end closed connection")
+            return Response()
+
+        with patch.object(video, "urlopen", side_effect=fake_urlopen), \
+             patch.object(video.time, "sleep"):
+            self.assertEqual(video.http_bytes("https://example.com/media"), b"payload")
+        self.assertEqual(len(calls), 2)
+
+    def test_http_bytes_reports_persistent_failure_as_fetch_blocked(self):
+        def always_fail(request, timeout=None):
+            raise http.client.RemoteDisconnected("remote end closed connection")
+
+        with patch.object(video, "urlopen", side_effect=always_fail), \
+             patch.object(video.time, "sleep"):
+            with self.assertRaises(video.FetchBlocked):
+                video.http_bytes("https://example.com/media", attempts=2)
 
     def test_browser_hint_names_the_video(self):
         hint = video.browser_hint("BV1Myez6LEKc")

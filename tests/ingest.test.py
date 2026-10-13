@@ -98,15 +98,16 @@ class IngestTest(unittest.TestCase):
                 self.run_ingest("https://example.com/blocked")
         self.assertEqual(list(self.sources.iterdir()), [])
 
-    def test_bilibili_video_uses_capture_and_local_transcript(self):
-        capture = self.root / "capture.json"
-        capture.write_text(json.dumps(CAPTURE), encoding="utf-8")
+    def test_bilibili_video_uses_ytdlp_and_local_transcript(self):
+        info = {"bvid": "BV1Myez6LEKc", "title": "Local-first 同步引擎还缺什么",
+                "owner": "六十四条悟", "duration": 1521, "source": "yt-dlp", "subtitles": []}
         cues = [ingest.video.Cue(0.0, 2.0, "先讲目录怎么同步"), ingest.video.Cue(2.0, 4.0, "再看正文")]
 
-        def fake_download(url, path, **kwargs):
-            path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_bytes(b"media")
-            return path
+        def fake_fetch(url, out_dir, **kwargs):
+            out_dir.mkdir(parents=True, exist_ok=True)
+            media = out_dir / ("audio.m4a" if kwargs.get("kind", "audio") == "audio" else "video.mp4")
+            media.write_bytes(b"media")
+            return media
 
         def fake_sheets(video_path, out_dir, **kwargs):
             out_dir.mkdir(parents=True, exist_ok=True)
@@ -114,16 +115,19 @@ class IngestTest(unittest.TestCase):
             sheet.write_bytes(b"png")
             return [sheet]
 
-        with patch.object(ingest.video, "download", side_effect=fake_download), \
+        with patch.object(ingest.video, "resolve_streams", return_value=info), \
+             patch.object(ingest.video, "fetch_subtitles", return_value=None), \
+             patch.object(ingest.video, "fetch_media", side_effect=fake_fetch), \
              patch.object(ingest.video, "transcribe_with_repair", return_value=(cues, {"repairs": []})), \
              patch.object(ingest.video, "contact_sheets", side_effect=fake_sheets):
             self.run_ingest(
                 "https://www.bilibili.com/video/BV1Myez6LEKc/",
-                "--name", "bili-talk", "--capture", str(capture), "--slides",
+                "--name", "bili-talk", "--slides",
             )
         text = (self.sources / "bili-talk.md").read_text()
         self.assertIn("type: video", text)
         self.assertIn("# Local-first 同步引擎还缺什么", text)
+        self.assertIn("文字来自本地转录", text)
         self.assertIn("**[00:00]**", text)
         self.assertIn("先讲目录怎么同步", text)
         self.assertIn("raw/assets/bili-talk-slides-1.png", text)
@@ -131,8 +135,36 @@ class IngestTest(unittest.TestCase):
             (self.root / "raw" / "assets" / "bili-talk-slides-1.png").read_bytes(), b"png"
         )
 
+    def test_bilibili_prefers_official_subtitles(self):
+        info = {"bvid": "BV1Myez6LEKc", "title": "有字幕的视频", "owner": "up主",
+                "duration": 600, "source": "yt-dlp", "subtitles": ["zh-Hans"]}
+        cues = [ingest.video.Cue(0.0, 3.0, "这一段来自官方字幕")]
+        with patch.object(ingest.video, "resolve_streams", return_value=info), \
+             patch.object(ingest.video, "fetch_subtitles", return_value=(cues, "zh-Hans")), \
+             patch.object(ingest.video, "fetch_media", side_effect=AssertionError("字幕优先时不应下载媒体")), \
+             patch.object(ingest.video, "transcribe_with_repair", side_effect=AssertionError("有字幕时不应转录")):
+            self.run_ingest("https://www.bilibili.com/video/BV1Myez6LEKc/", "--name", "bili-subs")
+        text = (self.sources / "bili-subs.md").read_text()
+        self.assertIn("文字来自官方字幕（zh-Hans）", text)
+        self.assertIn("这一段来自官方字幕", text)
+        self.assertNotIn("机器转录", text)
+
+    def test_bilibili_capture_path_downloads_streams(self):
+        capture = self.root / "capture.json"
+        capture.write_text(json.dumps(CAPTURE), encoding="utf-8")
+        cues = [ingest.video.Cue(0.0, 1.0, "capture 路径")]
+        with patch.object(ingest.video, "fetch_subtitles", side_effect=AssertionError("capture 路径不应试 yt-dlp 字幕")), \
+             patch.object(ingest.video, "download", side_effect=lambda url, path, **kw: (path.parent.mkdir(parents=True, exist_ok=True), path.write_bytes(b"media"), path)[-1]), \
+             patch.object(ingest.video, "transcribe_with_repair", return_value=(cues, {"repairs": []})):
+            self.run_ingest(
+                "https://www.bilibili.com/video/BV1Myez6LEKc/",
+                "--name", "bili-capture", "--capture", str(capture),
+            )
+        text = (self.sources / "bili-capture.md").read_text()
+        self.assertIn("capture 路径", text)
+
     def test_bilibili_blocked_direct_access_points_at_capture(self):
-        blocked = ingest.video.FetchBlocked("HTTP 412（风控）", needs_browser=True)
+        blocked = ingest.video.FetchBlocked("yt-dlp 失败", needs_browser=True)
         with patch.object(ingest.video, "resolve_streams", side_effect=blocked), \
              patch.object(ingest, "die", side_effect=SystemExit) as die_mock:
             with self.assertRaises(SystemExit):

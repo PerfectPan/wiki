@@ -526,12 +526,20 @@ def guard_direct_body(body_md: str, url: str) -> str:
     return body_md
 
 
+def _timestamp_of(frame: Path) -> float:
+    """从 `frame-330s.png` 这种文件名里取回时间点。"""
+    match = re.search(r"-(\d+)s\.png$", frame.name)
+    return float(match.group(1)) if match else 0.0
+
+
 def bilibili_video_body(
     title: str,
     info: dict,
     cues: list,
     report: dict,
     sheet_names: list[str],
+    frame_names: list[str],
+    origin: str,
 ) -> str:
     """拼出 B 站视频素材的正文：头注释 + 按段落整理的转录稿。"""
     duration = int(info.get("duration") or 0)
@@ -539,13 +547,17 @@ def bilibili_video_body(
         f"# {title}",
         "",
         "<!--",
-        "本文件由 tools/ingest.py 调用 tools/video.py 生成：下载音频后在本地转录，没有人工逐句校对。",
+        f"本文件由 tools/ingest.py 调用 tools/video.py 生成；文字来自{origin}。",
         f"讲者 / 发布账号：{info.get('owner') or '未知'}",
     ]
     if duration:
         lines.append(f"时长：{duration // 60} 分 {duration % 60} 秒")
+    if origin == "本地转录":
+        lines.append("机器转录没有人工逐句校对。")
     if sheet_names:
         lines.append("幻灯片缩略图总览：" + "、".join(f"raw/assets/{name}" for name in sheet_names))
+    if frame_names:
+        lines.append("按时间点取的整帧：" + "、".join(f"raw/assets/{name}" for name in frame_names))
     lines += [
         "幻灯片是这类分享的事实层：表格、数字和标题以幻灯片为准，转录只作旁证。",
         "转写里的专有名词可能有识别误差，写作前用幻灯片或公开资料核对。",
@@ -655,7 +667,16 @@ def main():
     parser.add_argument("--author", help="来源作者，写入头注释")
     parser.add_argument("--published", help="来源发布日期（YYYY-MM-DD），写入头注释")
     parser.add_argument("--capture", help="浏览器会话里取到的元信息和播放地址 JSON（B 站）")
+    parser.add_argument(
+        "--cookies-from-browser",
+        help="把浏览器登录态传给 yt-dlp（如 chrome），登录后能拿到字幕和更高画质",
+    )
+    parser.add_argument("--no-subs", action="store_true", help="跳过官方字幕，直接做本地转录")
     parser.add_argument("--slides", action="store_true", help="给 B 站视频再存一份幻灯片缩略图总览到 raw/assets/")
+    parser.add_argument(
+        "--frames",
+        help="配合 --slides 使用：再抽这几个时间点的整帧到 raw/assets/，如 330,570",
+    )
     parser.add_argument("--language", default="zh", help="转录语言，默认 zh")
     args = parser.parse_args()
 
@@ -685,31 +706,77 @@ def main():
     elif source_type == "video" and is_bilibili_url(url):
         work_dir = Path(tempfile.mkdtemp(prefix="wiki-video-"))
         try:
-            info = video.resolve_streams(url, Path(args.capture) if args.capture else None)
+            info = video.resolve_streams(
+                url,
+                Path(args.capture) if args.capture else None,
+                args.cookies_from_browser,
+            )
         except video.FetchBlocked as error:
             hint = f"\n\n{video.browser_hint(video.parse_bvid(url))}" if error.needs_browser else ""
             die(f"{error}{hint}")
         title = info.get("title") or name
-        print(f"B 站视频: {title}")
+        print(f"B 站视频: {title}（取数方式：{info.get('source')}）")
         try:
-            media = video.download(info["audio_url"], work_dir / "audio.m4s")
+            subtitles = None
+            if not args.no_subs and info.get("source") != "capture":
+                subtitles = video.fetch_subtitles(
+                    url, work_dir / "subs", cookies_from_browser=args.cookies_from_browser
+                )
             sheet_names: list[str] = []
+            frame_names: list[str] = []
+            if subtitles:
+                cues, language = subtitles
+                origin = f"官方字幕（{language}）"
+                report: dict = {"repairs": []}
+                print(f"用官方字幕，{len(cues)} 段，跳过转录")
+            else:
+                origin = "本地转录"
+                media = video.fetch_media(
+                    url,
+                    work_dir,
+                    kind="audio",
+                    info=info,
+                    cookies_from_browser=args.cookies_from_browser,
+                )
+                print("正在本地转录（mlx-whisper，首次会下载模型）…")
+                cues, report = video.transcribe_with_repair(media, work_dir, language=args.language)
+                print(f"转录 {len(cues)} 段，已修掉 {len(report.get('repairs', []))} 处解码循环")
             if args.slides:
-                video_path = video.download(info["video_url"], work_dir / "video.m4s")
-                assets_dir = sources_dir.parent / "assets"
-                assets_dir.mkdir(parents=True, exist_ok=True)
-                for index, sheet in enumerate(
-                    video.contact_sheets(video_path, work_dir / "slides"), start=1
-                ):
-                    asset = assets_dir / f"{name}-slides-{index}.png"
-                    shutil.copyfile(sheet, asset)
-                    sheet_names.append(asset.name)
-            print("正在本地转录（mlx-whisper，首次会下载模型）…")
-            cues, report = video.transcribe_with_repair(media, work_dir, language=args.language)
+                # 抽帧是附加产物：下载视频或抽帧失败不应该把已经拿到的转录搞丢。
+                try:
+                    video_path = video.fetch_media(
+                        url,
+                        work_dir,
+                        kind="video",
+                        info=info,
+                        cookies_from_browser=args.cookies_from_browser,
+                    )
+                    assets_dir = sources_dir.parent / "assets"
+                    assets_dir.mkdir(parents=True, exist_ok=True)
+                    for index, sheet in enumerate(
+                        video.contact_sheets(video_path, work_dir / "slides"), start=1
+                    ):
+                        asset = assets_dir / f"{name}-slides-{index}.png"
+                        shutil.copyfile(sheet, asset)
+                        sheet_names.append(asset.name)
+                    for frame in (
+                        video.extract_frames(
+                            video_path,
+                            work_dir / "frames",
+                            video.parse_timestamps(args.frames),
+                        )
+                        if args.frames
+                        else []
+                    ):
+                        asset = assets_dir / f"{name}-frame-{int(_timestamp_of(frame))}s.png"
+                        shutil.copyfile(frame, asset)
+                        frame_names.append(asset.name)
+                except video.FetchBlocked as error:
+                    print(f"抽帧没成功，转录照常写入：{error}", file=sys.stderr)
         except video.FetchBlocked as error:
             die(str(error))
-        print(f"转录 {len(cues)} 段，已修掉 {len(report.get('repairs', []))} 处解码循环")
-        body_md = bilibili_video_body(title, info, cues, report, sheet_names)
+        body_md = bilibili_video_body(title, info, cues, report, sheet_names, frame_names, origin)
+        print(f"中间产物留在：{work_dir}")
     elif source_type == "video" and is_youtube_url(url):
         try:
             transcript, title = fetch_youtube_transcript(url)

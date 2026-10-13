@@ -38,22 +38,41 @@ bin/wiki ingest <url> --file <path> --author <name> --published <date>
 ### B 站视频
 
 ```bash
-bin/wiki ingest <B站视频 URL> [--name <slug>] [--capture <json>] [--slides] [--language zh]
+bin/wiki ingest <B站视频 URL> [--name <slug>] [--slides] [--frames 330,570] [--cookies-from-browser chrome] [--capture <json>] [--no-subs]
 ```
 
-B 站的视频页、字幕接口和播放地址接口都有风控，直连通常返回 412。这条路径的流程是：先在浏览器会话里取一次元信息和播放地址，存成 JSON 用 `--capture` 传回来；工具负责下载音频、在本地转录（mlx-whisper）、修掉转录里的解码循环，结果写进 `raw/sources/`。加 `--slides` 会再把一份幻灯片缩略图总览写进 `raw/assets/`。
+接入交给 [yt-dlp](https://github.com/yt-dlp/yt-dlp)（仓库的 YouTube 路径本来就在用它），它负责 wbi 签名、画质、cookie 和重试。流程是：
 
-`--capture` 的 JSON 可以写成 `{ "meta": { bvid, cid, title, owner, duration }, "data": <playurl 接口返回体> }`，也可以直接就是 playurl 的返回体（含 `code` / `data` / `dash`）。没传 `--capture` 时会先试直连；被拦下时报错，并打印一段可以在浏览器会话里直接跑的取数脚本。
+1. `probe` 取元信息，同时看有哪些字幕；
+2. 有字幕就用字幕（`--subs` 优先，秒级、不跑模型），没有就下载音频在本机转录（mlx-whisper）；
+3. `--slides` 再下一份视频，抽一页缩略图总览写进 `raw/assets/`；想读某几页的表格和数字，加 `--frames 330,570` 把那几个时间点的整帧也存下来。
 
-分步命令（下载、转录、抽帧可以分开跑，也可以只用其中一步）：
+登录后才能拿到字幕和更高画质，需要时用 `--cookies-from-browser chrome` 把浏览器登录态传给 yt-dlp。加 `--no-subs` 可跳过字幕直接转录。
+
+**两个已经踩过的坑：**
+
+- yt-dlp 版本旧了会稳定拿到 HTTP 412（本机 2026.03.17 复现过，同一视频用当日最新版就正常）。工具会用 PATH 里的版本先试，碰到 412 自动改用 `uvx` 拉最新版重试。同一次运行里会记住真正能用的那个入口。
+- 到 B 站 CDN 的连接会间歇性 SSL 中断，命令自带重试。抽帧是附加产物，下载视频或抽帧失败不会影响已经拿到的转录。
+
+直连和 yt-dlp 都不行时（例如换了个出口 IP 被风控），可以用 `--capture` 传入浏览器会话里取到的播放地址：
 
 ```bash
-python3 tools/video.py streams <B站视频 URL> [--capture <json>] --out <目录>
+python3 tools/video.py probe <B站视频 URL>   # 被拦下时会打印可直接在浏览器会话里跑的取数脚本
+bin/wiki ingest <URL> --name <slug> --capture <json>
+```
+
+`--capture` 的 JSON 可以写成 `{ "meta": { bvid, cid, title, owner, duration }, "data": <playurl 接口返回体> }`，也可以直接就是 playurl 的返回体（含 `code` / `data` / `dash`）。这条路直接下载音频和视频流，比 yt-dlp 路径快，不用重试。
+
+分步命令（诊断、下载、转录、抽帧可以分开跑）：
+
+```bash
+python3 tools/video.py probe <B站视频 URL> [--capture <json>] --out <目录>
+python3 tools/video.py fetch <B站视频 URL> --out <目录> [--no-subs] [--video]
 python3 tools/video.py transcribe <音频或视频文件> --out-dir <目录> [--language zh]
 python3 tools/video.py slides <视频文件> --out-dir <目录> [--interval 60] [--frames 330,570]
 ```
 
-`slides` 默认每 60 秒抽一帧、拼成 5x5 的缩略图总览，用来先看清整场讲了哪些页；`--frames` 再对指定时间点取整帧，用来读表格和数字。抽出来的帧先落在临时目录，只把正文真正引用的复制进 `raw/assets/`。
+`slides` 默认每 60 秒抽一帧、拼成 5x5 的缩略图总览，用来先看清整场讲了哪些页；`--frames` 再对指定时间点取整帧，用来读表格和数字。抽出来的帧先落在临时目录，只把正文真正引用的复制进 `raw/assets/`。`ingest` 跑完会打印中间产物目录，里面留了下载好的音频和视频，不必为了补一张图重新下载。
 
 ## Wiki 用词检查
 

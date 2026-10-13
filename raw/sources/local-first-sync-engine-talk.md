@@ -11,8 +11,10 @@ note: body pre-fetched; direct fetch skipped
 
 <!--
 本文件是 Bilibili 视频的机器转录稿，没有做人工逐句校对。
-讲者：陈志轩（Loro 作者，Lody 团队）；视频发布账号：六十四条悟
-时长：25:20
+讲者：陈子轩（Zixuan Chen，Loro 作者，Lody 团队）；视频发布账号：六十四条悟
+时长：25:20；幻灯片上的英文标题：CRDT is not enough
+讲者的幻灯片才是这场分享的事实层，wiki 页面在关键几页上按截图核对过。
+已取的关键页截图存在 raw/assets/2026-09-20-local-first-*.png。
 视频简介：CRDT 解决了「各自修改、最终收敛」，但真要做一个本地优先的应用，它只解决了问题的一小部分。这场分享来自做 Lody 的经验：用一个有真实用户的应用，反推同步引擎到底需要解决哪些问题什么
 转录工具：mlx-whisper（whisper-large-v3-turbo），--language zh
 时间戳是段落起始时间，例如 [12:51]。
@@ -29,6 +31,10 @@ note: body pre-fetched; direct fetch skipped
   Walker → Web Worker
   elacity → Elasticsearch
   余一化搜索 → 疑为「语义化搜索」，未核实
+名字和数字另外按幻灯片校正过两处：
+  陈志轩 → 陈子轩（自我介绍页写作「陈子轩 · Zixuan Chen」）
+  CRDT is unknown enough → CRDT is not enough（自我介绍页）
+  目录格式「换了三次」→ 幻灯片标题是「同一个目录，格式换了四次」
 -->
 
 **[00:00]** 云端这个时候是作为一个备份的概念和一个辅助者的概念而不是一个权威所有者的概念在这个架构里面云端只是一个备份和额外的副本那Local First和Local Only是不一样的就是Local Only是我只能在本地去做这些事情但Local First是我还是希望能够保持我多设备同步的这种便利性的他给用户承诺的是这五种体验就是我能秒开因为我数据读写都在本地

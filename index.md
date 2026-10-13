@@ -300,6 +300,7 @@
   - [[wiki/syntheses/systems/serverless-app-layering-isolation|Serverless 应用分层与隔离]]
   - [[wiki/syntheses/systems/rpc-codegen-runtime-boundary|RPC 代码生成与运行时的边界]]
   - [[wiki/syntheses/systems/crdt-data-compression|CRDT 数据压缩策略]]
+  - [[wiki/syntheses/systems/local-first-sync-engine-gaps|Local-first 同步引擎还缺什么]]
   - [[wiki/syntheses/systems/gigabit-network-download-mechanisms|千兆宽带下载机制与带宽经济学]]
 - `product`
   - [[wiki/syntheses/product/logseq-architecture-evolution|Logseq 架构演进脉络]]

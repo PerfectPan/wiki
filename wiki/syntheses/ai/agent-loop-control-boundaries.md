@@ -1,11 +1,11 @@
 ---
 title: Agent 循环工作流的控制边界
-description: 结合 loop 分类与产出、注意力双目标，设计 agent 自动化的触发、停止、验收、并行协作和资源边界。
+description: 梳理 Agent loop 的控制边界，以及最大化产出、最小化人的注意力投入的双重优化目标。
 type: synthesis
 category: ai
 created: 2026-07-08
-updated: 2026-10-13
-timestamp: 2026-10-13
+updated: 2026-10-14
+timestamp: 2026-10-14
 tags:
   - agent
   - workflow
@@ -16,15 +16,11 @@ source_refs:
   - https://x.com/claudedevs/status/2074208949205881033
   - raw/sources/loopx.md
   - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html
-  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/product/foundations/project-level-reward-model.md
-  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/development/control-plane-course/00-concept-primer.md
 resource:
   - https://threadnavigator.com/thread/2074208949205881033/
   - https://x.com/claudedevs/status/2074208949205881033
   - raw/sources/loopx.md
   - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html
-  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/product/foundations/project-level-reward-model.md
-  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/development/control-plane-course/00-concept-primer.md
 ---
 # Agent 循环工作流的控制边界
 
@@ -35,8 +31,6 @@ Agent loop 不只是“让模型多跑几轮”。如果没有明确触发条件
 ## 简答
 
 Agent loop 的设计重点是决定把哪一块控制权交出去：检查、停止条件、触发器，还是整条例行工作流。越往后自动化程度越高，越需要把完成证据、最大轮数、权限边界、验证手段和模型成本写成显式协议。
-
-判断自动化有没有收益，还要同时看**经过验证的有效产出**和**获得这些产出所需的人的注意力**。减少持续盯守，把人的投入留给目标、质量标准和必要授权，是比单纯增加运行时间或 Agent 数量更具体的设计目标。[双目标与产出因素][loopx-objective]、[人的判断与协作负担][loopx-attention]
 
 ## 来源事实
 
@@ -56,11 +50,20 @@ ClaudeDevs 将 loop 定义为：agent 重复执行工作循环，直到满足停
 - 质量取决于 loop 外围系统：干净代码库、可达文档、可量化 verification skill，以及独立 review agent。
 - 成本控制要靠边界：选合适模型和 primitive、设置明确 done/stop 条件、先小范围试跑、确定性工作交给脚本、不要过密轮询，并通过用量工具观察 skill、subagent 和 workflow 的消耗。
 
-### 长程工作的产出与注意力
+### 长程工作的双重优化目标
 
-LoopX 的公开文章提出“最大化 Agent 产出，最小化人的注意力投入”，并列出四个产出因素：**模型能力、有效并行度、时间利用率、目标对齐程度**。文章要求观察每单位算力和人类注意力换来了多少经过验证的产出，并以“无干预跑稳，有干预跑好”描述技术目标：缺少新事实时等待，路线失效时重新规划，验收满足后停止，人的反馈进入下一轮状态。[公开文章第 1 节][loopx-objective]
+- **目标 1：最大化 Agent 产出（Maximize Agent Output）**。[公开原文][loopx-objective]
+  - **模型能力**：具体工作由底层模型与 Harness 执行。
+  - **有效并行度**：优先并行验收边界可分离的工作，控制评审和协调负担。[并行条件][loopx-parallel]
+  - **时间利用率**：不需要人判断时持续推进，缺少新事实时安静等待。
+  - **目标对齐程度**：围绕目标与验收推进，让人的反馈成为下一轮可继承的状态。
+- **目标 2：最小化人的注意力投入（Minimize Human Attention）**。[公开原文][loopx-attention]
+  - **展示面**：一起呈现产物、证据、尚未决定的选择和继续投入的预期价值，方便人判断方向与质量。
+  - **交互面**：在重要交付、路线决策或主要阻塞时汇报；相关事件合并、去重，无变化时不反复打断人。
 
-另一个产品文档写出 `project_reward = f(quantity, quality, token_cost, user_attention_cost)`：交付数量、质量、模型或执行预算消耗、人的指导投入共同用于项目复盘。这是**另一个观察项目价值的视角**，不能与上述四个产出因素混成一组变量。文档明确它不是模型训练奖励函数，也不替代任务 benchmark；它没有给出可计算的函数形式或权重。质量证据不足时，文档建议先用粗粒度标签。[产品价值模型][loopx-reward]
+技术目标是“无干预跑稳，有干预跑好”：路线失效时重新规划，控制状态矛盾时自我修复，验收满足后停止。[公开原文][loopx-objective]
+
+以上是优化目标与影响因素的定性拆解，原文未给出四因素的数学等式。
 
 ## 综合结论
 
@@ -77,38 +80,6 @@ Agent loop 可以理解为一组逐步上升的自动化交接层：
 
 4. **Proactive loop：把整条例行工作流系统化。**
    这类 loop 已经接近自动化系统，不只是 prompt 技巧。它需要任务路由、权限策略、子代理并行、审查 agent、状态存储、失败恢复和成本监控。适用场景必须是“反复出现、输入清楚、验收可写、权限边界可控”的工作流。
-
-## 用双目标检查一次循环
-
-以下是把公开框架用于工程设计的检查方法。四个因素提供优化方向，**没有定义四因素乘积，也不是经过实测标定的产出定律**。不能由此推导运行更久、并行更多或消耗更多 token 就一定增加收益。
-
-以“把公开 issue 推进为可审阅修复 PR”为例，可以逐项检查：
-
-| 产出因素 | 工程含义 | 实际检查问题 |
-| --- | --- | --- |
-| 模型能力 | 模型能完成所需的理解与推理；落地时还需检查 Agent-loop 的工具调用与验证能力 | 能复现问题并提供验证证据吗？当前失败来自模型判断，还是工具与执行循环缺少支持？ |
-| 有效并行度 | 工作与验收边界可分离，并行结果能可靠交接 | 复现、定位和独立审查能分别推进吗？新增 Agent 节省的等待，是否被冲突处理、结果整合与人工 review 抵消？ |
-| 时间利用率 | 有可推进的工作时持续执行，等待期间按条件恢复 | CI 没有新结果时能退避吗？还有独立任务可做吗？验收通过或预算耗尽时会停止吗？ |
-| 目标对齐程度 | 每轮工作仍服务于原目标与验收标准，纠正后的方向能被后续轮次使用 | PR 修改的是原问题吗？用户更新的验收条件能否跨 session 保留？任务清单做完是否真的意味着目标完成？ |
-
-四因素的名称来自[公开文章][loopx-objective]。将模型能力与 Agent-loop 执行能力一并检查，是本文的工程化解释；[概念导读][loopx-primer]区分模型执行与持久状态，并要求反馈保留权限和证据边界。[并行协作的讨论][loopx-parallel]还强调优先在验收边界可分离的地方并行，紧密耦合的修改可能更适合一个 Worker。
-
-### 减少盯守，保留关键决策
-
-Minimize Human Attention 指减少获得产出所需的注意力投入。设计交互时，可检查以下问题：
-
-- **什么变化值得打断人？** 重要交付、主要阻塞或路线选择是否清楚？能否合并重复汇报，让无变化的巡检保持安静？
-- **人被要求判断什么？** 是否需要决定目标、质量标准、权限或风险？问题是否附带产物、证据和可选行动，还是只在要求人提醒 Agent 继续？
-- **一次反馈能用多久？** 对目标和验收的纠正是否进入后续状态，避免每次新 session 都让人重新解释？
-- **注意力负担是否转移了？** 虽然消息少了，人是否反而需要花更多时间找错误、协调 Agent 或重新验收？
-
-这些问题综合自[交互与协作负担][loopx-attention]、[注意力成本定义][loopx-reward]和[反馈的状态边界][loopx-primer]。减少注意力投入不等于消除 Human Interaction（人机交互）；原文明确要求在需要判断时询问，并保留授权与验收。
-
-### Token 另记资源预算
-
-在上述 PR 例子中，可以分别记录通过验收的修复数量与质量、token 或执行时间、人的 review 与纠偏投入。token 表示资源消耗，不能与并行度拼成原文没有的成本公式。上游的 `token_cost` 也允许用运行分钟数或配额槽位作替代记录，因此记录时要注明单位与采集方式，并先在同一项目或宿主内比较。[预算指标与注意力成本][loopx-budget]
-
-本文建议先固定一类任务、验收标准和预算，再小范围比较：新增并行或延长运行后，经过验证的产出是否增加、返工是否减少、人的总投入是否可承受。必要的授权与 review 仍须保留，单看 token 数、运行时长、消息数量或 Agent 数量都不足以说明收益。
 
 ## 设计检查表
 
@@ -153,12 +124,7 @@ Minimize Human Attention 指减少获得产出所需的注意力投入。设计�
 - Original X thread: https://x.com/claudedevs/status/2074208949205881033
 - [[raw/sources/loopx|LoopX 双目标的公开来源核查]]：固定提交、证据位置与适用限制。
 - [LoopX：从一次性 Agent 到长程控制面][loopx-objective]：双目标与四因素；[交互面与并行条件][loopx-attention]。
-- [Project-Level Reward Model][loopx-reward]：用于产品复盘的价值维度，包含 token 与人的注意力投入。
-- [概念导读][loopx-primer]：无人干预与有人干预的状态、权限和证据边界。
 
 [loopx-objective]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L60-L66
 [loopx-attention]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L210-L234
-[loopx-parallel]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L224-L234
-[loopx-reward]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/product/foundations/project-level-reward-model.md#L11-L85
-[loopx-budget]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/product/foundations/project-level-reward-model.md#L59-L85
-[loopx-primer]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/docs/development/control-plane-course/00-concept-primer.md#L3-L45
+[loopx-parallel]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L216-L234

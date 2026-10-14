@@ -52,18 +52,16 @@ ClaudeDevs 将 loop 定义为：agent 重复执行工作循环，直到满足停
 
 ### 长程工作的双重优化目标
 
-- **目标 1：最大化 Agent 产出（Maximize Agent Output）**。[公开原文][loopx-objective]
+- **目标 1：最大化 Agent 产出（Maximize Agent Output）**
   - **模型能力**：具体工作由底层模型与 Harness 执行。
-  - **有效并行度**：优先并行验收边界可分离的工作，控制评审和协调负担。[并行条件][loopx-parallel]
+  - **有效并行度**：优先并行验收边界可分离的工作，控制评审和协调负担。
   - **时间利用率**：不需要人判断时持续推进，缺少新事实时安静等待。
   - **目标对齐程度**：围绕目标与验收推进，让人的反馈成为下一轮可继承的状态。
-- **目标 2：最小化人的注意力投入（Minimize Human Attention）**。[公开原文][loopx-attention]
+- **目标 2：最小化人的注意力投入（Minimize Human Attention）**
   - **展示面**：一起呈现产物、证据、尚未决定的选择和继续投入的预期价值，方便人判断方向与质量。
   - **交互面**：在重要交付、路线决策或主要阻塞时汇报；相关事件合并、去重，无变化时不反复打断人。
 
-技术目标是“无干预跑稳，有干预跑好”：路线失效时重新规划，控制状态矛盾时自我修复，验收满足后停止。[公开原文][loopx-objective]
-
-以上是优化目标与影响因素的定性拆解，原文未给出四因素的数学等式。
+技术目标是“无干预跑稳，有干预跑好”：路线失效时重新规划，控制状态矛盾时自我修复，验收满足后停止。
 
 ## 综合结论
 
@@ -127,4 +125,3 @@ Agent loop 可以理解为一组逐步上升的自动化交接层：
 
 [loopx-objective]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L60-L66
 [loopx-attention]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L210-L234
-[loopx-parallel]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L216-L234

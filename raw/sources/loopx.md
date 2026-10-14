@@ -25,7 +25,7 @@ note: body pre-fetched; direct fetch skipped
 
 - 使用 GitHub CLI `gh api` 读取文章的固定 `ref`，按上述行号复核保留内容。
 - 整理页按双目标和子项排列为无序列表；没有增加工程检查表或成本模型。
-- 原文未给出四因素的数学等式。这里只核查文档表述，未运行 LoopX 或复现效果测试。
+- 这里只核查文档表述，未运行 LoopX 或复现效果测试。
 
 整理页：[[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]。
 

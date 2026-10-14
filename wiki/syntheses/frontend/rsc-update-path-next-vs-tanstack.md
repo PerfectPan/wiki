@@ -46,6 +46,24 @@ React 只提供「把 payload 解码成一个 React 元素值，再 `setState` �
 2. 实验性 RSC 用 `@vitejs/plugin-rsc` 和 `tanstackStart({ rsc: { enabled: true } })` 开启。server function 返回 `renderServerComponent` / `createCompositeComponent` 的结果，响应类型 `application/x-tss-framed`：seroval 外壳里嵌入 Flight 数据，客户端插槽位置用 `ClientSlot` 占位。
 3. demo 中点一次「服务端 +1」发两个请求：先 POST `increment`（只返回 `{ count }`），再由 `router.invalidate()` 触发 loader 重跑，GET `getCard` 拿新的 RSC。
 
+下图对比点一次「+1」时两边的请求：
+
+```mermaid
+sequenceDiagram
+    participant B as 浏览器
+    participant N as Next 服务端
+    participant T as TanStack Start 服务端
+    Note over B,N: Next Server Action
+    B->>N: POST（next-action header）
+    N-->>B: text/x-component：整条路由 RSC（RootLayout、Page、Sidebar）
+    Note over B,T: TanStack Start RSC
+    B->>T: POST increment
+    T-->>B: { count }
+    B->>B: router.invalidate() → 重跑 loader
+    B->>T: GET getCard
+    T-->>B: x-tss-framed：只有 Card 的 RSC
+```
+
 ### TanStack Router 的客户端更新路径
 
 按 router-core 1.171.37 / react-router 1.170.44 源码：
@@ -56,11 +74,30 @@ React 只提供「把 payload 解码成一个 React 元素值，再 `setState` �
 4. `commit` 调 `commitMatches`（`:1624`），最终 `router.stores.setMatches(...)`（`stores.ts:153`）更新 atom。
 5. React 版本里 `router.startTransition` 被 `Transitioner.tsx:31` 覆盖为 `React.startTransition`；组件通过 `useSelector`（`react-store/src/useSelector.ts:60`，基于 `useSyncExternalStoreWithSelector`）订阅 atom，atom 变化后重新渲染。
 
+```mermaid
+flowchart TD
+    A["router.invalidate()"] --> B["load()"]
+    B --> C["loadClientRoute()"]
+    C --> D["runClientTransaction()"]
+    D --> E["executeClientLane()：调用 loader → getCard()"]
+    E --> F["router.startTransition(commit)<br/>即 React.startTransition"]
+    F --> G["commitMatches → stores.setMatches()"]
+    G --> H["useSelector（useSyncExternalStoreWithSelector）<br/>组件重新渲染"]
+```
+
 ## 综合结论
 
 ### 客户端「合并」就是替换值再 reconcile
 
 `createFromFetch` / `createFromReadableStream` 把 payload 解码成一个 React 元素值。框架把这个值放进自己的状态（Next 的路由缓存、TanStack 的 match），在 `startTransition` 里 `setState`，之后是普通的 React reconcile：和旧 fiber 对比，只改有变化的 DOM。
+
+```mermaid
+flowchart LR
+    P["RSC payload"] --> Q["createFromFetch()<br/>解码成 React 元素值"]
+    Q --> R["startTransition 内 setState<br/>替换旧值"]
+    R --> S["React reconcile<br/>只改变化的 DOM"]
+    S --> U["客户端组件位置和类型不变<br/>复用 fiber，state 保留"]
+```
 
 客户端组件的 state 能保住，是因为它在新树里的位置和类型没变，React 复用了同一个 fiber，不是因为 payload 做了局部 patch。如果新 payload 让客户端组件换了位置或类型，state 同样会丢。
 

@@ -16,6 +16,24 @@ spec = importlib.util.spec_from_file_location("wiki_ingest", ROOT / "tools" / "i
 ingest = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(ingest)
 
+CAPTURE = {
+    "meta": {
+        "bvid": "BV1Myez6LEKc",
+        "cid": 42055370907,
+        "title": "Local-first 同步引擎还缺什么",
+        "owner": {"name": "六十四条悟"},
+        "duration": 1521,
+    },
+    "data": {
+        "dash": {
+            "audio": [{"baseUrl": "https://example.com/audio", "bandwidth": 90671}],
+            "video": [
+                {"baseUrl": "https://example.com/video", "height": 480, "bandwidth": 90000, "codecs": "avc1.64001F"}
+            ],
+        }
+    },
+}
+
 
 class IngestTest(unittest.TestCase):
     def setUp(self):
@@ -29,7 +47,6 @@ class IngestTest(unittest.TestCase):
             "title": "Source title", "content": "# Source\n\nKept content.",
             "author": "Original author", "publishedTime": "2025-01-02T12:00:00Z",
         }))
-
     def run_ingest(self, *args):
         with patch.object(ingest, "__file__", str(self.root / "tools" / "ingest.py")), \
              patch.object(sys, "argv", ["ingest.py", *args]), \
@@ -61,7 +78,8 @@ class IngestTest(unittest.TestCase):
                 self.assertIn("Kept content.", text)
 
     def test_direct_fetch_paths_share_stable_names(self):
-        with patch.object(ingest, "fetch", return_value="<title>T</title><article><p>Page</p></article>"), \
+        page = "<title>T</title><article><p>" + "Page body text. " * 12 + "</p></article>"
+        with patch.object(ingest, "fetch", return_value=page), \
              patch.object(ingest, "analyze_github_repo", return_value="# Repository"), \
              patch.object(ingest, "fetch_youtube_transcript", return_value=("Transcript", "Video")), \
              patch.object(ingest, "fetch_x_thread", return_value="Thread"):
@@ -72,6 +90,96 @@ class IngestTest(unittest.TestCase):
                 self.run_ingest(url)
         self.assertEqual({p.name for p in self.sources.iterdir()},
                          {"an-article.md", "brain.md", "abc-def.md", "12345.md"})
+
+    def test_short_direct_fetch_is_rejected(self):
+        # 风控页和 JS 空壳会被解成几乎空的 Markdown；以前会写一个空文件并报「已保存」。
+        with patch.object(ingest, "fetch", return_value="<title>T</title><article><p>Page</p></article>"):
+            with self.assertRaises(SystemExit), contextlib.redirect_stderr(io.StringIO()):
+                self.run_ingest("https://example.com/blocked")
+        self.assertEqual(list(self.sources.iterdir()), [])
+
+    def test_bilibili_video_uses_ytdlp_and_local_transcript(self):
+        info = {"bvid": "BV1Myez6LEKc", "title": "Local-first 同步引擎还缺什么",
+                "owner": "六十四条悟", "duration": 1521, "source": "yt-dlp", "subtitles": []}
+        cues = [ingest.video.Cue(0.0, 2.0, "先讲目录怎么同步"), ingest.video.Cue(2.0, 4.0, "再看正文")]
+
+        def fake_fetch(url, out_dir, **kwargs):
+            out_dir.mkdir(parents=True, exist_ok=True)
+            media = out_dir / ("audio.m4a" if kwargs.get("kind", "audio") == "audio" else "video.mp4")
+            media.write_bytes(b"media")
+            return media
+
+        def fake_sheets(video_path, out_dir, **kwargs):
+            out_dir.mkdir(parents=True, exist_ok=True)
+            sheet = out_dir / "sheet-1.png"
+            sheet.write_bytes(b"png")
+            return [sheet]
+
+        with patch.object(ingest.video, "resolve_streams", return_value=info), \
+             patch.object(ingest.video, "fetch_subtitles", return_value=None), \
+             patch.object(ingest.video, "fetch_media", side_effect=fake_fetch), \
+             patch.object(ingest.video, "transcribe_with_repair", return_value=(cues, {"repairs": []})), \
+             patch.object(ingest.video, "contact_sheets", side_effect=fake_sheets):
+            self.run_ingest(
+                "https://www.bilibili.com/video/BV1Myez6LEKc/",
+                "--name", "bili-talk", "--slides",
+            )
+        text = (self.sources / "bili-talk.md").read_text()
+        self.assertIn("type: video", text)
+        self.assertIn("# Local-first 同步引擎还缺什么", text)
+        self.assertIn("文字来自本地转录", text)
+        self.assertIn("**[00:00]**", text)
+        self.assertIn("先讲目录怎么同步", text)
+        self.assertIn("raw/assets/bili-talk-slides-1.png", text)
+        self.assertEqual(
+            (self.root / "raw" / "assets" / "bili-talk-slides-1.png").read_bytes(), b"png"
+        )
+
+    def test_bilibili_prefers_official_subtitles(self):
+        info = {"bvid": "BV1Myez6LEKc", "title": "有字幕的视频", "owner": "up主",
+                "duration": 600, "source": "yt-dlp", "subtitles": ["zh-Hans"]}
+        cues = [ingest.video.Cue(0.0, 3.0, "这一段来自官方字幕")]
+        with patch.object(ingest.video, "resolve_streams", return_value=info), \
+             patch.object(ingest.video, "fetch_subtitles", return_value=(cues, "zh-Hans")), \
+             patch.object(ingest.video, "fetch_media", side_effect=AssertionError("字幕优先时不应下载媒体")), \
+             patch.object(ingest.video, "transcribe_with_repair", side_effect=AssertionError("有字幕时不应转录")):
+            self.run_ingest("https://www.bilibili.com/video/BV1Myez6LEKc/", "--name", "bili-subs")
+        text = (self.sources / "bili-subs.md").read_text()
+        self.assertIn("文字来自官方字幕（zh-Hans）", text)
+        self.assertIn("这一段来自官方字幕", text)
+        self.assertNotIn("机器转录", text)
+
+    def test_bilibili_capture_path_downloads_streams(self):
+        capture = self.root / "capture.json"
+        capture.write_text(json.dumps(CAPTURE), encoding="utf-8")
+        cues = [ingest.video.Cue(0.0, 1.0, "capture 路径")]
+        with patch.object(ingest.video, "fetch_subtitles", side_effect=AssertionError("capture 路径不应试 yt-dlp 字幕")), \
+             patch.object(ingest.video, "download", side_effect=lambda url, path, **kw: (path.parent.mkdir(parents=True, exist_ok=True), path.write_bytes(b"media"), path)[-1]), \
+             patch.object(ingest.video, "transcribe_with_repair", return_value=(cues, {"repairs": []})):
+            self.run_ingest(
+                "https://www.bilibili.com/video/BV1Myez6LEKc/",
+                "--name", "bili-capture", "--capture", str(capture),
+            )
+        text = (self.sources / "bili-capture.md").read_text()
+        self.assertIn("capture 路径", text)
+
+    def test_bilibili_blocked_direct_access_points_at_capture(self):
+        blocked = ingest.video.FetchBlocked("yt-dlp 失败", needs_browser=True)
+        with patch.object(ingest.video, "resolve_streams", side_effect=blocked), \
+             patch.object(ingest, "die", side_effect=SystemExit) as die_mock:
+            with self.assertRaises(SystemExit):
+                self.run_ingest("https://www.bilibili.com/video/BV1Myez6LEKc/")
+        self.assertEqual(list(self.sources.iterdir()), [])
+        self.assertIn("--capture", die_mock.call_args.args[0])
+
+    def test_bilibili_argument_errors_skip_the_browser_hint(self):
+        broken = ingest.video.FetchBlocked("找不到 capture 文件：/nope.json")
+        with patch.object(ingest.video, "resolve_streams", side_effect=broken), \
+             patch.object(ingest, "die", side_effect=SystemExit) as die_mock:
+            with self.assertRaises(SystemExit):
+                self.run_ingest("https://www.bilibili.com/video/BV1Myez6LEKc/", "--capture", "/nope.json")
+        self.assertNotIn("browser", die_mock.call_args.args[0])
+        self.assertIn("找不到 capture 文件", die_mock.call_args.args[0])
 
     def test_existing_and_legacy_files_are_preserved(self):
         for filename in ["memory.md", "2025-01-02-memory.md"]:
@@ -101,6 +209,7 @@ class IngestTest(unittest.TestCase):
         shutil.copytree(ROOT / "bin", self.root / "bin")
         (self.root / "tools").mkdir()
         shutil.copy(ROOT / "tools" / "ingest.py", self.root / "tools" / "ingest.py")
+        shutil.copy(ROOT / "tools" / "video.py", self.root / "tools" / "video.py")
         shutil.copy(ROOT / "package.json", self.root / "package.json")
         author = "Reader $(touch unexpected-marker) `touch another-marker`"
         result = subprocess.run([

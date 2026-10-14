@@ -33,6 +33,47 @@ bin/wiki ingest <url> --file <path> --author <name> --published <date>
 
 若目标文件或对应的旧日期前缀文件已存在，CLI 报错且不覆盖；同一对象先阅读已有素材再合并，不同对象用不同名称。最终写入使用排他创建，避免并发抓取覆盖。CLI 的 GitHub 直抓结果只是仓库阅读入口；完整实现分析由 `.agents/skills/ingest/SKILL.md` 指导完成。
 
+直抓拿到的正文少于 80 个字符时会直接报错退出。风控页和需要 JS 渲染的空壳都会被解成几乎空的 Markdown，这种情况不再写一个看起来成功的空文件。
+
+### B 站视频
+
+```bash
+bin/wiki ingest <B站视频 URL> [--name <slug>] [--slides] [--frames 330,570] [--cookies-from-browser chrome] [--capture <json>] [--no-subs]
+```
+
+接入交给 [yt-dlp](https://github.com/yt-dlp/yt-dlp)（仓库的 YouTube 路径本来就在用它），它负责 wbi 签名、画质、cookie 和重试。流程是：
+
+1. `probe` 取元信息，同时看有哪些字幕；
+2. 有字幕就用字幕（`--subs` 优先，秒级、不跑模型），没有就下载音频在本机转录（mlx-whisper）；
+3. `--slides` 再下一份视频，抽一页缩略图总览写进 `raw/assets/`；想读某几页的表格和数字，加 `--frames 330,570` 把那几个时间点的整帧也存下来。
+
+登录后才能拿到字幕和更高画质，需要时用 `--cookies-from-browser chrome` 把浏览器登录态传给 yt-dlp。加 `--no-subs` 可跳过字幕直接转录。
+
+**两个已经踩过的坑：**
+
+- yt-dlp 版本旧了会稳定拿到 HTTP 412（本机 2026.03.17 复现过，同一视频用当日最新版就正常）。工具会用 PATH 里的版本先试，碰到 412 自动改用 `uvx` 拉最新版重试。同一次运行里会记住真正能用的那个入口。
+- 到 B 站 CDN 的连接会间歇性 SSL 中断，命令自带重试。抽帧是附加产物，下载视频或抽帧失败不会影响已经拿到的转录。
+
+直连和 yt-dlp 都不行时（例如换了个出口 IP 被风控），可以用 `--capture` 传入浏览器会话里取到的播放地址：
+
+```bash
+python3 tools/video.py probe <B站视频 URL>   # 被拦下时会打印可直接在浏览器会话里跑的取数脚本
+bin/wiki ingest <URL> --name <slug> --capture <json>
+```
+
+`--capture` 的 JSON 可以写成 `{ "meta": { bvid, cid, title, owner, duration }, "data": <playurl 接口返回体> }`，也可以直接就是 playurl 的返回体（含 `code` / `data` / `dash`）。这条路直接下载音频和视频流，比 yt-dlp 路径快，不用重试。
+
+分步命令（诊断、下载、转录、抽帧可以分开跑）：
+
+```bash
+python3 tools/video.py probe <B站视频 URL> [--capture <json>] --out <目录>
+python3 tools/video.py fetch <B站视频 URL> --out <目录> [--no-subs] [--video]
+python3 tools/video.py transcribe <音频或视频文件> --out-dir <目录> [--language zh]
+python3 tools/video.py slides <视频文件> --out-dir <目录> [--interval 60] [--frames 330,570]
+```
+
+`slides` 默认每 60 秒抽一帧、拼成 5x5 的缩略图总览，用来先看清整场讲了哪些页；`--frames` 再对指定时间点取整帧，用来读表格和数字。抽出来的帧先落在临时目录，只把正文真正引用的复制进 `raw/assets/`。`ingest` 跑完会打印中间产物目录，里面留了下载好的音频和视频，不必为了补一张图重新下载。
+
 ## Wiki 用词检查
 
 ```bash

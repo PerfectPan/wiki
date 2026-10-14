@@ -15,12 +15,13 @@ const HELP_TEXT = `wiki CLI
 用法:
   bin/wiki help
   bin/wiki ingest <url> [--name <slug>] [--file <path>] [--author <name>] [--published <date>]
+  bin/wiki ingest <B站视频 URL> [--capture <json>] [--cookies-from-browser chrome] [--slides] [--frames 330,570] [--no-subs]
   bin/wiki check [path]
   bin/wiki check-jargon [path | --staged | --base <ref>]
   bin/wiki prompts <list|search|show|check> [...]
 
 命令:
-  ingest    抓取来源并存入 raw/sources/；--file 喂入预抓正文（见 bin/README.md）
+  ingest    抓取来源并存入 raw/sources/；--file 喂入预抓正文；B 站视频优先用字幕，必要时本地转录（见 bin/README.md）
   check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
   check-jargon  检查 Wiki 用词，报告位置与修改建议
   prompts   提示词库：列表、搜索、打印原文、校验（见 prompts/README.md）
@@ -632,7 +633,8 @@ function main(argv: string[]): void {
   }
 
   if (command === "ingest") {
-    const VALUE_FLAGS = ["--name", "--file", "--author", "--published"] as const;
+    const VALUE_FLAGS = ["--name", "--file", "--author", "--published", "--capture", "--language", "--cookies-from-browser", "--frames"] as const;
+    const FLAG_ONLY = ["--slides", "--no-subs"] as const;
     const parts = [...rest];
     const flags: string[] = [];
     for (const name of VALUE_FLAGS) {
@@ -645,6 +647,12 @@ function main(argv: string[]): void {
       flags.push(name, value);
       parts.splice(i, 2);
     }
+    for (const name of FLAG_ONLY) {
+      const i = parts.indexOf(name);
+      if (i === -1) continue;
+      flags.push(name);
+      parts.splice(i, 1);
+    }
     const source = parts.join(" ");
     if (!source) {
       die("缺少 source 参数。用法: bin/wiki ingest <source>");
@@ -654,7 +662,8 @@ function main(argv: string[]): void {
       try {
         const script = resolve(ROOT, "tools", "ingest.py");
         let type = "blog";
-        if (source.includes("github.com")) type = "repo";
+        if (source.includes("bilibili.com")) type = "video";
+        else if (source.includes("github.com")) type = "repo";
         else if (source.includes("youtube.com") || source.includes("youtu.be")) type = "video";
         else if (source.includes("x.com") || source.includes("twitter.com")) type = "tweet";
         execFileSync("python3", [script, source, "--type", type, ...flags], {

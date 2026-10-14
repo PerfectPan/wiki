@@ -6,6 +6,7 @@
 
 - `wiki-cli.sh`
 - `ingest.test.py`：在临时目录验证素材命名、日期元信息、拒绝覆盖、预抓正文与 CLI 参数传递；由 `wiki-cli.sh` 调用，不访问网络。
+- `video.test.py`：验证 `tools/video.py` 的纯函数——SRT 解析与回写、段落时间戳、解码循环检测与局部替换、`--capture` 里的流选择；同样不访问网络。
 
 说明：
 

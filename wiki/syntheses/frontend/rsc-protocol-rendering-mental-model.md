@@ -3,7 +3,7 @@ title: RSC 的协议与渲染心智模型
 type: synthesis
 category: frontend
 created: 2026-04-19
-updated: 2026-04-19
+updated: 2026-10-14
 tags:
   - react
   - rsc
@@ -53,6 +53,7 @@ RSC 传的不是最终 HTML，而是“服务端组件的 UI 描述 + 客户端�
 
 - `rsc.md` 里对客户端组件嵌套、流式上屏时机仍有实验性疑问，还没有形成更稳定的框架无关结论。
 - `waku.md` 里也保留了多个 TODO，例如动态路由在 SSG 场景下的兜底方式。
+- 交互之后的更新路径（Server Action 返回什么、客户端怎么替换）已整理到 [[wiki/syntheses/frontend/rsc-update-path-next-vs-tanstack|RSC 交互后的更新链路：Next 与 TanStack Start]]。
 - 当前仓库还缺一页真正聚焦 “hydrate / payload / HTML” 三层关系的图解页，后续可以单独补。
 
 ## 来源指针

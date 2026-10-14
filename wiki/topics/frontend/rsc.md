@@ -3,13 +3,14 @@ title: RSC
 type: topic
 category: frontend
 created: 2026-04-12
-updated: 2026-04-12
+updated: 2026-10-14
 tags:
   - react
   - rsc
   - ssr
 source_refs:
   - raw/sources/rsc.md
+  - raw/sources/rsc-update-path-local-demos.md
 ---
 # RSC
 
@@ -71,6 +72,14 @@ source_refs:
 	- 客户端组件则保留交互能力
 	- 但 这里还需要补一个边界：RSC 仍然不能自动消灭 hydration 和客户端下载，很多场景只是把“所有组件都必须在客户端执行”的前提打破了
 
+- `'use server'` 和 RSC 是两件事：
+	- `'use server'` 标记的函数会被构建工具替换成一个 id，客户端调用时发 HTTP 请求到服务端执行，本质上是 RPC。Next 里请求通过 `next-action` header 带上 action id。
+	- RSC 解决的是服务端组件渲染结果怎么传到客户端。两者常一起出现，是因为 Next 的 Server Action 响应会顺带返回新的 RSC payload；TanStack Start 的普通 server function 只返回 seroval 序列化的数据，不带 RSC。
+- RSC 和打包器强耦合：服务端渲染时客户端组件要变成模块引用（见上面的 `M1`），客户端要能按引用加载对应 chunk。这需要构建时把 `'use client'` 模块拆出来并生成模块映射，所以 RSC 实现依赖具体的打包器集成，例如 `react-server-dom-webpack`、`@vitejs/plugin-rsc`。
+- 和 Astro islands 对比：Astro 在服务端把页面渲染成 HTML，只有标记了 `client:*` 的组件作为 island 在浏览器 hydrate，其余部分不发 JS；它不传类似 RSC 的组件树协议，交互后的服务端更新也不在这套机制里。
+- 交互后的更新：React 只做「解码 payload 成元素值 → `setState` 替换 → reconcile」，没有局部合并 payload 的 API。框架差别在替换粒度，见 [[wiki/syntheses/frontend/rsc-update-path-next-vs-tanstack|RSC 交互后的更新链路]]。
+
 ## Source Pointers
 
 - `raw/sources/rsc.md`
+- `raw/sources/rsc-update-path-local-demos.md`

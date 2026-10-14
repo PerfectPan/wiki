@@ -1,11 +1,11 @@
 ---
 title: Agent 循环工作流的控制边界
-description: 从 ClaudeDevs 的 loop 分类中抽象出 agent 自动化的触发、停止、验收和成本控制模型。
+description: 梳理 Agent loop 的控制边界，以及最大化产出、最小化人的注意力投入的双重优化目标。
 type: synthesis
 category: ai
 created: 2026-07-08
-updated: 2026-07-08
-timestamp: 2026-07-08
+updated: 2026-10-14
+timestamp: 2026-10-14
 tags:
   - agent
   - workflow
@@ -14,9 +14,13 @@ tags:
 source_refs:
   - https://threadnavigator.com/thread/2074208949205881033/
   - https://x.com/claudedevs/status/2074208949205881033
+  - raw/sources/loopx.md
+  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html
 resource:
   - https://threadnavigator.com/thread/2074208949205881033/
   - https://x.com/claudedevs/status/2074208949205881033
+  - raw/sources/loopx.md
+  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html
 ---
 # Agent 循环工作流的控制边界
 
@@ -29,6 +33,8 @@ Agent loop 不只是“让模型多跑几轮”。如果没有明确触发条件
 Agent loop 的设计重点是决定把哪一块控制权交出去：检查、停止条件、触发器，还是整条例行工作流。越往后自动化程度越高，越需要把完成证据、最大轮数、权限边界、验证手段和模型成本写成显式协议。
 
 ## 来源事实
+
+### Loop 的控制权分类
 
 ClaudeDevs 将 loop 定义为：agent 重复执行工作循环，直到满足停止条件。文章按触发方式、停止方式、Claude Code primitive 和适用任务，把 loop 分为四类：
 
@@ -43,6 +49,19 @@ ClaudeDevs 将 loop 定义为：agent 重复执行工作循环，直到满足停
 
 - 质量取决于 loop 外围系统：干净代码库、可达文档、可量化 verification skill，以及独立 review agent。
 - 成本控制要靠边界：选合适模型和 primitive、设置明确 done/stop 条件、先小范围试跑、确定性工作交给脚本、不要过密轮询，并通过用量工具观察 skill、subagent 和 workflow 的消耗。
+
+### 长程工作的双重优化目标
+
+- **目标 1：最大化 Agent 产出（Maximize Agent Output）**
+  - **模型能力**：具体工作由底层模型与 Harness 执行。
+  - **有效并行度**：优先并行验收边界可分离的工作，控制评审和协调负担。
+  - **时间利用率**：不需要人判断时持续推进，缺少新事实时安静等待。
+  - **目标对齐程度**：围绕目标与验收推进，让人的反馈成为下一轮可继承的状态。
+- **目标 2：最小化人的注意力投入（Minimize Human Attention）**
+  - **展示面**：一起呈现产物、证据、尚未决定的选择和继续投入的预期价值，方便人判断方向与质量。
+  - **交互面**：在重要交付、路线决策或主要阻塞时汇报；相关事件合并、去重，无变化时不反复打断人。
+
+技术目标是“无干预跑稳，有干预跑好”：路线失效时重新规划，控制状态矛盾时自我修复，验收满足后停止。
 
 ## 综合结论
 
@@ -81,7 +100,7 @@ Agent loop 可以理解为一组逐步上升的自动化交接层：
 
 ## 风险和未决问题
 
-- 文章主要基于 Claude Code primitive；迁移到其他 coding agent 或个人助手系统时，需要重新映射对应的 goal、schedule、workflow 和 usage 能力。
+- ClaudeDevs 的 loop 分类主要基于 Claude Code primitive；迁移到其他 coding agent 或个人助手系统时，需要重新映射对应的 goal、schedule、workflow 和 usage 能力。
 - `/goal` 的 evaluator 本身也可能误判，尤其是目标含糊或依赖主观质量时。
 - 定时 loop 如果没有持久状态，很容易重复处理同一批输入，或在外部系统异常时反复空耗。
 - Proactive loop 的权限风险高于普通 coding loop，尤其是涉及发消息、合并 PR、发布内容、交易或真实账户操作时。
@@ -95,8 +114,14 @@ Agent loop 可以理解为一组逐步上升的自动化交接层：
 - [[wiki/syntheses/ai/skill-engineering-artifact-protocol|Skill 工程化的产物协议范式]]
 - [[wiki/syntheses/ai/agent-proactive-context-management|Agent 主动上下文管理]]
 - [[wiki/syntheses/ai/agent-native-system-interface-design|Agent Native 系统接口设计]]
+- [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]：工具调用、恢复和资源隔离的具体实现边界。
 
 ## 来源指针
 
 - ClaudeDevs, “Getting started with loops”, 2026-07-06: https://threadnavigator.com/thread/2074208949205881033/
 - Original X thread: https://x.com/claudedevs/status/2074208949205881033
+- [[raw/sources/loopx|LoopX 双目标的公开来源核查]]：固定提交、证据位置与适用限制。
+- [LoopX：从一次性 Agent 到长程控制面][loopx-objective]：双目标与四因素；[交互面与并行条件][loopx-attention]。
+
+[loopx-objective]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L60-L66
+[loopx-attention]: https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html#L210-L234

@@ -35,6 +35,14 @@ note: body pre-fetched; direct fetch skipped
   陈志轩 → 陈子轩（自我介绍页写作「陈子轩 · Zixuan Chen」）
   CRDT is unknown enough → CRDT is not enough（自我介绍页）
   目录格式「换了三次」→ 幻灯片标题是「同一个目录，格式换了四次」
+核查覆盖范围与抓取条件：
+  关键页截图取自未登录状态下的 480p 抓帧（B 站未登录能给的最高画质）。
+  部分幻灯片只在缩略图分辨率下看过（冲突 UI 页、Web Worker 页），wiki 页面没有引用这些页上的具体数值。
+  其余事实来自转录段落，按 [MM:SS] 引用。
+专有名词校正的额外依据：
+  Vlog → Flock：Lody 仓库 THIRD_PARTY_NOTICES.md 里列出 @loro-dev/flock（"TypeScript bindings for the Flock CRDT"）与 @loro-dev/flock-wasm
+  actree SQL / Durable strings → ElectricSQL 的 Durable Streams：https://github.com/durable-streams/durable-streams
+  Lody 自己的流协议实现：@loro-dev/streams-client（"Stream-scoped Durable Streams client"）与 @loro-dev/streams-crdt，见 https://github.com/loro-dev/protocol
 -->
 
 **[00:00]** 云端这个时候是作为一个备份的概念和一个辅助者的概念而不是一个权威所有者的概念在这个架构里面云端只是一个备份和额外的副本那Local First和Local Only是不一样的就是Local Only是我只能在本地去做这些事情但Local First是我还是希望能够保持我多设备同步的这种便利性的他给用户承诺的是这五种体验就是我能秒开因为我数据读写都在本地

@@ -74,7 +74,7 @@ sequenceDiagram
 4. `commit` 调 `commitMatches`（`:1624`），最终 `router.stores.setMatches(...)`（`stores.ts:153`）更新 atom。
 5. React 版本里 `router.startTransition` 被 `Transitioner.tsx:31` 覆盖为 `React.startTransition`；组件通过 `useSelector`（`react-store/src/useSelector.ts:60`，基于 `useSyncExternalStoreWithSelector`）订阅 atom，atom 变化后重新渲染。
 
-![TanStack Router 更新链路：router.invalidate → load → loadClientRoute → runClientTransaction → executeClientLane 调用 loader（getCard）→ startTransition(commit) → stores.setMatches → useSyncExternalStore 触发重新渲染](raw/assets/2026-10-14-tanstack-router-update-chain.jpg)
+![TanStack Router 更新链路：router.invalidate → load → loadClientRoute → runClientTransaction → executeClientLane 调用 loader（getCard）→ startTransition(commit) → stores.setMatches → useSyncExternalStore 触发重新渲染](../../../raw/assets/2026-10-14-tanstack-router-update-chain.jpg)
 
 ## 综合结论
 
@@ -82,7 +82,7 @@ sequenceDiagram
 
 `createFromFetch` / `createFromReadableStream` 把 payload 解码成一个 React 元素值。框架把这个值放进自己的状态（Next 的路由缓存、TanStack 的 match），在 `startTransition` 里 `setState`，之后是普通的 React reconcile：和旧 fiber 对比，只改有变化的 DOM。
 
-![替换值再 reconcile：RSC payload 经 createFromFetch 解码，在 startTransition 里 setState，React 对比新旧树，位置和类型不变的客户端组件保留 state](raw/assets/2026-10-14-rsc-replace-then-reconcile.jpg)
+![替换值再 reconcile：RSC payload 经 createFromFetch 解码，在 startTransition 里 setState，React 对比新旧树，位置和类型不变的客户端组件保留 state](../../../raw/assets/2026-10-14-rsc-replace-then-reconcile.jpg)
 
 客户端组件的 state 能保住，是因为它在新树里的位置和类型没变，React 复用了同一个 fiber，不是因为 payload 做了局部 patch。如果新 payload 让客户端组件换了位置或类型，state 同样会丢。
 

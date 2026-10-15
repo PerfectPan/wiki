@@ -79,28 +79,9 @@ return agent({ task: "汇总技术评估", input: analyses });
 
 沙箱中的 `agent()` 可以是一个调用代理：它发送结构化请求，保存等待结果的 Promise，收到对应响应后再恢复脚本执行。
 
-```mermaid
-sequenceDiagram
-    participant M as 主 Agent
-    box 执行沙箱
-        participant W as 编排脚本
-        participant P as 调用代理
-    end
-    box 受信服务
-        participant H as 调度器
-        participant A as 子 Agent 运行循环
-    end
-    M->>W: 提交脚本与输入
-    W->>P: agent(task)
-    P->>P: 生成请求 ID，登记等待项
-    P->>H: 发送子任务请求
-    H->>H: 校验身份、权限、额度与截止时间
-    H->>A: 在允许的资源范围内执行
-    A-->>H: 结果或错误
-    H-->>P: 携带相同请求 ID 的响应
-    P-->>W: 完成 Promise，继续脚本
-    W-->>M: 返回汇总结果
-```
+![动态工作流的调用与返回路径：主 Agent 生成脚本，沙箱中的调用代理连接受信服务，响应恢复脚本执行。](../../../raw/assets/sandboxed-agent-workflows-field-notes.png)
+
+图中节点表示职责，不表示每个节点对应一个独立进程。[配图提示词](../../../raw/assets/sandboxed-agent-workflows-field-notes-prompt.txt)
 
 可以借鉴 JSON-RPC（远程过程调用协议）的做法：请求与响应通过 `id` 关联，结果和错误有明确字段，消息语义独立于传输方式。[JSON-RPC 的请求与响应定义](https://www.jsonrpc.org/specification#request_object)支持这些基础机制；任务取消、预算和恢复则需要另外定义。
 

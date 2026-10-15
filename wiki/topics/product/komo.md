@@ -58,16 +58,7 @@ komo 是 Off brand 发布的一个评论工具（npm 包 `@tjcages/komo`，MIT�
 
 ## 核心数据流
 
-```mermaid
-flowchart LR
-  R["评审者浏览器"] --> W["komo 挂件<br/>ShadowRoot"]
-  W -->|"POST /threads：锚点 + 正文"| API["评论 API"]
-  API --> DB[("D1 或 PostgreSQL<br/>threads / comments / reactions")]
-  W -->|"轮询：revision 条件拉取"| API
-  A["coding agent"] -->|"list / get / prompt"| C["komo CLI"]
-  C -->|HTTPS + 会话| API
-  A -->|"reply / resolve / reopen"| C
-```
+![手绘风格概览：网站上的评论挂件通过 POST 把评论交给评论 API 并落到数据库，同时从 API 轮询拉取；CLI 与 API 双向读写，agent 通过 CLI 读反馈、回复并关闭会话](../../../raw/assets/komo-architecture-sketch.png)
 
 一次写评论的过程：挂件在宿主 DOM 上采集锚点和正文，POST 给评论 API，API 校验选择器、几何、权限和配额后写入 `threads` / `comments`。写入按提交顺序排队，界面先乐观显示；某一条失败时只回滚那一条改动（`OptimisticQueue` 把它从队列里去掉后按已确认状态重算），并提示，未保存的正文会保留下来。
 
@@ -129,3 +120,4 @@ CLI 的评论区命令覆盖读、写和状态变更：`comments list`、`get`�
 - <https://komo.offbr.co/>、[安装](https://komo.offbr.co/install/)、[配置](https://komo.offbr.co/configuration/)、[托管与限额](https://komo.offbr.co/hosting/)、[给 agent](https://komo.offbr.co/agent-prompts/)、[FAQ](https://komo.offbr.co/faq/)
 - <https://github.com/tjcages/komo>（快照 `6fb75d7b`）：`src/anchors.ts`、`src/agent-prompt.ts`、`src/polling.ts`、`server/index.ts`、`server/migrations/0001_comments.sql`、`server/migrations/0007_revisions.sql`、`cli/workflow.mjs`、`docs/performance.md`
 - <https://www.npmjs.com/package/@tjcages/komo>：0.7.0（2026-09-29）
+- `raw/assets/komo-architecture-sketch.png`：按本页内容生成的手绘风格示意图（codex 图像生成，1664×936），不是 komo 官方素材；图中的调用次序以本页正文和 `raw/sources/komo.md` 的源码记录为准。

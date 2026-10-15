@@ -172,5 +172,6 @@ npx @tjcages/komo comments resolve THREAD_ID
 ## 验证记录
 
 - 做过：`curl` 抓官网与 sitemap 页面、读 npm 注册表元信息与下载量、`git clone` 仓库后阅读 `packages/komo` 的源码与迁移、读 `docs/performance.md`。
+- 配图：`raw/assets/komo-architecture-sketch.png` 是按上面「它由三部分组成」和「实现事实」两节写的内容，用 codex 的图像生成能力画的手绘风格示意图，出图两轮（第一版缺了评论 API 回给挂件的轮询方向）。核对项是 8 个标签的文字、五组箭头方向、三段分组和点缀色；它不是 komo 官方素材，也不能当作证据，只能配着正文看。
 - 未做：没有安装或运行这个包，没有连接任何真实 komo 项目，没有部署 Worker 或 PostgreSQL 服务，没有跑仓库测试，也没有复现性能数字。
 - 因此本文件里凡是行为描述，都是对这个提交的代码和这一版文档的阅读结论；托管服务的实际限额、限流和清理行为按文档记录，未在真实服务上验证。

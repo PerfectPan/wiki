@@ -76,7 +76,7 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 - [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
 - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
-- [[wiki/syntheses/ai/sandboxed-agent-workflows|用沙箱脚本编排多 Agent]]
+- [[wiki/syntheses/ai/sandboxed-agent-workflows|动态工作流：用沙箱脚本编排多 Agent]]
 
 ## 来源指针
 

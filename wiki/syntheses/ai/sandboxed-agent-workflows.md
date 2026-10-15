@@ -93,7 +93,7 @@ return agent({ task: "汇总技术评估", input: analyses });
 
 ![动态工作流的调用与返回路径：主 Agent 生成脚本，沙箱中的调用代理连接受信服务，响应恢复脚本执行。](../../../raw/assets/sandboxed-agent-workflows-field-notes.png)
 
-图中节点表示职责，不表示每个节点对应一个独立进程。[配图提示词](../../../raw/assets/sandboxed-agent-workflows-field-notes-prompt.txt)
+图中节点表示职责，不表示每个节点对应一个独立进程。
 
 可以借鉴 JSON-RPC（远程过程调用协议）的做法：请求与响应通过 `id` 关联，结果和错误有明确字段，消息语义独立于传输方式。[JSON-RPC 的请求与响应定义](https://www.jsonrpc.org/specification#request_object)支持这些基础机制；任务取消、预算和恢复则需要另外定义。
 

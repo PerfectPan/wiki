@@ -96,6 +96,7 @@
 - `product`
   - [[wiki/topics/product/ai-cover|AI Cover]]
   - [[wiki/topics/product/bento|Bento]]
+  - [[wiki/topics/product/komo|komo]]
   - [[wiki/topics/product/logseq|Logseq]]
   - [[wiki/topics/product/orca|Orca]]
   - [[wiki/topics/product/quotio|Quotio：AI 额度监控与统计实现]]

@@ -103,6 +103,18 @@ npx @tjcages/komo comments resolve THREAD_ID
 - README 提醒客户端凭据和缓存的评论对嵌入站点自己的脚本可见：「install only on sites you trust.」
 - 宿主 DOM 边界：默认挂载后不重排宿主 DOM，Frame 需要一个有布局盒且不是 body/html/`display: contents` 的现有内容根节点，否则退回 Floating。komo 看不到闭合 shadow root、canvas 内部和跨域 iframe 内容，也不编造源码行号。
 
+### ShadowRoot 与乐观写入
+
+- 挂件在 `src/index.ts:449` 执行 `host.attachShadow({ mode: "open" })`：样式与宿主页面隔离，但 open 模式下宿主脚本仍可通过 `host.shadowRoot` 读到挂件 DOM。这与 README 那句「客户端凭据和缓存的评论对嵌入站点的脚本可见」是同一件事，shadow root 不是访问边界。
+- `src/optimistic.ts` 的 `OptimisticQueue` 负责乐观写入，类注释原文：「Rebase outstanding edits on confirmed state; failed writes remove only their own edit.」写入按提交顺序排队逐个 drain；成功的改动落到 `confirmed` 状态并记录临时 id 到真实 id 的别名映射，失败的 job 从队列移除后当前值从 `confirmed` 重算，也就是只回滚这一条改动。`reset()` 用 `AbortError` 拒绝所有未完成的 job。
+- `src/config.ts` 的 `resolveConfig`：`endpoint` 缺省为 `https://komo.offbr.co`，`repo` 缺省取 `project`，`scope` 缺省 `project`；project scope 下 branch 固定写成字符串 `"shared"`（数据库里 `threads.branch` 这一列始终有值），branch scope 没有 branch 时直接抛错。
+
+### CLI 参数与取数方式 `cli/agent.mjs`
+
+- `agentCommands` 与 `actions` 表覆盖：`login`、`logout`、`whoami`、`comments`（`list`/`get`/`prompt`/`create`/`reply`/`resolve`/`reopen`/`edit`/`delete`/`react`/`move`）、`schema`、`agents`、`project`，与 README 一致。
+- `comments list` 的 `--limit` 限定 1–250、默认 50，`--offset` 必须非负；失败时抛 `Use --limit 1–250 and a nonnegative --offset.`。
+- 实际取数和分页不同步：CLI 先按 `threads?offset=` 一路翻页把整个范围取完，再在本地做 `--limit` / `--offset` 切片，`total` 和 `nextOffset` 都是本地算出来的。请求量随该范围里的会话总数增长，而不是随页大小。
+
 ## 包与仓库事实
 
 - `package.json`：MIT；`type: module`；`engines.node >=22.12`；`bin.komo = cli/index.mjs`。

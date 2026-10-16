@@ -117,6 +117,12 @@ token 本身是两段随机 UUID，是不透明串，不含任何身份字段，
 
 CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机起一个临时 HTTP 服务，浏览器登录后用 `postMessage` 把 token 交给它，它再写到仓库之外的 `~/.config/komo`（目录 0700、文件 0600）。取 token 的顺序是环境变量 `KOMO_TOKEN` 优先，其次是这个文件，两者都没有就报 `No saved session. Run komo login, or set KOMO_TOKEN.`。CLI 的每个请求除了 `Authorization`，还带一个 `Origin` 头，因为站点审批检查对它同样生效。
 
+### 登录入口由服务端下发
+
+挂件要先问服务端给哪些登录方式：`GET /config` 返回 `google`、`github`、`guests`、`guestResolve`、`private` 五个开关（`github` 只有配了 GitHub 的 client id 和 secret 才为真，`guests` 在项目是 private、`allowGuests` 为 false 或 owner 还没认领时为假）。
+
+访客这条路完全不跳转：填一个名字，`POST /auth/guest {name}` 直接返回会话，挂件存下来就用。Google 和 GitHub 那条是弹窗，不是把你的页面导航走：挂件先 `window.open("about:blank", "branch-comments-signin", "popup,width=600,height=720")` 占一个空白窗，拿到 `start.url` 之后再把弹窗指过去，站点本身不动。只有需要已验证身份的动作才会要求登录，比如关闭会话（`guestResolve` 打开时访客也可以关）。
+
 ### 谁能看到评论
 
 - **站点层**：请求的 `Origin` 要落在项目已批准的站点列表里（支持 `https://*-preview.example.com` 这类最左标签单层通配，通配不跨点），localhost 直接放行。不在列表里返回 403 `site_not_approved`，同时不下发 CORS 头。
@@ -139,6 +145,7 @@ CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机
 - **附件**：不支持行内文件附件；头像只保存有上限的表示形式。
 - **移动端**：挂件会适配小视口，但精确点选和拖拽在指针设备上体验更好。
 - **自托管**：Cloudflare 路线用 `komo init --self-host`，CLI 建 D1、跑迁移、部署 Worker；Node 路线需要 PostgreSQL 和允许的预览 origin。自托管不套用托管额度（默认每天 10000 次写），但受自己账号的限额和计费约束。两条路线都要求先完成 Google owner 认领，之后才能开放访客评论。
+- **服务端源码**：MIT，服务端全部在公开仓库里（`server/` 下的 Worker 入口、校验、workspace 管理、项目成员管理、站点管理、导入导出、迁移和 `wrangler.jsonc`），npm 包里也带一部分服务端源码加打包好的 `dist/node.mjs`。托管服务就是这套代码加 `KOMO_HOSTED=true`。但线上**配置**不在仓库里（项目清单、Google client secret、D1 数据都看不到），也没有对「线上跑的是哪个提交」的可验证声明。
 - **数据搬移**：`project export` / `project import` 会带走会话、回复、表情、锚点和历史身份，不带会话凭据、已验证邮箱和成员关系；导入的作者是未验证身份。托管服务和自托管实例用的是各自的数据库。
 
 ## 体积与运行时开销

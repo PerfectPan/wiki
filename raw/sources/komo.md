@@ -180,6 +180,10 @@ npx @tjcages/komo comments resolve THREAD_ID
 - 鉴权入口 `authenticate()`：从 `Authorization: Bearer` 取 token（正则限制 200 字符），按 `token_hash + project + expires_at > now` 查 `users`，失败返回 401，文案分别是 `Enter your name to comment.` 和 `Your session expired. Enter your name again.`
 - OAuth：`/auth/{google,github}/start` 生成 `state`、`verifier`、`exchange` 三个随机串，只存 state 和 exchange 的哈希，`oauth_states` 行 10 分钟过期；`/auth/{provider}/authorize` 用 `code_challenge_method=S256` 并在响应里种 `__Host-comments-oauth=<state>; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`。回调时用 `timingSafeEqual` 比对 state 与 cookie，再用 `DELETE ... RETURNING` 一次性消费该行。
 - 回调地址：`/auth/{provider}/authorize` 里的 `redirect_uri` 是 `${url.origin}/auth/{provider}/callback`，即评论 API 自身的 origin，不是嵌入站点的 origin；README 也写明托管版固定回调到 `https://komo.offbr.co/auth/google/callback`。自托管的 README / `NODE.md` 要求把 `https://YOUR-WORKER.workers.dev/auth/google/callback` 或 `https://comments.example.com/auth/google/callback` 加进 Google OAuth 客户端的授权回调地址。`GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET`（GitHub 同理）是 API 侧的环境变量，缺配置时 `/auth/*/start` 返回 503 `Sign-in is not configured.`
+- 登录入口开关：`GET /config` 返回 `repo`、`github`、`google`、`guests`、`private`、`guestResolve`；`github` 与 `google` 取决于对应的 client id / secret 是否存在，`guests` 还需 `allowGuests !== false`、owner 已认领（若 `requireOwner`）且项目不是 private。
+- 访客路径：`api.guest(name)` → `POST auth/guest {name}`，成功即 `save()` 会话，没有跳转或弹窗；`canResolve()` 在 `guestResolve` 为真时允许访客关闭会话。
+- OAuth 通过弹窗完成：`githubLogin()` 先 `window.open("about:blank","branch-comments-signin","popup,width=600,height=720")`，再请求 `auth/{provider}/start`，把弹窗指向返回的 `start.url`；站点页面本身不导航。
+- 回传校验（挂件侧）：监听器要求 `event.origin === new URL(start.url).origin`、`event.source === popup`、`event.data.type === "branch-comments:auth"`，再检查 `token` 是字符串且 `user.id` / `user.name` 存在、`user.verified === true`；通过后 `api.save({token,user})`。弹窗监听 600000 毫秒后自动撤销。
 - 站点 origin 在流程里的位置：`/auth/{provider}/start` 的 `returnOrigin` 缺省取请求的 `Origin` 头，存进 `oauth_states.origin`，回调时作为 `postMessage` 目标。CLI 传入 `returnOrigin: loopback`，`cliReturnOrigin()` 要求它是 `http://127.0.0.1:<1024 以上端口>` 且与 origin 完全相等。
 - 登录回传：回调页在 `window.opener` 上 `postMessage({type, token, user}, <saved origin>)`，页面 CSP 为 `default-src 'none'; script-src 'nonce-...'; frame-ancestors 'none'`，并把 oauth cookie 置为 `Max-Age=0`。
 - Google 邮箱只在 `profile.email_verified === true` 时写入 `users.email`；头像只接受 `https://` 开头的地址。
@@ -192,6 +196,12 @@ npx @tjcages/komo comments resolve THREAD_ID
 - CLI 凭据：`readToken()` 先看环境变量 `KOMO_TOKEN`，再读 `~/.config/komo/<key>.json`（可由 `KOMO_CONFIG_HOME` 覆盖），都没有时 `comments list` 报 `No saved session. Run komo login, or set KOMO_TOKEN.`；`saveToken()` 建目录时用 `0o700`、写文件用 `mode: 0o600, flag: "wx"` 再 `rename`。`komo login` 在本机起临时 HTTP 服务（`/Users/...` 之外的 127.0.0.1 端口），浏览器登录窗口用 `postMessage` 把 token 交给它，页面里的回传脚本校验 `e.origin` 是 API 源、`e.source` 是它打开的窗口、`e.data.type === 'branch-comments:auth'`。
 - CLI 请求头：`apiClient()` 带 `Origin: config.origin` 和 `Authorization: Bearer <token>`，并把 `project`、`repo`、`branch` 放到查询串上；超时 15 秒、`redirect: "error"`、401 时提示 `Session missing or expired. Run komo login.`
 - 客户端存储：`src/api.ts` 用 `__Host-bc-session-<scope+project>`（配了 `sessionDomain` 时 `__Secure-` 加 `Domain`）写 cookie，同时写 localStorage；源码注释说明 cookie `Max-Age` 上限 400 天而服务端会话更长，所以靠 localStorage 续期；请求统一 `credentials: "omit"`。
+
+## 开源边界
+
+- 仓库根 `LICENSE` 为 MIT；`packages/komo/server/` 下的服务端源码（`index.ts`、`validation.ts`、`workspaces.ts`、`project-management.ts`、`project-sites.ts`、`import-project.ts`、`digest.ts`、`node.ts`、`postgres.ts`、`migrations/`、`wrangler.jsonc`、`hosted.jsonc`）都在公开仓库里。
+- npm 包的 `files` 字段包含 `server/index.ts`、`server/validation.ts`、`server/workspaces.ts`、`server/setup-page.ts`、`server/project-management.ts`、`server/import-project.ts`、`server/digest.ts`、`server/project-sites.ts`、`server/migrations`、`server/secrets.d.ts`、`server/tsconfig.json`，以及 `dist/` 里打包好的 `dist/node.mjs`（`server/node.ts`、`server/postgres.ts` 以 bundle 形式发布，不以源码形式随包）。
+- 托管部署的配置（`PROJECTS` 内容、Google / GitHub 的 secret、D1 数据）不在仓库里；仓库和 npm 都没有对托管线上版本对应哪个提交的声明。README 末尾写明这份代码是从 Cloudflare marketing workspace 的 `f57f3521` 抽出来的。
 
 ## 验证记录
 

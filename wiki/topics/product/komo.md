@@ -113,6 +113,8 @@ token 本身是两段随机 UUID，是不透明串，不含任何身份字段，
 
 登录走标准授权码 + PKCE：服务端存 `state` 的哈希和 `code_verifier`，授权时用 S256 challenge；回调时除了查 `state`，还要比对 `__Host-comments-oauth` 这个 HttpOnly cookie（`timingSafeEqual` 比对、10 分钟过期、`DELETE ... RETURNING` 用完即删），防止另一个浏览器拿同一个 state 换 token。登录成功后由回调页 `postMessage` 把会话交给发起登录的窗口，目标 origin 是存下来的那个，页面 CSP 是 `default-src 'none'`。
 
+回调落在评论 API 自己的域上，不是你的站点：授权请求里的 `redirect_uri` 取的是 API 请求 URL 的 origin。托管版固定是 `https://komo.offbr.co/auth/google/callback`，跟你把挂件装在哪个网站无关；自托管则要用自己 Worker 或 Node 服务的地址，并把它加进 Google OAuth 客户端的授权回调地址。Google 的 client id 和 secret 存在 API 的环境变量里（未配置时 `/auth/*/start` 返回 503 `Sign-in is not configured.`），所以站点方不需要自己的 Google Cloud 项目。你的站点域在这个流程里只出现两次：写进 `oauth_states.origin`（默认取请求的 `Origin` 头）当作登录成功后的 `postMessage` 目标，以及要过站点白名单。CLI 登录时这个目标换成 `http://127.0.0.1:<高位端口>` 的本地临时服务。
+
 CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机起一个临时 HTTP 服务，浏览器登录后用 `postMessage` 把 token 交给它，它再写到仓库之外的 `~/.config/komo`（目录 0700、文件 0600）。取 token 的顺序是环境变量 `KOMO_TOKEN` 优先，其次是这个文件，两者都没有就报 `No saved session. Run komo login, or set KOMO_TOKEN.`。CLI 的每个请求除了 `Authorization`，还带一个 `Origin` 头，因为站点审批检查对它同样生效。
 
 ### 谁能看到评论

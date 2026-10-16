@@ -185,6 +185,8 @@ npx @tjcages/komo comments resolve THREAD_ID
 - OAuth 通过弹窗完成：`githubLogin()` 先 `window.open("about:blank","branch-comments-signin","popup,width=600,height=720")`，再请求 `auth/{provider}/start`，把弹窗指向返回的 `start.url`；站点页面本身不导航。
 - 回传校验（挂件侧）：监听器要求 `event.origin === new URL(start.url).origin`、`event.source === popup`、`event.data.type === "branch-comments:auth"`，再检查 `token` 是字符串且 `user.id` / `user.name` 存在、`user.verified === true`；通过后 `api.save({token,user})`。弹窗监听 600000 毫秒后自动撤销。
 - 站点 origin 在流程里的位置：`/auth/{provider}/start` 的 `returnOrigin` 缺省取请求的 `Origin` 头，存进 `oauth_states.origin`，回调时作为 `postMessage` 目标。CLI 传入 `returnOrigin: loopback`，`cliReturnOrigin()` 要求它是 `http://127.0.0.1:<1024 以上端口>` 且与 origin 完全相等。
+- 换 token 发生在服务端之间：回调里由 Worker 自己 POST `https://oauth2.googleapis.com/token`（带 `client_secret`、`code_verifier`、`grant_type=authorization_code`），再用得到的 access token 请求 `openidconnect.googleapis.com/v1/userinfo`；这两个请求都不经过浏览器，Google 的 access token 也没有落库。
+- schema 里的残留字段：`oauth_states.exchange_hash` 只在 `/auth/*/start` 和 `/setup/connect` 两处被写入，全仓没有读取或比对它的代码；`oauth_states.session_token` 只出现在 `server/migrations/0001_comments.sql` 和 `server/postgres/001_initial.sql` 的建表语句里，没有任何写入。只能说明当前版本不用这两列，不能据此判断历史设计。
 - 登录回传：回调页在 `window.opener` 上 `postMessage({type, token, user}, <saved origin>)`，页面 CSP 为 `default-src 'none'; script-src 'nonce-...'; frame-ancestors 'none'`，并把 oauth cookie 置为 `Max-Age=0`。
 - Google 邮箱只在 `profile.email_verified === true` 时写入 `users.email`；头像只接受 `https://` 开头的地址。
 - 站点层授权：`originAllowed()` 要求 origin 与 pattern 完全相等（无 `*` 时）或用 `[a-zA-Z0-9-]+` 替换最左标签里的 `*`（`sitePattern()` 限制通配只出现在最左标签且不跨点）；`localOrigin()` 放行 `http://localhost|127.0.0.1`。不在名单内返回 403 `site_not_approved`，且不下发 CORS 头。

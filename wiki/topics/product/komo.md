@@ -107,7 +107,11 @@ komo 只有三类身份，区别写在 `users.id` 的前缀上：
 
 每个请求显式带 `Authorization: Bearer <token>`，服务端按 token 哈希 + 项目 + 未过期查会话。浏览器侧同时存两处：HTTPS 下写 `__Host-bc-session-...` cookie，配置了 `sessionDomain` 时换成 `__Secure-` 加 `Domain`；另外写一份 localStorage。cookie 的 `Max-Age` 上限是 400 天，服务端会话比它长，所以续期实际上靠 localStorage，请求本身是 `credentials: "omit"`，不依赖浏览器自动带 cookie。
 
+服务端只认 `Authorization` 头，没有基于 cookie 的会话校验路径：那个 cookie 是客户端自己读写的存储位置，不是凭据通道。好处是跨站请求不会被浏览器自动带上凭据，也就没有靠自动携带 cookie 冒充身份的请求面；代价是 token 必须能被页面脚本读到，所以宿主站点必须可信。
+
 登录走标准授权码 + PKCE：服务端存 `state` 的哈希和 `code_verifier`，授权时用 S256 challenge；回调时除了查 `state`，还要比对 `__Host-comments-oauth` 这个 HttpOnly cookie（`timingSafeEqual` 比对、10 分钟过期、`DELETE ... RETURNING` 用完即删），防止另一个浏览器拿同一个 state 换 token。登录成功后由回调页 `postMessage` 把会话交给发起登录的窗口，目标 origin 是存下来的那个，页面 CSP 是 `default-src 'none'`。
+
+CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机起一个临时 HTTP 服务，浏览器登录后用 `postMessage` 把 token 交给它，它再写到仓库之外的 `~/.config/komo`（目录 0700、文件 0600）。取 token 的顺序是环境变量 `KOMO_TOKEN` 优先，其次是这个文件，两者都没有就报 `No saved session. Run komo login, or set KOMO_TOKEN.`。CLI 的每个请求除了 `Authorization`，还带一个 `Origin` 头，因为站点审批检查对它同样生效。
 
 ### 谁能看到评论
 

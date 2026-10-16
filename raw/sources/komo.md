@@ -185,6 +185,8 @@ npx @tjcages/komo comments resolve THREAD_ID
 - 限流：`limit()` 往 `rate_limits` 写时间桶计数。项目每天 100000 次请求，非 GET 每 IP 每分钟 90 次，项目每天写入 `config.writesPerDay ?? 10000`（托管配置里是 500），托管服务全局每天 100000 次；`KOMO_HOSTED` 时在路由前面还有 `EDGE_LIMIT`（Cloudflare 限流绑定）按 `CF-Connecting-IP` 限流。
 - 配额：`0004_workspaces.sql` / `0006_member_budget.sql` 用触发器维护 `project_quotas`（评论数、字节数，成员按 13312 字节、表情按 256 字节计），超限 `RAISE(ABORT, 'komo_quota_exceeded')`。
 - 请求体字段白名单：`body()` 在解析前按路径列出允许字段（如 `/threads` 只允许 `body|page|anchor`，`/auth/guest` 只允许 `name`），出现多余字段返回 400 `Unexpected request fields.`；body 上限 16384 字节（413）。
+- CLI 凭据：`readToken()` 先看环境变量 `KOMO_TOKEN`，再读 `~/.config/komo/<key>.json`（可由 `KOMO_CONFIG_HOME` 覆盖），都没有时 `comments list` 报 `No saved session. Run komo login, or set KOMO_TOKEN.`；`saveToken()` 建目录时用 `0o700`、写文件用 `mode: 0o600, flag: "wx"` 再 `rename`。`komo login` 在本机起临时 HTTP 服务（`/Users/...` 之外的 127.0.0.1 端口），浏览器登录窗口用 `postMessage` 把 token 交给它，页面里的回传脚本校验 `e.origin` 是 API 源、`e.source` 是它打开的窗口、`e.data.type === 'branch-comments:auth'`。
+- CLI 请求头：`apiClient()` 带 `Origin: config.origin` 和 `Authorization: Bearer <token>`，并把 `project`、`repo`、`branch` 放到查询串上；超时 15 秒、`redirect: "error"`、401 时提示 `Session missing or expired. Run komo login.`
 - 客户端存储：`src/api.ts` 用 `__Host-bc-session-<scope+project>`（配了 `sessionDomain` 时 `__Secure-` 加 `Domain`）写 cookie，同时写 localStorage；源码注释说明 cookie `Max-Age` 上限 400 天而服务端会话更长，所以靠 localStorage 续期；请求统一 `credentials: "omit"`。
 
 ## 验证记录

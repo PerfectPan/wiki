@@ -4,8 +4,8 @@ description: 把网页元素上的评论存进独立 API、再交给 coding agen
 type: topic
 category: product
 created: 2026-10-15
-updated: 2026-10-15
-timestamp: 2026-10-15
+updated: 2026-10-16
+timestamp: 2026-10-16
 tags:
   - code-agent
   - developer-tools
@@ -170,6 +170,7 @@ CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机
 - [[wiki/topics/product/voila|Voila]]：不拥有源码的浏览器编辑扩展，产物是交接物而不是评论；两者都是「把界面上的意图交给下游 agent」。
 - [[wiki/syntheses/product/delta-product-architecture-investigation|Delta 产品与架构调研]]：编辑器里把对话、改动和评论收进同一个 thread 的做法，与 komo 把评论留在页面上、代码改动交给外部 agent 形成对照。
 - [[wiki/topics/ai/code-agent|Code Agent]]
+- [[wiki/topics/architecture/oauth#回调地址登记在谁那里，决定谁去换 token|OAuth]]：回调地址的登记模型，说明托管版为什么只能把回调固定在自己的域上，以及那样做的代价。
 - [[wiki/syntheses/ai/agent-native-system-interface-design|Agent Native 系统接口设计]]：komo 面向 agent 的一侧也是这套做法——机器可读的命令参考、固定的返回结构，以及写进 `AGENTS.md` 的使用约定。
 
 ## 来源指针

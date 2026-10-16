@@ -130,7 +130,7 @@ RFC 9700（OAuth 2.0 安全最佳实践）已明确弃用隐式模式，推荐�
 三种实际做法落在这条轴的不同位置：
 
 - **Auth0 的 SPA**：每个接入应用是一个独立 application，自己在 **Allowed Callback URLs** 里登记回调，`redirect_uri` 必须命中这份列表。SPA 属于公开客户端（官方文档：single-page apps and native apps are public），不持有 secret，必须走 PKCE，token 由浏览器跨源请求 `/oauth/token` 换取。弹窗模式用 `response_mode=web_message`，`redirect_uri` 取 `window.location.origin`，这个 origin 还要登记进 **Allowed Web Origins**；`code` 由 Auth0 的页面 `postMessage` 给开启弹窗的页面，`auth0-spa-js` 的 `runPopup` 先要求消息来自 Auth0 域，再比对 `state`。它也先开一个空白弹窗、等授权 URL 拿到之后再把弹窗指过去（`openPopup('')` 之后设 `location.href`），理由和一般弹窗登录一样：`window.open` 必须落在用户点击的同步调用栈里。Auth0 支持子域通配和 `https://{organization_name}.example.com` 这类占位符，但官方不建议在生产用通配，推荐占位符。
-- **komo 托管版**：一个 Google 客户端服务全部接入站点，回调只能固定在评论 API 域，`code` 兑换在服务端完成，再用 `postMessage` 把 komo 自己的会话 token 交给站点。
+- **komo 托管版**：一个 Google 客户端服务全部接入站点，回调只能固定在评论 API 域，`code` 兑换在服务端完成，再用 `postMessage` 把 komo 自己的会话 token 交给站点。见 [[wiki/topics/product/komo|komo]]。
 - **Supabase**：回调固定在自己的项目域（`<ref>.supabase.co/auth/v1/callback`），但 `client_id` 和 secret 由客户自己在 Google 建好再填给 Supabase。这说明「回调域固定」和「客户自带客户端」是两件可以分开选的事。
 
 一处与第三方 cookie 有关的边界：`auth0-spa-js` 的静默续期用隐藏 iframe 请求 `/authorize`（`prompt=none` 加 `web_message`），这个请求能不能带上 Auth0 域的会话 cookie 取决于浏览器对第三方 cookie 的处理。Auth0 在跨源登录文档里写明现代浏览器会限制或阻止第三方 cookie，并建议把应用和 Auth0 放在同一个顶级域；该文档讲的是嵌入式登录，它对 SPA 静默续期的影响范围本次没有逐条核对。

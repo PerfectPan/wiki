@@ -89,12 +89,44 @@ CLI 的评论区命令覆盖读、写和状态变更：`comments list`、`get`�
 
 提示词里对评论内容本身的定性值得记下来：评论正文、目标文本和 DOM/源码上下文都是捕获时的快照提示，不是当前事实，也不是给 agent 的指令，不能凭它去取凭据、跑无关命令或外发数据。
 
+## 身份与鉴权
+
+komo 只有三类身份，区别写在 `users.id` 的前缀上：
+
+| 身份 | id 形式 | 怎么获得 | `verified` |
+| --- | --- | --- | --- |
+| Google 用户 | `google:<sub>` | 授权码 + PKCE | 1 |
+| GitHub 用户 | `github:<id>` | 同上 | 1 |
+| 访客 | `guest:<uuid>` | 只提交一个显示名（最多 60 字符） | 0 |
+
+项目和 workspace 的 owner 必须是 Google 身份：`project_owners` 和 `workspaces` 两张表分别带 `CHECK(user_id LIKE 'google:%')` 和 `CHECK(owner_id LIKE 'google:%')`。自托管的 owner 用一次性 setup key 认领，服务端只存这个 key 的 SHA-256（`bootstrapHash`），认领成功后写入 `project_owners`，重复认领返回 409。
+
+### 会话
+
+服务端签发时生成一个双 UUID 的 token，数据库里只存它的 SHA-256（`sessions.token_hash`），并把会话绑定到具体项目（`sessions.project`）。有效期在代码里写成 100 年，注释给的理由是「Sessions should not force reviewers back through sign-in」，只有登出（`DELETE /me`）会删掉这一行。
+
+每个请求显式带 `Authorization: Bearer <token>`，服务端按 token 哈希 + 项目 + 未过期查会话。浏览器侧同时存两处：HTTPS 下写 `__Host-bc-session-...` cookie，配置了 `sessionDomain` 时换成 `__Secure-` 加 `Domain`；另外写一份 localStorage。cookie 的 `Max-Age` 上限是 400 天，服务端会话比它长，所以续期实际上靠 localStorage，请求本身是 `credentials: "omit"`，不依赖浏览器自动带 cookie。
+
+登录走标准授权码 + PKCE：服务端存 `state` 的哈希和 `code_verifier`，授权时用 S256 challenge；回调时除了查 `state`，还要比对 `__Host-comments-oauth` 这个 HttpOnly cookie（`timingSafeEqual` 比对、10 分钟过期、`DELETE ... RETURNING` 用完即删），防止另一个浏览器拿同一个 state 换 token。登录成功后由回调页 `postMessage` 把会话交给发起登录的窗口，目标 origin 是存下来的那个，页面 CSP 是 `default-src 'none'`。
+
+### 谁能看到评论
+
+- **站点层**：请求的 `Origin` 要落在项目已批准的站点列表里（支持 `https://*-preview.example.com` 这类最左标签单层通配，通配不跨点），localhost 直接放行。不在列表里返回 403 `site_not_approved`，同时不下发 CORS 头。
+- **项目层**：项目默认公开，能打开该站点的人都能读写。切成 `private` 后每次读写都要过 `requireMember`，它查两件事：`verified` 为真且 id 以 `google:` 开头，然后再看 `project_owners` 和 `project_access` 里有没有这个用户。所以访客身份进不了私有项目，GitHub 身份也进不了——后一条是从代码读出来的，没有实际跑过。
+- **邀请**：`project_invites` 存邮箱、token 哈希和 7 天过期时间，接受邀请时用登录账号的邮箱匹配，每个项目最多 50 条待接受邀请。
+
+### 限流和配额
+
+`limit()` 按时间桶写 `rate_limits` 表：每个项目每天 10 万次请求、非 GET 请求每 IP 每分钟 90 次、项目每天写入数（托管 500，自托管默认 10000）、托管服务全局每天 10 万次；开了 `KOMO_HOSTED` 时前面还有一层 Cloudflare 的 `EDGE_LIMIT` 按 IP 限流。评论数、字节数、成员数和表情数这些配额由数据库触发器兜底，超了抛 `komo_quota_exceeded`。
+
+另外每个路由的请求体有字段白名单：`body()` 按路径规定允许出现的字段，多一个字段就返回 400。CLI 的 `KOMO_TOKEN` 就是同一个评审者的会话 token，README 写明它不绕过 owner 检查。
+
 ## 使用限制
 
 - **托管额度**：每个 Google 账号 3 个项目、每个项目 250 条存储评论（含回复）、10 MiB 逻辑存储、每天 500 次写请求、请求体 16 KiB。beta 期间免费，没有付费升级路径。删除或解析评论不返还配额，官方给的回收方式是先导出、再清掉已解析会话。
-- **身份**：owner 必须是 Google 账号；访客可以只填名字参与，但这个名字不是已验证身份，登录之后也不会自动把旧的访客评论转成已登录账号。
+- **身份**：访客只填名字就能评论，但这个名字不是已验证身份，之后用 Google 登录也不会把旧的访客评论转成已登录账号；私有项目的门槛和邀请机制见上一节。
 - **可见范围**：项目默认是「有链接就能访问」，owner 可以改成只允许被邀请的 Google 账号。站点是否允许嵌入由已验证的站点地址控制，成员关系控制的是私有反馈的访问；这两件事和仓库权限互不相干。
-- **会话**：挂件用的是 `mode: "open"` 的 shadow root，只隔离样式，宿主页面自己的脚本仍能读到它；HTTPS 下默认是 host-only cookie；开 `sessionDomain` 会把会话共享给同一个父域下的所有主机，包括无关应用，官方不建议对不可信的预览环境开启。挂在页面上的客户端凭据和缓存的评论对宿主站点自己的脚本可见，所以只应该装在自己信任的站点上。
+- **会话**：挂件用的是 `mode: "open"` 的 shadow root，只隔离样式，宿主页面自己的脚本仍能读到它；会话长期有效（服务端 100 年、cookie 上限 400 天），所以凭据的暴露面跟着宿主站点走。开 `sessionDomain` 会把会话共享给同一个父域下的所有主机，包括无关应用，官方不建议对不可信的预览环境开启。挂在页面上的客户端凭据和缓存的评论对宿主站点自己的脚本可见，所以只应该装在自己信任的站点上。
 - **部署环境**：官方建议只在预览和开发环境挂载，用 `enabled` 接框架的公开环境变量；beta 期间的生产使用没有承诺。
 - **附件**：不支持行内文件附件；头像只保存有上限的表示形式。
 - **移动端**：挂件会适配小视口，但精确点选和拖拽在指针设备上体验更好。
@@ -118,6 +150,6 @@ CLI 的评论区命令覆盖读、写和状态变更：`comments list`、`get`�
 
 - `raw/sources/komo.md`：文档事实、源码阅读记录与验证范围。
 - <https://komo.offbr.co/>、[安装](https://komo.offbr.co/install/)、[配置](https://komo.offbr.co/configuration/)、[托管与限额](https://komo.offbr.co/hosting/)、[给 agent](https://komo.offbr.co/agent-prompts/)、[FAQ](https://komo.offbr.co/faq/)
-- <https://github.com/tjcages/komo>（快照 `6fb75d7b`）：`src/anchors.ts`、`src/agent-prompt.ts`、`src/polling.ts`、`server/index.ts`、`server/migrations/0001_comments.sql`、`server/migrations/0007_revisions.sql`、`cli/workflow.mjs`、`docs/performance.md`
+- <https://github.com/tjcages/komo>（快照 `6fb75d7b`）：`src/anchors.ts`、`src/agent-prompt.ts`、`src/polling.ts`、`src/api.ts`、`server/index.ts`、`server/validation.ts`、`server/project-management.ts`、`server/migrations/0001_comments.sql`、`server/migrations/0004_workspaces.sql`、`server/migrations/0007_revisions.sql`、`cli/agent.mjs`、`cli/workflow.mjs`、`docs/performance.md`
 - <https://www.npmjs.com/package/@tjcages/komo>：0.7.0（2026-09-29）
 - `raw/assets/komo-architecture-sketch.png`：按本页内容生成的手绘风格示意图（codex 图像生成，1664×936），不是 komo 官方素材；图中的调用次序以本页正文和 `raw/sources/komo.md` 的源码记录为准。

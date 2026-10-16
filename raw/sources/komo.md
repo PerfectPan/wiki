@@ -169,9 +169,27 @@ npx @tjcages/komo comments resolve THREAD_ID
 - 合成桌面负载（1280×900、5,000 行 DOM、250 个长正文会话、每帧 100 次文本改动、180 帧）：平均帧间隔 12.37 ms（优化前 120.45 ms），最差 17.7 ms；测量期间的选择器查询从 44,500 降到 0。
 - 无评论时平均帧间隔 8.28 ms，纯宿主对照 8.25 ms。作者自己标注这些数字不是 Core Web Vitals，也不能保证每台设备都这样。
 
+## 身份与鉴权（读 `server/`）
+
+- 身份三分支：`users.id` 用前缀区分 —— `google:<sub>`（从 Google userinfo 取 `sub`）、`github:<id>`（取 `id`）、`guest:<uuid>`。OAuth 用户 `INSERT ... verified=1`，访客插入时不带 `verified` 列，默认 0（`0001_comments.sql` 的列默认值）。
+- owner 必须是 Google 身份：`0004_workspaces.sql` 里 `workspaces.owner_id` 和 `project_owners.user_id` 都带 `CHECK(... LIKE 'google:%')`。
+- 自托管 owner 认领：`/owner/claim` 把请求里的 key 做 SHA-256 与配置里的 `bootstrapHash` 比对，不匹配返回 403 `Invalid owner setup key.`；认领用 `INSERT OR IGNORE` 写入 `project_owners`，已存在返回 409。
+- 会话：`token = crypto.randomUUID() + crypto.randomUUID()`；`sessions` 只存 `token_hash`（SHA-256）、`user_id`、`project`、`expires_at`。`SESSION_LIFETIME = 100 * 365 * 86400000`，源码注释：「Sessions should not force reviewers back through sign-in: keep them valid for a century and only revoke on logout.」`DELETE /me` 按 token 哈希删行。
+- 鉴权入口 `authenticate()`：从 `Authorization: Bearer` 取 token（正则限制 200 字符），按 `token_hash + project + expires_at > now` 查 `users`，失败返回 401，文案分别是 `Enter your name to comment.` 和 `Your session expired. Enter your name again.`
+- OAuth：`/auth/{google,github}/start` 生成 `state`、`verifier`、`exchange` 三个随机串，只存 state 和 exchange 的哈希，`oauth_states` 行 10 分钟过期；`/auth/{provider}/authorize` 用 `code_challenge_method=S256` 并在响应里种 `__Host-comments-oauth=<state>; HttpOnly; Secure; SameSite=Lax; Path=/; Max-Age=600`。回调时用 `timingSafeEqual` 比对 state 与 cookie，再用 `DELETE ... RETURNING` 一次性消费该行。
+- 登录回传：回调页在 `window.opener` 上 `postMessage({type, token, user}, <saved origin>)`，页面 CSP 为 `default-src 'none'; script-src 'nonce-...'; frame-ancestors 'none'`，并把 oauth cookie 置为 `Max-Age=0`。
+- Google 邮箱只在 `profile.email_verified === true` 时写入 `users.email`；头像只接受 `https://` 开头的地址。
+- 站点层授权：`originAllowed()` 要求 origin 与 pattern 完全相等（无 `*` 时）或用 `[a-zA-Z0-9-]+` 替换最左标签里的 `*`（`sitePattern()` 限制通配只出现在最左标签且不跨点）；`localOrigin()` 放行 `http://localhost|127.0.0.1`。不在名单内返回 403 `site_not_approved`，且不下发 CORS 头。
+- 项目层授权：`privateAccess()` 读 `project_settings.access`；为 `private` 时读写都走 `requireMember()` —— 先要求 `verified && id.startsWith("google:")`，再查 `project_owners ∪ project_access`，否则 403。
+- 邀请：`project_invites` 存 `token_hash`、`email`、`expires_at`（7 天），插入前检查待接受邀请少于 50 条，否则 409；`/project/join` 用当前用户 `users.email` 匹配。
+- 限流：`limit()` 往 `rate_limits` 写时间桶计数。项目每天 100000 次请求，非 GET 每 IP 每分钟 90 次，项目每天写入 `config.writesPerDay ?? 10000`（托管配置里是 500），托管服务全局每天 100000 次；`KOMO_HOSTED` 时在路由前面还有 `EDGE_LIMIT`（Cloudflare 限流绑定）按 `CF-Connecting-IP` 限流。
+- 配额：`0004_workspaces.sql` / `0006_member_budget.sql` 用触发器维护 `project_quotas`（评论数、字节数，成员按 13312 字节、表情按 256 字节计），超限 `RAISE(ABORT, 'komo_quota_exceeded')`。
+- 请求体字段白名单：`body()` 在解析前按路径列出允许字段（如 `/threads` 只允许 `body|page|anchor`，`/auth/guest` 只允许 `name`），出现多余字段返回 400 `Unexpected request fields.`；body 上限 16384 字节（413）。
+- 客户端存储：`src/api.ts` 用 `__Host-bc-session-<scope+project>`（配了 `sessionDomain` 时 `__Secure-` 加 `Domain`）写 cookie，同时写 localStorage；源码注释说明 cookie `Max-Age` 上限 400 天而服务端会话更长，所以靠 localStorage 续期；请求统一 `credentials: "omit"`。
+
 ## 验证记录
 
 - 做过：`curl` 抓官网与 sitemap 页面、读 npm 注册表元信息与下载量、`git clone` 仓库后阅读 `packages/komo` 的源码与迁移、读 `docs/performance.md`。
 - 配图：`raw/assets/komo-architecture-sketch.png` 是按上面「它由三部分组成」和「实现事实」两节写的内容，用 codex 的图像生成能力画的手绘风格示意图，出图两轮（第一版缺了评论 API 回给挂件的轮询方向）。核对项是 8 个标签的文字、五组箭头方向、三段分组和点缀色；它不是 komo 官方素材，也不能当作证据，只能配着正文看。
-- 未做：没有安装或运行这个包，没有连接任何真实 komo 项目，没有部署 Worker 或 PostgreSQL 服务，没有跑仓库测试，也没有复现性能数字。
+- 未做：没有实际发起过 OAuth 登录、访客评论、邀请或 owner 认领，上面这些流程都是读代码得到的，没有跑通端到端；没有安装或运行这个包，没有连接任何真实 komo 项目，没有部署 Worker 或 PostgreSQL 服务，没有跑仓库测试，也没有复现性能数字。
 - 因此本文件里凡是行为描述，都是对这个提交的代码和这一版文档的阅读结论；托管服务的实际限额、限流和清理行为按文档记录，未在真实服务上验证。

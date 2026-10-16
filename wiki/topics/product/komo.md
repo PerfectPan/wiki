@@ -121,7 +121,7 @@ CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机
 
 挂件要先问服务端给哪些登录方式：`GET /config` 返回 `google`、`github`、`guests`、`guestResolve`、`private` 五个开关（`github` 只有配了 GitHub 的 client id 和 secret 才为真，`guests` 在项目是 private、`allowGuests` 为 false 或 owner 还没认领时为假）。
 
-访客这条路完全不跳转：填一个名字，`POST /auth/guest {name}` 直接返回会话，挂件存下来就用。Google 和 GitHub 那条是弹窗，不是把你的页面导航走：挂件先 `window.open("about:blank", "branch-comments-signin", "popup,width=600,height=720")` 占一个空白窗，拿到 `start.url` 之后再把弹窗指过去，站点本身不动。只有需要已验证身份的动作才会要求登录，比如关闭会话（`guestResolve` 打开时访客也可以关）。
+访客这条路完全不跳转：填一个名字，`POST /auth/guest {name}` 直接返回会话，挂件存下来就用。Google 和 GitHub 那条是弹窗，不是把你的页面导航走：挂件先 `window.open("about:blank", "branch-comments-signin", "popup,width=600,height=720")` 占一个空白窗，拿到 `start.url` 之后再把弹窗指过去，站点本身不动。先开空窗是因为 `window.open` 必须落在用户点击的同步调用栈里，放到等待 `auth/*/start` 返回之后再开就会被浏览器当成弹窗拦掉；`start` 请求失败时这个空窗会被关掉并把错误抛回界面。空白窗在导航前继承的是站点自己的源，所以监听器除了比对 `event.source`，还要比对 `event.origin` 是 API 的源，否则同一个空窗就能伪造消息。只有需要已验证身份的动作才会要求登录，比如关闭会话（`guestResolve` 打开时访客也可以关）。
 
 ### 谁能看到评论
 

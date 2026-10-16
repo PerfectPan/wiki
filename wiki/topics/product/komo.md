@@ -107,6 +107,8 @@ komo 只有三类身份，区别写在 `users.id` 的前缀上：
 
 每个请求显式带 `Authorization: Bearer <token>`，服务端按 token 哈希 + 项目 + 未过期查会话。浏览器侧同时存两处：HTTPS 下写 `__Host-bc-session-...` cookie，配置了 `sessionDomain` 时换成 `__Secure-` 加 `Domain`；另外写一份 localStorage。cookie 的 `Max-Age` 上限是 400 天，服务端会话比它长，所以续期实际上靠 localStorage，请求本身是 `credentials: "omit"`，不依赖浏览器自动带 cookie。
 
+token 本身是两段随机 UUID，是不透明串，不含任何身份字段，也不是 JWT。解身份就是一次查表：按 `SHA-256(token)` 命中 `sessions.token_hash`，再 join `users`；会话作用域同时受请求里的 `project` 参数和 `sessions.project` 列约束，所以一个项目的 token 拿到另一个项目查不到行。没带 header、过期、项目不匹配这几种失败返回的 401 文案不区分彼此。命中之后，服务端只把 `id`、`name`、`verified`、`avatarUrl`、`accentColor` 五个字段当作调用方身份。
+
 服务端只认 `Authorization` 头，没有基于 cookie 的会话校验路径：那个 cookie 是客户端自己读写的存储位置，不是凭据通道。好处是跨站请求不会被浏览器自动带上凭据，也就没有靠自动携带 cookie 冒充身份的请求面；代价是 token 必须能被页面脚本读到，所以宿主站点必须可信。
 
 登录走标准授权码 + PKCE：服务端存 `state` 的哈希和 `code_verifier`，授权时用 S256 challenge；回调时除了查 `state`，还要比对 `__Host-comments-oauth` 这个 HttpOnly cookie（`timingSafeEqual` 比对、10 分钟过期、`DELETE ... RETURNING` 用完即删），防止另一个浏览器拿同一个 state 换 token。登录成功后由回调页 `postMessage` 把会话交给发起登录的窗口，目标 origin 是存下来的那个，页面 CSP 是 `default-src 'none'`。

@@ -111,9 +111,20 @@ token 本身是两段随机 UUID，是不透明串，不含任何身份字段，
 
 服务端只认 `Authorization` 头，没有基于 cookie 的会话校验路径：那个 cookie 是客户端自己读写的存储位置，不是凭据通道。好处是跨站请求不会被浏览器自动带上凭据，也就没有靠自动携带 cookie 冒充身份的请求面；代价是 token 必须能被页面脚本读到，所以宿主站点必须可信。
 
-登录走标准授权码 + PKCE：服务端存 `state` 的哈希和 `code_verifier`，授权时用 S256 challenge；回调时除了查 `state`，还要比对 `__Host-comments-oauth` 这个 HttpOnly cookie（`timingSafeEqual` 比对、10 分钟过期、`DELETE ... RETURNING` 用完即删），防止另一个浏览器拿同一个 state 换 token。登录成功后由回调页 `postMessage` 把会话交给发起登录的窗口，目标 origin 是存下来的那个，页面 CSP 是 `default-src 'none'`。
+登录走标准授权码 + PKCE：服务端存 `state` 的哈希和 `code_verifier`，授权时用 S256 challenge；回调时除了查 `state`，还要比对 `__Host-comments-oauth` 这个 HttpOnly cookie（`timingSafeEqual` 比对、10 分钟过期、`DELETE ... RETURNING` 用完即删），用于确认完成流程的浏览器就是发起流程的那一个。
 
-回调落在评论 API 自己的域上，不是你的站点：授权请求里的 `redirect_uri` 取的是 API 请求 URL 的 origin。托管版固定是 `https://komo.offbr.co/auth/google/callback`，跟你把挂件装在哪个网站无关；自托管则要用自己 Worker 或 Node 服务的地址，并把它加进 Google OAuth 客户端的授权回调地址。Google 的 client id 和 secret 存在 API 的环境变量里（未配置时 `/auth/*/start` 返回 503 `Sign-in is not configured.`），所以站点方不需要自己的 Google Cloud 项目。你的站点域在这个流程里只出现两次：写进 `oauth_states.origin`（默认取请求的 `Origin` 头）当作登录成功后的 `postMessage` 目标，以及要过站点白名单。CLI 登录时这个目标换成 `http://127.0.0.1:<高位端口>` 的本地临时服务。
+一轮登录里 token 的完整路径：
+
+1. 站点页面（origin A）点击登录，挂件先开一个 `about:blank` 弹窗，再 `POST /auth/google/start`；服务端把 `state`、`verifier`、`exchange` 三个随机串存进 `oauth_states`（只存 state 和 exchange 的哈希），返回一个授权 URL。
+2. 弹窗导航到评论 API（origin B）的 `/auth/google/authorize`；服务端 302 到 Google，`redirect_uri` 用的是 B 的 `/auth/google/callback`，同时在 B 上种下 `__Host-comments-oauth`。
+3. Google 在弹窗里完成授权，把弹窗送回 B 的回调地址。
+4. 服务端比对 state 与 cookie、用 `DELETE ... RETURNING` 消费掉那一行、拿 `code_verifier` 去换 access token、取 userinfo、写 `users` 和 `sessions`，得到原始 token。
+5. 回调页在 origin B 上返回一段 HTML，内联脚本执行 `window.opener.postMessage({type, token, user}, <origin A>)` 然后关窗；页面 CSP 是 `default-src 'none'`，oauth cookie 同时清零。
+6. 站点页面的监听器校验 `event.origin` 是 B、`event.source` 是它开的那个弹窗、`type` 正确、`user.verified === true`，通过后 `api.save({token, user})`，写进 cookie 和 localStorage，之后请求带 `Authorization`。
+
+token 不进 URL、不 redirect 回站点、也不靠跨站 cookie：回调页在 B 上，与站点跨源，只能通过 `postMessage` 交给开启它的那个窗口，目标 origin 是发起登录时记下的那个（CLI 登录时换成 `http://127.0.0.1:<高位端口>`）。
+
+回调地址永远在 API 域上，与站点无关：托管版固定是 `https://komo.offbr.co/auth/google/callback`；自托管要用自己 Worker 或 Node 服务的地址，并加进 Google OAuth 客户端的授权回调地址；client id 和 secret 存在 API 的环境变量里（没配时 `/auth/*/start` 返回 503 `Sign-in is not configured.`），所以站点方不需要自己的 Google Cloud 项目。你的站点域在这个流程里只出现两次：写进 `oauth_states.origin` 当作 `postMessage` 的目标，以及要过站点白名单。
 
 CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机起一个临时 HTTP 服务，浏览器登录后用 `postMessage` 把 token 交给它，它再写到仓库之外的 `~/.config/komo`（目录 0700、文件 0600）。取 token 的顺序是环境变量 `KOMO_TOKEN` 优先，其次是这个文件，两者都没有就报 `No saved session. Run komo login, or set KOMO_TOKEN.`。CLI 的每个请求除了 `Authorization`，还带一个 `Origin` 头，因为站点审批检查对它同样生效。
 

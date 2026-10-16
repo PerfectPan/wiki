@@ -124,7 +124,7 @@ token 本身是两段随机 UUID，是不透明串，不含任何身份字段，
 
 token 不进 URL、不 redirect 回站点、也不靠跨站 cookie：回调页在 B 上，与站点跨源，只能通过 `postMessage` 交给开启它的那个窗口，目标 origin 是发起登录时记下的那个（CLI 登录时换成 `http://127.0.0.1:<高位端口>`）。
 
-回调地址永远在 API 域上，与站点无关：托管版固定是 `https://komo.offbr.co/auth/google/callback`；自托管要用自己 Worker 或 Node 服务的地址，并加进 Google OAuth 客户端的授权回调地址；client id 和 secret 存在 API 的环境变量里（没配时 `/auth/*/start` 返回 503 `Sign-in is not configured.`），所以站点方不需要自己的 Google Cloud 项目。你的站点域在这个流程里只出现两次：写进 `oauth_states.origin` 当作 `postMessage` 的目标，以及要过站点白名单。
+回调地址永远在 API 域上，与站点无关：托管版固定是 `https://komo.offbr.co/auth/google/callback`（托管方只有一个 OAuth 客户端服务全部接入站点，而 Google 的授权回调地址不允许通配——官方文档写明 `Redirect URIs cannot contain ... Wildcard characters (*)`，且不匹配报 `redirect_uri_mismatch`——所以让回调落到每个客户自己的域在这条路上表达不出来）；自托管要用自己 Worker 或 Node 服务的地址，并加进 Google OAuth 客户端的授权回调地址；client id 和 secret 存在 API 的环境变量里（没配时 `/auth/*/start` 返回 503 `Sign-in is not configured.`），所以站点方不需要自己的 Google Cloud 项目。你的站点域在这个流程里只出现两次：写进 `oauth_states.origin` 当作 `postMessage` 的目标，以及要过站点白名单。
 
 CLI 用的是同一套凭据，区别只在怎么拿到：`komo login` 在本机起一个临时 HTTP 服务，浏览器登录后用 `postMessage` 把 token 交给它，它再写到仓库之外的 `~/.config/komo`（目录 0700、文件 0600）。取 token 的顺序是环境变量 `KOMO_TOKEN` 优先，其次是这个文件，两者都没有就报 `No saved session. Run komo login, or set KOMO_TOKEN.`。CLI 的每个请求除了 `Authorization`，还带一个 `Origin` 头，因为站点审批检查对它同样生效。
 

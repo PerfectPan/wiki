@@ -119,7 +119,7 @@ token 本身是两段随机 UUID，是不透明串，不含任何身份字段，
 2. 弹窗导航到评论 API（origin B）的 `/auth/google/authorize`；服务端 302 到 Google，`redirect_uri` 用的是 B 的 `/auth/google/callback`，同时在 B 上种下 `__Host-comments-oauth`。这个 cookie 是靠 `SameSite=Lax` 在顶层导航时自动带上的，所以这一步必须是弹窗真的导航过去；换成跨源 `fetch` 就不会带 cookie，回调直接 400。
 3. Google 在弹窗里完成授权，把弹窗送回 B 的回调地址。
 4. 服务端比对 state 与 cookie、用 `DELETE ... RETURNING` 消费掉那一行，然后**服务端之间**去 `oauth2.googleapis.com/token` 用 `code_verifier` 换 Google 的 access token，再带它取 userinfo；浏览器全程看不到 Google 的 token。接着写 `users` 和 `sessions`，这时 komo 自己的会话 token 才第一次出现。
-5. 回调页在 origin B 上返回一段 HTML，内联脚本执行 `window.opener.postMessage({type, token, user}, <origin A>)` 然后关窗；页面 CSP 是 `default-src 'none'`，oauth cookie 同时清零。
+5. 回调页在 origin B 上返回一段 HTML，内联脚本执行 `window.opener.postMessage({type, token, user}, <origin A>)` 然后关窗；oauth cookie 同时清零。这段 HTML 里只有 `postMessage` 和 `window.close()`，没有任何 `fetch` 或外部资源，所以它的 CSP 能用 `default-src 'none'`，只给内联脚本留一个 nonce。浏览器在整条链路上只发出这一次带 code 的导航请求，换 token 的两个请求都是服务端在处理它时发出的。
 6. 站点页面的监听器校验 `event.origin` 是 B、`event.source` 是它开的那个弹窗、`type` 正确、`user.verified === true`，通过后 `api.save({token, user})`，写进 cookie 和 localStorage，之后请求带 `Authorization`。
 
 token 不进 URL、不 redirect 回站点、也不靠跨站 cookie：回调页在 B 上，与站点跨源，只能通过 `postMessage` 交给开启它的那个窗口，目标 origin 是发起登录时记下的那个（CLI 登录时换成 `http://127.0.0.1:<高位端口>`）。

@@ -255,6 +255,7 @@
   - [[wiki/syntheses/architecture/authentication-api-design|登录态的服务端接口设计]]
   - [[wiki/syntheses/architecture/ddd-bounded-context-and-aggregate|限界上下文、聚合与仓储]]
   - [[wiki/syntheses/architecture/ddd-implementation-approaches|DDD 的实现方式与取舍]]
+  - [[wiki/syntheses/architecture/ddd-mental-models-and-anti-patterns|DDD 实践中的五大认知误区与全景分型范式]]
 - `career`
   - [[wiki/syntheses/career/hiring-search-and-standards|招聘中的搜索问题与用人标准]]
   - [[wiki/syntheses/career/structured-interview-and-behavioral-probing|结构化面试与行为追问]]

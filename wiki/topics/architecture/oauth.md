@@ -4,8 +4,8 @@ description: OAuth 2.0 的角色、授权方式（授权码 + PKCE、客户端�
 type: topic
 category: architecture
 created: 2026-04-12
-updated: 2026-10-16
-timestamp: 2026-10-16
+updated: 2026-10-18
+timestamp: 2026-10-18
 tags:
   - oauth
   - auth
@@ -117,7 +117,7 @@ RFC 9700（OAuth 2.0 安全最佳实践）已明确弃用隐式模式，推荐�
 
 授权服务器处理授权请求前会校验 `redirect_uri`：它必须与客户端预先登记的地址**完全一致**。Google 的规则写明回调地址不能含通配符（文档原文 `Redirect URIs cannot contain ... Wildcard characters (*)`），不匹配时报 `redirect_uri_mismatch`。所以一个客户端服务多个客户站点时，回调只可能落在少数几个固定地址；想让回调落到每个客户自己的域，就得让每个客户自己注册一个客户端。
 
-![两种回调归属：登记在应用自己的域时，浏览器带 code_verifier 换 token；登记在服务方的域时，服务端带 secret 换 token，再用 postMessage 把服务方会话 token 交给站点](../../../raw/assets/oauth-callback-registration.png)
+![手绘示意，两种回调归属：回调登记在站点自己的域时，浏览器带 code_verifier 换 token；登记在服务方的域时，服务端带 secret 换 token，再用 postMessage 把服务方会话 token 交给站点](../../../raw/assets/oauth-callback-registration.png)
 
 | | 回调登记在应用自己的域 | 回调登记在服务方的域 |
 | --- | --- | --- |
@@ -273,6 +273,7 @@ flowchart TB
 
 ## 来源指针
 
+- `raw/assets/oauth-callback-registration.png`：按本页「回调地址登记在谁那里，决定谁去换 token」一节生成的手绘风格示意图（codex 图像生成，1659×948），不是 Auth0、Google 或 Supabase 的官方素材；图中的流程以本页正文和 `raw/sources/oauth.md` 的核查记录为准。
 - `raw/sources/oauth.md`
 - 阮一峰《OAuth 2.0 的一个简单解释》：https://www.ruanyifeng.com/blog/2019/04/oauth_design.html
 - RFC 6749 OAuth 2.0：https://www.rfc-editor.org/rfc/rfc6749

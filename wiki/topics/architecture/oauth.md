@@ -1,11 +1,11 @@
 ---
 title: OAuth
-description: OAuth 2.0 的角色、授权方式（授权码 + PKCE、客户端凭证、设备码、刷新）、access_token 的几种实现，以及和 JWT、OIDC 的关系
+description: OAuth 2.0 的角色、授权方式（授权码 + PKCE、客户端凭证、设备码、刷新）、回调地址的登记模型、access_token 的几种实现，以及和 JWT、OIDC 的关系
 type: topic
 category: architecture
 created: 2026-04-12
-updated: 2026-10-12
-timestamp: 2026-10-12
+updated: 2026-10-18
+timestamp: 2026-10-18
 tags:
   - oauth
   - auth
@@ -22,6 +22,14 @@ source_refs:
   - https://www.rfc-editor.org/rfc/rfc9068
   - https://www.rfc-editor.org/rfc/rfc9700
   - https://openid.net/specs/openid-connect-core-1_0.html
+  - https://developers.google.com/identity/protocols/oauth2/web-server
+  - https://auth0.com/docs/get-started/applications/application-settings
+  - https://auth0.com/docs/get-started/applications/wildcards-for-subdomains
+  - https://auth0.com/docs/get-started/applications/confidential-and-public-applications
+  - https://auth0.com/docs/authenticate/protocols/oauth
+  - https://auth0.com/docs/authenticate/login/cross-origin-authentication
+  - https://github.com/auth0/auth0-spa-js/tree/189007f161ebc10369a4e986fe2d7f133ea00766
+  - https://supabase.com/docs/guides/auth/social-login/auth-google
 resource:
   - raw/sources/oauth.md
   - https://www.ruanyifeng.com/blog/2019/04/oauth_design.html
@@ -34,6 +42,14 @@ resource:
   - https://www.rfc-editor.org/rfc/rfc9068
   - https://www.rfc-editor.org/rfc/rfc9700
   - https://openid.net/specs/openid-connect-core-1_0.html
+  - https://developers.google.com/identity/protocols/oauth2/web-server
+  - https://auth0.com/docs/get-started/applications/application-settings
+  - https://auth0.com/docs/get-started/applications/wildcards-for-subdomains
+  - https://auth0.com/docs/get-started/applications/confidential-and-public-applications
+  - https://auth0.com/docs/authenticate/protocols/oauth
+  - https://auth0.com/docs/authenticate/login/cross-origin-authentication
+  - https://github.com/auth0/auth0-spa-js/tree/189007f161ebc10369a4e986fe2d7f133ea00766
+  - https://supabase.com/docs/guides/auth/social-login/auth-google
 ---
 # OAuth
 
@@ -96,6 +112,28 @@ sequenceDiagram
 2. **缺乏客户端身份核验**：直接在前端发 token 无法验证接收方的真实身份。通过授权码流程，真正的令牌仅在应用后端与授权服务器之间的安全信道（Server-to-Server）中兑换，结合机密客户端的 `client_secret` 或公开客户端的 PKCE（`code_verifier`），能够有效防御令牌被仿冒客户端窃取。
 
 RFC 9700（OAuth 2.0 安全最佳实践）已明确弃用隐式模式，推荐所有场景统一采用授权码流程。
+
+### 回调地址登记在谁那里，决定谁去换 token
+
+授权服务器处理授权请求前会校验 `redirect_uri`：它必须与客户端预先登记的地址**完全一致**。Google 的规则写明回调地址不能含通配符（文档原文 `Redirect URIs cannot contain ... Wildcard characters (*)`），不匹配时报 `redirect_uri_mismatch`。所以一个客户端服务多个客户站点时，回调只可能落在少数几个固定地址；想让回调落到每个客户自己的域，就得让每个客户自己注册一个客户端。
+
+![手绘示意，两种回调归属：回调登记在站点自己的域时，浏览器带 code_verifier 换 token；登记在服务方的域时，服务端带 secret 换 token，再用 postMessage 把服务方会话 token 交给站点](../../../raw/assets/oauth-callback-registration.png)
+
+| | 回调登记在应用自己的域 | 回调登记在服务方的域 |
+| --- | --- | --- |
+| 客户端 | 每个接入应用一个 `client_id` | 服务方一个共享客户端，或客户自带 `client_id` 和 secret 交给服务方 |
+| 回调落到 | 应用自己的 origin | 服务方域 |
+| 谁去换 token | 浏览器，公开客户端加 PKCE，没有 secret | 服务方，机密客户端持 secret，在服务端之间换 |
+| 站点怎么拿到凭据 | 同源读回 `code`，token 存在自己的 origin | 跨源 `postMessage` 交服务方自己的会话 token |
+| 怎么确认回调来自同一个浏览器 | `state` 和 `code_verifier` 存在应用自己 origin 的存储里，回调同源可直接比对 | 回调与站点不同源，要另找手段，例如在回调域写 HttpOnly cookie，靠 `SameSite=Lax` 顶层导航带上 |
+
+三种实际做法落在这条轴的不同位置：
+
+- **Auth0 的 SPA**：每个接入应用是一个独立 application，自己在 **Allowed Callback URLs** 里登记回调，`redirect_uri` 必须命中这份列表。SPA 属于公开客户端（官方文档：single-page apps and native apps are public），不持有 secret，必须走 PKCE，token 由浏览器跨源请求 `/oauth/token` 换取。弹窗模式用 `response_mode=web_message`，`redirect_uri` 取 `window.location.origin`，这个 origin 还要登记进 **Allowed Web Origins**；`code` 由 Auth0 的页面 `postMessage` 给开启弹窗的页面，`auth0-spa-js` 的 `runPopup` 先要求消息来自 Auth0 域，再比对 `state`。它也先开一个空白弹窗、等授权 URL 拿到之后再把弹窗指过去（`openPopup('')` 之后设 `location.href`），理由和一般弹窗登录一样：`window.open` 必须落在用户点击的同步调用栈里。Auth0 支持子域通配和 `https://{organization_name}.example.com` 这类占位符，但官方不建议在生产用通配，推荐占位符。
+- **komo 托管版**：一个 Google 客户端服务全部接入站点，回调只能固定在评论 API 域，`code` 兑换在服务端完成，再用 `postMessage` 把 komo 自己的会话 token 交给站点。见 [[wiki/topics/product/komo|komo]]。
+- **Supabase**：回调固定在自己的项目域（`<ref>.supabase.co/auth/v1/callback`），但 `client_id` 和 secret 由客户自己在 Google 建好再填给 Supabase。这说明「回调域固定」和「客户自带客户端」是两件可以分开选的事。
+
+一处与第三方 cookie 有关的边界：`auth0-spa-js` 的静默续期用隐藏 iframe 请求 `/authorize`（`prompt=none` 加 `web_message`），这个请求能不能带上 Auth0 域的会话 cookie 取决于浏览器对第三方 cookie 的处理。Auth0 在跨源登录文档里写明现代浏览器会限制或阻止第三方 cookie，并建议把应用和 Auth0 放在同一个顶级域；该文档讲的是嵌入式登录，它对 SPA 静默续期的影响范围本次没有逐条核对。
 
 ### 设备码流程（RFC 8628）
 
@@ -235,6 +273,7 @@ flowchart TB
 
 ## 来源指针
 
+- `raw/assets/oauth-callback-registration.png`：按本页「回调地址登记在谁那里，决定谁去换 token」一节生成的手绘风格示意图（codex 图像生成，1659×948），不是 Auth0、Google 或 Supabase 的官方素材；图中的流程以本页正文和 `raw/sources/oauth.md` 的核查记录为准。
 - `raw/sources/oauth.md`
 - 阮一峰《OAuth 2.0 的一个简单解释》：https://www.ruanyifeng.com/blog/2019/04/oauth_design.html
 - RFC 6749 OAuth 2.0：https://www.rfc-editor.org/rfc/rfc6749

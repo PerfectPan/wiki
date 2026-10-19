@@ -133,8 +133,19 @@ State of JS：2024 年 monorepo 工具 "Used at Work" 人数 pnpm 3508、npm Wor
 3. `storage: repository`：`pnpm change status` 显示 "@t/a: 0.19.0 → 0.19.1 (patch, via fixed+intent)"、"@t/b: 0.19.0 → 0.19.1 (patch, via fixed)"。`pnpm version -r` 后 a、b 为 0.19.1，c 不变；记录文件被删除；新增 `.changeset/ledger.yaml`（`"@t/a@0.19.1": dir: packages/a, intents: [fix-a]`）；`packages/a/CHANGELOG.md` 为 `## 0.19.1` / `### Patch Changes` / `- <summary>`，`packages/b/CHANGELOG.md` 只有 `## 0.19.1` 标题、没有条目；没有 git 提交和 tag。
 4. 默认 `registry` 存放：写 minor 记录后 `pnpm version -r`，a、b 升到 0.20.0；记录文件 `.changeset/add-flag.md` 保留，新增 `.changeset/changelogs/` 目录和 `ledger.yaml`；之后 `pnpm change status` 输出 "No pending changes."。
 
+### Dependabot 更新 pnpm 12.8.1 根 lockfile（2026-10-19，一次观察）
+
+新建的模板仓库：`packageManager: pnpm@12.8.1`，依赖版本放在 `pnpm-workspace.yaml` 的 catalog，根目录一份 `pnpm-lock.yaml`，`.github/dependabot.yml` 的 npm 生态 `directory: /`。仓库推送后 Dependabot 首次运行：
+
+1. 开出 PR "bump @types/node from 24.19.1 to 24.19.2 in the npm group"，改动文件只有 `pnpm-workspace.yaml`（catalog 一行）和 `pnpm-lock.yaml`（+71 −47）。
+2. lockfile 中 `@types/node` 及引用它的 peer 后缀都改成 24.19.2；同时夹带了与这次升级无关的改动：`postcss` 从 8.5.30 回到 8.5.29，并新增一批 `deprecated:` 字段。推断：Dependabot 用自己的 pnpm 版本重新生成了 lockfile。
+3. 该 PR 上的 CI 用 pnpm 12.8.1 执行 `pnpm install --frozen-lockfile` 和全部检查，通过。
+4. 同一次运行中 github_actions 生态的更新失败，原因是仓库里有一个 YAML 无效的 workflow 文件（`dependency_file_not_parseable`），与 pnpm 无关。
+
+只观察到一个补丁版本升级，没有覆盖大版本升级、多包升级和 Renovate。
+
 ### 未验证
 
 - changesets/action 以 `pnpm version -r` 作为 version 脚本、在 GitHub Actions 上开版本 PR 的完整流程。
-- Dependabot 和 Renovate 能否正确更新 pnpm 12 的根 lockfile。
+- Renovate 能否正确更新 pnpm 12 的根 lockfile；Dependabot 只观察过上面这一次补丁升级。
 - Rush lockstep 下没有改动的成员是否也会一起发布（按"同一策略共用一个版本"推断，未实测）。

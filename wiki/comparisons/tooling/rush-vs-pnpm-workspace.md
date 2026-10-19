@@ -76,7 +76,7 @@ resource:
 | 如果需要 | 优先选 | 因为 | 需要承担的代价 |
 | --- | --- | --- | --- |
 | 几十个包以内，装依赖、按依赖顺序跑脚本、发 npm | pnpm workspace + pnpm 原生发版或 changesets | 这些 pnpm 都原生支持，发版有原生功能或 changesets | 版本一致性检查要靠 catalog 或 syncpack；没有 Rush 的增量构建 |
-| 依赖升级机器人自动改 lockfile | pnpm workspace | Dependabot 和 Renovate 都读根目录的 `pnpm-lock.yaml` | Dependabot 文档只写支持 pnpm v7–v10，维护者 2026-09-28 说"目前不正式支持 pnpm 11 或 12"（[#16397](https://github.com/dependabot/dependabot-core/issues/16397)），用新版 pnpm 要先验证 |
+| 依赖升级机器人自动改 lockfile | pnpm workspace | Dependabot 和 Renovate 都读根目录的 `pnpm-lock.yaml` | Dependabot 文档只写支持 pnpm v7–v10，维护者 2026-09-28 说"目前不正式支持 pnpm 11 或 12"（[#16397](https://github.com/dependabot/dependabot-core/issues/16397)），一次实测（pnpm 12.8.1）里 Dependabot 同时更新了 catalog 和根 lockfile，frozen install 通过，但 lockfile 夹带了无关的版本回退，合入前要看 lockfile 的 diff |
 | 版本 PR 自动附上 changelog | changesets/action，配 changesets 或 pnpm 原生发版 | Rush 没有官方 Action，要自己写脚本 | pnpm 原生发版必须设 `versioning.changelog.storage: repository`，原因见 [[wiki/topics/tooling/pnpm-versioning\|pnpm 原生发版]] |
 | 几百个项目，单机 CI 要跑几十分钟 | Rush（构建缓存 + cobuild）或 Nx | 能跨机器复用构建结果，把一次构建分给多台机器 | 要维护云端缓存和 Redis；Turborepo 和 pnpm 都没有 cobuild 对应 |
 | 多个团队各自升级依赖 | Rush subspaces | pnpm 一个 workspace 只有一份 lockfile | 只有 Rush 有 |

@@ -129,7 +129,7 @@ State of JS：2024 年 monorepo 工具 "Used at Work" 人数 pnpm 3508、npm Wor
 同样的三包结构，`pnpm-workspace.yaml` 设 `versioning.fixed: [["@t/a", "@t/b"]]`。
 
 1. 改 a、不写记录：`pnpm change status` 输出 "No pending changes."，退出码 0；`pnpm change check` 输出 "No pending change intents to check." 和 "All package versions satisfy the configured versioning invariants."，退出码 0。
-2. `pnpm --filter @t/a change --bump patch --summary "..." -y` 在非终端环境报错 "IO error: not a terminal"，没有写出文件；手写 `.changeset/fix-a.md` 后可用。
+2. `pnpm --filter @t/a change --bump patch --summary "..." -y` 在非终端环境报错 "IO error: not a terminal"，没有写出文件；手写 `.changeset/fix-a.md` 后可用。另一次实测（同日，pnpm 12.8.1，标准输入重定向自 `/dev/null`）：包名作位置参数的 `pnpm change @scope/example --bump patch --summary "..."`（带不带 `-y` 都一样）输出 "Recorded change intent .changeset/<随机名>.md"，退出码 0。
 3. `storage: repository`：`pnpm change status` 显示 "@t/a: 0.19.0 → 0.19.1 (patch, via fixed+intent)"、"@t/b: 0.19.0 → 0.19.1 (patch, via fixed)"。`pnpm version -r` 后 a、b 为 0.19.1，c 不变；记录文件被删除；新增 `.changeset/ledger.yaml`（`"@t/a@0.19.1": dir: packages/a, intents: [fix-a]`）；`packages/a/CHANGELOG.md` 为 `## 0.19.1` / `### Patch Changes` / `- <summary>`，`packages/b/CHANGELOG.md` 只有 `## 0.19.1` 标题、没有条目；没有 git 提交和 tag。
 4. 默认 `registry` 存放：写 minor 记录后 `pnpm version -r`，a、b 升到 0.20.0；记录文件 `.changeset/add-flag.md` 保留，新增 `.changeset/changelogs/` 目录和 `ledger.yaml`；之后 `pnpm change status` 输出 "No pending changes."。
 

@@ -82,7 +82,7 @@ versioning:
 
 ## 使用限制
 
-- **没有终端时无法用 `pnpm change` 写记录。** 实测 `pnpm --filter <pkg> change --bump patch --summary "..." -y` 报 "IO error: not a terminal"，CI 或 agent 里要直接写 `.changeset/*.md` 文件。
+- **在 CI 或 agent 里写记录要用位置参数的写法。** 实测 `pnpm change <pkg> --bump patch --summary "..."` 在没有终端时也能写出记录；`pnpm --filter <pkg> change --bump patch --summary "..." -y` 会报 "IO error: not a terminal"。也可以直接手写 `.changeset/*.md` 文件。
 - **和 changesets/action 配合时必须用 `storage: repository`。** changesets/action 以 `.changeset/*.md` 是否存在判断"开版本 PR 还是发布"（`src/readChangesetState.ts`），而 `registry` 模式下记录文件在 `version -r` 后仍保留，action 会一直认为还有待发的版本。`repository` 模式下记录会删除，PR 描述也能从 `CHANGELOG.md` 取到条目；这种组合在 GitHub Actions 上的完整流程尚未验证。
 - **CI 拦截漏写记录要另想办法**，例如保留 `@changesets/cli` 只跑 `changeset status --since`，或者自己写检查脚本。
 - **功能还在频繁变化。** 发布后 12.4、12.6、12.7 都改过相关行为，pnpm 版本要固定在 11.13 以上的具体版本。

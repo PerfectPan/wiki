@@ -120,6 +120,7 @@
   - [[wiki/topics/tooling/markdown|Markdown]]
   - [[wiki/topics/tooling/monorepo|Monorepo]]
   - [[wiki/topics/tooling/opensumi|opensumi]]
+  - [[wiki/topics/tooling/pnpm-versioning|pnpm 原生发版]]
   - [[wiki/topics/tooling/raycast|Raycast]]
   - [[wiki/topics/tooling/rolldown|Rolldown]]
   - [[wiki/topics/tooling/sourcemap|SourceMap]]
@@ -337,6 +338,7 @@
   - [[wiki/comparisons/systems/thread-isolation-vs-process-isolation|线程级隔离 vs 进程级隔离]]
 - `tooling`
   - [[wiki/comparisons/tooling/html-css-vs-latex-vs-typst-vs-react-pdf|文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf]]
+  - [[wiki/comparisons/tooling/rush-vs-pnpm-workspace|Rush vs pnpm workspace]]
 
 ## 原始资料
 

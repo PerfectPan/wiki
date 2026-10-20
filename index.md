@@ -140,9 +140,11 @@
   - [[wiki/topics/languages/civet|Civet]]
   - [[wiki/topics/languages/clojure|Clojure]]
   - [[wiki/topics/languages/ecmascript|EcmaScript]]
+  - [[wiki/topics/languages/effect-ts|Effect（Effect-TS）]]
   - [[wiki/topics/languages/functional-programming|Functional Programming]]
   - [[wiki/topics/languages/javascript-runtime|JavaScript Runtime]]
   - [[wiki/topics/languages/javascript|JavaScript]]
+  - [[wiki/topics/languages/javascript-generators|JavaScript 生成器与 yield 的类型]]
   - [[wiki/topics/languages/lambda-calculus|Lambda 演算]]
   - [[wiki/topics/languages/pkl|Pkl]]
   - [[wiki/topics/languages/prettier|Prettier]]
@@ -294,6 +296,7 @@
   - [[wiki/syntheses/tooling/frontend-dependency-management-strategy|前端依赖管理策略]]
   - [[wiki/syntheses/tooling/aggregator-agent-cli-architecture-observations|聚合型 Agent CLI 的架构设计观察]]
 - `languages`
+  - [[wiki/syntheses/languages/effect-gen-type-inference|Effect.gen 的类型推导]]
   - [[wiki/syntheses/languages/typescript-narrowing-and-iimt|TypeScript 类型收窄与 IIMT]]
   - [[wiki/syntheses/languages/typescript-phantom-type-carriers|TypeScript Phantom Type Carriers]]
 - `product`

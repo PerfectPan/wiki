@@ -35,6 +35,8 @@ resource:
 
 代数效应是一种控制流机制，可以理解为"可以恢复的 throw"：函数执行到一半 `perform` 一个请求，离它最近的 handler 接住请求，决定怎么处理，然后可以 `resume` 把答案送回去，函数从 `perform` 那一行接着执行。handler 拿到的除了请求本身，还有"从 perform 处继续执行"这件事，即续体（continuation）。
 
+![手绘示意，左边 throw / catch：B() 抛出后跳到 catch，B 剩下的代码被丢弃；右边 perform / resume：B() 用 perform Ask 把请求交给 handler，handler 用 resume("董事长") 把答案送回 B()，B 拿到答案接着往下执行。两条箭头都绕过 A()，中间的函数不需要知道](../../../raw/assets/algebraic-effects-throw-vs-perform.png)
+
 handler 对 resume 的不同用法，分别对应常见的控制流：
 
 | handler 怎么用 resume | 等价于 |
@@ -138,3 +140,4 @@ Plotkin 与 Pretnar 在 2009 年把异常处理推广到所有能用"一组操�
 - [OCaml 手册 · Effect handlers](https://ocaml.org/manual/5.5/effects.html)
 - [Koka 手册](https://koka-lang.github.io/koka/doc/book.html)
 - [Dan Abramov · Algebraic Effects for the Rest of Us](https://overreacted.io/algebraic-effects-for-the-rest-of-us/)
+- `raw/assets/algebraic-effects-throw-vs-perform.png`：按本页内容生成的手绘风格示意图（codex 图像生成），对比 throw 与 perform / resume 的控制流。

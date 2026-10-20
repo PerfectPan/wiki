@@ -43,19 +43,7 @@ A、E、R 在运行时只是三个恒等函数（`dist/internal/core.js:14` 的 
 
 ## 运行时：fiber 怎么执行
 
-```mermaid
-flowchart TD
-    Code["你写的代码<br/>Effect.gen、pipe、catchTag…"] -->|构造，不执行| Tree["一棵 Effect 对象树<br/>每个节点带 evaluate 方法"]
-    Tree -->|runPromise / runFork| Fiber["FiberImpl<br/>current · _stack · context · interruptible"]
-    Fiber --> Loop{"runLoop：调用 current 的 evaluate，得到下一个 current"}
-    Loop -->|"组合节点（flatMap、catchCause、gen…）"| Push["把后续帧压入 _stack，转去执行内层"]
-    Push --> Loop
-    Loop -->|"Success / Failure"| Pop["getCont：弹出能处理这个方向的帧"]
-    Pop -->|还有帧| Loop
-    Pop -->|栈空| Exit["Exit：Success(A) 或 Failure(Cause)"]
-    Loop -->|"异步原语返回 Yield"| Suspend["fiber 挂起；回调里 fiber.evaluate(结果) 接着跑"]
-    Suspend --> Loop
-```
+![手绘示意，Effect 程序怎么运行：你写的代码只构造一棵 Effect 对象树；runPromise 把它交给 fiber，fiber 带着 current、stack、context，在 runLoop 里反复执行 current 的 evaluate——组合节点把后续压栈，Success / Failure 弹栈找对应的帧，异步时挂起、回调里接着跑；栈空时得到 Exit](../../../raw/assets/effect-fiber-runtime.png)
 
 核心实现在 `dist/internal/effect.js` 的 `FiberImpl.runLoop`（第 430 行）：每一步调用当前对象的 `[evaluate]`，组合节点把后续帧压栈，结果节点用 `getCont` 弹栈。后续帧存在 `_stack` 这个数组里，不在 JS 调用栈上，所以嵌套很深也不会栈溢出。每连续执行 2048 步（`Scheduler.MaxOpsBeforeYield`），fiber 会主动让出线程。
 
@@ -127,6 +115,7 @@ Effect-TS 由 Michael Arnaldi 于 2020 年前后开始写，早期仓库自称 "
 ## 来源指针
 
 - `raw/sources/effect-ts.md`：源码位置（effect 4.0.5 `dist/`）、类型定义、agent-kit 链接，以及对比实验、包体与开销的测量记录
+- `raw/assets/effect-fiber-runtime.png`：按本页内容生成的手绘风格示意图（codex 图像生成，1672×941），不是 Effect 官方素材；执行细节以本页正文和 `raw/sources/effect-ts.md` 的源码位置为准。
 - [Effect 官网 · The Effect Type](https://effect.website/docs/v4/getting-started/the-effect-type)
 - [Effect 官网 · Managing Services（v3）](https://effect.website/docs/v3/requirements-management/services/)
 - [mikearnaldi/effect-ts](https://github.com/mikearnaldi/effect-ts)

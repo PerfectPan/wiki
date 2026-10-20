@@ -81,8 +81,8 @@ declare const gen: <Eff extends Effect<any, any, any>, AEff>(
 
 ```mermaid
 flowchart LR
-    A["users.find(&quot;1&quot;)<br/>Effect&lt;User, NotFound, never&gt;"] --> B["调用 Symbol.iterator 方法<br/>EffectIterator&lt;Effect&lt;User, NotFound, never&gt;&gt;"]
-    B --> C["next() 的返回类型<br/>IteratorResult&lt;Effect&lt;User, NotFound, never&gt;, User&gt;"]
+    A["users.find(#quot;1#quot;)<br/>Effect#lt;User, NotFound, never#gt;"] --> B["调用 Symbol.iterator 方法<br/>EffectIterator#lt;Effect#lt;User, NotFound, never#gt;#gt;"]
+    B --> C["next() 的返回类型<br/>IteratorResult#lt;Effect#lt;User, NotFound, never#gt;, User#gt;"]
     C -->|"done: false 的 value"| Y["并入生成器的 Y"]
     C -->|"done: true 的 value"| V["yield* 表达式的类型：User"]
 ```

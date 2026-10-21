@@ -224,6 +224,7 @@
 
 - 综合理解页放在 `wiki/syntheses/`
 - `ai`
+  - [[wiki/syntheses/ai/agent-engineering-uncertainty|Agent 工程中的不确定性与验收设计]]
   - [[wiki/syntheses/ai/generative-ui-evolution|生成式 UI 的社区演进与工程边界]]
   - [[wiki/syntheses/ai/agent-driven-wiki-maintenance|Agent 驱动 Wiki 的维护流程]]
   - [[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]

@@ -4,8 +4,8 @@ description: Model Context Protocol 从本地上下文连接协议演进为远�
 type: topic
 category: ai
 created: 2026-04-12
-updated: 2026-07-30
-timestamp: 2026-07-30
+updated: 2026-10-20
+timestamp: 2026-10-20
 tags:
   - mcp
   - agent
@@ -147,6 +147,8 @@ Anthropic 在 2024-11-25 开源 MCP，希望用一套协议替代每个 AI 应�
 - OAuth / OIDC 加强 issuer 校验和凭据签发方绑定，Dynamic Client Registration 转向 Client ID Metadata Documents；
 - Roots、Sampling、Logging 和旧 HTTP + SSE transport 进入弃用期。
 
+逐项对照 2025-11-25 的变化、删除与弃用清单，以及为什么新版可以放在普通负载均衡后面，见 [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]；授权的完整流程与加固项见 [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]。
+
 这使远程 MCP 更接近标准 HTTP 工作负载：请求可落到任意实例，更容易部署到 serverless、edge 和普通负载均衡后，也更容易接入缓存、观测和企业身份系统。
 
 协议无状态不等于业务不能保存状态。跨调用状态应由工具显式签发 handle，并由 Client 或模型在后续参数中带回。状态因此成为调用数据的一部分，而不是藏在 transport session 中。
@@ -206,6 +208,8 @@ MCP 扩大了 Agent 的行动面，也扩大了风险面。至少要区分四层
 
 ## 相关页面
 
+- [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
+- [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
 - [[mcp-client]]
 - [[mcp-sse-multi-instance-routing]]
 - [[mcp-remote]]

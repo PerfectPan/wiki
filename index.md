@@ -89,6 +89,8 @@
   - [[wiki/topics/ai/code-agent|Code Agent]]
   - [[wiki/topics/ai/coding-agent-edit-tools|Coding Agent 编辑工具]]
   - [[wiki/topics/ai/mcp|MCP]]
+  - [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
+  - [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
   - [[wiki/topics/ai/mcp-client|MCP Client]]
   - [[wiki/topics/ai/mcp-remote|mcp-remote]]
   - [[wiki/topics/ai/prompt|Prompt]]

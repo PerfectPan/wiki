@@ -4,8 +4,8 @@ description: OAuth 2.0 的角色、授权方式（授权码 + PKCE、客户端�
 type: topic
 category: architecture
 created: 2026-04-12
-updated: 2026-10-18
-timestamp: 2026-10-18
+updated: 2026-10-20
+timestamp: 2026-10-20
 tags:
   - oauth
   - auth
@@ -21,6 +21,7 @@ source_refs:
   - https://www.rfc-editor.org/rfc/rfc7009
   - https://www.rfc-editor.org/rfc/rfc9068
   - https://www.rfc-editor.org/rfc/rfc9700
+  - https://www.rfc-editor.org/rfc/rfc9207
   - https://openid.net/specs/openid-connect-core-1_0.html
   - https://developers.google.com/identity/protocols/oauth2/web-server
   - https://auth0.com/docs/get-started/applications/application-settings
@@ -41,6 +42,7 @@ resource:
   - https://www.rfc-editor.org/rfc/rfc7009
   - https://www.rfc-editor.org/rfc/rfc9068
   - https://www.rfc-editor.org/rfc/rfc9700
+  - https://www.rfc-editor.org/rfc/rfc9207
   - https://openid.net/specs/openid-connect-core-1_0.html
   - https://developers.google.com/identity/protocols/oauth2/web-server
   - https://auth0.com/docs/get-started/applications/application-settings
@@ -102,6 +104,7 @@ sequenceDiagram
 - `code` 很短（分钟级），只能用一次。
 - 图中是有后端的机密客户端：兑换时同时提交 PKCE 的 `code_verifier` 并完成客户端认证，二者不互相替代。公开客户端也可直接兑换，但不应依赖保存在浏览器或 App 中的共享 secret。
 - `state` 用来确认回调是自己发起的，防止伪造的回调（CSRF）。
+- 客户端对接多个授权服务器时，`state` 挡不住授权服务器混淆（mix-up）：回调里的 `state` 是真的，但 code 可能来自另一个授权服务器。需要核对回调里的 `iss`（RFC 9207），或给每个授权服务器配不同的回调地址（RFC 9700 §4.4.2）。攻击过程与 MCP 的做法见 [[wiki/topics/ai/mcp-authorization#state 与 iss 分别防什么|MCP 授权流程]]。
 - PKCE（RFC 7636）：客户端先生成随机的 `code_verifier`，授权请求里带它的哈希 `code_challenge`，换 token 时带原值。即使 `code` 被截获，没有 `code_verifier` 也换不到 token。原本为没有 secret 的公开客户端（App、SPA）设计。RFC 9700 规定公开客户端必须用，机密客户端推荐用。
 
 ### 为什么必须使用授权码（code）换取令牌？
@@ -268,6 +271,7 @@ flowchart TB
 ## 相关页面
 
 - [[wiki/topics/architecture/jwt|JWT]]
+- [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
 - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - [[sso]]
 
@@ -284,4 +288,5 @@ flowchart TB
 - RFC 7009 Token Revocation：https://www.rfc-editor.org/rfc/rfc7009
 - RFC 9068 JWT Profile for Access Tokens：https://www.rfc-editor.org/rfc/rfc9068
 - RFC 9700 OAuth 2.0 Security Best Current Practice：https://www.rfc-editor.org/rfc/rfc9700
+- RFC 9207 Authorization Server Issuer Identification：https://www.rfc-editor.org/rfc/rfc9207
 - OpenID Connect Core 1.0：https://openid.net/specs/openid-connect-core-1_0.html

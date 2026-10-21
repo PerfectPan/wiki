@@ -78,6 +78,9 @@
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/agent-harness|Agent Harness]]
   - [[wiki/topics/ai/rivet-agentos|Rivet agentOS：执行环境与持久会话]]
+  - [[wiki/topics/ai/cloudflare-computer|Cloudflare Computer：Durable Object 上的 Agent 工作区]]
+  - [[wiki/topics/ai/layerfs|LayerFS：给 Agent 用的分层文件系统]]
+  - [[wiki/topics/ai/perplexity-space|Perplexity SPACE：Firecracker 沙箱平台]]
   - [[wiki/topics/ai/tetral|Tetral]]
   - [[wiki/topics/ai/pi-durable|Pi Durable]]
   - [[wiki/topics/ai/anthropic-messages-api|Anthropic Messages API]]
@@ -327,6 +330,7 @@
   - [[wiki/comparisons/ai/workflow-vs-agent|Workflow vs Agent]]
   - [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比：gbrain、memU、agentmemory 与 Letta]]
   - [[wiki/comparisons/ai/agent-output-checks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
+  - [[wiki/comparisons/ai/cloudflare-computer-vs-layerfs-vs-space|Agent 工作区方案对比：Cloudflare Computer vs LayerFS vs Perplexity SPACE]]
 - `architecture`
   - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - `career`

@@ -29,6 +29,7 @@
   - [[wiki/topics/frontend/nextjs-middleware-auth-bypass|Next.js Middleware Auth Bypass]]
   - [[wiki/topics/frontend/polyfill|Polyfill]]
   - [[wiki/topics/frontend/mini-program-architecture-evolution|小程序架构演进]]
+  - [[wiki/topics/frontend/near-membrane|near-membrane：Salesforce 的 JS 沙箱库]]
   - [[wiki/topics/frontend/react-devtools|React Devtools]]
   - [[wiki/topics/frontend/react|React]]
   - [[wiki/topics/frontend/react-render-optimization|React Render Optimization]]
@@ -338,6 +339,7 @@
 - `frontend`
   - [[wiki/comparisons/frontend/ssr-vs-ssg-vs-rsc|SSR vs SSG vs RSC]]
   - [[wiki/comparisons/frontend/zod-vs-valibot|Zod vs Valibot]]
+  - [[wiki/comparisons/frontend/javascript-sandbox-approaches|JavaScript 沙箱方案对比]]
   - [[wiki/comparisons/frontend/overlayscrollbars-vs-simplebar-vs-perfect-scrollbar|自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar]]
 - `product`
   - [[wiki/comparisons/product/obsidian-vs-logseq|Obsidian vs Logseq]]

@@ -45,6 +45,7 @@ resource:
 - [[wiki/comparisons/systems/thread-isolation-vs-process-isolation|线程级隔离 vs 进程级隔离]]
 - [[wiki/syntheses/systems/serverless-app-layering-isolation|Serverless 应用分层与隔离]]
 - [[wiki/comparisons/ai/cloudflare-computer-vs-layerfs-vs-space|Agent 工作区方案对比：Cloudflare Computer vs LayerFS vs Perplexity SPACE]]
+- [[wiki/comparisons/frontend/javascript-sandbox-approaches|JavaScript 沙箱方案对比]]
 
 ## 来源指针
 

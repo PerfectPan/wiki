@@ -4,8 +4,8 @@ description: 生成器怎么暂停和恢复、yield 与 yield* 的区别、Gener
 type: topic
 category: languages
 created: 2026-10-20
-updated: 2026-10-20
-timestamp: 2026-10-20
+updated: 2026-10-22
+timestamp: 2026-10-22
 tags:
   - javascript
   - typescript
@@ -52,12 +52,12 @@ sequenceDiagram
     D->>G: next()（参数被丢弃）
     Note over G: 从头执行到 yield "你叫什么？"
     G-->>D: { value: "你叫什么？", done: false }
-    D->>G: next("董事长")
-    Note over G: name = "董事长"，执行到下一个 yield
-    G-->>D: { value: "你好 董事长，几岁？", done: false }
+    D->>G: next("王小明")
+    Note over G: name = "王小明"，执行到下一个 yield
+    G-->>D: { value: "你好 王小明，几岁？", done: false }
     D->>G: next(18)
     Note over G: age = 18，执行到 return
-    G-->>D: { value: "董事长 18 岁", done: true }
+    G-->>D: { value: "王小明 18 岁", done: true }
 ```
 
 - 第一次 `next` 的参数没有 `yield` 在等，会被丢弃。
@@ -131,7 +131,7 @@ function* chat() {
 ```
 
 - `*[Symbol.iterator]() {}` 是"方法简写 + 生成器方法 + 计算属性名"的组合，MDN Method definitions 的语法块列出了 `*[expression](parameters) {}`，Symbol.iterator 页的 "User-defined iterables" 有 `class Foo { *[Symbol.iterator]() { … } }` 的示例。效果等于 `[Symbol.iterator]: function* () {}`（除 `super` 等细节）。
-- 运行时：第 1 次 `next()` 停在 `yield this`，交出 Ask；第 2 次 `next("董事长")` 恢复，`yield this` 的值为 `"董事长"`，接着执行 `return`，得到 `{ done: true, value: "董事长" }`。
+- 运行时：第 1 次 `next()` 停在 `yield this`，交出 Ask；第 2 次 `next("王小明")` 恢复，`yield this` 的值为 `"王小明"`，接着执行 `return`，得到 `{ done: true, value: "王小明" }`。
 - 类型上的 A 来自注解 `Generator<Ask<A>, A, any>` 的第二个参数，不是编译器从运行时推出来的。删掉注解，`name` 变成 `any` 并报 TS7057；第三个参数改成 `unknown`，编译器报 `Type 'unknown' is not assignable to type 'A'`。
 - 外层生成器的 Y 是 `Ask<string> | Ask<number>`，从类型就能读出这段程序会提出哪些请求。
 

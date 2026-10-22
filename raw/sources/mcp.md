@@ -33,3 +33,8 @@
   - 官方博客授权段落：`iss` 校验关闭 mix-up 漏洞；DCR 时设置 `application_type` 让 AS 不再拒绝桌面和 CLI 的 `localhost` 回调；凭据绑定签发方；DCR 正式弃用，以后版本会移除。博客和规范都没有写弃用 DCR 的单独理由。
 - 验证记录：只读规范、SEP、RFC 和发布文章，没有运行任何 MCP SDK、服务器或客户端，没有实际走过 OAuth 流程，也没有验证各 SDK 对这些条文的实现情况。页面里「并行登录时把记录放共享存储或签名后编进 `state`」「记录只用一次并设过期时间」是设计建议，规范没有对应条文。
 - 配图：`raw/assets/mcp-2026-07-28-overview.png`（2400×1520）、`raw/assets/mcp-2026-07-28-lifecycle.png`（2000×1330）、`raw/assets/mcp-2026-07-28-mrtr.png`（2200×1420）、`raw/assets/mcp-2026-07-28-http-auth.png`（2200×1560）。用 roughjs 生成手绘线条、resvg 渲染为 PNG，字体为霞鹜文楷，带浅色填充块，不是 MCP 官方素材。逐张核对了标题、左右两栏的新旧版本归属、箭头方向（发出的请求为实线、返回的响应为虚线）、字段名与错误码（`-32020`、`-32022`、`resultType`、`requestState`、`Mcp-Method`、`Mcp-Name`、`Mcp-Param-*`）与本记录所列规范一致。
+
+## 授权页改写记录（2026-10-22）
+
+- `wiki/topics/ai/mcp-authorization.md` 改为只写 MCP 和普通 OAuth 的差异：顶部加差异对照表，「完整流程」补齐受保护资源元数据的 GET 与 JSON、AS 元数据的 GET、CIMD 文档和 DCR 请求响应、完整的 `/authorize` 地址和带 token 的请求；mix-up 攻击步骤、并行登录记录结构等通用内容移到 `wiki/topics/architecture/oauth.md`，本页链接过去。核查记录见 `raw/sources/oauth.md` 同日条目。
+- 原 Mermaid 时序图换成 `raw/assets/oauth-mcp-discovery-sequence.png`（脚本生成的白底黑线时序图），两者表达同一流程，按「一条信息一张清楚的图」只保留一张。

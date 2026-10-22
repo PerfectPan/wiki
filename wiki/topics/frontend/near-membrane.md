@@ -35,9 +35,58 @@ resource:
 
 库本身声明「提供完整性，不提供安全保证」，安全策略要在上层用 distortion 实现。仓库在 2026-09-18 17:59（北京时间）归档，最后的 npm 版本是 0.19.1。
 
-术语：宿主一侧叫 **blue**，沙箱一侧叫 **red**。Blue Proxy 是在 blue 里创建、包着 red 值的 Proxy；Red Proxy 是在 red 里创建、包着 blue 值的 Proxy。代码里 red 一侧被称为 shadow realm（变量 `IS_IN_SHADOW_REALM`），与 TC39 的 ShadowRealm 提案不是一回事。
+术语：宿主一侧叫 **blue**，沙箱一侧叫 **red**。Blue Proxy 是在 blue 里创建、包着 red 值的 Proxy；Red Proxy 是在 red 里创建、包着 blue 值的 Proxy。代码里 red 一侧被称为 shadow realm（变量 `IS_IN_SHADOW_REALM`），与 TC39 的 ShadowRealm 提案不是一回事。第一次接触的话，先看下一节「先看懂 blue 和 red」里的比方和例子。
 
 本页依据 `main` 分支最后的提交 `19685c3`。源码与 README、`DESIGN_DOCUMENT.md` 不一致的地方以源码为准，并单独指出。
+
+## 先看懂 blue 和 red
+
+**打个比方**：blue 是你自己的家（宿主页面），red 是给客人新装修的一间客房，里面的家具（`Object`、`Array`、`Array.prototype` 这些内置对象）全是新买的一套。客人在客房里随便改家具，不会改到你家的。客人要用你家的东西（比如 `document`、`fetch`、你挂在 `window` 上的配置），不能直接把真东西搬过去，只能隔着一道玻璃窗递过去一个「遥控器」（Proxy）：客人按遥控器，动作才传到真东西上。这道玻璃窗就是 membrane。递东西时你还可以偷偷换掉（distortion），比如把 `alert` 换成一个只打日志的版本。
+
+对应到代码：
+
+- **blue Realm**：宿主页面自己的 JS 世界，就是页面原来的 `window`、`document`，和它自己那套 `Object`、`Array`。调用 `createVirtualEnvironment` 的代码跑在这里。
+- **red Realm**：一套全新的内置对象，沙箱代码在这里跑。浏览器版借一个同源 iframe 造出来，Node 版用 `vm`。
+- **membrane**：两边之间的 Proxy 层。blue 的对象进入 red 时，red 拿到的是包着它的 Proxy；Proxy 传回 blue 时会解包回原来的对象，所以同一个对象来回传，`===` 始终成立。
+
+![白底黑线示意图：左边 blue Realm 是宿主页面的 JS 世界，右边 red Realm 有自己的一套内置对象，中间的虚线是 membrane，上面有 distortion；下方示例展示沙箱改 Array.prototype.push 只影响 red](../../../raw/assets/near-membrane-blue-red-realms.png)
+
+一个具体例子（`examples/` 里的示例都是这种写法）：
+
+```js
+import createVirtualEnvironment from '@locker/near-membrane-dom';
+
+// blue：宿主页面自己的代码
+window.config = { theme: 'dark' };
+
+const env = createVirtualEnvironment(window, {
+    distortionCallback(v) {
+        // blue 值第一次进入 red 时经过这里，可以换成别的值
+        return v === alert ? () => console.warn('沙箱里不能 alert') : v;
+    },
+});
+
+// red：下面这段字符串在 red Realm 里求值
+env.evaluate(`
+    Array.prototype.push = () => 'hacked';  // 改的是 red 自己那套 Array.prototype
+    [].push(1);                             // 'hacked'
+    config.theme;                           // 'dark'：读操作经 Proxy 问 blue
+    config.theme = 'light';                 // 第一次写：把属性复制到 red 本地（static），宿主对象不变
+    alert('hi');                            // 实际调用的是 distortion 换上去的函数
+`);
+
+// 回到 blue
+[].push(1);            // 1：宿主的 Array.prototype.push 没被改
+window.config.theme;   // 'dark'
+```
+
+这个例子对应下文的几处机制：
+
+- `Array` 属于 `getESGlobalKeys` 列出的名字，red 用自己的，不从 blue 投影；`linkIntrinsics` 把两边的 `Array.prototype` 配成一对，所以 blue 的数组进入 red 后原型链对得上，但 red 改的始终是自己那一份（见「`link`：内置对象直接互换」）。
+- `config` 是 blue 的普通对象，进入 red 时变成 red proxy，第一次写触发 pending → static，修改只落在 red 本地的 shadow target 上（见「red 侧状态机」）。数组和带 live 标记的对象不一样，写操作会透传到宿主。
+- `alert` 被换掉发生在 blue 侧的 `getTransferablePointer`，沙箱拿不到原函数（见「Distortion」）。
+
+和后面几节的关系：「指针协议」讲 Proxy 和原对象之间怎么对上号，「red 侧状态机」讲写操作什么时候复制、什么时候透传，「Distortion」讲换值的时机和局限。
 
 ## 目标与非目标
 
@@ -251,6 +300,7 @@ README：「The main feature of this library is the laziness aspect of the Red P
 
 ## 来源指针
 
+- `raw/assets/near-membrane-blue-red-realms.png`：脚本（matplotlib）按本页「先看懂 blue 和 red」一节画的白底黑线示意，不是项目官方素材；图中代码与该节示例一致
 - [salesforce/near-membrane](https://github.com/salesforce/near-membrane)：README、`DESIGN_DOCUMENT.md`；源码 `packages/near-membrane-base/src/membrane.ts`、`connector.ts`、`environment.ts`、`intrinsics.ts`、`types.ts`，`packages/near-membrane-dom/src/browser-realm.ts`，`packages/near-membrane-node/src/node-realm.ts`，`packages/near-membrane-shared/src/WeakMap.ts`、`NearMembrane.ts`
 - 关键提交：#481、#483、#485、#487、#488、#489、#491、#492、#493，[归档提交 `19685c3`](https://github.com/salesforce/near-membrane/commit/19685c36d267071cc70c2876925f8a020361fe3d)
 - [salesforce/LAVIS](https://github.com/salesforce/LAVIS)（同批归档）

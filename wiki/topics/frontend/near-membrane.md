@@ -49,7 +49,7 @@ resource:
 - **red Realm**：一套全新的内置对象，沙箱代码在这里跑。浏览器版借一个同源 iframe 造出来，Node 版用 `vm`。
 - **membrane**：两边之间的 Proxy 层。blue 的对象进入 red 时，red 拿到的是包着它的 Proxy；Proxy 传回 blue 时会解包回原来的对象，所以同一个对象来回传，`===` 始终成立。
 
-![白底黑线示意图：左边 blue Realm 是宿主页面的 JS 世界，右边 red Realm 有自己的一套内置对象，中间的虚线是 membrane，上面有 distortion；下方示例展示沙箱改 Array.prototype.push 只影响 red](../../../raw/assets/near-membrane-blue-red-realms.png)
+![米色底手绘风格示意图：左边 blue Realm 是宿主页面的 JS 世界，右边 red Realm 有自己的一套内置对象，中间的虚线是 membrane，上面有 distortion；下方示例展示沙箱改 Array.prototype.push 只影响 red](../../../raw/assets/near-membrane-blue-red-realms.png)
 
 一个具体例子（`examples/` 里的示例都是这种写法）：
 
@@ -300,7 +300,7 @@ README：「The main feature of this library is the laziness aspect of the Red P
 
 ## 来源指针
 
-- `raw/assets/near-membrane-blue-red-realms.png`：脚本（matplotlib）按本页「先看懂 blue 和 red」一节画的白底黑线示意，不是项目官方素材；图中代码与该节示例一致
+- `raw/assets/near-membrane-blue-red-realms.png`：脚本（matplotlib）按本页「先看懂 blue 和 red」一节画的米色底手绘风格示意，不是项目官方素材；图中代码与该节示例一致
 - [salesforce/near-membrane](https://github.com/salesforce/near-membrane)：README、`DESIGN_DOCUMENT.md`；源码 `packages/near-membrane-base/src/membrane.ts`、`connector.ts`、`environment.ts`、`intrinsics.ts`、`types.ts`，`packages/near-membrane-dom/src/browser-realm.ts`，`packages/near-membrane-node/src/node-realm.ts`，`packages/near-membrane-shared/src/WeakMap.ts`、`NearMembrane.ts`
 - 关键提交：#481、#483、#485、#487、#488、#489、#491、#492、#493，[归档提交 `19685c3`](https://github.com/salesforce/near-membrane/commit/19685c36d267071cc70c2876925f8a020361fe3d)
 - [salesforce/LAVIS](https://github.com/salesforce/LAVIS)（同批归档）

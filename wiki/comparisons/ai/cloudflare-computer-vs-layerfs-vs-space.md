@@ -48,7 +48,7 @@ resource:
 
 要安全地跑不可信代码、要一台完整的 Linux 机器，选 SPACE；已经在 Cloudflare 上，想要一个跨会话一直在、运行时可以换的工作区，选 Cloudflare Computer；真正的痛点是文件状态要大量分叉、随时回退，LayerFS 的设计最对路，但它现在只适合研究和做原型；只是少量并行任务、只改源码，用 git worktree 就够了。三者还能叠：SPACE 或 Cloudflare Computer 提供执行环境，LayerFS 这类文件历史放在里面管文件。
 
-![白底黑线示意图：上中下三层，机器层是 Perplexity SPACE，工作区层是 Cloudflare Computer，文件历史层是 LayerFS；右侧说明三者可以叠着用](../../../raw/assets/agent-workspace-layers.png)
+![米色底手绘风格示意图：上中下三层，机器层是 Perplexity SPACE，工作区层是 Cloudflare Computer，文件历史层是 LayerFS；右侧说明三者可以叠着用](../../../raw/assets/agent-workspace-layers.png)
 
 ## 三个项目各管什么
 
@@ -126,5 +126,5 @@ SQLite 里主要的表是 `vfs_nodes`、`vfs_chunks`、`vfs_blobs`。分块用�
 - [[wiki/topics/ai/cloudflare-computer|Cloudflare Computer]]、[[wiki/topics/ai/layerfs|LayerFS]]、[[wiki/topics/ai/perplexity-space|Perplexity SPACE]]：各自的实现细节和源码位置
 - `raw/sources/cloudflare-computer.md`、`raw/sources/layerfs.md`、`raw/sources/perplexity-space.md`：阅读范围、核查位置与验证记录
 - [cloudflare/computer](https://github.com/cloudflare/computer)、[Ephemeral-AI-Lab/layerfs](https://github.com/Ephemeral-AI-Lab/layerfs)、[perplexityai/SPACE](https://github.com/perplexityai/SPACE)
-- `raw/assets/agent-workspace-layers.png`：脚本（matplotlib）按本页「三个项目各管什么」画的白底黑线分层示意，不是各项目的官方素材
+- `raw/assets/agent-workspace-layers.png`：脚本（matplotlib）按本页「三个项目各管什么」画的米色底手绘风格分层示意，不是各项目的官方素材
 - `raw/assets/agent-workspace-layer-comparison.png`：按三页内容画的手绘风格对比表。图中 SPACE 的「fork/快照粒度」一栏只写了挂起，没写整机 fork，以正文为准

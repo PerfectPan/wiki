@@ -83,9 +83,9 @@ AS 的实现不在 MCP 规范范围内，现成的 OAuth / OIDC 身份系统可�
 
 ## 完整流程
 
-下图按 2026-07-28 授权规范的时序图整理，虚线框是 MCP 在普通授权码 + PKCE 之上新增或强制的步骤。
+下图按 2026-07-28 授权规范的时序图整理，橙色虚线框是 MCP 在普通授权码 + PKCE 之上新增或强制的步骤。
 
-![白底黑线时序图：MCP 客户端、浏览器、MCP 服务器、授权服务器四条泳道，从 401 开始依次读受保护资源元数据和授权服务器元数据、注册客户端、带 PKCE 和 resource 发起授权、回调核对 state 和 iss、换 token、带 token 访问；虚线框标出 MCP 新增或强制的步骤](../../../raw/assets/oauth-mcp-discovery-sequence.png)
+![米色底手绘风格时序图：MCP 客户端、浏览器、MCP 服务器、授权服务器四条泳道，从 401 开始依次读受保护资源元数据和授权服务器元数据、注册客户端、带 PKCE 和 resource 发起授权、回调核对 state 和 iss、换 token、带 token 访问；橙色虚线框标出 MCP 新增或强制的步骤](../../../raw/assets/oauth-mcp-discovery-sequence.png)
 
 下面用一个例子把每一步的请求和响应写全：MCP 服务器在 `https://mcp.example.com/mcp`，AS 是 `https://auth.example.com`，客户端是一个 CLI，在本机 `3000` 端口接收回调。地址和值都是示例。
 
@@ -347,5 +347,5 @@ MCP 安全章节要求丢弃不含 `state` 或 `state` 不一致的结果。2026
 - RFC 9207 Authorization Server Issuer Identification：<https://www.rfc-editor.org/rfc/rfc9207>
 - RFC 9700 §4.4 Mix-Up Attacks：<https://www.rfc-editor.org/rfc/rfc9700>
 - RFC 9728 Protected Resource Metadata：<https://www.rfc-editor.org/rfc/rfc9728>
-- `raw/assets/oauth-mcp-discovery-sequence.png`：脚本（matplotlib）按本页「完整流程」画的白底黑线时序图，不是 MCP 规范的官方配图
+- `raw/assets/oauth-mcp-discovery-sequence.png`：脚本（matplotlib）按本页「完整流程」画的米色底手绘风格时序图，不是 MCP 规范的官方配图
 - `raw/sources/mcp.md`：本次阅读的规范章节与核查记录

@@ -246,7 +246,7 @@ GitHub CLI（`gh`）、AWS CLI、Vercel CLI 等官方第一方工具访问自研
 
 下文把授权服务器简称 AS（authorization server）。这些规范在 MCP 里怎么串成一条链、MCP 额外强制了什么，见 [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]。
 
-![白底黑线时序图：MCP 客户端、浏览器、MCP 服务器、授权服务器四条泳道，从 401 开始依次读受保护资源元数据和授权服务器元数据、注册客户端、带 PKCE 和 resource 发起授权、回调核对 state 和 iss、换 token、带 token 访问；虚线框标出 MCP 新增或强制的步骤](../../../raw/assets/oauth-mcp-discovery-sequence.png)
+![米色底手绘风格时序图：MCP 客户端、浏览器、MCP 服务器、授权服务器四条泳道，从 401 开始依次读受保护资源元数据和授权服务器元数据、注册客户端、带 PKCE 和 resource 发起授权、回调核对 state 和 iss、换 token、带 token 访问；橙色虚线框标出 MCP 新增或强制的步骤](../../../raw/assets/oauth-mcp-discovery-sequence.png)
 
 ## 元数据发现：RFC 9728 与 RFC 8414
 
@@ -578,7 +578,7 @@ flowchart TB
 ## 来源指针
 
 - `raw/assets/oauth-callback-registration.png`：按本页「回调地址登记在谁那里，决定谁去换 token」一节生成的手绘风格示意图（codex 图像生成，1659×948），不是 Auth0、Google 或 Supabase 的官方素材；图中的流程以本页正文和 `raw/sources/oauth.md` 的核查记录为准。
-- `raw/assets/oauth-mcp-discovery-sequence.png`：脚本（matplotlib）按本页「对接陌生服务时，RFC 6749 缺的几块」各节和 [[wiki/topics/ai/mcp-authorization|MCP 授权流程]] 画的白底黑线时序图，不是任何规范的官方配图
+- `raw/assets/oauth-mcp-discovery-sequence.png`：脚本（matplotlib）按本页「对接陌生服务时，RFC 6749 缺的几块」各节和 [[wiki/topics/ai/mcp-authorization|MCP 授权流程]] 画的米色底手绘风格时序图，不是任何规范的官方配图
 - `raw/sources/oauth.md`
 - 阮一峰《OAuth 2.0 的一个简单解释》：https://www.ruanyifeng.com/blog/2019/04/oauth_design.html
 - RFC 6749 OAuth 2.0：https://www.rfc-editor.org/rfc/rfc6749

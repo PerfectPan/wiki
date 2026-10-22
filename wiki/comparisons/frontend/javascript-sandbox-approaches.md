@@ -71,7 +71,7 @@ resource:
 
 只防多个前端应用互相污染，用 qiankun、micro-app、wujie 这类微前端框架；要跑不可信代码，优先独立 isolate、wasm 或进程 / 虚拟机隔离，别只靠同堆的 Proxy membrane；要第三方组件像原生一样直接操作宿主 DOM、又由平台控制它能碰什么，看 near-membrane 这条路线（LWS）；在 Node 里跑不可信代码，用 isolated-vm 再加单独进程或容器 / VM；浏览器里安全优先于性能，选 QuickJS-wasm；想等标准化的隔离原语，关注 ShadowRealm，但它现在停在 Stage 2.7，还不能依赖。
 
-![白底黑线示意图：六层隔离单位从上到下依次是同 Realm 换全局对象、同 Realm 冻结共享、新 Realm 加 Proxy membrane、ShadowRealm 的 callable boundary、独立 V8 isolate、wasm 里的另一个 JS 引擎，每层标出例子和特点](../../../raw/assets/js-sandbox-isolation-layers.png)
+![米色底手绘风格示意图：六层隔离单位从上到下依次是同 Realm 换全局对象、同 Realm 冻结共享、新 Realm 加 Proxy membrane、ShadowRealm 的 callable boundary、独立 V8 isolate、wasm 里的另一个 JS 引擎，每层标出例子和特点](../../../raw/assets/js-sandbox-isolation-layers.png)
 
 ## 先看隔离单位：关得越深，代价越大
 
@@ -180,7 +180,7 @@ near-membrane 两侧只交换 37 个函数、对象用指针闭包表示，结�
 ## 来源指针
 
 - [[wiki/topics/frontend/near-membrane|near-membrane]]：near-membrane 的实现细节、修复历史和归档
-- `raw/assets/js-sandbox-isolation-layers.png`：脚本（matplotlib）按本页「先看隔离单位」一节画的白底黑线示意，不是任何项目的官方素材
+- `raw/assets/js-sandbox-isolation-layers.png`：脚本（matplotlib）按本页「先看隔离单位」一节画的米色底手绘风格示意，不是任何项目的官方素材
 - `raw/sources/near-membrane.md`：各方案的核对记录、日期和待确认项
 - [SES](https://github.com/endojs/endo/tree/master/packages/ses)、[Compartments 提案](https://github.com/tc39/proposal-compartments)
 - [ShadowRealm 提案](https://github.com/tc39/proposal-shadowrealm)、[chromestatus](https://chromestatus.com/feature/5638053476433920)

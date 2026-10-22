@@ -83,9 +83,59 @@ AS 的实现不在 MCP 规范范围内，现成的 OAuth / OIDC 身份系统可�
 
 ## 完整流程
 
-下图按 2026-07-28 授权规范的时序图整理，编号和下文各节一致。实线是请求，虚线是响应；橙色箭头和橙色标签是 MCP 在普通授权码 + PKCE 之上新增或强制的部分。
+下图按 2026-07-28 授权规范的时序图整理，编号和下文各节一致。实线是请求，虚线是响应；浅橙底色的两段（发现、注册）是 MCP 在普通授权码 + PKCE 之上新增的步骤，标着「MCP 强制」的是普通 OAuth 里可选、MCP 里必须做的检查或参数。
 
-![米色底手绘风格时序图：MCP 客户端、浏览器（用户）、MCP 服务器（资源服务器）、授权服务器四条泳道，按发现、注册、授权、换 token、调用分组，步骤编号 ① 到 ⑧ 和正文一致：401 后读受保护资源元数据和授权服务器元数据，拿 client_id，经浏览器打开 /authorize 并由浏览器把 code 带回本机回调，核对 state 和 iss，换 token，带 token 访问；实线是请求，虚线是响应，橙色标出 MCP 新增或强制的部分](../../../raw/assets/oauth-mcp-discovery-sequence.png)
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontSize":"15px","actorBkg":"#35597a","actorBorder":"#24405a","actorTextColor":"#ffffff","actorLineColor":"#8c96a3","signalColor":"#3a4652","signalTextColor":"#1f2933","noteBkgColor":"#fff7e0","noteBorderColor":"#c98a2b","noteTextColor":"#3a2a08","labelBoxBkgColor":"#35597a","labelTextColor":"#ffffff","loopTextColor":"#1f2933"}}}%%
+sequenceDiagram
+    participant C as MCP 客户端
+    participant B as 浏览器（用户）
+    participant M as MCP 服务器（资源服务器）
+    participant A as 授权服务器
+
+    rect rgb(252, 222, 190)
+    Note over C,A: MCP 新增：发现（①–③）
+    C->>M: ① POST /mcp（没带 token）
+    M-->>C: 401 + resource_metadata 地址
+    C->>M: ② GET 受保护资源元数据
+    M-->>C: resource、authorization_servers
+    C->>A: ③ GET AS 元数据
+    A-->>C: issuer、各端点、S256
+    Note over C: 核对 issuer<br/>没有 S256 就停
+    end
+
+    rect rgb(248, 208, 166)
+    Note over C,A: MCP 新增：注册（④）
+    C->>A: ④ 拿 client_id（预注册 > CIMD > DCR）
+    A-->>C: client_id
+    end
+
+    rect rgb(212, 228, 244)
+    Note over C,A: 授权（⑤–⑥）
+    Note over C: ⑤ 生成 code_verifier、state<br/>记下 issuer
+    C->>B: 打开 /authorize
+    B->>A: GET /authorize?…&resource（MCP 强制）
+    Note over B,A: 用户登录、同意
+    A-->>B: ⑥ 302 → redirect_uri?code&state&iss
+    B->>C: GET localhost/callback?code…
+    Note over C: 核对 state 和 iss<br/>（iss：2026-07-28 强制）
+    end
+
+    rect rgb(214, 236, 220)
+    Note over C,A: 换 token（⑦）
+    C->>A: ⑦ POST /token：code + code_verifier + resource
+    A-->>C: access_token、refresh_token
+    end
+
+    rect rgb(230, 222, 244)
+    Note over C,A: 调用（⑧）
+    C->>M: ⑧ POST /mcp + Bearer token
+    Note over M: 核对 token 受众是自己（MCP 强制）
+    M-->>C: 结果（过期就刷新）
+    end
+```
+
+手绘版（同一流程，留作对比）：[oauth-mcp-discovery-sequence.png](../../../raw/assets/oauth-mcp-discovery-sequence.png)
 
 下面用一个例子把每一步的请求和响应写全：MCP 服务器在 `https://mcp.example.com/mcp`，AS 是 `https://auth.example.com`，客户端是一个 CLI，在本机 `3000` 端口接收回调。地址和值都是示例。
 
@@ -347,5 +397,5 @@ MCP 安全章节要求丢弃不含 `state` 或 `state` 不一致的结果。2026
 - RFC 9207 Authorization Server Issuer Identification：<https://www.rfc-editor.org/rfc/rfc9207>
 - RFC 9700 §4.4 Mix-Up Attacks：<https://www.rfc-editor.org/rfc/rfc9700>
 - RFC 9728 Protected Resource Metadata：<https://www.rfc-editor.org/rfc/rfc9728>
-- `raw/assets/oauth-mcp-discovery-sequence.png`：脚本（matplotlib）按本页「完整流程」画的米色底手绘风格时序图，不是 MCP 规范的官方配图
+- 「完整流程」的 Mermaid 时序图和 `raw/assets/oauth-mcp-discovery-sequence.png`（脚本 matplotlib 画的手绘版）都是按本页各节整理的，不是 MCP 规范的官方配图
 - `raw/sources/mcp.md`：本次阅读的规范章节与核查记录

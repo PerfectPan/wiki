@@ -38,3 +38,4 @@
 
 - `wiki/topics/ai/mcp-authorization.md` 改为只写 MCP 和普通 OAuth 的差异：顶部加差异对照表，「完整流程」补齐受保护资源元数据的 GET 与 JSON、AS 元数据的 GET、CIMD 文档和 DCR 请求响应、完整的 `/authorize` 地址和带 token 的请求；mix-up 攻击步骤、并行登录记录结构等通用内容移到 `wiki/topics/architecture/oauth.md`，本页链接过去。核查记录见 `raw/sources/oauth.md` 同日条目。
 - 原 Mermaid 时序图换成 `raw/assets/oauth-mcp-discovery-sequence.png`（脚本生成的白底黑线时序图），两者表达同一流程，按「一条信息一张清楚的图」只保留一张。
+- 2026-10-22：按用户反馈，`wiki/topics/ai/mcp-authorization.md`「完整流程」改回 GitHub 原生渲染的 Mermaid `sequenceDiagram`（`base` 主题加 `themeVariables` 配色，五段用 `rect rgb(...)` 底色分组，发现、注册两段是浅橙底色，表示 MCP 新增），内容和步骤编号 ① 到 ⑧ 与手绘 PNG 一致；PNG 暂时保留，在图下以「手绘版」链接给出，方便对比。用 @mermaid-js/mermaid-cli 分别以白底和 GitHub 深色底（#0d1117）渲染核对过语法和可读性。

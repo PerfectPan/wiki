@@ -4,8 +4,8 @@ description: 沙箱的基本概念、隔离机制和常见实现方式。
 type: topic
 category: systems
 created: 2026-04-12
-updated: 2026-08-29
-timestamp: 2026-08-29
+updated: 2026-10-22
+timestamp: 2026-10-22
 tags:
   - sandbox
   - isolation
@@ -44,6 +44,8 @@ resource:
 - [[wiki/syntheses/systems/container-resource-isolation-oversubscription|容器资源隔离与超卖机制]]
 - [[wiki/comparisons/systems/thread-isolation-vs-process-isolation|线程级隔离 vs 进程级隔离]]
 - [[wiki/syntheses/systems/serverless-app-layering-isolation|Serverless 应用分层与隔离]]
+- [[wiki/comparisons/ai/cloudflare-computer-vs-layerfs-vs-space|Agent 工作区方案对比：Cloudflare Computer vs LayerFS vs Perplexity SPACE]]
+- [[wiki/comparisons/frontend/javascript-sandbox-approaches|JavaScript 沙箱方案对比]]
 
 ## 来源指针
 

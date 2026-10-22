@@ -14,3 +14,28 @@
 			- **令牌身份隔离**作为核心举措，极大限制了风险半径，防止危害横向扩散。
 			- **API 级别权限管控**遵循最小权限原则，为潜在的未知风险提供了最终的安全保障。
 -
+## 2025-11-25 与 2026-07-28 规范对照核查记录（2026-10-20）
+
+- 用途：支撑 `wiki/topics/ai/mcp-2026-07-28.md` 与 `wiki/topics/ai/mcp-authorization.md`。
+- 访问日期：2026-10-20。资料版本：MCP 规范 `2026-07-28`（当前版）与 `2025-11-25`（上一版）。规范页面通过在路径后加 `.md` 取得 Markdown 正文，例如 `https://modelcontextprotocol.io/specification/2026-07-28/basic/index.md`；文档索引见 `https://modelcontextprotocol.io/llms.txt`。
+- 读过的页面：
+  - 2026-07-28：`changelog`、`basic/index`（`_meta`、Statelessness、错误码）、`basic/versioning`、`basic/patterns/mrtr`、`basic/patterns/subscriptions`、`basic/patterns/cancellation`、`basic/patterns/progress`、`basic/transports/streamable-http`、`basic/transports/stdio`、`basic/authorization/index`、`basic/authorization/authorization-server-discovery`、`basic/authorization/client-registration`、`basic/authorization/security-considerations`、`server/discover`、`server/tools`、`server/utilities/caching`、`server/utilities/logging`、`client/elicitation`、`client/roots`、`client/sampling`、`deprecated`，以及 `docs/2026-07-28/learn/versioning`。
+  - 2025-11-25：`basic/lifecycle`、`basic/transports`、`basic/utilities/tasks`、`client/elicitation`、`basic/authorization`。
+  - SEP：2575（无状态）、2567（去掉会话）、2322（MRTR）、2243（HTTP 头）、2549（列表 TTL）、2577（弃用 Roots / Sampling / Logging）、2663（Tasks 扩展）；扩展页 `extensions/overview`、`extensions/tasks/overview`。
+  - 发布文章：<https://blog.modelcontextprotocol.io/posts/2026-07-28/>、<https://claude.com/resources/articles/bringing-mcp-2026-07-28-to-claude>、<https://devblogs.microsoft.com/dotnet/announcing-v20-of-the-official-mcp-csharp-sdk/>。
+  - RFC：6749 §4.1.3 / §5.1 / §6、7636、8707、9207 §1–§2、9700 §4.4（含 §4.4.1 攻击步骤与 §4.4.2.2 不同回调地址的限制）。
+- 没有单独打开原文的：SEP-837、SEP-2352、SEP-2468、SEP-2106、SEP-2596、PR #2858。页面中这几项的描述来自变更日志、授权规范页面和官方博客。
+- 核查要点：
+  - `basic/authorization/index`「Authorization Response Validation」：跳转前必须记下所选 AS 已校验元数据中的 `issuer`，并与存 PKCE `code_verifier`（及 `state`）的同一条按请求区分的记录关联；四行 `iss` 处理表；不做 RFC 3986 §6.2.2–6.2.3 规范化；`iss` 从 SHOULD 升级为 MUST 是计划中的后续修订。
+  - `authorization-server-discovery`：元数据中的 `issuer` 必须与拼 well-known 地址用的 issuer 一致，示例是 `attacker.example` 返回 `"issuer": "https://honest.example"` 必须拒绝。在 2025-11-25 `basic/authorization` 中检索 `identical`，没有对应条文。
+  - `client-registration`「Authorization Server Binding」：预注册与 DCR 凭据按 issuer 绑定；CIMD 的 `client_id` 可以跨 AS 使用，不需要重新注册。2025-11-25 已有「预注册 > CIMD > DCR」的选择顺序，2026-07-28 把 DCR 标为弃用。
+  - `security-considerations`：PKCE 必须实现，元数据缺 `code_challenge_methods_supported` 时必须停止；回调地址必须是 `localhost` 或 HTTPS；客户端应使用并核对 `state`；Mix-Up Attacks 一节引用 RFC 9207 §1。
+  - 官方博客授权段落：`iss` 校验关闭 mix-up 漏洞；DCR 时设置 `application_type` 让 AS 不再拒绝桌面和 CLI 的 `localhost` 回调；凭据绑定签发方；DCR 正式弃用，以后版本会移除。博客和规范都没有写弃用 DCR 的单独理由。
+- 验证记录：只读规范、SEP、RFC 和发布文章，没有运行任何 MCP SDK、服务器或客户端，没有实际走过 OAuth 流程，也没有验证各 SDK 对这些条文的实现情况。页面里「并行登录时把记录放共享存储或签名后编进 `state`」「记录只用一次并设过期时间」是设计建议，规范没有对应条文。
+- 配图：`raw/assets/mcp-2026-07-28-overview.png`（2400×1520）、`raw/assets/mcp-2026-07-28-lifecycle.png`（2000×1330）、`raw/assets/mcp-2026-07-28-mrtr.png`（2200×1420）、`raw/assets/mcp-2026-07-28-http-auth.png`（2200×1560）。用 roughjs 生成手绘线条、resvg 渲染为 PNG，字体为霞鹜文楷，带浅色填充块，不是 MCP 官方素材。逐张核对了标题、左右两栏的新旧版本归属、箭头方向（发出的请求为实线、返回的响应为虚线）、字段名与错误码（`-32020`、`-32022`、`resultType`、`requestState`、`Mcp-Method`、`Mcp-Name`、`Mcp-Param-*`）与本记录所列规范一致。
+
+## 授权页改写记录（2026-10-22）
+
+- `wiki/topics/ai/mcp-authorization.md` 改为只写 MCP 和普通 OAuth 的差异：顶部加差异对照表，「完整流程」补齐受保护资源元数据的 GET 与 JSON、AS 元数据的 GET、CIMD 文档和 DCR 请求响应、完整的 `/authorize` 地址和带 token 的请求；mix-up 攻击步骤、并行登录记录结构等通用内容移到 `wiki/topics/architecture/oauth.md`，本页链接过去。核查记录见 `raw/sources/oauth.md` 同日条目。
+- 原 Mermaid 时序图换成 `raw/assets/oauth-mcp-discovery-sequence.png`（脚本生成的白底黑线时序图），两者表达同一流程，按「一条信息一张清楚的图」只保留一张。
+- 2026-10-22：按用户反馈，`wiki/topics/ai/mcp-authorization.md`「完整流程」改回 GitHub 原生渲染的 Mermaid `sequenceDiagram`（`base` 主题加 `themeVariables` 配色，五段用 `rect rgb(...)` 底色分组，发现、注册两段是浅橙底色，表示 MCP 新增），内容和步骤编号 ① 到 ⑧ 与手绘 PNG 一致；PNG 暂时保留，在图下以「手绘版」链接给出，方便对比。用 @mermaid-js/mermaid-cli 分别以白底和 GitHub 深色底（#0d1117）渲染核对过语法和可读性。

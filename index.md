@@ -29,6 +29,7 @@
   - [[wiki/topics/frontend/nextjs-middleware-auth-bypass|Next.js Middleware Auth Bypass]]
   - [[wiki/topics/frontend/polyfill|Polyfill]]
   - [[wiki/topics/frontend/mini-program-architecture-evolution|小程序架构演进]]
+  - [[wiki/topics/frontend/near-membrane|near-membrane：Salesforce 的 JS 沙箱库]]
   - [[wiki/topics/frontend/react-devtools|React Devtools]]
   - [[wiki/topics/frontend/react|React]]
   - [[wiki/topics/frontend/react-render-optimization|React Render Optimization]]
@@ -78,6 +79,9 @@
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/agent-harness|Agent Harness]]
   - [[wiki/topics/ai/rivet-agentos|Rivet agentOS：执行环境与持久会话]]
+  - [[wiki/topics/ai/cloudflare-computer|Cloudflare Computer：Durable Object 上的 Agent 工作区]]
+  - [[wiki/topics/ai/layerfs|LayerFS：给 Agent 用的分层文件系统]]
+  - [[wiki/topics/ai/perplexity-space|Perplexity SPACE：Firecracker 沙箱平台]]
   - [[wiki/topics/ai/tetral|Tetral]]
   - [[wiki/topics/ai/pi-durable|Pi Durable]]
   - [[wiki/topics/ai/anthropic-messages-api|Anthropic Messages API]]
@@ -89,6 +93,8 @@
   - [[wiki/topics/ai/code-agent|Code Agent]]
   - [[wiki/topics/ai/coding-agent-edit-tools|Coding Agent 编辑工具]]
   - [[wiki/topics/ai/mcp|MCP]]
+  - [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
+  - [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
   - [[wiki/topics/ai/mcp-client|MCP Client]]
   - [[wiki/topics/ai/mcp-remote|mcp-remote]]
   - [[wiki/topics/ai/prompt|Prompt]]
@@ -325,6 +331,7 @@
   - [[wiki/comparisons/ai/workflow-vs-agent|Workflow vs Agent]]
   - [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比：gbrain、memU、agentmemory 与 Letta]]
   - [[wiki/comparisons/ai/agent-output-checks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
+  - [[wiki/comparisons/ai/cloudflare-computer-vs-layerfs-vs-space|Agent 工作区方案对比：Cloudflare Computer vs LayerFS vs Perplexity SPACE]]
 - `architecture`
   - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - `career`
@@ -332,6 +339,7 @@
 - `frontend`
   - [[wiki/comparisons/frontend/ssr-vs-ssg-vs-rsc|SSR vs SSG vs RSC]]
   - [[wiki/comparisons/frontend/zod-vs-valibot|Zod vs Valibot]]
+  - [[wiki/comparisons/frontend/javascript-sandbox-approaches|JavaScript 沙箱方案对比]]
   - [[wiki/comparisons/frontend/overlayscrollbars-vs-simplebar-vs-perfect-scrollbar|自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar]]
 - `product`
   - [[wiki/comparisons/product/obsidian-vs-logseq|Obsidian vs Logseq]]

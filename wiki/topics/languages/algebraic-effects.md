@@ -4,8 +4,8 @@ description: 代数效应是"可以恢复的 throw"；它和效应系统、"副�
 type: topic
 category: languages
 created: 2026-04-12
-updated: 2026-10-20
-timestamp: 2026-10-20
+updated: 2026-10-22
+timestamp: 2026-10-22
 tags:
   - algebraic
   - effects
@@ -35,7 +35,7 @@ resource:
 
 代数效应是一种控制流机制，可以理解为"可以恢复的 throw"：函数执行到一半 `perform` 一个请求，离它最近的 handler 接住请求，决定怎么处理，然后可以 `resume` 把答案送回去，函数从 `perform` 那一行接着执行。handler 拿到的除了请求本身，还有"从 perform 处继续执行"这件事，即续体（continuation）。
 
-![手绘示意，左边 throw / catch：B() 抛出后跳到 catch，B 剩下的代码被丢弃；右边 perform / resume：B() 用 perform Ask 把请求交给 handler，handler 用 resume("董事长") 把答案送回 B()，B 拿到答案接着往下执行。两条箭头都绕过 A()，中间的函数不需要知道](../../../raw/assets/algebraic-effects-throw-vs-perform.png)
+![手绘示意，左边 throw / catch：B() 抛出后跳到 catch，B 剩下的代码被丢弃；右边 perform / resume：B() 用 perform Ask 把请求交给 handler，handler 用 resume("王小明") 把答案送回 B()，B 拿到答案接着往下执行。两条箭头都绕过 A()，中间的函数不需要知道](../../../raw/assets/algebraic-effects-throw-vs-perform.png)
 
 handler 对 resume 的不同用法，分别对应常见的控制流：
 

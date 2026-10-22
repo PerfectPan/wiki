@@ -86,14 +86,14 @@ AS 的实现不在 MCP 规范范围内，现成的 OAuth / OIDC 身份系统可�
 下图按 2026-07-28 授权规范的时序图整理，编号和下文各节一致。实线是请求，虚线是响应；浅橙底色的两段（发现、注册）是 MCP 在普通授权码 + PKCE 之上新增的步骤，标着「MCP 强制」的是普通 OAuth 里可选、MCP 里必须做的检查或参数。
 
 ```mermaid
-%%{init: {"theme":"base","themeVariables":{"fontSize":"15px","actorBkg":"#35597a","actorBorder":"#24405a","actorTextColor":"#ffffff","actorLineColor":"#8c96a3","signalColor":"#3a4652","signalTextColor":"#1f2933","noteBkgColor":"#fff7e0","noteBorderColor":"#c98a2b","noteTextColor":"#3a2a08","labelBoxBkgColor":"#35597a","labelTextColor":"#ffffff","loopTextColor":"#1f2933"}}}%%
+%%{init: {"theme":"base","themeVariables":{"fontSize":"15px","actorBkg":"#f3efe7","actorBorder":"#8a7f72","actorTextColor":"#2b2724","actorLineColor":"#a39888","signalColor":"#4a423a","signalTextColor":"#2b2724","noteBkgColor":"#fffaf0","noteBorderColor":"#c9a15a","noteTextColor":"#3a2f22","labelBoxBkgColor":"#f3efe7","labelBoxBorderColor":"#8a7f72","labelTextColor":"#2b2724","loopTextColor":"#2b2724"}}}%%
 sequenceDiagram
     participant C as MCP 客户端
     participant B as 浏览器（用户）
     participant M as MCP 服务器（资源服务器）
     participant A as 授权服务器
 
-    rect rgb(252, 222, 190)
+    rect rgb(250, 224, 200)
     Note over C,A: MCP 新增：发现（①–③）
     C->>M: ① POST /mcp（没带 token）
     M-->>C: 401 + resource_metadata 地址
@@ -104,13 +104,13 @@ sequenceDiagram
     Note over C: 核对 issuer<br/>没有 S256 就停
     end
 
-    rect rgb(248, 208, 166)
+    rect rgb(250, 224, 200)
     Note over C,A: MCP 新增：注册（④）
     C->>A: ④ 拿 client_id（预注册 > CIMD > DCR）
     A-->>C: client_id
     end
 
-    rect rgb(212, 228, 244)
+    rect rgb(244, 236, 220)
     Note over C,A: 授权（⑤–⑥）
     Note over C: ⑤ 生成 code_verifier、state<br/>记下 issuer
     C->>B: 打开 /authorize
@@ -121,13 +121,13 @@ sequenceDiagram
     Note over C: 核对 state 和 iss<br/>（iss：2026-07-28 强制）
     end
 
-    rect rgb(214, 236, 220)
+    rect rgb(230, 236, 218)
     Note over C,A: 换 token（⑦）
     C->>A: ⑦ POST /token：code + code_verifier + resource
     A-->>C: access_token、refresh_token
     end
 
-    rect rgb(230, 222, 244)
+    rect rgb(236, 232, 226)
     Note over C,A: 调用（⑧）
     C->>M: ⑧ POST /mcp + Bearer token
     Note over M: 核对 token 受众是自己（MCP 强制）

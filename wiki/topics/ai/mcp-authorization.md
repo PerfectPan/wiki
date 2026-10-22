@@ -83,9 +83,9 @@ AS 的实现不在 MCP 规范范围内，现成的 OAuth / OIDC 身份系统可�
 
 ## 完整流程
 
-下图按 2026-07-28 授权规范的时序图整理，橙色虚线框是 MCP 在普通授权码 + PKCE 之上新增或强制的步骤。
+下图按 2026-07-28 授权规范的时序图整理，编号和下文各节一致。实线是请求，虚线是响应；橙色箭头和橙色标签是 MCP 在普通授权码 + PKCE 之上新增或强制的部分。
 
-![米色底手绘风格时序图：MCP 客户端、浏览器、MCP 服务器、授权服务器四条泳道，从 401 开始依次读受保护资源元数据和授权服务器元数据、注册客户端、带 PKCE 和 resource 发起授权、回调核对 state 和 iss、换 token、带 token 访问；橙色虚线框标出 MCP 新增或强制的步骤](../../../raw/assets/oauth-mcp-discovery-sequence.png)
+![米色底手绘风格时序图：MCP 客户端、浏览器（用户）、MCP 服务器（资源服务器）、授权服务器四条泳道，按发现、注册、授权、换 token、调用分组，步骤编号 ① 到 ⑧ 和正文一致：401 后读受保护资源元数据和授权服务器元数据，拿 client_id，经浏览器打开 /authorize 并由浏览器把 code 带回本机回调，核对 state 和 iss，换 token，带 token 访问；实线是请求，虚线是响应，橙色标出 MCP 新增或强制的部分](../../../raw/assets/oauth-mcp-discovery-sequence.png)
 
 下面用一个例子把每一步的请求和响应写全：MCP 服务器在 `https://mcp.example.com/mcp`，AS 是 `https://auth.example.com`，客户端是一个 CLI，在本机 `3000` 端口接收回调。地址和值都是示例。
 

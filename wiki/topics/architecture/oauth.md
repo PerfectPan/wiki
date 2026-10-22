@@ -246,7 +246,7 @@ GitHub CLI（`gh`）、AWS CLI、Vercel CLI 等官方第一方工具访问自研
 
 下文把授权服务器简称 AS（authorization server）。这些规范在 MCP 里怎么串成一条链、MCP 额外强制了什么，见 [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]。
 
-![米色底手绘风格时序图：MCP 客户端、浏览器、MCP 服务器、授权服务器四条泳道，从 401 开始依次读受保护资源元数据和授权服务器元数据、注册客户端、带 PKCE 和 resource 发起授权、回调核对 state 和 iss、换 token、带 token 访问；橙色虚线框标出 MCP 新增或强制的步骤](../../../raw/assets/oauth-mcp-discovery-sequence.png)
+![米色底手绘风格时序图：MCP 客户端、浏览器（用户）、MCP 服务器（资源服务器）、授权服务器四条泳道，按发现、注册、授权、换 token、调用分组，步骤编号 ① 到 ⑧ 和正文一致：401 后读受保护资源元数据和授权服务器元数据，拿 client_id，经浏览器打开 /authorize 并由浏览器把 code 带回本机回调，核对 state 和 iss，换 token，带 token 访问；实线是请求，虚线是响应，橙色标出 MCP 新增或强制的部分](../../../raw/assets/oauth-mcp-discovery-sequence.png)
 
 ## 元数据发现：RFC 9728 与 RFC 8414
 

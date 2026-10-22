@@ -37,3 +37,4 @@
 ## 配图重绘记录（2026-10-22）
 
 - 按用户反馈，`raw/assets/oauth-mcp-discovery-sequence.png` 以及同批的 `near-membrane-blue-red-realms.png`、`agent-workspace-layers.png`、`js-sandbox-isolation-layers.png` 改用与 `raw/assets/cloudflare-computer-architecture.png` 等配图相同的脚本风格重绘：米色底、浅色填充的圆角框、xkcd 手绘线条、Noto Sans CJK SC。内容、文件名和路径不变。时序图里 MCP 新增或强制的步骤改用橙色虚线框加橙色标签，请求箭头为红色实线，响应箭头为蓝色虚线；blue / red 示意图里 blue Realm 用蓝色、red Realm 用红色、membrane 和 distortion 用紫色。上一条记录里的「白底黑线」说明以本条为准。重绘后逐张打开核对了标签文字、箭头方向，确认中文没有显示成方框。
+- 时序图 `raw/assets/oauth-mcp-discovery-sequence.png` 按用户反馈（颜色太多、字太挤）再次重绘：线条和文字只用墨色，强调色只用橙色，只标 MCP 新增或强制的部分（发现 ①–③、注册 ④ 的箭头，以及 resource、issuer/S256、iss、token 受众几处标签）；请求和响应不再用红蓝区分，改为实线和虚线；泳道表头统一一种浅色填充；每条箭头的文字缩短，步骤编号 ① 到 ⑧ 与 `wiki/topics/ai/mcp-authorization.md` 各节一致；左侧细括号和浅灰虚线按发现、注册、授权、换 token、调用分组。生成脚本断言了 16 条箭头的起止泳道和请求/响应类型（⑤ 客户端 → 浏览器 → AS 的 /authorize，⑥ AS 302 回浏览器、浏览器再请求本机回调），并检查标签、便签互不重叠、不压线、各框上下留白相等。上一条记录里「请求箭头为红色实线，响应箭头为蓝色虚线」和「橙色虚线框」的说明以本条为准。

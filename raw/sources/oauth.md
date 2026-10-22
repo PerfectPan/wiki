@@ -33,3 +33,7 @@
 - 写入位置：`wiki/topics/architecture/oauth.md` 从「对接陌生服务时，RFC 6749 缺的几块」到「进一步加固：PAR、DPoP 与 OAuth 2.1」各节。`wiki/topics/ai/mcp-authorization.md` 改为只写和普通 OAuth 的差异，原理部分链接到这里。
 - 验证范围：只读规范文本，没有在任何 AS 上实际跑 DCR、CIMD、RFC 9207 或 PAR，各家 AS 的支持情况没有逐个核对。DCR 示例响应里的 `client_id_issued_at` 是示例值。
 - 配图：`raw/assets/oauth-mcp-discovery-sequence.png` 由 matplotlib 脚本生成（白底黑线，Noto Sans CJK SC），按 PR #114 审阅意见用白板风格。核对项：四条泳道、① 到 ⑧ 的箭头方向、三个虚线框（MCP 新增发现、MCP 新增自动注册、2026-07-28 强制核对 iss）的范围、`resource` 标注为 MCP 强制。
+
+## 配图重绘记录（2026-10-22）
+
+- 按用户反馈，`raw/assets/oauth-mcp-discovery-sequence.png` 以及同批的 `near-membrane-blue-red-realms.png`、`agent-workspace-layers.png`、`js-sandbox-isolation-layers.png` 改用与 `raw/assets/cloudflare-computer-architecture.png` 等配图相同的脚本风格重绘：米色底、浅色填充的圆角框、xkcd 手绘线条、Noto Sans CJK SC。内容、文件名和路径不变。时序图里 MCP 新增或强制的步骤改用橙色虚线框加橙色标签，请求箭头为红色实线，响应箭头为蓝色虚线；blue / red 示意图里 blue Realm 用蓝色、red Realm 用红色、membrane 和 distortion 用紫色。上一条记录里的「白底黑线」说明以本条为准。重绘后逐张打开核对了标签文字、箭头方向，确认中文没有显示成方框。

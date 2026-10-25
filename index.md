@@ -303,6 +303,7 @@
   - [[wiki/syntheses/tooling/aggregator-agent-cli-architecture-observations|聚合型 Agent CLI 的架构设计观察]]
 - `languages`
   - [[wiki/syntheses/languages/effect-gen-type-inference|Effect.gen 的类型推导]]
+  - [[wiki/syntheses/languages/reylo-sql-import-typescript|Reylo：SQL import 进 TypeScript 的实现原理]]
   - [[wiki/syntheses/languages/typescript-narrowing-and-iimt|TypeScript 类型收窄与 IIMT]]
   - [[wiki/syntheses/languages/typescript-phantom-type-carriers|TypeScript Phantom Type Carriers]]
 - `product`

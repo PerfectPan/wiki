@@ -3,7 +3,7 @@ title: TypeScript
 type: topic
 category: languages
 created: 2026-04-12
-updated: 2026-04-25
+updated: 2026-10-24
 tags:
   - typescript
 source_refs:
@@ -52,6 +52,8 @@ source_refs:
 - 工具库：
 	- pattern-match：https://github.com/gvergnaud/ts-pattern
 	- https://github.com/sindresorhus/type-fest
+
+- 相关综合：[[wiki/syntheses/languages/reylo-sql-import-typescript|Reylo：SQL import 进 TypeScript 的实现原理]]（TypeScript 7.1 Content Mapper + 活库 PREPARE 推类型）
 
 ## Source Pointers
 

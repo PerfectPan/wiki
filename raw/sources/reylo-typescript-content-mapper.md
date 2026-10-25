@@ -25,7 +25,7 @@
 | Content mapper 把外来扩展变成虚拟 TS 文本并带 span map | TS 7.1 Beta 博文；typescript-go#4712 | 注册扩展后 `transform` 产出可检查文本 |
 | CLI 必须 `--runExternalCode` | #4712；`contentmappers.go` | mapper 是可执行进程；编辑器需 workspace trust |
 | TS 本身不做 SQL 类型推断 | 博文 / PR 能力边界 | SQL→类型由 Reylo 在 `transform` 内完成 |
-| Reylo 用活库 PREPARE/Describe，不真正跑查询 | reylo.dev FAQ；`packages/postgres/describe.ts` | Postgres：`sql.unsafe(text).describe()` |
+| Reylo 用开发库 PREPARE/Describe，不真正跑查询 | reylo.dev FAQ；`packages/postgres/describe.ts` | Postgres：`sql.unsafe(text).describe()` |
 | 类型路径与运行时路径共用 `Session.analyze` / `.reylo/` 缓存 | `src/analyze.ts` 文件头与实现 | mapper 出 `declare Query`；register/Vite 出 `defineQuery` |
 | Content-mapped 文件不 emit JS | #4712 Emit 节 | 故运行时需独立 loader |
 

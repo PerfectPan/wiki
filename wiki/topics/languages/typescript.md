@@ -110,8 +110,6 @@ flowchart LR
   linkStyle 0,1,2,3 stroke:#6a8aaa,stroke-width:2px
 ```
 
-蓝灰是编译器宿主，紫是外部 mapper，绿是虚拟模块，陶色是检查与诊断回写。
-
 ### 限制
 
 - 没有 `--runExternalCode`（或编辑器未授信）时，mapper 不会跑。
@@ -125,7 +123,7 @@ flowchart LR
 - [microsoft/typescript-go#4712](https://github.com/microsoft/typescript-go/pull/4712)
 - [[raw/sources/reylo-typescript-content-mapper|核查记录]]（含 Content Mapper 与 Reylo 对照）
 
-落地示例见 [[wiki/syntheses/languages/reylo-sql-import-typescript|Reylo：SQL import 进 TypeScript 的实现原理]]（活库 PREPARE 推类型 + 运行时 loader）。
+落地示例见 [[wiki/syntheses/languages/reylo-sql-import-typescript|Reylo：SQL import 进 TypeScript 的实现原理]]（开发库 PREPARE 推类型 + 运行时 loader）。
 
 ## 相关页面
 

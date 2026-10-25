@@ -46,13 +46,13 @@ timestamp: 2026-10-25
 Reylo 是 Colin McDonnell 做的 SQL 工具链（[reylo.dev](https://reylo.dev/)、[colinhacks/reylo](https://github.com/colinhacks/reylo)），挂在 Content Mapper 上。它要求 TypeScript 7.1 beta，以及一个能连上的开发数据库。
 
 - **直接 `import` `.sql`。** 应用代码写 `import q from './get_user.sql'`，`q` 就有类型。
-- **类型来自活库，不是手写，也不是 codegen。** mapper 在 `transform` 里对 SQL 做 PREPARE / Describe，只让数据库解析和描述语句，不执行查询；再结合 catalog（表、列、可空性、主键等）推断参数类型、结果行类型、基数和方言差异，生成 `declare const query: Query<…>` 虚拟模块。
+- **类型来自开发库，不是手写，也不是 codegen。** mapper 在 `transform` 里对 SQL 做 PREPARE / Describe，只让数据库解析和描述语句，不执行查询；再结合 catalog（表、列、可空性、主键等）推断参数类型、结果行类型、基数和方言差异，生成 `declare const query: Query<…>` 虚拟模块。
 - **类型检查和运行时分开。** Content Mapper 不产出 JavaScript。运行时由 `reylo/register` 或 Vite、esbuild、webpack 插件加载 `.sql`，得到 `defineQuery(…).run(db, params)`。两边共用 `.reylo/` 缓存和 schema 指纹；缓存命中时不用重复分析。
 - **原生 SQL 的表达力，ORM 式的调用体验。** 查询仍是手写 SQL；调用侧有参数/结果类型、补全和 `.run()`，不必维护手写类型，也不必把生成文件提交进仓库。
 
-限制很短：没有活库且缓存未命中时，typecheck / build 会失败；`.reylo/` 是本地缓存，不要 commit；CLI 不能漏 `--runExternalCode`；编辑器要开 Native Preview 或让项目用上 TS 7.1；mapper 只在受信任工作区跑。
+限制很短：没有可连的开发库且缓存未命中时，typecheck / build 会失败；`.reylo/` 是本地缓存，不要 commit；CLI 不能漏 `--runExternalCode`；编辑器要开 Native Preview 或让项目用上 TS 7.1；mapper 只在受信任工作区跑。
 
-从 import 到类型检查再到运行时，完整链路如下。蓝灰是类型路径，陶色是运行时，青绿是两边共用的分析缓存。
+从 import 到类型检查再到运行时，完整链路如下。
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables':{'fontFamily':'ui-sans-serif,system-ui,sans-serif','primaryColor':'#c9d9e8','primaryTextColor':'#1f2933','primaryBorderColor':'#6a8aaa','lineColor':'#6b7280','secondaryColor':'#e6d0c0','tertiaryColor':'#cfe0c8','mainBkg':'#c9d9e8','nodeBorder':'#6a8aaa','clusterBkg':'#f7f5f2','clusterBorder':'#9a9080'}}}%%

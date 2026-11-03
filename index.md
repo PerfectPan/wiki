@@ -193,7 +193,7 @@
   - [[wiki/topics/systems/redis|Redis]]
   - [[wiki/topics/systems/sandbox|Sandbox]]
   - [[wiki/topics/systems/shell|Shell]]
-  - [[wiki/topics/systems/terminal|Terminal：终端、TTY 与 Shell]]
+  - [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]]
   - [[wiki/topics/systems/ssh|SSH]]
   - [[wiki/topics/systems/terminology|Terminology]]
   - [[wiki/topics/systems/websocket|WebSocket]]

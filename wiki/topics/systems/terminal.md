@@ -120,7 +120,7 @@ vim 等程序不能直接操作显卡或字体库；终端模拟器也不理解�
 - 光标：`ESC[5;10H` 把光标移到第 5 行第 10 列；htop 一类程序靠同类序列原地刷新。
 - 按键编码：上箭头在常见模式下编码为 `ESC[A`；具体序列随终端模式变化。鼠标事件通常要由程序开启报告后才发送。
 
-TUI（文本用户界面）更新界面时输出文字和控制序列，不需要终端理解按钮或业务状态。[教程的 Escape Sequences](https://how-terminals-work.vercel.app/#escape)、[xterm 控制序列](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
+TUI（文本用户界面）更新界面时输出文字和控制序列，不需要终端理解按钮或业务状态。改窗口标题、超链接、剪贴板等网格外能力通常走 OSC（Operating System Command，操作系统命令），见 [[wiki/topics/systems/terminal-osc|Terminal OSC]]。[教程的 Escape Sequences](https://how-terminals-work.vercel.app/#escape)、[xterm 控制序列](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 
 网格只是显示模型，不能推成“一个 Unicode 字符固定占一格”：显示列宽可以是 0、1 或 2，组合字符和 emoji 还会增加难度。[wcwidth(3)](https://man7.org/linux/man-pages/man3/wcwidth.3.html)
 
@@ -158,6 +158,7 @@ printf '\033[31mred\033[0m\n'
 
 ## 相关页面
 
+- [[wiki/topics/systems/terminal-osc|Terminal OSC：操作系统命令控制串]]
 - [[wiki/topics/systems/shell|Shell]]
 - [[wiki/topics/systems/syscalls-and-shell|系统调用和 Shell]]
 - [[wiki/topics/tooling/cmux|cmux]]

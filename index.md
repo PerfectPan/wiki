@@ -194,6 +194,7 @@
   - [[wiki/topics/systems/sandbox|Sandbox]]
   - [[wiki/topics/systems/shell|Shell]]
   - [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]]
+  - [[wiki/topics/systems/terminal-osc|Terminal OSC：操作系统命令控制串]]
   - [[wiki/topics/systems/ssh|SSH]]
   - [[wiki/topics/systems/terminology|Terminology]]
   - [[wiki/topics/systems/websocket|WebSocket]]

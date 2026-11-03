@@ -36,7 +36,7 @@ OSC 7501（Program Status Protocol，程序状态协议）让**跑在终端里�
 
 这是 Ghostty 项目开创的**第一条净新增终端规范**（Mitchell Hashimoto）。`libghostty-vt` 按规范校验并交给宿主；Ghostty 应用侧在 1.4 仍可解析但不做 UI。Rex、phux 等是实现/采用方。[Ghostty PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)、[Ghostty 1.4.0](https://ghostty.org/docs/install/release-notes/1-4-0)
 
-本页承接 [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]] 中「程序经字节流驱动模拟器宿主能力」的视角。OSC 7501 与标题、OSC 52 等一样，经程序写入 **PTY slave** 的字节流到达模拟器解析器，**并不绕过**伪终端。下文依据提案修订 **0.4** 的公开摘要；不是 Kitty OSC 5522 剪贴板协议。
+本页承接 [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]] 中「程序经字节流驱动模拟器宿主能力」的视角。OSC 7501 与标题、OSC 52、CSI、DCS 一样，只是程序写进 **PTY slave** 的普通字节；**PTY 不认识、也不实现这些序列**——它只搬运字节（外加自己的行规范、信号等终端设备语义）。识别 `OSC 7501 … ST`、维护记录、回答探测，都是**终端模拟器**（或 libghostty-vt 一类解析库）的事。序列语义 ≠ PTY 功能；分层示意见 [[wiki/topics/systems/terminal#控制序列分层：CSI、OSC、DCS（含 DECRQPSR）|terminal 的 CSI/OSC/DCS 节]]。下文依据提案修订 **0.4** 的公开摘要；不是 Kitty OSC 5522 剪贴板协议。
 
 ## 在控制面上的位置
 
@@ -52,6 +52,8 @@ OSC 7501（Program Status Protocol，程序状态协议）让**跑在终端里�
 程序可以同时发 OSC 9;4 与 7501；终端若曾把 9;4 映射到根记录，一旦见过 7501 应停止映射，以免抹掉 `kind`/`msg`，直到下次 RIS。[control-codes](https://control-codes.page/proposals/osc-7501/)
 
 ![OSC 7501 报告经程序写入 PTY，模拟器解析后写入宿主记录或整条丢弃](../../../raw/assets/osc-7501-report-path.png)
+
+图示强调：PTY 段只传字节；「这是 OSC 7501、是否合法、记到哪个 id」发生在模拟器一侧。
 
 ## 帧格式
 
@@ -107,7 +109,7 @@ OSC 7501 ; ? ST                           # 能力探测（可选）
 
 libghostty-vt：**仅当宿主设置了 program-status 回调**才回答 `?`，避免程序向「无人消费」的终端狂发报告；完整 RIS 时向宿主交一条无 id 的 `clear`。[PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)
 
-## 信任边界与硬上限
+## 信任边界与不可放宽的上限
 
 报告内容一律不可信：能写 PTY 的进程都能发。终端必须拒绝含控制字符的 `msg`/`title`，不得当标记语言解析，展示时应中和双向文本覆盖等不可见格式。**唯一回写**是对 `?` 的应答，且不含任何报告字段——记录不可被远程读回。对外副作用（桌面通知、声音）应限流。任一项超限则整条丢弃：
 

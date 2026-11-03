@@ -24,6 +24,8 @@ source_refs:
   - https://www.gnu.org/software/bash/manual/html_node/Readline-Interaction.html
   - https://man7.org/linux/man-pages/man1/tty.1.html
   - https://man7.org/linux/man-pages/man3/wcwidth.3.html
+  - https://control-codes.page/csi/decrqpsr/
+  - raw/sources/decrqpsr.md
 resource:
   - raw/sources/terminal-emulator-pty-guide.md
   - raw/sources/how-terminals-work.md
@@ -36,6 +38,8 @@ resource:
   - https://www.gnu.org/software/bash/manual/html_node/Readline-Interaction.html
   - https://man7.org/linux/man-pages/man1/tty.1.html
   - https://man7.org/linux/man-pages/man3/wcwidth.3.html
+  - https://control-codes.page/csi/decrqpsr/
+  - raw/sources/decrqpsr.md
 ---
 
 # Terminal：终端模拟器、PTY 与程序
@@ -156,6 +160,45 @@ printf '\033[31mred\033[0m\n'
 
 第一个 `tty` 打印标准输入连接的终端设备名；第二个的标准输入是管道，所以报告 `not a tty`。最后一个命令在支持相应控制序列的模拟器中显示红字。这个实验区分了“程序在终端窗口内运行”和“程序的标准输入连接着终端”。[tty(1)](https://man7.org/linux/man-pages/man1/tty.1.html)、[xterm](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)
 
+
+## 控制序列分层：CSI、OSC、DCS（含 DECRQPSR）
+
+程序经 PTY 写出的控制串，由**终端模拟器用户态**解析。常见几类互不替代，且都走同一条字节流：
+
+| 家族 | 典型引入 | 作用面 | 本页相关例子 |
+| --- | --- | --- | --- |
+| CSI | `ESC [` | 光标、擦除、SGR 颜色、模式 | `ESC[31m`、`ESC[5;10H`、备用屏幕 `1049` |
+| OSC | `ESC ]` | 网格外的宿主协作 | 标题；[[wiki/topics/systems/osc-7501-program-status|OSC 7501]] 程序状态 |
+| DCS | `ESC P` | 设备控制串（常携带可回放状态） | DECCIR / DECTABSR 应答 |
+
+**DECRQPSR**（Request Presentation State Report，请求呈现状态报告）是 CSI 侧的经典「查询 → DCS 报告 → 日后还原」例子：主机发 `CSI Ps $ w`，终端用 DCS 答回一部分呈现状态，主机可稍后用 **DECRSPS**（`DCS Ps $ t … ST`）写回去。[control-codes：DECRQPSR](https://control-codes.page/csi/decrqpsr/)
+
+| `Ps` | 报告 | 应答形状 |
+| --- | --- | --- |
+| `1` | DECCIR（光标信息：行列、页、rendition、保护、标志、字符集等） | `DCS 1 $ u … ST` |
+| `2` | DECTABSR（制表位列号，`/` 分隔） | `DCS 2 $ u … ST` |
+
+这与 OSC 7501 不同：DECRQPSR 问的是**终端呈现状态**（光标/制表等），OSC 7501 是**程序向终端申告业务状态**。二者都经 PTY，都不另开旁路。xterm 实现查询与还原；不少现代模拟器（含 libghostty-vt 在公开对照用例中）对 DECRQPSR 无应答、对 DECRSPS 忽略——对接全屏恢复或严格 VT 兼容时要实测。[control-codes Support 表](https://control-codes.page/csi/decrqpsr/)
+
+![CSI / OSC / DCS 同走 PTY；DECRQPSR 查询经 CSI，应答与还原走 DCS](../../../raw/assets/terminal-csi-osc-decrqpsr.png)
+
+## 常见问答
+
+**终端模拟器、PTY、shell 是不是一回事？**  
+不是。模拟器画窗口；PTY 在内核提供带终端语义的假串口；shell 只是常连在 PTY 上的一个程序，可以换成 vim 等。
+
+**为什么不用普通管道？**  
+管道能传字节，但没有窗口大小、行规范、`SIGINT` 转换、`isatty` 等终端语义；大量旧程序依赖这些接口。
+
+**OSC 7501 会绕过 PTY 吗？**  
+不会。报告写进 PTY slave，与颜色 CSI、标题 OSC 一样由模拟器从 master 读出再解析。
+
+**DECRQPSR 和 OSC 7501 解决同一件事吗？**  
+不。前者保存/恢复终端呈现状态（VT 传统）；后者让程序报告 idle/working/blocked 等业务进度。可同时存在，家族不同。
+
+**收到 `Ctrl+C` 一定退出吗？**  
+不一定。需 `ISIG` 且匹配 `VINTR` 才会向**前台进程组**发 `SIGINT`；进程可以捕获或忽略。
+
 ## 相关页面
 
 - [[wiki/topics/systems/osc-7501-program-status|OSC 7501：Program Status Protocol]]
@@ -170,4 +213,5 @@ printf '\033[31mred\033[0m\n'
 - [POSIX General Terminal Interface](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap11.html)：进程组、输入处理和特殊字符。
 - [pty(7)](https://man7.org/linux/man-pages/man7/pty.7.html)、[termios(3)](https://man7.org/linux/man-pages/man3/termios.3.html)：伪终端与终端模式。
 - [xterm 控制序列](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html)：颜色、光标、备用屏幕与输入编码。
+- [DECRQPSR — Request Presentation State Report](https://control-codes.page/csi/decrqpsr/)；[[raw/sources/decrqpsr|核对笔记]]：CSI 查询与 DCS 呈现状态报告 / DECRSPS 还原。
 - [Bash](https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html)、[Readline](https://www.gnu.org/software/bash/manual/html_node/Readline-Interaction.html)：shell 职责与交互式行编辑。

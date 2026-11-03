@@ -3,7 +3,7 @@
 - 日期：2026-11-03
 - 对象：`wiki/topics/systems/terminal.md` 的入门重写
 - 输入：既有主题页与 [[raw/sources/how-terminals-work|How Terminals Work 阅读记录]]；同日用户整理的终端 / 终端模拟器 / PTY 学习笔记（教学叙事，非官方文档）
-- 配图：`raw/assets/terminal-emulator-pty-program.png`、`terminal-pty-vs-pipe.png`、`terminal-foreground-handoff.png` 为手绘说明图，用于角色与数据流示意，不是标准文档附图
+- 配图：`raw/assets/terminal-emulator-pty-program.png`、`terminal-pty-vs-pipe.png`、`terminal-foreground-handoff.png`、`terminal-csi-osc-decrqpsr.png` 为手绘说明图，用于角色与数据流示意，不是标准文档附图
 
 ## 核对过的权威来源
 
@@ -13,6 +13,7 @@
 | 终端接口与信号 | [POSIX General Terminal Interface](https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap11.html) | 行规范、特殊字符、前台进程组；`Ctrl+C` 条件见 §11.1.9 |
 | 终端属性 | [termios(3)](https://man7.org/linux/man-pages/man3/termios.3.html) | `ECHO`、`ICANON`、`ISIG` / `VINTR`；raw 通常关掉多项标志 |
 | 控制序列与备用屏幕 | [xterm ctlseqs](https://invisible-island.net/xterm/ctlseqs/ctlseqs.html) | 颜色 / 光标序列；`ESC[?1049h` / `l` 与 Alternate Screen Buffer |
+| CSI 呈现状态查询 | [DECRQPSR](https://control-codes.page/csi/decrqpsr/) | `CSI Ps $ w` → DCS DECCIR/DECTABSR；DECRSPS 还原；与 OSC 7501 对照 |
 | Shell 与行编辑 | [Bash：What is a shell?](https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html)、[Readline Interaction](https://www.gnu.org/software/bash/manual/html_node/Readline-Interaction.html) | shell 不等于终端；交互式 Bash 常由 Readline 做行编辑 |
 | 直观演示与既有修正 | [How Terminals Work](https://how-terminals-work.vercel.app/)、[[raw/sources/how-terminals-work]] | 网格、转义、信号、备用屏幕；纠正“cooked 模式等于 shell 行编辑”的过度简化 |
 

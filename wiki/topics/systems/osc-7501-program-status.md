@@ -19,6 +19,7 @@ source_refs:
   - https://docs.phux.sh/program-protocol
   - https://ghostty.org/docs/install/release-notes/1-4-0
   - wiki/topics/systems/terminal.md
+  - https://control-codes.page/csi/decrqpsr/
 resource:
   - raw/sources/osc-7501-program-status.md
   - https://control-codes.page/proposals/osc-7501/
@@ -26,6 +27,7 @@ resource:
   - https://docs.phux.sh/program-protocol
   - https://ghostty.org/docs/install/release-notes/1-4-0
   - wiki/topics/systems/terminal.md
+  - https://control-codes.page/csi/decrqpsr/
 ---
 
 # OSC 7501：Program Status Protocol
@@ -45,6 +47,7 @@ OSC 7501（Program Status Protocol，程序状态协议）让**跑在终端里�
 | OSC 133 | shell 提示符与命令边界 | 来自 shell，不知程序内部卡点 |
 | OSC 9 / 99 / 777 | 一次性通知 | 不留下「现在仍为真」的记录 |
 | 窗口标题 OSC 0/2 | 一个自由字符串 | 常被塞进 spinner，语义模糊 |
+| CSI DECRQPSR / DCS DECRSPS | 保存并还原光标、制表等**呈现状态** | 问的是终端状态，不是程序业务状态；见 [[wiki/topics/systems/terminal#控制序列分层：CSI、OSC、DCS（含 DECRQPSR）|terminal 分层节]] |
 
 程序可以同时发 OSC 9;4 与 7501；终端若曾把 9;4 映射到根记录，一旦见过 7501 应停止映射，以免抹掉 `kind`/`msg`，直到下次 RIS。[control-codes](https://control-codes.page/proposals/osc-7501/)
 
@@ -194,7 +197,7 @@ libghostty-vt：**仅当宿主设置了 program-status 回调**才回答 `?`，�
 
 ## 相关页面
 
-- [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]]
+- [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]]（含 DECRQPSR CSI 例子）
 - [[wiki/topics/systems/shell|Shell]]
 
 ## 来源指针
@@ -204,3 +207,4 @@ libghostty-vt：**仅当宿主设置了 program-status 回调**才回答 `?`，�
 - [ghostty-org/ghostty#14560](https://github.com/ghostty-org/ghostty/pull/14560)
 - [phux: OSC 7501](https://docs.phux.sh/program-protocol)
 - [Ghostty 1.4.0 release notes](https://ghostty.org/docs/install/release-notes/1-4-0)
+- [DECRQPSR](https://control-codes.page/csi/decrqpsr/)（相关 CSI/DCS 呈现状态查询，对照用）

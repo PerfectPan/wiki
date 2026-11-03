@@ -194,6 +194,7 @@
   - [[wiki/topics/systems/sandbox|Sandbox]]
   - [[wiki/topics/systems/shell|Shell]]
   - [[wiki/topics/systems/terminal|Terminal：终端、TTY 与 Shell]]
+  - [[wiki/topics/systems/kitty-osc-5522-clipboard|Kitty OSC 5522：按 MIME 的终端剪贴板协议]]
   - [[wiki/topics/systems/ssh|SSH]]
   - [[wiki/topics/systems/terminology|Terminology]]
   - [[wiki/topics/systems/websocket|WebSocket]]

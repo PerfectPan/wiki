@@ -158,6 +158,7 @@ printf '\033[31mred\033[0m\n'
 
 ## 相关页面
 
+- [[wiki/topics/systems/kitty-osc-5522-clipboard|Kitty OSC 5522：按 MIME 的终端剪贴板协议]]
 - [[wiki/topics/systems/shell|Shell]]
 - [[wiki/topics/systems/syscalls-and-shell|系统调用和 Shell]]
 - [[wiki/topics/tooling/cmux|cmux]]

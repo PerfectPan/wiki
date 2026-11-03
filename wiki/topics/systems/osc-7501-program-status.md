@@ -34,7 +34,7 @@ OSC 7501（Program Status Protocol，程序状态协议）让**跑在终端里�
 
 这是 Ghostty 项目开创的**第一条净新增终端规范**（Mitchell Hashimoto）。`libghostty-vt` 按规范校验并交给宿主；Ghostty 应用侧在 1.4 仍可解析但不做 UI。Rex、phux 等是实现/采用方。[Ghostty PR #14560](https://github.com/ghostty-org/ghostty/pull/14560)、[Ghostty 1.4.0](https://ghostty.org/docs/install/release-notes/1-4-0)
 
-本页承接 [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]] 中「程序经字节流驱动模拟器宿主能力」的视角。下文依据提案修订 **0.4** 的公开摘要；不是 Kitty OSC 5522 剪贴板协议。
+本页承接 [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]] 中「程序经字节流驱动模拟器宿主能力」的视角。OSC 7501 与标题、OSC 52 等一样，经程序写入 **PTY slave** 的字节流到达模拟器解析器，**并不绕过**伪终端。下文依据提案修订 **0.4** 的公开摘要；不是 Kitty OSC 5522 剪贴板协议。
 
 ## 在控制面上的位置
 
@@ -53,12 +53,15 @@ flowchart TB
   subgraph prog [命令行 / 构建 / Agent]
     Report[写出 OSC 7501 报告]
   end
+  subgraph kernel [内核]
+    Pty[PTY slave 到 master]
+  end
   subgraph emu [终端 / libghostty-vt]
     Parse[解析与硬上限校验]
     Host[宿主持有每 id 一条记录]
     UI[可选：侧栏 / 标签 / 通知]
   end
-  Report --> Parse
+  Report --> Pty --> Parse
   Parse -->|合法| Host
   Parse -->|超限或非法| Drop[整条丢弃]
   Host --> UI
@@ -132,14 +135,14 @@ sequenceDiagram
   participant App as 程序
   participant Term as 终端 / VT
   participant Rec as 记录集
-  App->>Term: state=working:app=make:msg=…
-  Term->>Rec: 替换根或 id 记录
-  App->>Term: state=blocked:kind=question:msg=…
-  Term->>Rec: 整表替换（未重发的键消失）
-  App->>Term: state=done:msg=…
-  Note over Rec: done 可跨进程退出与下一提示符
-  App->>Term: OSC 7501 ; ? ST
-  Term-->>App: ? : states=… : kinds=…
+  App->>Term: "report working app=make"
+  Term->>Rec: "replace root or id record"
+  App->>Term: "report blocked kind=question"
+  Term->>Rec: "full replace missing keys drop"
+  App->>Term: "report done"
+  Note over Rec: "done may outlive exit and next prompt"
+  App->>Term: "query support OSC 7501"
+  Term-->>App: "reply lists states and kinds"
 ```
 
 ## 能力探测

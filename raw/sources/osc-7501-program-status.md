@@ -35,3 +35,7 @@
 - gist 原文与 0.1–0.3 全文 diff
 - 多工器透传行为
 - Windows ConPTY
+
+## 配图
+
+手绘：`raw/assets/osc-7501-report-path.png`、`osc-7501-states-lifecycle.png`、`osc-7501-report-sequence.png`（说明报告路径、状态生命周期、报告/探测时序；CSI/OSC/DCS 分层见 `terminal-csi-osc-decrqpsr.png`，本页不重复）。

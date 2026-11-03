@@ -51,24 +51,7 @@ OSC 7501（Program Status Protocol，程序状态协议）让**跑在终端里�
 
 程序可以同时发 OSC 9;4 与 7501；终端若曾把 9;4 映射到根记录，一旦见过 7501 应停止映射，以免抹掉 `kind`/`msg`，直到下次 RIS。[control-codes](https://control-codes.page/proposals/osc-7501/)
 
-```mermaid
-flowchart TB
-  subgraph prog [命令行 / 构建 / Agent]
-    Report[写出 OSC 7501 报告]
-  end
-  subgraph kernel [内核]
-    Pty[PTY slave 到 master]
-  end
-  subgraph emu [终端 / libghostty-vt]
-    Parse[解析与硬上限校验]
-    Host[宿主持有每 id 一条记录]
-    UI[可选：侧栏 / 标签 / 通知]
-  end
-  Report --> Pty --> Parse
-  Parse -->|合法| Host
-  Parse -->|超限或非法| Drop[整条丢弃]
-  Host --> UI
-```
+![OSC 7501 报告经程序写入 PTY，模拟器解析后写入宿主记录或整条丢弃](../../../raw/assets/osc-7501-report-path.png)
 
 ## 帧格式
 
@@ -90,24 +73,7 @@ OSC 7501 ; ? ST                           # 能力探测（可选）
 
 `id` 是 `/` 分段路径（如 `build/test`），最多 8 段、每段 ≤32 字符；用于清子树与 `app` 继承，父节点不必事先存在。根与子记录可并存（例如 shell 根为 `idle`，工人为 `blocked`）。记录属于终端单元而非屏幕缓冲：切备用屏幕不动；**RIS** 清空全部，**DECSTR** 不动。[control-codes — Records](https://control-codes.page/proposals/osc-7501/)
 
-```mermaid
-stateDiagram-v2
-  [*] --> idle: state=idle
-  idle --> working: state=working
-  working --> blocked: state=blocked
-  blocked --> working: state=working
-  working --> done: state=done
-  working --> error: state=error
-  blocked --> done: state=done
-  blocked --> error: state=error
-  done --> idle: state=idle
-  error --> idle: state=idle
-  idle --> [*]: state=clear / RIS
-  working --> [*]: clear / 进程退出或 OSC 133 A
-  blocked --> [*]: clear / 进程退出或 OSC 133 A
-  done --> [*]: clear / 终端停显
-  error --> [*]: clear / 终端停显
-```
+![OSC 7501 记录状态：idle / working / blocked / done / error 与清除条件](../../../raw/assets/osc-7501-states-lifecycle.png)
 
 说明：`working`/`blocked` 在进程退出或新 shell 提示（OSC 133 `A`）时必须丢掉；`done`/`error` 应保留到用户看见或终端策略停显；`idle` 可否跨提示符由实现决定（提案允许丢，phux 选择保留）。无心跳：过期不靠计时器。
 
@@ -133,20 +99,7 @@ stateDiagram-v2
 
 用户打断应报 `idle`；马上退出的程序应先报 `done`/`error`，否则用户回来时可能已无记录。[control-codes — States / Keys](https://control-codes.page/proposals/osc-7501/)
 
-```mermaid
-sequenceDiagram
-  participant App as 程序
-  participant Term as 终端 / VT
-  participant Rec as 记录集
-  App->>Term: "report working app=make"
-  Term->>Rec: "replace root or id record"
-  App->>Term: "report blocked kind=question"
-  Term->>Rec: "full replace missing keys drop"
-  App->>Term: "report done"
-  Note over Rec: "done may outlive exit and next prompt"
-  App->>Term: "query support OSC 7501"
-  Term-->>App: "reply lists states and kinds"
-```
+![OSC 7501 报告整表替换与能力探测问答时序](../../../raw/assets/osc-7501-report-sequence.png)
 
 ## 能力探测
 

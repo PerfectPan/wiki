@@ -29,5 +29,7 @@
   { "term": "法定入口", "suggestion": "唯一入口", "exceptions": [] },
   { "term": "未决问题", "suggestion": "写明是尚未验证的行为、尚未决定的选择，还是已知限制，并说明具体事项", "exceptions": [] },
   { "term": "权威记录", "suggestion": "写明具体是以哪份数据或底稿为准，例如“真实底稿”、“以它为准的数据”", "exceptions": [] },
-  { "term": "活库", "suggestion": "按语境用「开发库」或「可连的开发库」", "exceptions": [] }
+  { "term": "活库", "suggestion": "按语境用「开发库」或「可连的开发库」", "exceptions": [] },
+  { "term": "硬上限", "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制", "exceptions": [] },
+  { "term": "硬限制", "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制", "exceptions": [] }
 ]

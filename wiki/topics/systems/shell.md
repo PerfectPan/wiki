@@ -4,8 +4,8 @@ description: Shell 语法与脚本笔记，并链接终端、TTY、PTY 的职责
 type: topic
 category: systems
 created: 2026-04-12
-updated: 2026-10-07
-timestamp: 2026-10-07
+updated: 2026-11-03
+timestamp: 2026-11-03
 tags:
   - shell
 source_refs:
@@ -17,7 +17,7 @@ resource:
 ---
 # Shell
 
-Shell 是命令解释器和脚本语言，可以交互执行，也可以读取脚本或管道。终端模拟器负责输入输出，TTY 提供内核终端接口，shell 使用这些接口解析并执行命令；具体关系见 [[wiki/topics/systems/terminal|Terminal：终端、TTY 与 Shell]]。[Bash 定义](https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html)
+Shell 是命令解释器和脚本语言，可以交互执行，也可以读取脚本或管道。终端模拟器负责按键与像素，PTY 提供内核终端接口，shell 作为前台或后台程序使用这些接口解析并执行命令；三角色与前台交接见 [[wiki/topics/systems/terminal|Terminal：终端模拟器、PTY 与程序]]。[Bash 定义](https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html)
 
 - Syntax Cheat Sheet:
 	- \$@ - 所有参数的列表，如 "\$@" 用 " 括起来的情况，以 "\$1", "\$2", ... "\$n" 的形式输出所有参数

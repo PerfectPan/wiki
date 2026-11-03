@@ -4,4 +4,9 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Prefer bun: plain `node` cannot load TypeScript entrypoints on this box.
+if command -v bun >/dev/null 2>&1; then
+  exec bun "$ROOT/wiki.ts" "$@"
+fi
+
 exec node "$ROOT/wiki.ts" "$@"

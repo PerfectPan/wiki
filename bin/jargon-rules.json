@@ -1,179 +1,35 @@
 [
-  {
-    "term": "护栏",
-    "suggestion": "写明具体机制，例如输出检查、权限限制或重试规则",
-    "exceptions": []
-  },
-  {
-    "term": "门禁",
-    "suggestion": "写明检查条件，例如发布检查、合并条件或权限检查",
-    "exceptions": []
-  },
-  {
-    "term": "契约",
-    "suggestion": "按语境使用接口定义、调用约定或约束",
-    "exceptions": [
-      "契约测试"
-    ]
-  },
-  {
-    "term": "收口",
-    "suggestion": "写明是汇总、缩小范围还是统一处理",
-    "exceptions": []
-  },
-  {
-    "term": "口径",
-    "suggestion": "写明指标定义、统计标准或具体说法",
-    "exceptions": []
-  },
-  {
-    "term": "拉齐",
-    "suggestion": "同步信息或使具体内容一致",
-    "exceptions": []
-  },
-  {
-    "term": "踩坑",
-    "suggestion": "遇到问题或触发异常",
-    "exceptions": []
-  },
-  {
-    "term": "坐实",
-    "suggestion": "确认或证实，并给出依据",
-    "exceptions": []
-  },
-  {
-    "term": "墙钟",
-    "suggestion": "实际耗时、经过时间或 wall-clock time",
-    "exceptions": []
-  },
-  {
-    "term": "颗粒度",
-    "suggestion": "粒度或精细程度",
-    "exceptions": []
-  },
-  {
-    "term": "赋能",
-    "suggestion": "写清为谁提供什么能力",
-    "exceptions": []
-  },
-  {
-    "term": "抓手",
-    "suggestion": "写明具体手段或切入点",
-    "exceptions": []
-  },
-  {
-    "term": "闸门",
-    "suggestion": "写明过滤条件、权限检查或执行限制",
-    "exceptions": []
-  },
-  {
-    "term": "反应性框架",
-    "suggestion": "Reactive Framework",
-    "exceptions": []
-  },
-  {
-    "term": "补偿型脚手架",
-    "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单",
-    "exceptions": []
-  },
-  {
-    "term": "补偿性脚手架",
-    "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单",
-    "exceptions": []
-  },
-  {
-    "term": "协作原语",
-    "suggestion": "写明具体机制，例如任务依赖、消息频道或共享任务列表",
-    "exceptions": []
-  },
-  {
-    "term": "上下文接力",
-    "suggestion": "写明数据如何传递，例如通过文件、工具返回值或会话接口",
-    "exceptions": []
-  },
-  {
-    "term": "合约",
-    "suggestion": "按语境使用接口定义、类型定义、调用约定或代码库",
-    "exceptions": [
-      "智能合约",
-      "符合约定"
-    ]
-  },
-  {
-    "term": "搭便车",
-    "suggestion": "写明具体透传机制，例如在现有消息元数据字段中携带属性",
-    "exceptions": []
-  },
-  {
-    "term": "状态坦诚",
-    "suggestion": "写明具体处理方式，例如显式上报 unknown 状态或标记数据不完整",
-    "exceptions": []
-  },
-  {
-    "term": "矩阵",
-    "suggestion": "写明具体对比表、对照表或分类清单",
-    "exceptions": [
-      "混淆矩阵",
-      "转移矩阵",
-      "CRF 转移矩阵"
-    ]
-  },
-  {
-    "term": "租约",
-    "suggestion": "写明具体机制，例如有有效期的执行锁、超时重新分配或认领超时时间",
-    "exceptions": []
-  },
-  {
-    "term": "死信",
-    "suggestion": "写明具体处理，例如重试多次失败后的隔离存储或无法投递的消息暂存区",
-    "exceptions": []
-  },
-  {
-    "term": "张力",
-    "suggestion": "写明具体的风险、取舍或冲突，例如“招得快和招得准之间要取舍”",
-    "exceptions": [
-      "视觉张力",
-      "表面张力"
-    ]
-  },
-  {
-    "term": "裁决",
-    "suggestion": "判定、决定，或写明以谁的结果为准",
-    "exceptions": []
-  },
-  {
-    "term": "墙上时钟",
-    "suggestion": "本机系统时间",
-    "exceptions": []
-  },
-  {
-    "term": "法定入口",
-    "suggestion": "唯一入口",
-    "exceptions": []
-  },
-  {
-    "term": "未决问题",
-    "suggestion": "写明是尚未验证的行为、尚未决定的选择，还是已知限制，并说明具体事项",
-    "exceptions": []
-  },
-  {
-    "term": "权威记录",
-    "suggestion": "写明具体是以哪份数据或底稿为准，例如“真实底稿”、“以它为准的数据”",
-    "exceptions": []
-  },
-  {
-    "term": "活库",
-    "suggestion": "按语境用「开发库」或「可连的开发库」",
-    "exceptions": []
-  },
-  {
-    "term": "硬上限",
-    "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制",
-    "exceptions": []
-  },
-  {
-    "term": "硬限制",
-    "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制",
-    "exceptions": []
-  }
+  { "term": "护栏", "suggestion": "写明具体机制，例如输出检查、权限限制或重试规则", "exceptions": [] },
+  { "term": "门禁", "suggestion": "写明检查条件，例如发布检查、合并条件或权限检查", "exceptions": [] },
+  { "term": "契约", "suggestion": "按语境使用接口定义、调用约定或约束", "exceptions": ["契约测试"] },
+  { "term": "收口", "suggestion": "写明是汇总、缩小范围还是统一处理", "exceptions": [] },
+  { "term": "口径", "suggestion": "写明指标定义、统计标准或具体说法", "exceptions": [] },
+  { "term": "拉齐", "suggestion": "同步信息或使具体内容一致", "exceptions": [] },
+  { "term": "踩坑", "suggestion": "遇到问题或触发异常", "exceptions": [] },
+  { "term": "坐实", "suggestion": "确认或证实，并给出依据", "exceptions": [] },
+  { "term": "墙钟", "suggestion": "实际耗时、经过时间或 wall-clock time", "exceptions": [] },
+  { "term": "颗粒度", "suggestion": "粒度或精细程度", "exceptions": [] },
+  { "term": "赋能", "suggestion": "写清为谁提供什么能力", "exceptions": [] },
+  { "term": "抓手", "suggestion": "写明具体手段或切入点", "exceptions": [] },
+  { "term": "闸门", "suggestion": "写明过滤条件、权限检查或执行限制", "exceptions": [] },
+  { "term": "反应性框架", "suggestion": "Reactive Framework", "exceptions": [] },
+  { "term": "补偿型脚手架", "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单", "exceptions": [] },
+  { "term": "补偿性脚手架", "suggestion": "写明具体工具及其作用，例如 TodoWrite 记录单个 agent 的步骤清单", "exceptions": [] },
+  { "term": "协作原语", "suggestion": "写明具体机制，例如任务依赖、消息频道或共享任务列表", "exceptions": [] },
+  { "term": "上下文接力", "suggestion": "写明数据如何传递，例如通过文件、工具返回值或会话接口", "exceptions": [] },
+  { "term": "合约", "suggestion": "按语境使用接口定义、类型定义、调用约定或代码库", "exceptions": ["智能合约", "符合约定"] },
+  { "term": "搭便车", "suggestion": "写明具体透传机制，例如在现有消息元数据字段中携带属性", "exceptions": [] },
+  { "term": "状态坦诚", "suggestion": "写明具体处理方式，例如显式上报 unknown 状态或标记数据不完整", "exceptions": [] },
+  { "term": "矩阵", "suggestion": "写明具体对比表、对照表或分类清单", "exceptions": ["混淆矩阵", "转移矩阵", "CRF 转移矩阵"] },
+  { "term": "租约", "suggestion": "写明具体机制，例如有有效期的执行锁、超时重新分配或认领超时时间", "exceptions": [] },
+  { "term": "死信", "suggestion": "写明具体处理，例如重试多次失败后的隔离存储或无法投递的消息暂存区", "exceptions": [] },
+  { "term": "张力", "suggestion": "写明具体的风险、取舍或冲突，例如“招得快和招得准之间要取舍”", "exceptions": ["视觉张力", "表面张力"] },
+  { "term": "裁决", "suggestion": "判定、决定，或写明以谁的结果为准", "exceptions": [] },
+  { "term": "墙上时钟", "suggestion": "本机系统时间", "exceptions": [] },
+  { "term": "法定入口", "suggestion": "唯一入口", "exceptions": [] },
+  { "term": "未决问题", "suggestion": "写明是尚未验证的行为、尚未决定的选择，还是已知限制，并说明具体事项", "exceptions": [] },
+  { "term": "权威记录", "suggestion": "写明具体是以哪份数据或底稿为准，例如“真实底稿”、“以它为准的数据”", "exceptions": [] },
+  { "term": "活库", "suggestion": "按语境用「开发库」或「可连的开发库」", "exceptions": [] },
+  { "term": "硬上限", "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制", "exceptions": [] },
+  { "term": "硬限制", "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制", "exceptions": [] }
 ]

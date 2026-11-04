@@ -32,3 +32,14 @@
 - 本次只读微信公众号正文，未审计 AgentScope / AgentCore 源码，未运行示例，未对照官方 API 文档逐字段核实。
 - 未把本文与 `@earendil-works/pi-durable` 源码做同源证明；数据模型名词相近只作概念对照，不声称同一代码库。
 - WeChat 页面可能截断、改版或图示缺失；若与线上原文冲突，以原文为准并回写本笔记。
+
+## 读者澄清笔记（2026-11-04 Asia/Shanghai，对话整理）
+
+以下不是原文新段落，而是把常见误解写成可回链的要点；正式叙述以 `wiki/topics/ai/agentscope-durable.md` FAQ 为准。
+
+- Document ≠ Task：都会被改、常同 Commit；Document=可变业务事实表，Task=带 phase 的进度机。
+- 不能合并：恢复规则（任意改字段 vs 状态机）、寿命（表常比某一单久）、并发（一 Document 上多子 Task）会打架。
+- Document 不是工具结果：原始回执→Entry；业务是否成功→Document；卡在哪一步→Task phase。对方服务有日志也不替代本地 Task。
+- 能把 Task 状态塞进 Document，但不该——等于手搓状态机，丢掉框架提交/恢复。
+- Task 不按「每个工具」建模，而按一段可恢复的有副作用业务活；普通工具 Task 有 call/execute；细粒度需自定义多阶段（五封邮件概念例，非可 clone 小仓）。
+- 可跑对照：Pi Durable 恢复测试；概念对比见 `wiki/comparisons/ai/agentscope-durable-vs-pi-durable.md`。

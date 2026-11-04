@@ -57,6 +57,8 @@ resource:
 
 **Document ≠ Task。** 没有单一的「task document」对象；业务事实在 Document，执行进度在 Task，常在同一次 Commit 里一起改。图见 [[wiki/topics/ai/agentscope-durable#FAQ：所谓「task document」是什么？|AgentScope 页 FAQ]]。
 
+**读者 FAQ（为何不合并、工具结果落哪、Task 是否按工具建模、文章有无 demo）** 已写在 AgentScope topic 的同节展开问答里，本页不重复整表：见 [[wiki/topics/ai/agentscope-durable#Document 和 Task 为什么「感觉差不多」？|Document vs Task 展开]]。想对照可跑恢复测试仍看本页「差异与取舍」里的 Pi Durable 一行。
+
 ## 差异与取舍
 
 | 如果需要 | 更贴近哪边的叙述 | 因为 | 代价 / 注意 |

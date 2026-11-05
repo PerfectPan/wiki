@@ -43,3 +43,5 @@
 - 能把 Task 状态塞进 Document，但不该——等于手搓状态机，丢掉框架提交/恢复。
 - Task 不按「每个工具」建模，而按一段可恢复的有副作用业务活；普通工具 Task 有 call/execute；细粒度需自定义多阶段（五封邮件概念例，非可 clone 小仓）。
 - 可跑对照：Pi Durable 恢复测试；概念对比见 `wiki/comparisons/ai/agentscope-durable-vs-pi-durable.md`。
+- 话题页「重新打开 Session 与宿主唤醒」里曾出现的 `requestId` / `resume()` / `onWake`：微信长文未给出这些 API 名；已改为据原文的宿主职责叙述，并标明勿当作已核实的 AgentScope 契约（对照见 Pi Durable）。
+

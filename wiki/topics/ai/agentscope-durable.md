@@ -4,8 +4,8 @@ description: 据刘军微信长文梳理 AgentScope Durable 与 AgentCore 托管
 type: topic
 category: ai
 created: 2026-11-04
-updated: 2026-11-04
-timestamp: 2026-11-04
+updated: 2026-11-05
+timestamp: 2026-11-05
 tags:
   - agent
   - durability
@@ -184,9 +184,9 @@ Agent 循环由模型生成任务和工具任务组成。输入受理后先保�
 
 ## 重新打开 Session 与宿主唤醒
 
-重新打开同一 Storage → 恢复 Conversation、Entry、Document、Task、Submission → 核对任务类型/版本与阶段处理器 → 启动调度器：pending 或中断的 running 从已保存阶段进入；waiting 重查依赖；sleeping 等到点；completing 检查子任务收尾；terminal 直接提供结果。同 `requestId` 重试返回原 Submission。取消先持久记录取消意图，再通知活动阶段停止并等待所属子任务结束。
+重新打开同一 Storage → 恢复 Conversation、Entry、Document、Task、Submission → 核对任务类型/版本与阶段处理器 → 启动调度器：pending 或中断的 running 从已保存阶段进入；waiting 重查依赖；sleeping 等到点；completing 检查子任务收尾；terminal 直接提供结果。取消先持久记录取消意图，再通知活动阶段停止并等待所属子任务结束。
 
-`resume()` 启动调度器；唤醒信息告诉宿主「现在有工作」以及「下次何时继续」。常驻宿主用本地定时器；云端宿主经 `onWake` 安排唤醒，进程回收后重新打开 Session 再 `resume()`。调度器判断任务是否可运行，宿主提供实际执行机会。
+据原文，调度器判断任务是否可运行，宿主负责提供实际执行机会：常驻宿主可用本地定时器；云端宿主需在进程回收后重新打开 Session 并再次启动调度。微信长文未给出 `requestId` / `resume()` / `onWake` 等具体 API 名；同请求重试返回原 Submission、以及宿主唤醒钩子的细节，勿当作已核实的 AgentScope 调用约定（对照可看 [[wiki/topics/ai/pi-durable|Pi Durable]] 的幂等与宿主约定，二者不是同一代码库）。
 
 ## AgentCore、Brain–Hands（高层面）
 

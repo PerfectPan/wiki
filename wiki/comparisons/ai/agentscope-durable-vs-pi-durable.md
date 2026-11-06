@@ -4,8 +4,8 @@ description: 对照微信长文中的 AgentScope Durable（及 AgentCore 托管�
 type: comparison
 category: ai
 created: 2026-11-04
-updated: 2026-11-04
-timestamp: 2026-11-04
+updated: 2026-11-06
+timestamp: 2026-11-06
 tags:
   - agent
   - durability
@@ -55,9 +55,7 @@ resource:
 | safe / unsafe | 双方策略均为 safe 才重跑，否则 interrupted | 框架不自动把外部写操作变成幂等 |
 | 五封邮件类例子 | 文中核心例子 | Pi Durable 测试里也有按 key 去重的转账/副作用示范 |
 
-**Document ≠ Task。** 没有单一的「task document」对象；业务事实在 Document，执行进度在 Task，常在同一次 Commit 里一起改。图见 [[wiki/topics/ai/agentscope-durable#FAQ：所谓「task document」是什么？|AgentScope 页 FAQ]]。
-
-**读者 FAQ（为何不合并、工具结果落哪、Task 是否按工具建模、文章有无 demo）** 已写在 AgentScope topic 的同节展开问答里，本页不重复整表：见 [[wiki/topics/ai/agentscope-durable#Document 和 Task 为什么「感觉差不多」？|Document vs Task 展开]]。想对照可跑恢复测试仍看本页「差异与取舍」里的 Pi Durable 一行。
+**Document ≠ Task。** 没有单一的「task document」对象；业务事实在 Document，执行进度在 Task，常在同一次 Commit 里一起改。两者为什么不能合并、工具结果分别落在哪、Task 是否按工具建模，见 AgentScope 主题页的 [[wiki/topics/ai/agentscope-durable#Document 与 Task：事实和进度是两类数据|Document 与 Task 分工]]一节；配图也在该页。可运行的恢复测试对照见本页「差异与取舍」中 Pi Durable 一行。
 
 ## 差异与取舍
 

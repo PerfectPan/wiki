@@ -84,6 +84,7 @@
   - [[wiki/topics/ai/perplexity-space|Perplexity SPACE：Firecracker 沙箱平台]]
   - [[wiki/topics/ai/tetral|Tetral]]
   - [[wiki/topics/ai/pi-durable|Pi Durable]]
+  - [[wiki/topics/ai/agentscope-durable|AgentScope Durable]]
   - [[wiki/topics/ai/anthropic-messages-api|Anthropic Messages API]]
   - [[wiki/topics/ai/chat-completions|Chat Completions]]
   - [[wiki/topics/ai/gpu-time|gpu-time]]
@@ -334,6 +335,7 @@
   - [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比：gbrain、memU、agentmemory 与 Letta]]
   - [[wiki/comparisons/ai/agent-output-checks|Agent 输出检查：TTSR、权限规则与 PreToolUse hooks]]
   - [[wiki/comparisons/ai/cloudflare-computer-vs-layerfs-vs-space|Agent 工作区方案对比：Cloudflare Computer vs LayerFS vs Perplexity SPACE]]
+  - [[wiki/comparisons/ai/agentscope-durable-vs-pi-durable|AgentScope Durable vs Pi Durable]]
 - `architecture`
   - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - `career`

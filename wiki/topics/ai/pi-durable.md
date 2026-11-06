@@ -175,6 +175,7 @@ Extension 可以组合工具、提示章节、hooks、wrappers 与任务定义�
 ## 相关页面
 
 - [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]：讨论持久化执行、沙箱解耦与工具组合的关键工程限制与演进。
+- [[wiki/topics/ai/agentscope-durable|AgentScope Durable]]：微信长文中的 Durable 数据模型与 Document/Task 分工；对照见 [[wiki/comparisons/ai/agentscope-durable-vs-pi-durable|对比页]]。
 - [[wiki/topics/ai/agent-harness|Agent Harness]]。
 - [[wiki/topics/ai/tetral|Tetral]]。
 - [[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]。

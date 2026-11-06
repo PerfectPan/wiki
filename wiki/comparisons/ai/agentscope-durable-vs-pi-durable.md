@@ -1,6 +1,6 @@
 ---
 title: AgentScope Durable vs Pi Durable
-description: 对照微信长文中的 AgentScope Durable（及 AgentCore 托管方向）与 wiki 已有的 Pi Durable：数据模型近乎同构，但产品与宿主不同；澄清 Document 与 Task 的分工，不将二者视为同一代码库
+description: AgentScope Durable（及 AgentCore 托管方向）与 @earendil-works/pi-durable 的对比：数据模型近乎同构，但产品形态与宿主职责不同；澄清 Document 与 Task 的分工，二者不构成同一代码库
 type: comparison
 category: ai
 created: 2026-11-04

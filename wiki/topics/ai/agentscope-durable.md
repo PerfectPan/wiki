@@ -1,6 +1,6 @@
 ---
 title: AgentScope Durable：任务可恢复执行与 Document / Task 分工
-description: 据刘军微信长文梳理 AgentScope Durable 的 Session 数据模型：Document 保存业务事实、Task 保存可恢复的执行进度，二者在同一次 Commit 中一起生效；不存在名为 task document 的单一对象
+description: AgentScope Durable 的 Session 数据模型：Document 保存业务事实、Task 保存可恢复的执行进度，二者在同一次 Commit 中一起生效；不存在名为 task document 的单一对象
 type: topic
 category: ai
 created: 2026-11-04

@@ -17,6 +17,7 @@ source_refs:
   - raw/sources/agentmemory.md
   - raw/sources/letta-context-repositories.md
   - raw/sources/anthropic-components-of-agent-memory.md
+  - wiki/topics/ai/agent-memory.md
   - https://www.anthropic.com/research/components-of-agent-memory
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
@@ -26,6 +27,7 @@ resource:
   - raw/sources/agentmemory.md
   - raw/sources/letta-context-repositories.md
   - raw/sources/anthropic-components-of-agent-memory.md
+  - wiki/topics/ai/agent-memory.md
   - https://www.anthropic.com/research/components-of-agent-memory
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
@@ -43,7 +45,7 @@ Agent Memory 的核心是让事实可追溯、可纠正，并在需要时取回�
 
 在此基础上，再实现修订、撤回和自动提炼等维护操作。
 
-本文原有实现依据是 2026-10-07 的 gbrain、memU、agentmemory 固定源码快照及 Letta MemFS 文档。2026-11-08 补入 [Anthropic 记忆实验][anthropic-memory] 的文章观察，阅读范围见 [[raw/sources/anthropic-components-of-agent-memory|文章阅读证据]]。下文将文章报告与设计建议分开；字段、接口和组合方式仍是尚未实现或运行验证的建议。产品取舍见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]。
+本文综合 gbrain、memU、agentmemory 的固定源码快照及 Letta MemFS 文档，资料日期为 2026-10-07。机制依据见文中链接与 raw 记录。下面的字段、接口和组合方式是设计建议，尚未实现或运行验证。2026-11-08 补入合同任务的并发写入案例，未重新验证原有源码。Agent Memory 的定义、知识选择与实验边界见 [[wiki/topics/ai/agent-memory|Agent Memory]]；产品取舍见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]。
 
 ## 1. 先确定保存的对象
 
@@ -54,8 +56,6 @@ Agent Memory 的核心是让事实可追溯、可纠正，并在需要时取回�
 - **可复用步骤**：记录遇到同类任务时怎样做。
 
 任务进度可以用于交接，但不应自动变成永久规则。agentmemory 将过程记录与长期记忆分开，memU 将 memory 和 skill 按类别管理，gbrain 则区分长期知识与临时运行状态。[数据类型][a-types]、[memU 模型][m-models]、[记忆边界][g-boundary]
-
-保存候选时，建议先问：不保存它，下次需要重新推导什么？当前文件列表或分支可以重新查询，更值得保留的是依赖不能升级的原因、已验证的修复路径，以及决定的适用条件。[Anthropic 记忆实验][anthropic-memory] 的 Pokémon 案例中，一个模型更偏向保存策略与规则，另一个大量记录屏幕可见状态。但对比换了模型且各只有一次运行，不能把文件更少解释为成绩更好的原因。原文也报告，“只记录失败”的限制削弱了较强模型的记忆增益，因此不要排除有用的成功经验。
 
 第一版可从明确的“记住这个”和用户纠正开始。验证写入、纠错和召回后，再加入自动会话提炼：
 
@@ -115,8 +115,6 @@ flowchart TB
 
 版本、来源和替代关系可参考 agentmemory 的 `Memory`，范围和撤回则参考 gbrain。[Memory 定义][a-types]、[记忆边界][g-boundary]
 
-还要区分记录是否生效与结论是否经过验证。[Anthropic 记忆实验][anthropic-memory] 的 CL-Bench 案例区分了保存猜测与检验假设后保存规则。据此建议为经验规则记录“假设”或“已验证”、验证方法及适用版本。一次失败不能直接变成所有项目的禁令；未经验证的假设可以保留，但召回时仍须标明。
-
 ## 4. 把写入、修订和撤回做成明确操作
 
 建议先提供四个操作：
@@ -134,7 +132,7 @@ SQLite 方案可以按以下顺序保存记忆：
 
 这是对 gbrain 的持久请求与修订检查、agentmemory 的 capture inbox 的简化应用。先保存正文，可以让明确的事实写入不受 embedding 服务故障影响。memU 当前采用先 embedding 再写入的顺序，选择这种方式就需要接受模型服务失败时无法完成写入的限制。[gbrain 写入边界][g-record]、[capture inbox][a-capture]、[memU 提交][m-agentic]
 
-[Anthropic 记忆实验][anthropic-memory] 图 14 的合同任务还暴露了并发写入问题：多个智能体概括并编辑共享条款表，发生遗漏和相互覆盖。改为强调条款重要性、每份合同由一个智能体写独立页面并逐字摘录后，满足评分标准的比例从约 72% 升至 100%。指令、写入方式和摘录方式同时改变，不能把提升单独归因于拆文件。对文件方案的建议是先拆开写入对象、再汇总索引；必须共享修改时，检查版本。
+[Anthropic 记忆实验][anthropic-memory] 的合同任务中，多个智能体概括并修改共享条款表，发生遗漏和相互覆盖。调整指令后，每份合同由一个智能体负责独立页面并逐字摘录。这里同时改变了任务指令、并发写入和摘录方式，不能把结果单独归因于拆文件。对文件方案的建议是先拆开写入对象、再汇总索引；必须共享修改时，检查版本。实验设置见 [[raw/sources/anthropic-components-of-agent-memory#Dreaming can focus memory on a specific goal|合同任务记录]]。
 
 “忘记”需要区分两种结果：
 
@@ -159,8 +157,6 @@ SQLite 方案可以按以下顺序保存记忆：
 
 不要把 top-k 当作上下文预算：五篇长文也可能挤占当前任务。
 
-[Anthropic 记忆实验][anthropic-memory] 图 10 在约 350,000 个文件、420M token 的内部资料上，用 25 道问题评估 wiki。仅搜索满足评分标准的比例为 53%；wiki 加搜索随着构建会话从 2 次增加到 128 次，由 54% 升至 61%，每题约节省 20,000 token。这里的 53% 到 61% 是该评测下不同使用方式的比较，不是通用正确率；前台节省也未扣除 wiki 构建和维护成本。因此建议让 wiki 帮助定位知识和跨文档关系，保留搜索与来源回查，不把它当作原始资料的替代品。
-
 ## 6. 后台维护与前台工作分开
 
 按是否影响当前交互分配工作：
@@ -169,8 +165,6 @@ SQLite 方案可以按以下顺序保存记忆：
 - **后台**：整理重复内容、提炼技能、处理过期记录和更新索引。
 
 后台写入也要检查版本，避免覆盖前台刚接受的纠正。文件方案可以参考 Letta 的独立 worktree，数据库方案可以使用待处理任务和修订号。[Letta dreaming](https://docs.letta.com/configuration/memory)、[gbrain 写入边界][g-record]
-
-后台整理还应回查证据。[Anthropic 记忆实验][anthropic-memory] 的 Mt. Moon 案例通过对照会话日志，纠正了 PokéCenter 方位笔记，随后该运行抵达 Cerulean City。这是具体案例，不保证所有错误都能自动修正。建议先核对日志是否支持结论，再修改笔记，避免只对旧摘要继续总结。日志本身也可能包含模型误判或过时工具结果，不能直接当作事实。整理频率还应考虑信息变化和访问频率，不必每次扫描全部记忆；成本与收益仍需测量。
 
 外部网页或工具输出中的指令只作为待分析内容。系统不应因为将它们保存为记忆，就允许其修改权限或工具配置。自动写入范围与业务操作权限应分别控制。[gbrain 记忆边界][g-boundary]
 
@@ -193,8 +187,6 @@ SQLite 方案可以按以下顺序保存记忆：
 - 使用成本：占用多少上下文 token，延迟和模型调用成本是多少。
 
 先做几十条贴近实际工作的案例，再决定是否增加图关系、自动技能提炼或复杂重排。agentmemory 的评测也说明，单个 recall 数字不能代替整条流程的验证。[评测方法][a-eval]
-
-验证记忆收益时，建议固定模型、工具和预算，分别比较无跨会话记忆、只有原始记录搜索、搜索加 wiki，以及再加入后台整理。除上述指标外，记录重复错误、过时记忆和后台维护成本，并尽量重复运行。[Anthropic 记忆实验][anthropic-memory] 的 CL-Bench 同模型无状态与有记忆对比，更接近检验该任务的记忆收益；跨模型的 Pokémon 单次展示不能替代这种控制实验，也不能证明少记文件会更强。
 
 对当前文件优先 Wiki，可以沿用正文、frontmatter、来源指针和 PR，先补充按需检索与来源回查。已有结构已经覆盖内容维护，不必同时接入四套记忆系统。相关设计目标见 [[wiki/syntheses/ai/auditable-local-agent-memory-architecture|可审计的本地 Agent 记忆架构]]。
 
@@ -232,6 +224,7 @@ flowchart LR
 
 ## 来源与相关页面
 
+- [[wiki/topics/ai/agent-memory|Agent Memory]]
 - [[raw/sources/gbrain]]
 - [[raw/sources/memu]]
 - [[raw/sources/agentmemory]]

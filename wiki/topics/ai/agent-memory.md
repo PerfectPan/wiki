@@ -26,15 +26,19 @@ Agent Memory 是智能体将过去任务中的信息保存在当前会话之外�
 
 单会话上下文学习只利用当前输入中的信息，不保证会话结束后仍能使用。摘要或压缩可以减少文字，但若没有跨会话保存与取回，就还没有形成这里所说的记忆。反过来，记忆也不一定经过压缩，能够检索的原始日志就可以构成基础。后一点见 [[raw/sources/anthropic-components-of-agent-memory#Thinking backward, looking forward|文章结尾讨论]]；上述边界是本文为解释外部记忆采用的定义。
 
-## 保存的是对未来有用性的判断
+## 优先记住推导结果，而不是能重新查到的状态
 
-一条记忆被写下，是因为预期未来还会遇到相关问题。价值不取决于保存了多少文字，而取决于它是否让后续任务少做重复推导、少犯已知错误。这个理解对应文章的 [[raw/sources/anthropic-components-of-agent-memory#Memory can be a prediction about what the future will need|记忆作为预测]]。
+**优先保存已经推导、验证过的规则、失败原因和决策依据，而不是下一轮就能重新读取的状态。**
 
-容易重新读取的状态与难以重新推导的知识，保存价值不同。当前文件列表可以重新扫描，依赖不能升级的原因却可能需要重做调查。项目决定的理由、已验证的操作规则、失败的复现条件和成功路径，都可能值得保留。任务进度也有交接价值，但临时状态不因此成为长期规则。这些是本文据此作出的判断，不是实验已经验证的通用筛选公式。
+容易重新读取的状态与难以重新推导的知识，保存价值不同。当前文件列表可以重新扫描，依赖不能升级的原因却可能需要重做调查。放到编程任务里，少记“刚改了哪些文件”，多记“为什么必须这样改，以及怎样验证”。项目决定的理由、已验证的操作规则、失败的复现条件和成功路径，都可能值得保留。任务进度也有交接价值，但临时状态不因此成为长期规则。这些是本文据此作出的判断，不是实验已经验证的通用筛选公式。
 
 文章的 Pokémon 案例中，一个模型大量保存屏幕可见状态，另一个更偏向保存目标、策略和规则。这说明“记什么”值得关注，但两者使用不同模型，且各只展示一次运行，不能推断少记文件导致成绩更好。见 [[raw/sources/anthropic-components-of-agent-memory#Claude has learned to judge salience|记忆选择案例]]。
 
 筛选也不能简单限制为“只记录失败”。文章在较强模型上观察到，这条限制反而削弱了记忆增益，成功经验同样可能有用。见 [[raw/sources/anthropic-components-of-agent-memory#Steering Claude to write memory|记忆指令实验]]。
+
+## 记忆是对未来有用性的预测
+
+一条记忆被写下，是因为预期未来还会遇到相关问题。价值不取决于保存了多少文字，而取决于它是否让后续任务少做重复推导、少犯已知错误。这个理解对应文章的 [[raw/sources/anthropic-components-of-agent-memory#Memory can be a prediction about what the future will need|记忆作为预测]]。
 
 预测可能出错。保存下来的推测不自动成为事实，过去正确的规则也可能因版本或环境变化而过时。CL-Bench 案例区分了留下未经检验的猜测与检验假设后保存规则。因此，本文认为一条经验除了结论，还需要能辨认其来源、验证状态和适用范围，避免把一次观察扩展成所有场景的规则。依据见 [[raw/sources/anthropic-components-of-agent-memory#Memory can be a prediction about what the future will need|假设检验案例]]及 [[raw/sources/anthropic-components-of-agent-memory#Thinking backward, looking forward|过时与维护问题]]。
 

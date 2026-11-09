@@ -4,8 +4,8 @@ description: 从多个记忆系统的实现中总结采集、存储、检索、�
 type: synthesis
 category: ai
 created: 2026-10-07
-updated: 2026-10-07
-timestamp: 2026-10-07
+updated: 2026-11-08
+timestamp: 2026-11-08
 tags:
   - agent
   - memory
@@ -16,6 +16,9 @@ source_refs:
   - raw/sources/memu.md
   - raw/sources/agentmemory.md
   - raw/sources/letta-context-repositories.md
+  - raw/sources/anthropic-components-of-agent-memory.md
+  - wiki/topics/ai/agent-memory.md
+  - https://www.anthropic.com/research/components-of-agent-memory
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
 resource:
@@ -23,6 +26,9 @@ resource:
   - raw/sources/memu.md
   - raw/sources/agentmemory.md
   - raw/sources/letta-context-repositories.md
+  - raw/sources/anthropic-components-of-agent-memory.md
+  - wiki/topics/ai/agent-memory.md
+  - https://www.anthropic.com/research/components-of-agent-memory
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
 ---
@@ -39,7 +45,7 @@ Agent Memory 的核心是让事实可追溯、可纠正，并在需要时取回�
 
 在此基础上，再实现修订、撤回和自动提炼等维护操作。
 
-本文综合 gbrain、memU、agentmemory 的固定源码快照及 Letta MemFS 文档，资料日期为 2026-10-07。机制依据见文中链接与 raw 记录。下面的字段、接口和组合方式是设计建议，尚未实现或运行验证。产品取舍见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]。
+本文综合 gbrain、memU、agentmemory 的固定源码快照及 Letta MemFS 文档，资料日期为 2026-10-07。机制依据见文中链接与 raw 记录。下面的字段、接口和组合方式是设计建议，尚未实现或运行验证。2026-11-08 补入合同任务的并发写入案例，未重新验证原有源码。Agent Memory 的定义、知识选择与实验边界见 [[wiki/topics/ai/agent-memory|Agent Memory]]；产品取舍见 [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]。
 
 ## 1. 先确定保存的对象
 
@@ -125,6 +131,8 @@ SQLite 方案可以按以下顺序保存记忆：
 3. 向量生成失败时重试待处理任务，保留已保存的正文。
 
 这是对 gbrain 的持久请求与修订检查、agentmemory 的 capture inbox 的简化应用。先保存正文，可以让明确的事实写入不受 embedding 服务故障影响。memU 当前采用先 embedding 再写入的顺序，选择这种方式就需要接受模型服务失败时无法完成写入的限制。[gbrain 写入边界][g-record]、[capture inbox][a-capture]、[memU 提交][m-agentic]
+
+[Anthropic 记忆实验][anthropic-memory] 的合同任务中，多个智能体概括并修改共享条款表，发生遗漏和相互覆盖。调整指令后，每份合同由一个智能体负责独立页面并逐字摘录。这里同时改变了任务指令、并发写入和摘录方式，不能把结果单独归因于拆文件。对文件方案的建议是先拆开写入对象、再汇总索引；必须共享修改时，检查版本。实验设置见 [[raw/sources/anthropic-components-of-agent-memory#Dreaming can focus memory on a specific goal|合同任务记录]]。
 
 “忘记”需要区分两种结果：
 
@@ -216,10 +224,13 @@ flowchart LR
 
 ## 来源与相关页面
 
+- [[wiki/topics/ai/agent-memory|Agent Memory]]
 - [[raw/sources/gbrain]]
 - [[raw/sources/memu]]
 - [[raw/sources/agentmemory]]
 - [[raw/sources/letta-context-repositories]]
+- [[raw/sources/anthropic-components-of-agent-memory|Anthropic 记忆实验阅读证据]]
+- [Anthropic 记忆实验][anthropic-memory]
 - [[wiki/comparisons/ai/agent-memory-approaches|Agent 记忆方案对比]]
 - [[wiki/syntheses/ai/auditable-local-agent-memory-architecture|可审计的本地 Agent 记忆架构]]
 - [[wiki/syntheses/ai/agent-proactive-context-management|Agent 主动上下文管理]]
@@ -236,3 +247,5 @@ flowchart LR
 [a-search]: https://github.com/rohitg00/agentmemory/blob/007a1a7fe8646a03d8652eb0712400cc6f0fcca3/src/functions/search.ts
 [a-context]: https://github.com/rohitg00/agentmemory/blob/007a1a7fe8646a03d8652eb0712400cc6f0fcca3/src/functions/context.ts
 [a-eval]: https://github.com/rohitg00/agentmemory/blob/007a1a7fe8646a03d8652eb0712400cc6f0fcca3/benchmark/LONGMEMEVAL.md
+
+[anthropic-memory]: https://www.anthropic.com/research/components-of-agent-memory

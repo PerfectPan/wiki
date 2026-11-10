@@ -4,8 +4,8 @@ description: Token、M/B 数量级、input/output/cache 分项，缓存保留时
 type: topic
 category: ai
 created: 2026-08-03
-updated: 2026-10-08
-timestamp: 2026-10-08
+updated: 2026-11-10
+timestamp: 2026-11-10
 tags:
   - llm
   - token
@@ -130,6 +130,7 @@ Opus 5.5（`P_in` = $4/M，`P_out` = $20/M）一次多 agent 任务的实算：
 
 ## 相关页面
 
+- [[claude-code-compact-and-idle-compaction]]：compact 请求在缓存冷热两种情况下的计费过程，以及 idle compaction 的触发条件与配置
 - [[kv-cache-vs-request-cache]]
 - [[model-usage-and-gotchas]]
 - [[code-agent]]

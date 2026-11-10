@@ -1,6 +1,6 @@
 ---
 title: Token 与计费统计标准
-description: Token、M/B 数量级、input/output/cache 分项，缓存保留时间与计价，以及 ccusage、Claude Code transcript 一类本地统计该怎么读。
+description: Token、M/B 数量级、input/output/cache 分项，缓存保留时间与计价，compact 与 idle compaction 的成本机制，以及 ccusage、Claude Code transcript 一类本地统计该怎么读。
 type: topic
 category: ai
 created: 2026-08-03
@@ -12,14 +12,27 @@ tags:
   - billing
   - cache
   - ccusage
+  - compaction
 source_refs:
   - raw/sources/2026-08-03-llm-101-conversation.md
   - raw/sources/claude-code-multi-agent-token-audit.md
+  - raw/sources/claude-code-prompt-caching-docs.md
+  - raw/sources/claude-code-model-config-docs.md
+  - raw/sources/claude-code-settings-reference.md
+  - raw/sources/claude-code-idle-compaction.md
+  - raw/sources/claude-code-autocompact-settings.md
+  - raw/sources/claude-prompt-caching-pricing.md
   - https://code.claude.com/docs/en/prompt-caching
   - https://platform.claude.com/docs/en/about-claude/pricing
 resource:
   - raw/sources/2026-08-03-llm-101-conversation.md
   - raw/sources/claude-code-multi-agent-token-audit.md
+  - raw/sources/claude-code-prompt-caching-docs.md
+  - raw/sources/claude-code-model-config-docs.md
+  - raw/sources/claude-code-settings-reference.md
+  - raw/sources/claude-code-idle-compaction.md
+  - raw/sources/claude-code-autocompact-settings.md
+  - raw/sources/claude-prompt-caching-pricing.md
   - https://code.claude.com/docs/en/prompt-caching
   - https://platform.claude.com/docs/en/about-claude/pricing
 ---
@@ -117,6 +130,50 @@ Opus 5.5（`P_in` = $4/M，`P_out` = $20/M）一次多 agent 任务的实算：
 - Claude Code 的默认值：主会话在订阅额度内用 1 小时，用 usage credits、API key 或云厂商时用 5 分钟；subagent、workflow、teammate、fork 一律 5 分钟。可用 `promptCacheTtl`、`subagentPromptCacheTtl` 或 subagent frontmatter 的 `experimental.cacheTtl` 修改，详见 [官方文档](https://code.claude.com/docs/en/prompt-caching)。
 - 每次响应的 `usage.cache_creation` 分 `ephemeral_5m_input_tokens` 和 `ephemeral_1h_input_tokens` 两档，用来确认一次请求实际用了哪个 TTL。
 
+### compact 的成本：它就是一轮普通请求
+
+`/compact` 没有独立计费通道。Claude Code 发一个单独请求，重发 system prompt、工具定义和整段历史，末尾加摘要指令，再用输出的摘要替换历史。请求前缀分三层（system prompt、项目上下文、对话历史），compact 只让对话历史层失效，前两层继续命中缓存。
+
+- **缓存热时 compact**：长历史走缓存读取价（输入价的 0.05–0.1 倍），花费主要是几千 token 的摘要输出，成本远低于上下文体量。
+- **缓存过期后 compact**（典型场景是恢复旧会话）：整段历史按未缓存输入全价处理并重建缓存，官方文档称这是 compact 最贵的情形。
+- compact 本身不属于主对话的 TTL 桶：compaction、subagent、workflow、会话标题等请求默认都是 5 分钟 TTL。
+- 相邻两个命令的缓存语义不同：`/recap` 只把摘要作为命令输出追加，不替换历史，缓存前缀不变；`/rewind` 把对话截断回更早的轮次，剩余历史正是当时建缓存的前缀，下一轮直接命中旧缓存。想放弃一条探索路径时优先用 `/rewind`，不产生新摘要。
+
+### idle compaction：在缓存过期前自动压缩
+
+闲置压缩（idle compaction，v2.1.283 上线）把「离开前趁缓存热手动 compact」产品化了：1 小时 TTL 的会话在缓存过期前几分钟自动压缩，用户回来时全价重读的对象从长历史换成短摘要。本质是用一轮「缓存读取 + 摘要输出」的便宜请求，对冲缓存过期后那轮「长历史全价重读」的昂贵请求。代价是摘要有损：早期只提过一次的约束、被否决的方案、精确报错和文件内容可能丢失。
+
+触发条件必须同时满足：
+
+| 条件 | 默认值 | 调整方式 |
+| --- | --- | --- |
+| 会话使用 1 小时 TTL 缓存 | 订阅额度内主会话默认是；API key、Bedrock、Vertex、Foundry 默认 5 分钟，永不触发 | `promptCacheTtl`、`CLAUDE_CODE_PROMPT_CACHE_TTL` |
+| 对话大小 ≥ 200K token | 200,000 | `CLAUDE_CODE_IDLE_COMPACT_MIN_TOKENS`，低于 100K 的值抬到 100K |
+| 闲置约 54 分钟（TTL 的 90%） | 远程配置，区间 50%–95% | 本地不可调 |
+| auto-compaction 总开关开着、缓存仍热、无在途请求、未接近用量上限 | — | 见下节 |
+
+v2.1.300 另加 compact-on-return 模式：闲置时后台预写摘要，用户回来发下一条消息时才套用（依赖 `precomputeCompactionEnabled`）；`"idleCompaction": false` 同时关掉两种模式。`"idleCompaction": true` 不能强制开启，功能由 Anthropic 远程开关控制，`true` 只是不阻止。
+
+### 自动压缩的三层控制
+
+idle compaction 挂在自动压缩体系下面，开关和阈值分三层，不要混调：
+
+1. **总开关**：`"autoCompactEnabled": false` 或 `DISABLE_AUTO_COMPACT=1` 关闭所有自动压缩（接近窗口上限的常规压缩和 idle compaction 一起关），手动 `/compact` 仍可用；`DISABLE_COMPACT=1` 更彻底，连手动压缩也禁用。
+2. **总阈值 `autoCompactWindow`**：上下文攒到多少 token 才压缩，范围 100K–1M，超过模型窗口的值截到窗口大小。不设置时 1M 窗口模型约 967K 才压缩，200K 窗口模型在 200K 边界压缩。idle compaction 不看这个值，只用自己的 200K 门槛。
+3. **闲置开关 `idleCompaction`**：只管闲置压缩，关掉不影响窗口上限保护。
+
+同一个 `autoCompactWindow` 有五个设置入口，优先级和单位不同：
+
+| 设置方式 | 单位写法 | 作用范围 | 优先级 |
+| --- | --- | --- | --- |
+| 环境变量 `CLAUDE_CODE_AUTO_COMPACT_WINDOW=200000` | 纯整数；写 `200` 就是 200 token，写 `500k` 会被抬到 100K | 主会话和 subagent | 最高 |
+| 启动参数 `claude --autocompact 500k` | 支持 `k` 后缀 | 仅本次启动 | 次之，不被 managed settings 抢占 |
+| `/autocompact 500k` 交互命令 | 支持 `k`；裸数字 `500` 按 500K 解释 | 当前模型，存入 `modelSettings`，后续会话生效；`/autocompact auto` 恢复默认 | 再次之 |
+| settings.json `"autoCompactWindow": 500000` | JSON 整数 | 所有模型主会话 | 同文件内被模型专属值覆盖 |
+| subagent frontmatter `autoCompactWindow: 200000`（v2.1.296+） | 纯整数，`500k` 格式直接被忽略 | 单个 subagent，必须小于继承值才生效 | 环境变量存在时被忽略 |
+
+旧变量 `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=70` 按窗口百分比生效，只能调低不能调高，主会话和 subagent 都适用。注意 statusLine 的 `used_percentage` 始终按模型完整窗口计算，调小 autoCompactWindow 后压缩触发时显示的百分比会偏低，不能拿它判断压缩时机。
+
 ### 从 Claude Code transcript 统计
 
 - 主会话在 `~/.claude/projects/<项目>/<会话 id>.jsonl`，subagent 在同名目录下的 `subagents/agent-*.jsonl`，每条 assistant 记录带 `message.usage`。
@@ -130,7 +187,6 @@ Opus 5.5（`P_in` = $4/M，`P_out` = $20/M）一次多 agent 任务的实算：
 
 ## 相关页面
 
-- [[claude-code-compact-and-idle-compaction]]：compact 请求在缓存冷热两种情况下的计费过程，以及 idle compaction 的触发条件与配置
 - [[kv-cache-vs-request-cache]]
 - [[model-usage-and-gotchas]]
 - [[code-agent]]
@@ -141,5 +197,10 @@ Opus 5.5（`P_in` = $4/M，`P_out` = $20/M）一次多 agent 任务的实算：
 
 - `raw/sources/2026-08-03-llm-101-conversation.md`
 - `raw/sources/claude-code-multi-agent-token-audit.md`（多 agent 任务的账单拆分与 transcript 统计）
-- [How Claude Code uses prompt caching](https://code.claude.com/docs/en/prompt-caching)
+- `raw/sources/claude-code-prompt-caching-docs.md`（[How Claude Code uses prompt caching](https://code.claude.com/docs/en/prompt-caching)：compact 请求结构、缓存分层、TTL 桶）
+- `raw/sources/claude-code-model-config-docs.md`（[Model configuration](https://code.claude.com/docs/en/model-config)：auto-compact window 的设置入口、优先级与默认阈值）
+- `raw/sources/claude-code-settings-reference.md`（[All settings](https://code.claude.com/docs/en/settings-reference)：`autoCompactEnabled`、`autoCompactWindow`、`idleCompaction` 的定义）
+- `raw/sources/claude-code-idle-compaction.md`（[idle compaction 指南](https://www.turboai.dev/blog/claude-code-idle-compaction-guide)：触发条件表与版本时间线）
+- `raw/sources/claude-code-autocompact-settings.md`（[Zenn：自動コンパクト設定整理](https://zenn.dev/zozotech/articles/1a26d1775c06f7)：设置入口的单位差异与实测）
+- `raw/sources/claude-prompt-caching-pricing.md`（[Respan：缓存定价与 TTL](https://www.respan.ai/articles/claude-prompt-caching)）
 - [Claude 价格](https://platform.claude.com/docs/en/about-claude/pricing)

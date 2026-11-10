@@ -243,6 +243,7 @@
   - [[wiki/syntheses/ai/sandboxed-agent-workflows|动态工作流：用沙箱脚本编排多 Agent]]
   - [[wiki/syntheses/ai/agent-native-system-interface-design|Agent Native 系统接口设计]]
   - [[wiki/syntheses/ai/claude-code-quality-regression-lessons|Claude Code 质量退化事故的产品与工程教训]]
+  - [[wiki/syntheses/ai/claude-code-compact-and-idle-compaction|Claude Code compact 与 idle compaction 的成本机制]]
   - [[wiki/syntheses/ai/claude-5-context-engineering|Claude 5 时代的上下文工程]]
   - [[wiki/syntheses/ai/coding-agent-shell-git-permissions|Coding Agent Shell 与 Git 权限边界]]
   - [[wiki/syntheses/ai/llm-101|大模型 101]]

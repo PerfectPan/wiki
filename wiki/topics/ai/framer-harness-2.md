@@ -60,37 +60,43 @@ Framer Harness 2 是 Framer 设计文档 Agent 的第二代运行环境，作者
 
 ```mermaid
 %%{init: {'theme':'base','themeVariables': {
-  'actorBkg':'#f5efe6',
-  'actorBorder':'#9a9080',
-  'actorTextColor':'#1f2933',
-  'signalColor':'#6b7280',
-  'signalTextColor':'#1f2933',
-  'labelBoxBkgColor':'#eef3f7',
-  'labelBoxBorderColor':'#6a8aaa',
-  'labelTextColor':'#1f2933',
-  'noteBkgColor':'#fff6d8',
-  'noteBorderColor':'#c4a35a',
-  'fontFamily':'ui-sans-serif,system-ui,sans-serif'
-}}}%%
+  'actorLineColor':'#e8ecf1',
+  'signalColor':'#475569',
+  'signalTextColor':'#334155',
+  'noteBkgColor':'#f8fafc',
+  'noteBorderColor':'#d6dbe2',
+  'noteTextColor':'#475569',
+  'actorFontSize':'14px',
+  'noteFontSize':'13px',
+  'fontSize':'14px',
+  'fontFamily':'system-ui,sans-serif'
+}, 'sequence': {'mirrorActors': false, 'messageMargin': 42, 'diagramMarginY': 20, 'bottomMarginAdj': 16},
+'themeCSS': '.actor{fill:#ffffff !important;stroke:#d6dbe2 !important;stroke-width:1px;rx:6px;filter:none !important} .actor-line{stroke:#e8ecf1 !important} text.actor-box{fill:#0f172a !important;font-weight:600} .messageLine1{stroke-dasharray:5 3;stroke-width:1.25} .note{fill:#f8fafc !important;stroke:#d6dbe2 !important;rx:6px} rect.note[data-look=neo]{filter:none !important} .noteText{font-size:13px !important;fill:#475569 !important} rect.rect{stroke:#fecaca;stroke-width:1px;rx:6px}'}}%%
 sequenceDiagram
     participant M as 模型流式输出
     participant P as 解析器
     participant W as Web Worker
     participant D as Worker 内文档镜像
     M->>P: 持续到达的 token
-    P->>P: 识别完整语句，切成 cell
+    Note over P: 识别完整语句，切成 cell
     P->>W: 完整 cell 按序派发
     W->>D: 同步读写文档树
     D-->>W: 执行结果
-    rect rgba(230,208,192,0.45)
+    rect rgba(217,45,32,0.08)
     W-->>P: 终止性错误或提前 return
     P-->>M: 取消后续 token 生成
     end
 ```
 
-Mermaid v12 的 sequenceDiagram 已移除 `style` / `classDef` 单节点语法。这里用 `init` 的 `themeVariables` 统一四个 actor 的中性配色，再用 `rect` 背景只高亮最后两条取消消息；`rect` 颜色只接受 rgb / rgba / hsl，不支持 hex。
+这张图的配色在 Mermaid v12 上踩过几个实际的坑，维护时注意：
 
-图中每个环节都来自文章的明确描述：cell 的切分与派发、Worker 内执行、提前终止后取消生成；取消时已经应用到文档的编辑会保留。
+- v12 的 sequenceDiagram 已移除 `style` / `classDef` 单节点语法，且 neo look 会用内置粉彩数组覆盖 `actorBkg`，在 init 里覆盖调色板数组无效；统一 actor 配色只能靠 `themeCSS` 里的 `!important` 规则。
+- init 指令是宽松 JSON，值里不能出现双引号（如带引号的字体名），否则整个指令静默回退默认样式；字体栈用 `system-ui,sans-serif` 这类无引号写法。
+- actor 和 note 的投影是 mermaid 自带 CSS 滤镜，需要分别用 `.actor{filter:none}` 和 `rect.note[data-look=neo]{filter:none}` 覆盖。
+- `mirrorActors` 等时序图配置放在 init 顶层的 `sequence` 字段下，不是 `config.sequence`。
+- `rect` 内联颜色只接受 rgb / rgba / hsl，不支持 hex；图中仅保留红色一处强调色，标记「取消生成」这条异常路径。
+
+图中每个环节都来自文章的明确描述：cell 的切分与派发、Worker 内执行、提前终止后取消生成；取消时已经应用到的文档编辑会保留。
 
 ### 提前取消与可操作错误
 

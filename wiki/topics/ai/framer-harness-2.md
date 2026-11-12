@@ -59,27 +59,36 @@ Framer Harness 2 是 Framer 设计文档 Agent 的第二代运行环境，作者
 同一次解析还会把 `// @step Building buttons` 这样的注释转成 `emit("Building buttons")` 调用，在长程序执行过程中给用户推送进度。
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables': {
+  'actorBkg':'#f5efe6',
+  'actorBorder':'#9a9080',
+  'actorTextColor':'#1f2933',
+  'signalColor':'#6b7280',
+  'signalTextColor':'#1f2933',
+  'labelBoxBkgColor':'#eef3f7',
+  'labelBoxBorderColor':'#6a8aaa',
+  'labelTextColor':'#1f2933',
+  'noteBkgColor':'#fff6d8',
+  'noteBorderColor':'#c4a35a',
+  'fontFamily':'ui-sans-serif,system-ui,sans-serif'
+}}}%%
 sequenceDiagram
-    box rgba(217,230,240,0.55) 生成
     participant M as 模型流式输出
-    end
-    box rgba(216,204,232,0.55) 解析
     participant P as 解析器
-    end
-    box rgba(215,232,210,0.55) 执行
     participant W as Web Worker
     participant D as Worker 内文档镜像
-    end
     M->>P: 持续到达的 token
     P->>P: 识别完整语句，切成 cell
     P->>W: 完整 cell 按序派发
     W->>D: 同步读写文档树
     D-->>W: 执行结果
+    rect rgba(230,208,192,0.45)
     W-->>P: 终止性错误或提前 return
     P-->>M: 取消后续 token 生成
+    end
 ```
 
-Mermaid v12 的 sequenceDiagram 不支持 `style` / `classDef` 内联语法，分角色着色只能用 `box` 分组背景色（只接受 rgb / rgba / hsl，不支持 hex），所以按生成、解析、执行三个阶段分组。
+Mermaid v12 的 sequenceDiagram 已移除 `style` / `classDef` 单节点语法。这里用 `init` 的 `themeVariables` 统一四个 actor 的中性配色，再用 `rect` 背景只高亮最后两条取消消息；`rect` 颜色只接受 rgb / rgba / hsl，不支持 hex。
 
 图中每个环节都来自文章的明确描述：cell 的切分与派发、Worker 内执行、提前终止后取消生成；取消时已经应用到文档的编辑会保留。
 

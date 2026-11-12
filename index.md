@@ -79,6 +79,7 @@
   - [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]]
   - [[wiki/topics/ai/agent-client-protocol|Agent Client Protocol]]
   - [[wiki/topics/ai/agent-harness|Agent Harness]]
+  - [[wiki/topics/ai/framer-harness-2|Framer Harness 2]]
   - [[wiki/topics/ai/rivet-agentos|Rivet agentOS：执行环境与持久会话]]
   - [[wiki/topics/ai/cloudflare-computer|Cloudflare Computer：Durable Object 上的 Agent 工作区]]
   - [[wiki/topics/ai/layerfs|LayerFS：给 Agent 用的分层文件系统]]

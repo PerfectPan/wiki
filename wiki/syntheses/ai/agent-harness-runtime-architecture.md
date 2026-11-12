@@ -4,8 +4,8 @@ description: 分析现代 Agent Harness 架构在落地过程中面临的三个�
 type: synthesis
 category: ai
 created: 2026-10-01
-updated: 2026-10-04
-timestamp: 2026-10-04
+updated: 2026-11-12
+timestamp: 2026-11-12
 tags:
   - agent
   - harness
@@ -27,6 +27,8 @@ source_refs:
   - https://tetral.ai/blog/the-next-scaling-problem/
   - raw/sources/2026-10-02-pi-durable.md
   - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
+  - raw/sources/framer-harness-2.md
+  - https://www.framer.com/blog/harness-2/
 resource:
   - raw/sources/2026-09-29-you-said-no-mcp.md
   - https://earendil.com/posts/you-said-no-mcp/
@@ -42,6 +44,8 @@ resource:
   - https://tetral.ai/blog/the-next-scaling-problem/
   - raw/sources/2026-10-02-pi-durable.md
   - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
+  - raw/sources/framer-harness-2.md
+  - https://www.framer.com/blog/harness-2/
 ---
 
 # Agent Harness 运行时架构与演进
@@ -80,6 +84,19 @@ Agent Harness 是连接基础模型与外部运行环境的软件层（包含 Pr
 执行模型生成脚本的沙箱与底层操作系统环境有明确的分工：
 - **轻量受控沙箱**：通常采用独立的 JavaScript 引擎（如 V8 Isolate 或 QuickJS/WASM）。该环境能调用注册的内部工具接口，但不提供宿主机网络、通用文件系统或子进程权限，防止不可信代码破坏系统。
 - **高影响动作的确认边界**：数据读取、过滤和聚合适合交给沙箱脚本自动完成；而文件写入、Git 提交、权限变更、资金操作等最终修改动作，仍必须由模型显式发起单独的工具调用，保留人工确认与审计记录。
+
+### 4. 流式执行：代码边生成边运行
+
+前面 Pi Codemode 与 OpenAI PTC 的脚本都是**先写完再跑**：模型把整段程序生成完，harness 才开始执行。[[wiki/topics/ai/framer-harness-2|Framer Harness 2]] 改成**边写边跑**：模型还在逐行写后续代码，已经写完整的语句就被切出来送进 Web Worker 运行，写和跑同时进行。这解决了长程序的两个问题：用户要等整个程序生成完才看到首个进展（反馈延迟）；程序在几行后提前 return 或报错时，后续代码的生成时间和输出 token 已经浪费。
+
+具体机制：
+
+- **按语句切 cell，写完整一句就执行一句**：解析器在 token 流中识别完整的 JavaScript 语句，分组为 cell 后送入专用 Web Worker，按 classic script 顺序执行，cell 之间保留变量绑定，顶层 `await` 做转译处理。文档编辑等操作在模型写后续代码时就开始，画布的首次更新不必等程序结束。
+- **提前取消省下输出 token**：harness 在提示词中要求模型先检查前置条件；终止性错误或提前 return 触发后，直接取消模型的后续生成，已经应用的文档编辑保留。前面几种方案节省的主要是进入上下文的输入 token，流式取消把节省对象扩展到了尚未生成的输出 token。其成立前提是执行速度快于生成速度，否则发现停止时代价已经付出。
+- **执行环境内的同步数据镜像**：Framer 在 Web Worker 中保留文档树的内存副本，程序同步读写，消除 Worker 与文档之间的逐次往返和大量 `await`，这也是取消能快过生成的速度前提。代价是执行环境持有完整数据副本，并发更新时如何与权威数据同步需要另行设计。
+- **容错写入让长程序不中断**：合法属性正常应用、越界值夹到合法区间、不支持的属性跳过，警告和错误累积到程序结束统一返回，可恢复错误不会终止整个程序；patch 还支持点路径与稀疏数组，减少模型写展开语法的输出 token。
+
+这套机制的适用条件是操作对象为结构化的本地数据（Framer 的文档树），且执行环境能持有它的同步副本。对外部系统的写操作仍要面对限制二中的副作用与幂等问题，流式执行本身不解决这一层。
 
 ---
 
@@ -185,6 +202,7 @@ flowchart TB
 ## 相关页面
 
 - [[wiki/topics/ai/agent-harness|Agent Harness]]
+- [[wiki/topics/ai/framer-harness-2|Framer Harness 2]]
 - [[wiki/topics/ai/tetral|Tetral]]
 - [[wiki/topics/ai/pi-durable|Pi Durable]]
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]

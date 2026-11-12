@@ -4,8 +4,8 @@ description: Agent harness 是为 AI 模型提供运行环境的软件层，由 
 type: topic
 category: ai
 created: 2026-08-20
-updated: 2026-10-01
-timestamp: 2026-10-01
+updated: 2026-11-12
+timestamp: 2026-11-12
 tags:
   - agent
   - harness
@@ -13,9 +13,13 @@ tags:
 source_refs:
   - raw/sources/2026-08-20-what-is-a-harness.md
   - https://earendil.com/posts/what-is-a-harness/
+  - raw/sources/framer-harness-2.md
+  - https://www.framer.com/blog/harness-2/
 resource:
   - raw/sources/2026-08-20-what-is-a-harness.md
   - https://earendil.com/posts/what-is-a-harness/
+  - raw/sources/framer-harness-2.md
+  - https://www.framer.com/blog/harness-2/
 ---
 
 # Agent Harness
@@ -59,6 +63,7 @@ Harness 是用户自主权的载体：
 随着底层模型规划与执行能力的提升，Harness 的演化重点正在从「管理单步执行」转向「支撑多任务协同」：
 - **精简单步干预**：早期为了防止模型遗忘步骤而设计的单步记录工具（如强制更新 `TodoWrite` 任务列表），随着新模型长程规划能力的增强而逐步停用；框架转而专注于提供支持多 Agent 协同和依赖关系的任务系统。
 - **由代码完成中间数据处理**：组合调用多个工具时，不再把每次调用的完整原始数据都注入模型上下文，而是让模型生成一段脚本在沙箱中批量执行过滤与聚合，仅将最终结果返回给上下文。
+- **生成与执行在时间上重叠**：长程序不必等全部生成完再执行。Framer Harness 2 把流式到达的代码按完整语句切成 cell，送 Web Worker 随流执行；遇到提前 return 或终止性错误时取消后续 token 生成，把节省范围从输入 token 扩到输出 token，同时保留已应用的修改。详见 [[wiki/topics/ai/framer-harness-2|Framer Harness 2]]。
 - **状态存储与生态分化**：多 Agent 协作状态是依托本地文件系统还是云端托管会话，以及选用跨模型的中立 Harness 还是云厂商全家桶，正在成为两条平行的工程路线。
 
 具体维度的案例与技术细节见 [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]。
@@ -71,6 +76,7 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 
 - [[agent]]
 - [[code-agent]]
+- [[wiki/topics/ai/framer-harness-2|Framer Harness 2]]
 - [[wiki/topics/ai/tetral|Tetral]]
 - [[wiki/topics/ai/pi-durable|Pi Durable]]
 - [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]
@@ -82,3 +88,5 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 
 - `raw/sources/2026-08-20-what-is-a-harness.md`
 - https://earendil.com/posts/what-is-a-harness/
+- `raw/sources/framer-harness-2.md`
+- https://www.framer.com/blog/harness-2/

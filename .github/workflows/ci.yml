@@ -17,7 +17,8 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "24"
+          node-version-file: package.json
+          check-latest: true
 
       - name: PR metadata
         if: github.event_name == 'pull_request'

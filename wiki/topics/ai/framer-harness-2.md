@@ -24,7 +24,7 @@ resource:
 
 ## 摘要
 
-Framer Harness 2 是 Framer 设计文档 Agent 的第二代运行环境，作者 Adam Seckel，2026-11-02 发布。Framer 的设计文档本身是一棵树，等价于一份 AST，代码和 CMS 内容都从这棵树确定性生成。第一代 harness 让模型用 DSL 命令描述对树的写入；Harness 2 改为让模型直接编写 JavaScript 程序，并在程序还在流式生成时就开始执行：解析器把已到达的完整语句切成可执行 cell，送入专用 Web Worker 按序运行，画布在模型写完剩余代码之前就能看到首批修改。
+Framer Harness 2 是 Framer 设计文档 Agent 的第二代运行环境，作者 Adam Seckel，2026-11-02 发布。Framer 的设计文档本身是一棵树，等价于一份 AST，代码和 CMS 内容都从这棵树确定性生成。第一代 harness 让模型用 DSL 命令描述对树的写入；Harness 2 改为让模型直接编写 JavaScript 程序，并且边写边跑：模型还在生成后续代码时，写完整的语句就被解析器切成可执行 cell，送入专用 Web Worker 按序运行，画布在模型写完剩余代码之前就能看到首批修改。
 
 ## 背景：第一代 DSL harness 的三个限制
 
@@ -47,7 +47,9 @@ Framer Harness 2 是 Framer 设计文档 Agent 的第二代运行环境，作者
 
 ### cell 切分与 Web Worker 执行
 
-Harness 2 让生成与执行在时间上重叠：
+旧方式是**先写完再跑**：模型把整段程序生成完，harness 才拿到完整程序开始执行。Harness 2 改成**边写边跑**：模型还在逐行写后续代码，已经写完整的语句就立刻被 harness 切出来拿去运行，写代码和跑代码两件事同时进行。
+
+具体流程：
 
 1. 代码随 token 流到达，解析器识别出完整的 JavaScript 语句。
 2. 完整语句被分组为可执行的 cell，发送给专用 Web Worker。
@@ -58,10 +60,16 @@ Harness 2 让生成与执行在时间上重叠：
 
 ```mermaid
 sequenceDiagram
+    box rgba(217,230,240,0.55) 生成
     participant M as 模型流式输出
+    end
+    box rgba(216,204,232,0.55) 解析
     participant P as 解析器
+    end
+    box rgba(215,232,210,0.55) 执行
     participant W as Web Worker
     participant D as Worker 内文档镜像
+    end
     M->>P: 持续到达的 token
     P->>P: 识别完整语句，切成 cell
     P->>W: 完整 cell 按序派发
@@ -70,6 +78,8 @@ sequenceDiagram
     W-->>P: 终止性错误或提前 return
     P-->>M: 取消后续 token 生成
 ```
+
+Mermaid v12 的 sequenceDiagram 不支持 `style` / `classDef` 内联语法，分角色着色只能用 `box` 分组背景色（只接受 rgb / rgba / hsl，不支持 hex），所以按生成、解析、执行三个阶段分组。
 
 图中每个环节都来自文章的明确描述：cell 的切分与派发、Worker 内执行、提前终止后取消生成；取消时已经应用到文档的编辑会保留。
 

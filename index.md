@@ -73,6 +73,7 @@
   - [[wiki/topics/ai/botmux-team-federation|Botmux 团队联邦与身份鉴权]]
   - [[wiki/topics/ai/pi-generative-ui|pi-generative-ui：read_me 与 show_widget 工具设计]]
   - [[wiki/topics/ai/agent|Agent]]
+  - [[wiki/topics/ai/agent-execution-terms|Agent 执行术语：session、turn、run 与 step]]
   - [[wiki/topics/ai/agent-memory|Agent Memory]]
   - [[wiki/topics/ai/mirage|Mirage：用文件路径访问不同服务]]
   - [[wiki/topics/ai/ai-slop|AI Slop]]

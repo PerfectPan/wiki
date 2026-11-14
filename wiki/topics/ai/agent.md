@@ -4,8 +4,8 @@ description: Agent 的自主决策与工具调用循环，以及效果评测、�
 type: topic
 category: ai
 created: 2026-04-12
-updated: 2026-10-21
-timestamp: 2026-10-21
+updated: 2026-11-14
+timestamp: 2026-11-14
 tags:
   - agent
   - coding-agent
@@ -63,6 +63,7 @@ Agent 引入模型后，同一任务可能得到不同方案，因此需要对�
 
 ## 相关页面
 
+- [[wiki/topics/ai/agent-execution-terms|Agent 执行术语：session、turn、run 与 step]]
 - [[code-agent]]
 - [[workflow-vs-agent]]
 - [[agent-client-protocol]]

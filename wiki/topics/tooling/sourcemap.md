@@ -1,5 +1,6 @@
 ---
 title: SourceMap
+description: 提供 SourceMap 规范文档的参考入口。
 type: topic
 category: tooling
 created: 2026-04-12

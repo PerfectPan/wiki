@@ -1,5 +1,6 @@
 ---
 title: npm Trusted Publishers
+description: 介绍基于 OIDC 的 npm Trusted Publishers 发布机制，说明如何免除长期 npm token 并提升供应链可追溯性。
 type: topic
 category: tooling
 created: 2026-04-25

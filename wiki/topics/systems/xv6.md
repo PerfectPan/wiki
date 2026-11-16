@@ -1,5 +1,6 @@
 ---
 title: xv6
+description: 记录 xv6-riscv 的用户程序调试方法与 VSCode GDB 调试配置文件。
 type: topic
 category: systems
 created: 2026-04-12

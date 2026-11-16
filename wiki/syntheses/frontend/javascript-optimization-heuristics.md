@@ -1,5 +1,6 @@
 ---
 title: JavaScript 优化启发
+description: 归纳保持对象形状稳定、减少间接层与结合基准测试验证的通用 JavaScript 性能优化原则。
 type: synthesis
 category: frontend
 created: 2026-04-25

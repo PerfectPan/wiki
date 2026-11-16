@@ -1,5 +1,6 @@
 ---
 title: tapable
+description: 说明 Webpack tapable 事件订阅器的类型、动态函数生成机制及异步异常处理要点。
 type: topic
 category: tooling
 created: 2026-04-12

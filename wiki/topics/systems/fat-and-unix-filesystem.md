@@ -1,5 +1,6 @@
 ---
 title: FAT 和 UNIX 文件系统
+description: 对比按块访问的文件系统与内存随机访问模型，分析 FAT 链表的性能与可靠性特点。
 type: topic
 category: systems
 created: 2026-04-12

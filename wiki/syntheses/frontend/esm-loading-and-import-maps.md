@@ -1,5 +1,6 @@
 ---
 title: ES Module 加载与 Import Maps
+description: 拆解浏览器 ES Module 的加载阶段，说明 Import Maps、polyfill 方案与 modulepreload 各自解决的问题。
 type: synthesis
 category: frontend
 created: 2026-04-25

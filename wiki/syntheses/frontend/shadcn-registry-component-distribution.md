@@ -1,5 +1,6 @@
 ---
 title: shadcn Registry 组件分发模式
+description: 说明 shadcn registry 如何通过标准化 JSON 协议实现源码级 UI 组件与依赖的跨项目分发。
 type: synthesis
 category: frontend
 created: 2026-04-25

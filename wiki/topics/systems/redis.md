@@ -1,5 +1,6 @@
 ---
 title: Redis
+description: 记录 Redis 作为高性能缓存配合 MySQL 使用与缓存失效兜底的典型场景。
 type: topic
 category: systems
 created: 2026-04-12

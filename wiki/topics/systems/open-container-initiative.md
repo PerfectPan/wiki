@@ -1,5 +1,6 @@
 ---
 title: Open Container Initiative
+description: 介绍 OCI（Open Container Initiative）建立容器镜像与运行时通用标准的作用。
 type: topic
 category: systems
 created: 2026-04-25

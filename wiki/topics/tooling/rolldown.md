@@ -1,5 +1,6 @@
 ---
 title: Rolldown
+description: 记录 Rolldown 的调试日志、just 命令与单个 Cargo 测试用例的运行方式。
 type: topic
 category: tooling
 created: 2026-04-12

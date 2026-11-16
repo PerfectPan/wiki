@@ -1,5 +1,6 @@
 ---
 title: A fork() in the road
+description: 解释 fork 与 execve 的状态机语义、文件描述符继承、写时复制与并行搜索用法。
 type: topic
 category: systems
 created: 2026-04-12

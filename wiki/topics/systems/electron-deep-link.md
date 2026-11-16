@@ -1,5 +1,6 @@
 ---
 title: Electron Deep Link
+description: 说明 Electron Deep Link 在安装期与运行期跨平台注册并维护自定义协议的链路。
 type: topic
 category: systems
 created: 2026-04-25

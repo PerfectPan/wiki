@@ -1,5 +1,6 @@
 ---
 title: RSC 的协议与渲染心智模型
+description: 梳理 RSC 协议传输内容及其与 SSR、SSG 在 React 渲染链路中的分工与组合方式。
 type: synthesis
 category: frontend
 created: 2026-04-19

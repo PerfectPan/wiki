@@ -1,5 +1,6 @@
 ---
 title: 事件循环与 Microtask 检查点
+description: 阐明浏览器事件循环中 task 与 microtask 检查点的执行时机，解释 Promise 与 MutationObserver 的调度表现。
 type: synthesis
 category: frontend
 created: 2026-04-25

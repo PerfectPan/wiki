@@ -1,5 +1,6 @@
 ---
 title: Serverless 应用分层与隔离
+description: 解释 serverless 场景下从容器层进一步演进到容器内线程或进程级调度的资源与隔离权衡。
 type: synthesis
 category: systems
 created: 2026-04-25

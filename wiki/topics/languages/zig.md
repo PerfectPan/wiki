@@ -1,5 +1,6 @@
 ---
 title: Zig
+description: 整理 Zig 语言学习资源、指针与切片类型对照及基础语法笔记。
 type: topic
 category: languages
 created: 2026-04-12

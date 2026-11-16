@@ -1,5 +1,6 @@
 ---
 title: LLM 结构化输出的可靠性边界
+description: 说明 constrained decoding 如何保证格式合规，以及结构化输出工具无法保证事实准确性的能力边界。
 type: synthesis
 category: ai
 created: 2026-05-18

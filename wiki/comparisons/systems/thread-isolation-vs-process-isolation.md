@@ -1,5 +1,6 @@
 ---
 title: 线程级隔离 vs 进程级隔离
+description: 对比线程级与进程级隔离在冷启动成本、实例密度、故障半径与 fork 复用上的取舍。
 type: comparison
 category: systems
 created: 2026-04-25

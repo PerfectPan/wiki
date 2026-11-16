@@ -1,5 +1,6 @@
 ---
 title: QEMU
+description: 记录 QEMU 在 nographic 模式下通过 telnet 使用 monitor 观察内存与退出模拟器的常用指令。
 type: topic
 category: systems
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: 状态管理的技术选型维度
+description: 梳理 React 状态管理库在状态拆分、可变性、并发渲染及 SSR/RSC 支持上的核心选型维度。
 type: synthesis
 category: frontend
 created: 2026-04-19

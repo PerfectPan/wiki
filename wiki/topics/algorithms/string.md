@@ -1,5 +1,6 @@
 ---
 title: String
+description: 梳理字符串前缀后缀、Border、周期、循环节等基础概念及相关算法入口。
 type: topic
 category: algorithms
 created: 2026-04-12

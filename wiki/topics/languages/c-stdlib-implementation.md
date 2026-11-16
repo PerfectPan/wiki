@@ -1,5 +1,6 @@
 ---
 title: C 标准库的实现
+description: 说明 C 标准库如何封装系统调用与缓冲机制，以及 malloc 的快慢路径设计思路。
 type: topic
 category: languages
 created: 2026-04-12

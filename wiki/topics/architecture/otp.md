@@ -1,5 +1,6 @@
 ---
 title: OTP
+description: 介绍一次性密码（OTP）用于防止重放攻击的原理及短信、令牌与认证器等常见传递方式。
 type: topic
 category: architecture
 created: 2026-04-12

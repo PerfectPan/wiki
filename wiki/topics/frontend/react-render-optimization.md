@@ -1,5 +1,6 @@
 ---
 title: React Render Optimization
+description: 说明 React 渲染优化应优先通过状态下移、稳定对象引用与热点观测来缩小重渲染范围，而非盲目使用 memo。
 type: topic
 category: frontend
 created: 2026-04-25

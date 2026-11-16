@@ -1,5 +1,6 @@
 ---
 title: Logseq
+description: 梳理 Logseq 的 Electron 进程架构、ClojureScript/Rum 渲染流程与块树插件化演进。
 type: topic
 category: product
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: EcmaScript
+description: 记录 ESM 模块解析必须显式标明文件扩展名的规范特性。
 type: topic
 category: languages
 created: 2026-04-12

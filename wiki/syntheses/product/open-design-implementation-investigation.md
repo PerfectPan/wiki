@@ -1,5 +1,6 @@
 ---
 title: OpenDesign 实现调研
+description: 调研开源设计工具 OpenDesign 的本地优先架构、daemon 职责划分与 coding-agent 集成机制。
 type: synthesis
 category: product
 created: 2026-06-22

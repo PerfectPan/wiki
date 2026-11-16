@@ -1,5 +1,6 @@
 ---
 title: 法治的细节
+description: 记录《法治的细节》读书笔记，涵盖自由平等边界、苏格拉底审判与具体关系投入的思考。
 type: topic
 category: life
 created: 2026-04-12

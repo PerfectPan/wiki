@@ -1,5 +1,6 @@
 ---
 title: React 18 流式 SSR 与渐进式 hydration
+description: 解释 React 18 如何通过 Suspense 边界实现流式 HTML 传输与按优先级渐进式 hydration。
 type: synthesis
 category: frontend
 created: 2026-04-25

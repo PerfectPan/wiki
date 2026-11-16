@@ -1,5 +1,6 @@
 ---
 title: React Devtools
+description: 记录在 Electron 中集成 React DevTools 时的已知兼容性问题与相关 issue 线索。
 type: topic
 category: frontend
 created: 2026-04-12

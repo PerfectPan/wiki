@@ -1,5 +1,6 @@
 ---
 title: StarkNet Workshop
+description: 记录 StarkNet 工作坊关于 Cairo 1.0、Sierra 中间表示及 Stark 证明系统分类的笔记。
 type: topic
 category: languages
 created: 2026-04-12

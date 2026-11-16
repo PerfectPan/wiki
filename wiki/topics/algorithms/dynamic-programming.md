@@ -1,5 +1,6 @@
 ---
 title: Dynamic Programming
+description: 整理动态规划的核心拆解思路及 LIS、SOS DP 等典型状态转移题解。
 type: topic
 category: algorithms
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: Linter
+description: 分析 ESLint 单文件无状态架构在并行检查与跨文件类型共享上的性能瓶颈及改造难点。
 type: topic
 category: tooling
 created: 2026-04-12

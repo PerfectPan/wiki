@@ -1,5 +1,6 @@
 ---
 title: ReScript
+description: 收集 ReScript 生态资源列表与编译产物输出目录配置的相关讨论链接。
 type: topic
 category: languages
 created: 2026-04-12

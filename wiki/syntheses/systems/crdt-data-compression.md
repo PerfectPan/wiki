@@ -1,5 +1,6 @@
 ---
 title: CRDT 数据压缩策略
+description: 总结在不改变 CRDT 合并语义的前提下，通过共享字典、连续段编码与二进制表示压缩存储体积的思路。
 type: synthesis
 category: systems
 created: 2026-04-25

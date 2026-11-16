@@ -1,5 +1,6 @@
 ---
 title: TypeScript 类型收窄与 IIMT
+description: 解释 TypeScript 控制流类型收窄与立即索引映射类型（IIMT）分别解决的推断与类型构造问题。
 type: synthesis
 category: languages
 created: 2026-04-25

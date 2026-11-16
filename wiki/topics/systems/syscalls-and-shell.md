@@ -1,5 +1,6 @@
 ---
 title: 系统调用和 Shell
+description: 说明 Shell 如何把命令解析并翻译为 pipe、dup、fork、execve 等系统调用以及终端信号机制。
 type: topic
 category: systems
 created: 2026-04-12

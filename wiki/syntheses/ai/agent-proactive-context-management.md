@@ -1,5 +1,6 @@
 ---
 title: Agent 主动上下文管理
+description: 提出将上下文视为可操作状态树，使 agent 能主动标记节点、带摘要回溯与切换分支的管理模式。
 type: synthesis
 category: ai
 created: 2026-06-28

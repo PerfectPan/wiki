@@ -1,5 +1,6 @@
 ---
 title: 理财
+description: 记录公积金提取政策、境外银行账户卡种区分及汇丰红蓝狮子卡、众安银行使用笔记。
 type: topic
 category: life
 created: 2026-04-12

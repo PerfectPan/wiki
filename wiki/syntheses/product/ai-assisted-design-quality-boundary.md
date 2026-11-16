@@ -1,5 +1,6 @@
 ---
 title: AI 辅助设计的质量边界
+description: 界定 AI 辅助设计的适用定位，说明为何仍需人类承担审美取舍、语境判断与最终验收责任。
 type: synthesis
 category: product
 created: 2026-05-06

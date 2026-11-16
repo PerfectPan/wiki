@@ -1,5 +1,6 @@
 ---
 title: 进程的地址空间
+description: 说明进程地址空间的分段结构、mmap 映射机制、vdso 系统调用优化与进程间内存隔离。
 type: topic
 category: systems
 created: 2026-04-12

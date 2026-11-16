@@ -1,5 +1,6 @@
 ---
 title: JavaScript
+description: 记录 JavaScript 的 AOT 引擎 Porffor 与逻辑与短路运算返回值特性。
 type: topic
 category: languages
 created: 2026-04-12

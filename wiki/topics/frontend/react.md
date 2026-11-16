@@ -1,5 +1,6 @@
 ---
 title: React
+description: 汇总 React 状态设计、组件嵌套禁忌、useEffect 使用时机及异步请求竞态清理等工程实践。
 type: topic
 category: frontend
 created: 2026-04-12

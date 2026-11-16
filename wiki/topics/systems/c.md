@@ -1,5 +1,6 @@
 ---
 title: C
+description: 记录 SEI CERT C 编码规范参考链接。
 type: topic
 category: systems
 created: 2026-04-12

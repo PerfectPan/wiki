@@ -1,5 +1,6 @@
 ---
 title: Mini Shai-Hulud npm 供应链攻击
+description: 剖析 Mini Shai-Hulud npm 蠕虫的攻击链，并说明其对 SLSA provenance 与 OIDC 发布信任模型的启示。
 type: synthesis
 category: tooling
 created: 2026-05-12

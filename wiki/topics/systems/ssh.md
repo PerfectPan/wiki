@@ -1,5 +1,6 @@
 ---
 title: SSH
+description: 记录 SSH 认证方式、WSL2 开启 SSH 服务配置以及 Windows 端口转发与防火墙命令。
 type: topic
 category: systems
 created: 2026-04-12

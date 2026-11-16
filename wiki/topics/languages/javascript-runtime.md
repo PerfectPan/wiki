@@ -1,5 +1,6 @@
 ---
 title: JavaScript Runtime
+description: 记录 WinterCG 轻量 JavaScript Worker 运行时的跨场景部署优势与 Node 兼容性局限。
 type: topic
 category: languages
 created: 2026-04-12

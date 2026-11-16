@@ -1,5 +1,6 @@
 ---
 title: Node
+description: 记录 Node.js 常用的子进程封装、鉴权方案以及 ESM 环境下替代 __dirname 的写法。
 type: topic
 category: systems
 created: 2026-04-12

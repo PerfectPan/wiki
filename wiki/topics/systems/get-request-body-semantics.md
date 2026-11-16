@@ -1,5 +1,6 @@
 ---
 title: GET 请求的 body 语义
+description: 分析 HTTP GET 请求携带 body 缺乏协议语义支持及其在不同实现中的兼容性风险。
 type: topic
 category: systems
 created: 2026-04-25

@@ -1,5 +1,6 @@
 ---
 title: Makefile
+description: 介绍 Makefile 的基本语法、伪目标、依赖解析流程与常用内置函数。
 type: topic
 category: tooling
 created: 2026-04-12

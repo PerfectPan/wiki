@@ -1,5 +1,6 @@
 ---
 title: 浏览器 Fetch Streaming 的读取边界
+description: 区分 fetch 的 Response.body 底层流读取与 .json()/.text() 整包缓冲 API 之间的流式处理边界。
 type: synthesis
 category: frontend
 created: 2026-04-25

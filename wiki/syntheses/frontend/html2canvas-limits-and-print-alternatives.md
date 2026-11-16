@@ -1,5 +1,6 @@
 ---
 title: html2canvas 的渲染局限与打印替代方案
+description: 分析 html2canvas 在字体、复杂 CSS 与主线程性能上的局限，并说明基于 iframe 与 print CSS 的打印替代路线。
 type: synthesis
 category: frontend
 created: 2026-04-25

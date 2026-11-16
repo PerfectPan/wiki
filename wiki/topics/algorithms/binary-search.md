@@ -1,5 +1,6 @@
 ---
 title: Binary Search
+description: 说明二分查找从单调性到二段性（01 与 1? 特性）的判断本质与例题实现。
 type: topic
 category: algorithms
 created: 2026-04-12

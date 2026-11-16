@@ -1,5 +1,6 @@
 ---
 title: Rust
+description: 记录 Rust 中 String 与 &str 内存布局、if let 语法及 mut self 所有权模式笔记。
 type: topic
 category: languages
 created: 2026-04-12

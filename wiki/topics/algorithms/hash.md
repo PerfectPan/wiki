@@ -1,5 +1,6 @@
 ---
 title: Hash
+description: 整理字符串多项式哈希、模数选择、生日悖论碰撞分析及双模实现模板。
 type: topic
 category: algorithms
 created: 2026-04-12

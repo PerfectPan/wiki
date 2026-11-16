@@ -1,5 +1,6 @@
 ---
 title: Greedy
+description: 概括贪心算法的两种常见构造与证明思路（排序选择与局部调整）。
 type: topic
 category: algorithms
 created: 2026-04-12

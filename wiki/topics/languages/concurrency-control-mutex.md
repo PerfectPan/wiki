@@ -1,5 +1,6 @@
 ---
 title: 并发控制：互斥
+description: 从共享内存读写冲突出发，梳理自旋锁（xchg）等并发互斥实现原理。
 type: topic
 category: languages
 created: 2026-04-12

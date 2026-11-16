@@ -1,5 +1,6 @@
 ---
 title: STL
+description: 记录利用 C++ STL set 的 swap 与 merge 实现启发式合并的代码片段。
 type: topic
 category: tooling
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: GCC
+description: 整理 GCC 编译选项索引入口以及使用 ld -Ttext 指定代码加载地址的参考笔记。
 type: topic
 category: tooling
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: whyframe
+description: 介绍 whyframe 如何在编译期剥离 iframe 组件源码并生成独立虚拟入口的隔离方案。
 type: topic
 category: frontend
 created: 2026-04-25

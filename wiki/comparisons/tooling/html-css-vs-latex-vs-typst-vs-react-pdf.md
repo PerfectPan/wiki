@@ -1,5 +1,6 @@
 ---
 title: 文档排版引擎选型：HTML & CSS vs LaTeX vs Typst vs React-pdf
+description: 按换行质量、CJK 支持、分页能力与实时预览对比 HTML & CSS、LaTeX、Typst 和 React-pdf 的适用场景。
 type: comparison
 category: tooling
 created: 2026-04-25

@@ -1,5 +1,6 @@
 ---
 title: Sqrt Tree
+description: 介绍支持 O(1) 区间查询的 Sqrt Tree 递归分块思想与 C++ 模板实现。
 type: topic
 category: algorithms
 created: 2026-04-12

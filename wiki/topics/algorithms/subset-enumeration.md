@@ -1,5 +1,6 @@
 ---
 title: 子集枚举
+description: 说明利用二进制减一与按位与操作高效枚举集合子集的原理。
 type: topic
 category: algorithms
 created: 2026-04-12

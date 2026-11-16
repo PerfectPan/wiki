@@ -1,5 +1,6 @@
 ---
 title: @opensumi/di
+description: 解析 @opensumi/di 如何基于 reflect-metadata 与装饰器在运行时注册并解析依赖。
 type: topic
 category: architecture
 created: 2026-04-12

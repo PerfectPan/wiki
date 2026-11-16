@@ -1,5 +1,6 @@
 ---
 title: Webpack
+description: 记录 Webpack 的 devtool sourcemap 模式差异及 splitChunks cacheGroups 分包配置示例。
 type: topic
 category: tooling
 created: 2026-04-12

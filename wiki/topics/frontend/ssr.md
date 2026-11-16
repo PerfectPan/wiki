@@ -1,5 +1,6 @@
 ---
 title: SSR
+description: 分析 SSR 的适用与不适用场景、同构渲染原理、服务端状态泄漏风险以及流式 SSR 与 CSR 兜底等扩展方案。
 type: topic
 category: frontend
 created: 2026-04-12

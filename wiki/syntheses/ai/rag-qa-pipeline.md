@@ -1,5 +1,6 @@
 ---
 title: RAG 问答管线
+description: 概述 RAG 问答系统中文档向量化、相似度检索与上下文生成回答的最小可行链路。
 type: synthesis
 category: ai
 created: 2026-04-25

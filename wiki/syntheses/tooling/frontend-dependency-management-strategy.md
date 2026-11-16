@@ -1,5 +1,6 @@
 ---
 title: 前端依赖管理策略
+description: 从约束求解、版本策略与依赖分层三个层面说明如何兼顾前端项目的稳定性与演进速度。
 type: synthesis
 category: tooling
 created: 2026-04-25

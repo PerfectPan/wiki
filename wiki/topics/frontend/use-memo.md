@@ -1,5 +1,6 @@
 ---
 title: useMemo
+description: 说明 useMemo 的适用场景以及通过状态下移和组件拆分避免不必要缓存的优化方法。
 type: topic
 category: frontend
 created: 2026-04-12

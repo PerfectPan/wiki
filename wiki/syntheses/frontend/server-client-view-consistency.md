@@ -1,5 +1,6 @@
 ---
 title: 服务端与客户端视图一致性
+description: 解释 SSR 场景下首帧视图不一致的风险，并说明如何将浏览器环境差异推迟到客户端阶段处理。
 type: synthesis
 category: frontend
 created: 2026-04-25

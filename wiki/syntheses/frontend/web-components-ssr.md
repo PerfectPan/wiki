@@ -1,5 +1,6 @@
 ---
 title: Web Components 的服务端渲染路径
+description: 说明如何借助 DOM 仿真环境与组件预注册实现 Web Components 的服务端渲染及其维护代价。
 type: synthesis
 category: frontend
 created: 2026-04-25

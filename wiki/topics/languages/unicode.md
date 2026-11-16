@@ -1,5 +1,6 @@
 ---
 title: Unicode
+description: 以历史演进方式梳理从 ASCII、GB2312/GBK 到 Unicode 与 UTF-8 编码的原理。
 type: topic
 category: languages
 created: 2026-04-12

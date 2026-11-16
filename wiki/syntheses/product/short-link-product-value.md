@@ -1,5 +1,6 @@
 ---
 title: 短链服务的产品价值
+description: 说明短链服务如何超越缩短 URL 本身，作为可编排代理层承载点击统计、来源追踪与分享展示控制。
 type: synthesis
 category: product
 created: 2026-04-25

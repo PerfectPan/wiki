@@ -1,5 +1,6 @@
 ---
 title: Ref
+description: 总结 React Ref 的核心用途、不触发重渲染的特性以及 forwardRef 与 callback ref 等实践要点。
 type: topic
 category: frontend
 created: 2026-04-12

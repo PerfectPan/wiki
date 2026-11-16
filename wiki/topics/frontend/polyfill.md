@@ -1,5 +1,6 @@
 ---
 title: Polyfill
+description: 区分 Polyfill 与 Shim 的定位差异，说明前者用于补齐旧环境缺失能力而后者侧重拦截或改写既有接口。
 type: topic
 category: frontend
 created: 2026-04-25

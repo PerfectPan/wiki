@@ -1,5 +1,6 @@
 ---
 title: Waku
+description: 记录 RSC 框架 Waku 的构建插件管线、SSG/SSR 产物与路由 API 机制。
 type: topic
 category: frontend
 created: 2026-04-12

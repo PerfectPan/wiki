@@ -1,5 +1,6 @@
 ---
 title: State Management
+description: 对比基于 Proxy 的 Optics 局部状态订阅隔离与 Zustand 依赖 Object.is 触发重渲染的机制差异。
 type: topic
 category: frontend
 created: 2026-04-12

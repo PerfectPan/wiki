@@ -1,5 +1,6 @@
 ---
 title: 简历排版引擎选择
+description: 对比 LaTeX、Typst、HTML/CSS 与 React-pdf 在简历排版中的换行质量、分页与 CJK 支持取舍。
 type: comparison
 category: career
 created: 2026-04-25

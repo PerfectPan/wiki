@@ -1,5 +1,6 @@
 ---
 title: 稳定币
+description: 梳理法币抵押型稳定币的运行与套利机制及全球监管立法动态。
 type: topic
 category: life
 created: 2026-04-12

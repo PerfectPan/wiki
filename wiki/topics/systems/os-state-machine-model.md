@@ -1,5 +1,6 @@
 ---
 title: 操作系统的状态机模型
+description: 从 CPU Reset、Firmware 引导到 Boot Loader 加载内核，解释操作系统的状态机模型。
 type: topic
 category: systems
 created: 2026-04-12

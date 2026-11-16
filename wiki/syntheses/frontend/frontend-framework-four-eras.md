@@ -1,5 +1,6 @@
 ---
 title: 前端框架的四个时代
+description: 按问题域演变梳理前端框架从早期无构建、一站式 MVC、组件化视图层到全栈 meta-framework 的发展脉络。
 type: synthesis
 category: frontend
 created: 2026-04-25

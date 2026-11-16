@@ -1,5 +1,6 @@
 ---
 title: 技术方案
+description: 概括从实体建模、存储设计到接口设计及前端实体绑定的技术方案设计路径。
 type: topic
 category: architecture
 created: 2026-04-12

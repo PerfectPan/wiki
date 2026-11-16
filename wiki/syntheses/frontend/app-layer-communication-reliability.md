@@ -1,5 +1,6 @@
 ---
 title: 应用层通信的可靠性边界
+description: 说明如何按业务重要性为 JSBridge 与 postMessage 分层设计确认重试机制及安全校验，避免过度模拟 TCP。
 type: synthesis
 category: frontend
 created: 2026-04-25

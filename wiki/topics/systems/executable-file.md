@@ -1,5 +1,6 @@
 ---
 title: 可执行文件
+description: 梳理 ELF/PE 等可执行文件格式、编译汇编链接流程以及重定位地址计算规则。
 type: topic
 category: systems
 created: 2026-04-12

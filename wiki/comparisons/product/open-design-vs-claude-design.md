@@ -1,5 +1,6 @@
 ---
 title: OpenDesign vs Claude Design
+description: 对比托管产品 Claude Design 与开源本地优先设计工具 OpenDesign 的架构定位与适用场景。
 type: comparison
 category: product
 created: 2026-06-22

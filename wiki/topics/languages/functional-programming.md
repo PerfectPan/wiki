@@ -1,5 +1,6 @@
 ---
 title: Functional Programming
+description: 介绍函数式编程中 Optics（Lens、Prism、Iso、Traversal）用于操作嵌套数据结构的概念。
 type: topic
 category: languages
 created: 2026-04-12

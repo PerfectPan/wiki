@@ -1,5 +1,6 @@
 ---
 title: Prettier
+description: 记录 Prettier 的调试参数、AST 到打印文档的转换流程及所依据的论文参考。
 type: topic
 category: languages
 created: 2026-04-12

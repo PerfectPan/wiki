@@ -1,5 +1,6 @@
 ---
 title: Clojure
+description: 收集 Clojure 语言基础语法、不可变数据结构与常用函数示例笔记。
 type: topic
 category: languages
 created: 2026-04-12

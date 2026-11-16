@@ -1,5 +1,6 @@
 ---
 title: 小程序架构演进
+description: 概括小程序架构在内核定制、Worker 化执行、受控宿主能力暴露与沙箱隔离方面的演进方向。
 type: topic
 category: frontend
 created: 2026-04-25

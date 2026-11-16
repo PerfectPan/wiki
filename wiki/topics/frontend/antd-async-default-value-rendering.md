@@ -1,5 +1,6 @@
 ---
 title: Ant Design 异步默认值渲染
+description: 解释 Ant Design Select 异步默认值不生效的初始化时机原因，并给出延迟渲染或重置 key 的解法。
 type: topic
 category: frontend
 created: 2026-04-25

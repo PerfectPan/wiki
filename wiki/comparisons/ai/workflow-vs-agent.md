@@ -1,5 +1,6 @@
 ---
 title: Workflow vs Agent
+description: 说明按步骤可预期程度在确定性 Workflow 与模型自主决策 Agent 之间做选型的判断边界。
 type: comparison
 category: ai
 created: 2026-04-25

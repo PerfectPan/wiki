@@ -239,9 +239,26 @@ function checkFile(filePath: string): CheckIssue[] {
     issues.push({ level: "error", message: "source_refs 必须是数组格式" });
   }
 
-  // 9. description 建议有（warning）
+  // 9. description 建议有（warning），且不应多余地用双引号包裹
   if (!("description" in fm)) {
     issues.push({ level: "warning", message: "缺少 description 字段，建议补上一句话摘要" });
+  } else if (typeof fm["description"] === "string") {
+    const desc = fm["description"].trim();
+    if (/^".*"$/.test(desc)) {
+      const inner = desc.slice(1, -1);
+      const needsYamlQuotes =
+        inner === "" ||
+        /^[-\[{*&!%@`'|>?]/.test(inner) ||
+        inner.includes(": ") ||
+        inner.endsWith(":") ||
+        inner.includes(" #");
+      if (!needsYamlQuotes) {
+        issues.push({
+          level: "error",
+          message: "description 不应使用多余的双引号包裹，请直接写 description: ...",
+        });
+      }
+    }
   }
 
   // 10. OKF 字段一致性（warning）

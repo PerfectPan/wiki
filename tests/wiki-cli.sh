@@ -131,6 +131,39 @@ rm "$prompt_probe/project/prompts/bad-level.md"
 
 write_prompt empty.md empty recommended ""
 "$probe_cli" prompts check >/dev/null 2>&1 && fail "正文为空时 prompts check 应失败"
+
+# description 不应多余地用双引号包裹（含 ': ' 等 YAML 特殊字符时例外）
+cat >"$prompt_probe/project/wiki/topics/ai/quoted-desc.md" <<'EOF'
+---
+title: Quoted
+description: "普通摘要不应该加双引号"
+type: topic
+category: ai
+created: 2026-11-16
+updated: 2026-11-16
+tags:
+  - ai
+source_refs:
+  - https://example.com
+---
+EOF
+"$probe_cli" check wiki/topics/ai/quoted-desc.md >/dev/null 2>&1 && fail "普通 description 带双引号时 check 应失败"
+
+cat >"$prompt_probe/project/wiki/topics/ai/quoted-colon-desc.md" <<'EOF'
+---
+title: Quoted Colon
+description: "含冒号空格: 才需要双引号"
+type: topic
+category: ai
+created: 2026-11-16
+updated: 2026-11-16
+tags:
+  - ai
+source_refs:
+  - https://example.com
+---
+EOF
+"$probe_cli" check wiki/topics/ai/quoted-colon-desc.md >/dev/null 2>&1 || fail "含 ': ' 的 description 带双引号应允许通过"
 rm -rf "$prompt_probe"
 
 echo "PASS"

@@ -25,6 +25,11 @@ source_refs:
 resource:
   - raw/sources/mcp.md
   - https://www.anthropic.com/news/model-context-protocol
+  - https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+  - https://blog.modelcontextprotocol.io/posts/2025-09-26-mcp-next-version-update/
+  - https://blog.modelcontextprotocol.io/posts/2025-09-08-mcp-registry-preview/
+  - https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/
+  - https://blog.modelcontextprotocol.io/posts/2025-12-19-mcp-transport-future/
   - https://modelcontextprotocol.io/specification/2026-07-28
   - https://blog.modelcontextprotocol.io/posts/2026-07-28/
 ---

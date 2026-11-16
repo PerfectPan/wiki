@@ -23,6 +23,10 @@ source_refs:
 resource:
   - https://github.com/nyblnet/bento
   - https://bento.page
+  - https://raw.githubusercontent.com/nyblnet/bento/main/README.md
+  - https://raw.githubusercontent.com/nyblnet/bento/main/docs/architecture.md
+  - https://raw.githubusercontent.com/nyblnet/bento/main/docs/agents.md
+  - https://raw.githubusercontent.com/nyblnet/bento/main/slides/src/main.ts
   - raw/sources/2026-08-06-bento-slides-skill-review.md
 ---
 # Bento

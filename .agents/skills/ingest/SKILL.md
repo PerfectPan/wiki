@@ -7,15 +7,12 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 
 你正在为这个 wiki 执行一次标准 ingest。
 
-仓库根目录：`{{ROOT}}`
-
 开始前必须先阅读：
-- `{{AGENTS}}`
-- `{{SCHEMA}}`
-- `{{INDEX}}`
+- `AGENTS.md`
+- `SCHEMA.md`
+- `index.md`
 
-本次输入：
-- 来源：`{{INPUT}}`
+本次输入为需要沉淀进知识库的来源（URL、仓库或文件路径）。
 
 开始整理来源、选择 raw/topic/synthesis/comparison 或改写正文前，先读 [页面类型与写作参考](references/page-writing.md)。
 
@@ -122,7 +119,7 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 ## 第四步：选择分类
 
 从 SCHEMA.md 定义的一级分类中选一个：
-frontend、ai、languages、systems、algorithms、architecture、tooling、product、career、life
+frontend、design、ai、languages、systems、algorithms、architecture、tooling、product、career、life
 
 每个页面只能选一个主分类。
 
@@ -192,17 +189,17 @@ source_refs:
 
 一句话回答。
 
-## 来源事实
-
-客观列出素材中的关键事实。
-
 ## 综合结论
 
-展开说明综合后的理解，分点论述。
+展开说明综合后的理解，分点论述（把来源事实与综合判断分开表达）。
 
-## 对个人/项目的启发
+## 使用限制
 
-提炼可操作的启发。
+哪些场景不适用，有什么已知限制？
+
+## 还需要确认什么
+
+写出尚未验证的具体行为，或谁需要决定哪项选择；没有此类内容时省略。
 
 ## 相关页面
 
@@ -272,6 +269,6 @@ source_refs:
 - 在 PR body 中写清楚本次知识变更摘要、受影响页面和来源指针
 
 目标目录：
-- topics：`{{TOPICS}}`
-- syntheses：`{{SYNTHESES}}`
-- comparisons：`{{COMPARISONS}}`
+- topics：`wiki/topics/`
+- syntheses：`wiki/syntheses/`
+- comparisons：`wiki/comparisons/`

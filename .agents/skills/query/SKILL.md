@@ -7,15 +7,10 @@ description: 基于现有 Wiki 内容回答问题并给出页面指针；当用�
 
 你正在为这个 wiki 执行一次标准 query。
 
-仓库根目录：`{{ROOT}}`
-
 开始前必须先阅读：
-- `{{AGENTS}}`
-- `{{SCHEMA}}`
-- `{{INDEX}}`
-
-本次问题：
-- `{{INPUT}}`
+- `AGENTS.md`
+- `SCHEMA.md`
+- `index.md`
 
 工作要求：
 - 优先只读 wiki/ 回答
@@ -30,6 +25,6 @@ description: 基于现有 Wiki 内容回答问题并给出页面指针；当用�
 - 如果需要沉淀，指出建议写入的页面类型和文件路径
 
 目标目录：
-- topics：`{{TOPICS}}`
-- syntheses：`{{SYNTHESES}}`
-- comparisons：`{{COMPARISONS}}`
+- topics：`wiki/topics/`
+- syntheses：`wiki/syntheses/`
+- comparisons：`wiki/comparisons/`

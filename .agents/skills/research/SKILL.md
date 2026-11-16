@@ -7,15 +7,10 @@ description: 围绕主题开展深度调研并沉淀为可审阅的 Wiki 页面�
 
 你正在为这个 wiki 执行一次深度调研，并准备把结论沉淀为可审阅的 wiki 页面。
 
-仓库根目录：`{{ROOT}}`
-
 开始前必须先阅读：
-- `{{AGENTS}}`
-- `{{SCHEMA}}`
-- `{{INDEX}}`
-
-本次调研主题：
-- `{{INPUT}}`
+- `AGENTS.md`
+- `SCHEMA.md`
+- `index.md`
 
 工作要求：
 - 写页面或选择配图前，先读 [页面类型与写作参考](../ingest/references/page-writing.md)，配图按其中的「配图选择与核对」执行
@@ -27,18 +22,16 @@ description: 围绕主题开展深度调研并沉淀为可审阅的 Wiki 页面�
 - 不要新增项目内 `.codex/skills` 或本地 skill；本仓库的 agent 工作流统一沉淀在 `bin/wiki` 和 `prompts/`
 
 深度验收项：
-- 必须包含系统架构图
-- 必须包含核心数据流、执行链路或生命周期图
-- 必须包含扩展面、边界或 trust model 图
-- 对比类调研必须包含双方架构差异图
-- 必须包含证据矩阵，至少覆盖：结论、证据来源、证据位置、置信度或限制
+- 涉及系统实现或运行机制时，按需补充系统架构图、核心数据流/生命周期图，以及扩展面或边界图（具体规范见 [配图选择与核对](../ingest/references/page-writing.md#配图选择与核对)）
+- 对比类调研涉及架构或执行链路差异时，补充双方架构差异图
+- 包含证据矩阵，至少覆盖：结论、证据来源、证据位置、置信度或限制
 - 按 [验证记录与使用限制](../ingest/references/page-writing.md#验证记录与使用限制) 区分知识正文、raw 证据和 PR 验收；有尚未决定的具体选择时再设置相应小节，不留占位内容。
 
 输出目标：
 - 判断应新增或更新 `wiki/topics/`、`wiki/syntheses/` 还是 `wiki/comparisons/` 页面
 - 新页面应带 `SCHEMA.md` 约定的 frontmatter，并在单独打开时自洽
 - 如果导航发生变化，更新 `index.md`
-- 不要向 `log.md` 追加新记录；把日期、页面和来源指针写进 PR body
+- 把日期、受影响页面、来源和验证结果写进 PR body
 - 为 PR 写出简短摘要，说明调研范围、来源、图表、验证方式和剩余风险
 
 验证要求：
@@ -49,6 +42,6 @@ description: 围绕主题开展深度调研并沉淀为可审阅的 Wiki 页面�
 - 创建或修改 PR 前运行 `PR_TITLE="..." PR_BODY="..." node tests/pr-metadata.mjs` 预检 PR 标题与正文格式
 
 目标目录：
-- topics：`{{TOPICS}}`
-- syntheses：`{{SYNTHESES}}`
-- comparisons：`{{COMPARISONS}}`
+- topics：`wiki/topics/`
+- syntheses：`wiki/syntheses/`
+- comparisons：`wiki/comparisons/`

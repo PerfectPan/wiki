@@ -7,15 +7,10 @@ description: 将旧 Logseq 页面迁移到当前 Wiki 结构；当用户要求�
 
 你正在把旧 Logseq 内容迁移进这个 wiki。
 
-仓库根目录：`{{ROOT}}`
-
 开始前必须先阅读：
-- `{{AGENTS}}`
-- `{{SCHEMA}}`
-- `{{INDEX}}`
-
-本次迁移输入：
-- Logseq 页面：`{{INPUT}}`
+- `AGENTS.md`
+- `SCHEMA.md`
+- `index.md`
 
 迁移要求：
 - 以旧仓库中的 `pages/` 为主要迁移来源
@@ -34,7 +29,7 @@ description: 将旧 Logseq 页面迁移到当前 Wiki 结构；当用户要求�
 - 为本次迁移准备简短 PR 摘要
 
 目标目录：
-- raw sources：`{{RAW_SOURCES}}`
-- topics：`{{TOPICS}}`
-- syntheses：`{{SYNTHESES}}`
-- comparisons：`{{COMPARISONS}}`
+- raw sources：`raw/sources/`
+- topics：`wiki/topics/`
+- syntheses：`wiki/syntheses/`
+- comparisons：`wiki/comparisons/`

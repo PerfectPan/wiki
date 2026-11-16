@@ -40,7 +40,7 @@ source_refs:
   - 最后在需要时引入更细粒度的依赖分层，而不是一开始就把所有语义塞进复杂标签系统。
 - `Dependency Resolution` 这页更像底层建模视角，而这页更偏工程策略视角：一个解决“怎么求解”，一个解决“怎么长期运营”。
 
-## 未决问题
+## 还需要确认什么
 
 - 当前仓库还没有专门记录 `peerDependencies`、catalogs、trusted publishers`、`supply chain` 等子主题页。
 - `catalogs` 这条思路还没有在真实项目里落成规则文件或插件实践，后续可以补成更具体的 tooling 页面。

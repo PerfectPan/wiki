@@ -112,7 +112,7 @@ sequenceDiagram
 - eval 设计比项目产品化更成熟：它已经在度量 tool errors、shell uses、MoonBit command usage、edit/write successes、validation pass、finish marker 等行为指标。
 - 下一步最有价值的方向不是继续堆 prompt，而是 `agent-improvement-guide.md` 说的 semantic CLI validation：让 agent 证明外部命令行为，而不是只证明代码能编译。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度 / 限制 |
 | --- | --- | --- | --- |
@@ -125,7 +125,7 @@ sequenceDiagram
 | 项目当前短板是 CLI contract reliability | roadmap | `agent-improvement-guide.md` | 中高；这是项目作者的方向性总结 |
 | 本次没有本地运行 eval | 本地环境限制 | 未安装 `moon` CLI | 中 |
 
-## 当前张力 / 风险 / 未决问题
+## 当前取舍、风险与还需要确认什么
 
 - **专用工具越多，路由越难**：`shell`、`moon_cmd`、`moon_check`、未来可能的 `moon_accept` 都需要清晰 routing，否则模型会走最宽松路径。
 - **eval 仍然偏 MoonBit**：这有利于自举，但泛化到其他语言需要新的 task bundle 和工具策略。

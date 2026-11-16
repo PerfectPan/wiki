@@ -39,7 +39,7 @@ task 是较粗粒度的事件循环工作单元，microtask 则是在 task 边�
   - 哪些东西会被延后到 microtask 检查点；
   - 哪些东西可能在下一轮 task 或渲染之后才发生。
 
-## 未决问题
+## 还需要确认什么
 
 - 当前仓库还没有单独记录 `requestAnimationFrame`、rendering opportunity 和 layout/paint 的关系。
 - 如果后续积累更多浏览器调度案例，可以把 task / microtask / rendering 再整理成一页更完整的时间线图。

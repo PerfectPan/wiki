@@ -36,7 +36,7 @@ source_refs:
   - Lit 一类实现并不是简单复制模板，而是在“模板 + 动态洞”之间做了更细的运行时组织。
 - 因此，模板克隆并不是所有框架都会采用的唯一答案，但它很好地解释了为什么很多现代 UI 系统会把“模板定义”与“局部更新”当作两回事来设计。
 
-## 未决问题
+## 还需要确认什么
 
 - 当前仓库还没有把这条路径和 signal / fine-grained reactivity / virtual DOM 放在一页里比较。
 - 后续如果继续积累渲染模型材料，可以补一页 comparison，专门比较 template cloning、virtual DOM 和 fine-grained DOM updates。

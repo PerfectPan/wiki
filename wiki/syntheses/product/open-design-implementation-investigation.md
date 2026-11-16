@@ -211,14 +211,14 @@ OpenDesign 的扩展策略不是单点 plugin API，而是几类不同生命周�
 - **多产物类型**：默认产物不只是网页原型，还包括 deck、live artifact、image、video、HyperFrames、audio、PDF/PPTX/MP4 等。它更像 agent-native creative workspace，而不是单一 UI generator。
 - **质量与自演进方向**：Critique Theater / Design Jury、artifact lint、automation proposals、memory tree、skill crystallization 等设计说明，OpenDesign 想把“每次成功运行”反哺为未来上下文，而不是只停留在一次性生成。
 
-## 当前张力
+## 当前取舍
 
 - `server.ts` 仍是非常重的装配层。虽然 routes、runtime defs、plugins、design-systems 等模块已经拆开，但启动和依赖组装仍然集中，理解成本高。
 - Adapter 面覆盖很广，但每个 CLI 的 stream schema、权限参数、登录状态和 prompt 输入方式都可能漂移。这个层是运行可靠性的高风险面。
 - README 的产品叙述比早期 `docs/spec.md` 更先进。早期 spec 里曾写过“不做 desktop app”和“不做 model router”，但当前实现已经包含 Electron packaged runtime 和 AMR。做判断时应优先看当前 README、package 和代码。
 - 插件与 skill 的能力模型带来开放性，也带来信任边界问题。`open-design.json` 的 capabilities、pipeline 和 connector 声明是治理起点，但用户仍需理解“安装一个 plugin 等于允许 agent 读取/写入/联网/调用外部工具”的含义。
 
-## 未决问题
+## 还需要确认什么
 
 - OpenDesign 的“local-first + AMR”定位如何平衡：AMR 降低上手成本，但会让“完全 BYO agent / BYOK”叙事变得不那么纯。
 - Design-system extraction 是否能稳定产出高质量、可复用的 `DESIGN.md`，取决于 source evidence、token contract、preview 和人工 review 的闭环质量。

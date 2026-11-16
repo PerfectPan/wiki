@@ -123,7 +123,7 @@ flowchart LR
 | 交付与迁移 | Canva、PDF、PPTX、HTML、Claude Code handoff。 | HTML、PDF、PPTX、ZIP、Markdown、MP4、project files、MCP read、Claude Design ZIP import。 |
 | 治理与审计 | 依赖 Anthropic 的企业策略、retention、role 和未来 audit 能力。 | 依赖本地数据根、Git history、runtime/provider 选择、plugin 安装来源和权限边界。 |
 
-## 未决问题
+## 还需要确认什么
 
 - Claude Design 仍处于 beta / research preview，官方文档更新很快，usage、sharing、export 和 admin 能力都可能继续变化。
 - OpenDesign 当前 repo 演进速度同样很快。本页对 OpenDesign 的判断绑定到 `20c61f7732fa65ff656d3636327d99d6f7560f2d`，不是永久状态。

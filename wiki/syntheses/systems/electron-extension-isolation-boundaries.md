@@ -122,7 +122,7 @@ flowchart TB
 
 `moveBefore()` 可以在 DOM 内移动 iframe 而不触发卸载，从而保留 loading state。它是有效优化，但不应成为唯一正确路径：React reconciliation 可能与手工 DOM 所有权冲突，隐藏 iframe 仍消耗内存、连接和计时器。扩展多时需要 LRU suspend / destroy，并提供不支持 `moveBefore()` 时的 reload 降级。
 
-## 当前张力与未决问题
+## 当前取舍与还需要确认什么
 
 - **隔离强度 vs 资源成本**：每扩展一进程更安全，但内存与启动成本随扩展数增加。
 - **直接 MessagePort vs 中央审计**：绕过 main 转发性能更好，审计与策略必须落在可复用 wrapper/broker。
@@ -131,7 +131,7 @@ flowchart TB
 - **静态 contributions vs 动态扩展性**：静态 manifest 降低攻击面，动态注册更灵活。
 - 仍需验证多平台 OS sandbox、签名更新、扩展崩溃恢复和大规模扩展资源水位。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度或限制 |
 | --- | --- | --- | --- |

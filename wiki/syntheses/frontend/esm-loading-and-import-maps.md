@@ -41,7 +41,7 @@ ES Module 至少可以拆成“解析 specifier / 建立模块图 / 初始化绑
   - 浏览器兼容与补丁：由 `es-module-shims` 一类 polyfill 接管；
   - 性能优化：由 `modulepreload` 等资源提示负责。
 
-## 未决问题
+## 还需要确认什么
 
 - 现在仓库里还没有把 ESM / Import Maps / bundler rewrites / integrity 校验放在一起画成一张完整链路图。
 - `es-module-shims` 的内部实现仍可以继续拆成更具体的 topic，例如“浏览器侧模块 polyfill 的改写策略”。

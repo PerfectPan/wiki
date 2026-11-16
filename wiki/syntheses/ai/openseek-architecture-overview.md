@@ -103,7 +103,7 @@ OpenSeek 的关键是每个阶段都落入 session event，而不是只在内存
 - 它有清楚的边界意识：纯协议和 effectful transport 分开，session model 和 TUI transcript 分开，tool result 和 loop control 分开，runtime event 和 steering input 分开。
 - 它更适合作为“agent runtime 设计样本”学习，而不是作为即拿即用的工具依赖。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度 / 限制 |
 | --- | --- | --- | --- |
@@ -115,7 +115,7 @@ OpenSeek 的关键是每个阶段都落入 session event，而不是只在内存
 | CLI/TUI 是不同控制面 | CLI/TUI docs and code | `cmd/openseek/README.md`、`cmd/tui/README.md`、`cmd/openseek/serve.mbt` | 高；serve JSONL 协议清楚 |
 | 本次没有本地跑 upstream 测试 | 本地环境限制 | `moon` CLI 不可用 | 中；源码阅读可靠，但运行验证缺失 |
 
-## 当前张力 / 风险 / 未决问题
+## 当前取舍、风险与还需要确认什么
 
 - **MoonBit 绑定较深**：这让项目能围绕 `moon` 工具链做深优化，但也限制了泛语言 agent 的直接复用价值。
 - **会话事件很完整，但信息量会膨胀**：项目已有 compaction，但 summary 质量依赖模型，未来仍需要更强的上下文治理。

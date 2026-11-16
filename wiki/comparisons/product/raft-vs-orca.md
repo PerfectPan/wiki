@@ -177,7 +177,7 @@ Orca 的公开代码使用 MIT License，且其远程 Server 可以完全运行�
 
 可以让 Orca 负责受控 coding 执行，让 Raft 负责高层协作；但只应向 Raft 发送必要的任务摘要、状态和经过脱敏的结论。不要把 Orca 的完整终端输出、pairing URL、访问 token 或含敏感信息的 diff 粘贴到 Raft。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 一手证据 | 证据位置 | 置信度与限制 |
 | --- | --- | --- | --- |
@@ -188,7 +188,7 @@ Orca 的公开代码使用 MIT License，且其远程 Server 可以完全运行�
 | Orca 具团队部署能力但不是 Raft 式协作控制面 | Orca Enterprise/Docs 与 Raft Docs 的产品模型对比 | [Enterprise](https://www.onorca.dev/enterprise)；[Raft FAQ](https://raft.build/zh-cn/#faq) | 中；这是基于公开资料的产品边界判断，Enterprise 私有能力需向厂商确认 |
 | Orca 遥测可关闭，但默认有匿名产品事件外发 | Orca 官方文档 | [Privacy & Telemetry](https://www.onorca.dev/docs/telemetry) | 高；仍需在目标版本和网络环境中实测 |
 
-## 当前张力、风险与未决问题
+## 当前取舍、风险与还需要确认什么
 
 1. **Raft 的企业治理能力仍在演进。** 官网将私有部署、SSO 与高级访问控制放在 Enterprise 的未来能力中；若它们是硬门槛，不应以当前公开材料推断“已经支持”。[Raft pricing](https://raft.build/zh-cn/#pricing)
 2. **Orca 的 self-host 是 runtime self-host，不是完整企业控制面。** 它解决执行位置和代码归属，不自动提供成熟的多租户、统一身份、审计留存或组织权限系统。

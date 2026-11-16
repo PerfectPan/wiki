@@ -130,7 +130,7 @@ flowchart LR
 - 错误提示也是控制面。阻断危险 shell 时，提示必须告诉模型“不要绕过”，并指出正确替代路径。否则模型可能把 block 当成需要用另一条 shell 技巧绕开的临时障碍。
 - 测试应覆盖绕路形态，而不只覆盖正常命令。PR #273 的测试覆盖了 `git apply`、`git mv`、`git clean`、重配置 Git、自定义环境、glob/TooComplex 路径、强制 checkout、source tree move、masked redirect 等绕路入口。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度 / 限制 |
 | --- | --- | --- | --- |
@@ -142,7 +142,7 @@ flowchart LR
 | macOS runtime sandbox 是强约束，但跨平台仍依赖静态 pre-block | PR #273、`sandbox.mbt` | `/usr/bin/sandbox-exec` probe 与 pre-block 注释 | 中高；未在本地重跑测试 |
 | 该策略不是完整安全边界 | PR #273 与源码注释 | PR residuals、`git_preblock_target` 注释 | 高；作者显式承认 residual channel |
 
-## 当前张力 / 风险 / 未决问题
+## 当前取舍、风险与还需要确认什么
 
 - **可用性与安全性**：放宽 `checkout`、`reset`、`stash` 能显著提升 agent 的工程可用性，但每个放宽项都需要解释“写入来源”和“恢复路径”。否则 allowlist 会慢慢膨胀成不透明规则。
 - **Git object store 不是绝对可信域**：只要 `.git` 可写，攻击面就没有完全关闭。把 object store 当作可信来源是工程折中，不是沙箱级隔离。

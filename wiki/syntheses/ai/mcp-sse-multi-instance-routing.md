@@ -48,7 +48,7 @@ source_refs:
 - 长任务状态进入 Tasks 扩展，通过持久句柄和轮询管理；它与协议核心的无状态性不冲突。
 - 旧 HTTP + SSE transport 已弃用但有至少 12 个月兼容期。迁移期内仍运行旧 server 时，本页记录的 sticky routing、中心化映射和连接层隔离仍然适用。
 
-## 未决问题
+## 还需要确认什么
 
 - 现有 server 中有多少把业务状态错误地绑定在 `Mcp-Session-Id` 上，仍需通过真实迁移案例验证。
 - MRTR、Tasks 和显式 handle 在失败恢复、幂等和超时语义上的最佳实践仍会继续演化。

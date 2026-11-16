@@ -93,7 +93,7 @@ constrained decoding 解决的是“模型输出能不能被程序稳定消费�
 3. **自托管模型或大批量抽取**：再考虑 dottxt 这类 constrained decoding 层，重点评估吞吐、schema 支持范围、失败率和运维成本。
 4. **Agent 平台或推理服务商**：把结构化输出视为协议能力，而不是 prompt 技巧；它应该和工具权限、状态机、日志、评估、回放一起设计。
 
-## 未决问题
+## 还需要确认什么
 
 - dottxt.ai 当时未看到公开透明的 pricing，商业化状态更像 early access / B2B / 开发者 API 阶段。
 - 厂商原生 Structured Outputs 的能力会持续增强，第三方工具需要靠自托管生态、性能和集成深度保持位置。

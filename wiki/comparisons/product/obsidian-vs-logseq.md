@@ -40,7 +40,7 @@ source_refs:
 2. `deep-research-report.md` 对 Logseq 的判断不是否定，而是“主库可选（偏折衷）”：它保留了本地文件的优点，但要额外承担 Markdown/Org 风格差异带来的迁移成本。
 3. 从当前仓库已有材料看，Logseq 的成熟页面更偏代码贡献与内部架构，而不是围绕长期主资产治理；相较之下，本仓库的整体 workflow 本身已经更接近 Obsidian-compatible wiki。
 
-## 未决问题
+## 还需要确认什么
 
 - 仓库内暂时没有 `wiki/topics/product/Obsidian.md` 或对应 raw 页面，因此关于 Obsidian 的插件选择、移动端体验、链接组织方式等细节还缺少本地一手材料。
 - 仓库内也缺少用户自身从 Logseq 迁移到当前 wiki 结构时的真实案例；如果后续沉淀出迁移经验，这一页应该补一次基于实操的更新。

@@ -30,7 +30,7 @@ source_refs: []
 - 这也解释了 Hooks 规则为什么重要：一旦调用顺序变了，状态槽和逻辑位置就会错位。
 - 因此，这条“模拟实现”最有价值的地方，不是教你重写 React，而是把 Hooks 约束背后的原因解释清楚。
 
-## 未决问题
+## 还需要确认什么
 
 - 当前仓库还没有把 Hooks 调度、effect 阶段和 concurrent rendering 下的行为系统展开。
 - 如果后续继续沉淀 React 运行机制，这页可以进一步连接到 `useEffect`、`React Render Optimization` 和 `RSC`。

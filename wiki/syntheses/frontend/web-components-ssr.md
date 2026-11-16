@@ -39,7 +39,7 @@ Web Components 能不能像普通 SSR 框架那样先在服务端产出 HTML？�
   - 组件不能过度依赖浏览器独有 API；
   - 调试和运行时一致性要比传统 React/Vue SSR 更谨慎。
 
-## 未决问题
+## 还需要确认什么
 
 - 这页还没有覆盖 hydration、事件恢复以及不同 Web Components 实现库的差异。
 - 如果后续仓库里积累了更多例子，可以继续拆成 topic，例如专门记录 Lit 的 SSR 路线。

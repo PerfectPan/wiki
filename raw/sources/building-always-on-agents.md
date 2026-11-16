@@ -68,4 +68,5 @@ note: body pre-fetched and verified against page HTML
 
 - 已通过脚本直接抓取页面 HTML 并提取正文与全部 `<img>` 标签核对章节结构与表述。
 - 本文属于架构设计指南，不包含可运行的开源代码库；未在本地搭建或压测文中描述的五组件服务。
+- 手绘配图 `raw/assets/always-on-agent-five-primitives.png` 根据本文的五个核心组件（Event Inbox、Timers & Scheduler、Memory、Permissions、Outbox & Dispatcher）及唤醒闭环绘制，已逐项核对图中中英文标签与箭头方向。
 - 整理页：[[wiki/topics/ai/personal-agent|Personal Agent 与 Super-agent]]、[[wiki/syntheses/ai/always-on-and-super-agent-architecture|常驻型 Agent（Always-on / Super-agent）的系统架构]]。

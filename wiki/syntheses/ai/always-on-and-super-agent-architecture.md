@@ -108,34 +108,7 @@ flowchart LR
 
 当用户在飞书群报了 bug、同时又有另外三个开发任务在进行时，系统面临**全局上下文连续性**与**多任务并发吞吐**的直接取舍：若把所有事件都塞进同一个 Session，单步 ReAct 循环会串行阻塞且不同任务的中间输出互相干扰；若每个事件都新建独立 Session，当用户在 GitHub PR 里修改飞书群提过的需求时，新 Session 又拿不到此前的全局背景。[DeepSeek Super-agent §2][dsh-article]
 
-```mermaid
-flowchart TB
-  subgraph Channels["多渠道交互入口"]
-    Feishu["飞书群聊话题（Thread A）"]
-    GH["GitHub PR 评论与 CI（Thread B）"]
-  end
-
-  subgraph Layer1["第一层：Router Layer（长生命周期主 Session）"]
-    Router["Router Session：全局交互、记忆协调、派发工单（无 Bash 工具）"]
-    Batch["Prefill 自动批处理：合并上一轮推理期间积压的 Triggers"]
-    Batch --> Router
-  end
-
-  subgraph Layer2["第二层：Worker Layer（隔离上下文执行器）"]
-    W1["Worker Session 1（Ticket 1 + git worktree 1）"]
-    W2["Worker Session 2（Ticket 2 + git worktree 2）"]
-  end
-
-  Feishu -->|1. 首次报障（Slow Path 未订阅）| Batch
-  Router -->|2. 创建 Ticket 1 并绑定订阅| W1
-  Feishu -->|3. 同话题后续跟进（Fast Path 订阅直通）| W1
-  GH -->|4. PR 评论与 CI 状态（Fast Path 订阅直通）| W1
-  GH -->|5. 跨任务需求变更或超范围 handback| Batch
-  Router -->|6. 派发新任务或注入跨工单 note| W2
-  W1 -->|7. 结构化 Report 汇报进展/结果| Router
-  W2 -->|7. 结构化 Report 汇报进展/结果| Router
-  Router -->|8. 统一通过 Outbox 对外回复| Channels
-```
+![Super-agent 两层架构与 Thread 直通：环境事件经两级过滤后，未订阅的首次事件走 Slow Path 进入 Router 主会话创建工单，已订阅 Thread 的后续事件走 Fast Path 直通隔离的 Worker 会话，Worker 执行后向 Router 汇报并统一对外回复](../../../raw/assets/super-agent-two-level-architecture.png)
 
 1. **Router + Worker 两层架构解耦连续性与吞吐量**：
    - **Router 层（主会话）**：维护全局长生命周期上下文，承接所有入口的人类交互，充当系统的全局顺序点与协调点。为避免成为性能瓶颈，Router **不直接执行具体编码或耗时命令**（甚至可以不挂载 Bash 工具），只做轻量对话与任务派发。[DeepSeek Super-agent §2.1][dsh-article]

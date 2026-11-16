@@ -27,7 +27,8 @@ description: 将文章、网页、仓库、推文线程或视频素材整理为�
 
 1. 默认 `bin/wiki ingest <url>` 直抓。
 2. 直抓被反爬拦截（403）或落盘文件明显太脏（导航、订阅尾巴、粗体和行内代码丢失）时，改用会话侧 reader 工具（如 GLM 的 webReader MCP，是否可用取决于客户端）抓正文，存成临时文件后 `bin/wiki ingest <url> --file <路径>` 落盘。reader 返回的 JSON 直接喂 `--file` 即可，`title`、`author`、`publishedTime` 会自动写入头注释。`--file` 不绑定具体 reader，手动复制的正文文件同样适用。
-3. 站点提供 llms.txt 类端点时，可用它核对落盘正文是否完整；发现缺漏时以官方端点为准重存正文。
+   - **X（Twitter）推文与 X Article 长文**：X 页面直抓通常只返回空壳或 `t.co` 短链；可通过 `https://api.fxtwitter.com/<user>/status/<id>` 获取结构化 JSON（普通推文在 `tweet.text`，X 长文在 `tweet.article.content.blocks` 及 `entityMap` 的表格与图注中），整理后通过 `--file` 落盘或写入核查记录。
+3. 站点提供 llms.txt 类端点时（如 `<origin>/llms.txt`），可用它定位 Markdown 原文文档并核对落盘正文是否完整；发现缺漏时以官方端点为准重存正文。
 4. 视频来源（B 站、YouTube）：接入用 yt-dlp（仓库的 YouTube 路径已在用），先看有没有字幕，没有再做本地转录。`bin/wiki ingest <URL> [--slides] [--cookies-from-browser chrome]` 会依次完成取元信息、试字幕、必要时下音频转录、抽幻灯片缩略图；命令与两个已知的坑见 `bin/README.md` 的「B 站视频」。
 
 素材命名遵循 `SCHEMA.md` 的「原始素材命名」。先搜索是否已有同一对象的素材；新文件使用稳定的对象或主题名，必要时用 `bin/wiki ingest <url> --name <name>` 指定。日期与源码提交版本写进文件头。
@@ -265,7 +266,10 @@ resource:
 
 ## 第九步：校验
 
-运行 `bin/wiki check <页面路径>` 确认 frontmatter 无误。
+1. 运行 `bin/wiki check <页面路径>` 确认 frontmatter 无误（0 错误，新增页面尽量消除警告）。
+2. 运行 `bin/wiki check-jargon --base origin/main` 检查新增或改写行的用词是否符合 `SCHEMA.md` 规范。
+3. 运行 `git diff --check` 检查空白字符，并确认 Markdown 代码块与 Mermaid fence 成对闭合且不含解析错误字符（见 `references/page-writing.md#配图选择与核对`）。
+4. 创建或更新 PR 前，可用 `PR_TITLE="..." PR_BODY="..." node tests/pr-metadata.mjs` 本地预检英文标题（Conventional Commits）与英文 PR 正文格式。
 
 ## 输出
 

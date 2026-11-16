@@ -111,24 +111,7 @@ sequenceDiagram
 
 Poppy 没有要求个人 Agent 事先去每家企业后台手动注册 OAuth 客户端，而是结合 **CIMD（Client ID Metadata Document）** 与**两级密钥架构**解决身份与隐私问题：[Spec §4.1, §5.1, §5.2, §10.7][spec]
 
-```mermaid
-flowchart LR
-  subgraph AgentKeys["Personal Agent 密钥与身份层"]
-    CIMD["client_id（HTTPS 元数据文档 URL，暴露 jwks_uri 主公钥）"]
-    MasterKey["jwks_uri 主私钥（ES256 / PS384）"]
-    DlgKey["短期委托密钥（Delegated Key，ES256，按 User ID 与企业隔离）"]
-    CIMD --- MasterKey
-    MasterKey -->|"签发 ≤24h 委托凭证 poppy-delegation+jwt（不含用户与企业信息）"| DlgKey
-  end
-
-  subgraph Targets["发往企业的两类签名凭证"]
-    Assertion["OAuth 客户端断言（private_key_jwt，aud = 企业 issuer，exp ≤ 5min）"]
-    SessJWT["Poppy-Session 请求头（poppy-session+jwt，含 poppy_dlg、sid、pairwise sub、htm/htu/ath）"]
-  end
-
-  MasterKey -->|"仅在 /token、/revoke 等 OAuth 端点使用"| Assertion
-  DlgKey -->|"随每个业务请求逐次签发"| SessJWT
-```
+![Poppy 两级密钥与伪匿名会话：client_id 主密钥一方面在企业 OAuth 授权端点签发短期 private_key_jwt 客户端断言，另一方面签发不含用户信息的 24 小时委托凭证 poppy_dlg 授权给按用户与企业隔离的短期委托密钥，再由委托密钥逐请求签发 Poppy-Session JWT](../../../raw/assets/poppy-delegated-keys-architecture.png)
 
 - **按企业隔离的伪匿名 `User ID`（Pairwise `sub`）**：Personal Agent 为每个用户在每家企业生成一个稳定、不透明且互不相同的 `User ID`（严禁包含或由邮箱、手机号、姓名做哈希派生）。这样企业在未登录状态下也能跨会话识别回访用户，但**不同企业之间无法通过 `User ID` 串通比对出同一个自然人**。Agent 也可在隐私浏览模式下为单次匿名会话生成用完即弃的临时 `User ID`。[Spec §5.1][spec]
 - **为什么用委托密钥（`poppy_dlg`）签 `Poppy-Session`**：Agent 的每个 API、对话和网页抓取请求都要签名 `Poppy-Session` JWT。如果直接用 `jwks_uri` 里的主私钥高频签名，不仅主密钥暴露面大，且签名服务会看到用户每次访问了哪家企业。因此主密钥只用来签发有效期不超过 24 小时、**不包含任何用户 ID 或企业标识**的委托凭证（`typ: poppy-delegation+jwt`），放入 `Poppy-Session` 头的 `poppy_dlg` 字段；真正的每次请求由绑定单个 `User ID` 的短期委托私钥签名。[Spec §5.2, §10.7][spec]

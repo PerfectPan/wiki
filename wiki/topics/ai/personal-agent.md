@@ -63,51 +63,17 @@ DeepSeek Harness 将常驻型 Super-agent / Personal Agent 的目标体验归纳
 
 ## 核心数据流与系统全貌
 
-下图展示一次外部事件进入常驻型 Agent，经内部调度与记忆读取、调用本地工作区或外部商业服务，最终将结果送达用户的完整路径：[Anthropic 指南][always-on]、[DeepSeek Super-agent §2–§5][dsh-article]、[Poppy Spec §1][poppy-spec]
+下图展示常驻型 Agent 围绕一次运行（Run）形成的五个核心外围组件闭环：外部事件或到期定时器进入持久收件箱（`Event Inbox`）唤醒 Worker，在会话中读写跨运行持久记忆（`Memory`）、经凭据代理与延后审批（`Permissions`）调用外部工具或协议，最终通过发件箱（`Outbox`）控频投递给用户，或设下新的定时器（`Timers`）等待下次唤醒：[Anthropic 指南][always-on]
 
-```mermaid
-flowchart TB
-  subgraph Sources["1. 触发源与定时唤醒"]
-    IM["IM / 邮件 / GitHub Webhook"]
-    Timer["Timers：follow-up 截止 / schedule 周期"]
-  end
+![常驻型 Agent 的五个核心组件：Event Inbox 唤醒 Worker Run，读写跨运行 Memory、经 Permissions 代理与延后审批执行操作，由 Outbox 控频投递，并通过 Timers 轮询再次唤醒](../../../raw/assets/always-on-agent-five-primitives.png)
 
-  subgraph Intake["2. 接入、去重与二级过滤"]
-    Inbox["持久 Event Inbox / Source Trigger"]
-    Filter["Fast Path 代码规则过滤 → Slow Path 模型研判"]
-    IM --> Inbox
-    Timer -->|Scheduler 轮询到期写入| Inbox
-    Inbox --> Filter
-  end
+当并发任务规模扩大并横跨多个交互渠道（如 IM 群聊、GitHub PR 与外部商业服务）时，上述单实例闭环进一步扩展为五层端到端链路：[DeepSeek Super-agent §2–§5][dsh-article]、[Poppy Spec §1][poppy-spec]
 
-  subgraph Core["3. 路由、会话与跨运行记忆"]
-    Router["Router 主会话 / 单活 Worker：批处理与全局协调"]
-    Mem[("持久 Memory / 引用图 Chain of Recall")]
-    Worker["隔离 Worker Session / Ticket：并发执行"]
-    Filter -->|新任务或跨任务协调| Router
-    Filter -->|已订阅 Thread 事件直通| Worker
-    Router <--> Mem
-    Router -->|派发工单与 Mandate| Worker
-  end
-
-  subgraph Exec["4. 权限控制、执行环境与外部协议"]
-    Proxy["凭据代理 / 延后工具调用审批"]
-    Env["云端按需沙箱 / BYOM 本地设备守护进程"]
-    Poppy["外部企业交互：Personal Agent Protocol / MCP"]
-    Worker --> Proxy
-    Proxy --> Env
-    Proxy --> Poppy
-  end
-
-  subgraph Delivery["5. 发件箱与分渠道投递"]
-    Outbox["持久 Outbox + Dispatcher 控频重试"]
-    Watchdog["独立 Watchdog Session：巡检死循环与故障"]
-    Worker -->|汇报进展 / 待决问题 / 成果| Router
-    Router --> Outbox
-    Outbox -->|IM 简短结论 / GitHub 结构化 PR / 审批卡片| User["用户 / 团队成员"]
-    Watchdog -.->|定时检查与热修规则| Core
-  end
-```
+1. **触发与定时唤醒**：IM 消息、邮件、GitHub Webhook 与独立轮询的定时器（`follow-up` 截止时间 / `schedule` 周期任务）统一写入持久化收件箱。
+2. **两级降噪过滤**：先由确定性代码（Fast Path / Gate）核对发送者白名单与接收范围筛除噪音，再将候选事件交由模型语义策略（Slow Path / Assessment）研判。
+3. **两层路由与记忆召回**：长生命周期的 **Router 主会话**负责全渠道人机交互、Prefill 自动批处理与全局协调，通过引用图（Chain of Recall）按需多跳召回历史；具体任务派发给上下文隔离的 **Worker 会话**并发执行，已订阅同一话题（`Thread`）的后续事件直接由代码直通 Worker（详见 [[wiki/syntheses/ai/always-on-and-super-agent-architecture|常驻型 Agent 的系统架构]]）。
+4. **权限隔离、执行环境与外部协议**：凭据由外部代理注入或经延后工具调用（Deferred Tool Calls）挂起等待人工批准；代码执行下发至按需云端沙箱或用户个人设备上的轻量守护进程（BYOM Daemon）；跨出个人环境访问外部商业公司时，通过 [[wiki/topics/ai/personal-agent-protocol|Personal Agent Protocol（Poppy）]] 或 [[wiki/topics/ai/mcp|MCP]] 交互。
+5. **发件箱控频投递与外部巡检**：结果经持久发件箱（Outbox + Dispatcher）按渠道规范（IM 简短结论、GitHub/邮件结构化长文）送达用户；主系统之外由独立的 **Watchdog 会话**定时巡检死循环、目标偏离与基础设施故障。
 
 ## 主题版图与页面导航
 

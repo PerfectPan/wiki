@@ -64,4 +64,5 @@ note: Personal Agent Protocol (Poppy) v1.0 specification and extensions
 
 - 已抓取并逐章核对 `personalagentprotocol.org` 的 `llms.txt`、`introduction.md`、`1.0/spec.md`、`1.0/extensions.md` 与 `1.0/extensions/operations.md`。
 - 本次未运行站点提供的社区 Demo 或 Company Implementation Kit 校验器，协议请求与响应格式均直接依据 v1.0 规范正文核对。
+- 手绘配图 `raw/assets/poppy-delegated-keys-architecture.png` 根据规范 §4.1、§5.1、§5.2 的 `client_id` 主密钥、短期委托密钥（`poppy_dlg`）与 `Poppy-Session` JWT 签名关系绘制，已逐项核对中英文标签与箭头方向。
 - 整理页：[[wiki/topics/ai/personal-agent-protocol|Personal Agent Protocol（Poppy）]]、[[wiki/topics/ai/personal-agent|Personal Agent 与 Super-agent]]。

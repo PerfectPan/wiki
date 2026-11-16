@@ -47,8 +47,3 @@ Anthropic 在 2026-04-23 发布的 Claude Code 复盘里，暴露了哪些对 AI
 - 默认推理强度应该如何按模型、任务类型和用户偏好分层，而不是只做一个全局默认，仍然需要更细的产品设计。
 - reasoning 历史应保留到什么粒度，既足够支持连续任务，又不至于让延迟和成本失控，仍然是 Agent 系统设计里的长期权衡。
 - system prompt、产品交互层和模型训练三者之间，哪些约束该放在哪一层，怎样避免跨层叠加后伤害能力，仍然需要更成熟的治理方法。
-
-## 来源指针
-
-- `https://www.anthropic.com/engineering/april-23-postmortem`
-- `memory/2026-04-23.md`

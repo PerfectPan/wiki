@@ -16,11 +16,6 @@ source_refs:
   - https://github.com/vercel-labs/konsistent
   - https://vercel.com/changelog/enforce-consistent-code-for-agents-and-humans-with-konsistent
   - https://github.com/vercel/ai/issues/15868
-resource:
-  - raw/sources/2026-07-02-vercel-konsistent-structural-conventions.md
-  - https://github.com/vercel-labs/konsistent
-  - https://vercel.com/changelog/enforce-consistent-code-for-agents-and-humans-with-konsistent
-  - https://github.com/vercel/ai/issues/15868
 ---
 
 # Code Agent 结构约定的可验证边界
@@ -95,10 +90,3 @@ code agent 常见失败不是完全不知道该做什么，而是从几个样例
 - [[agent-native-system-interface-design]]
 - [[agent-native-generative-cli-artifact-protocol]]
 - [[linter]]
-
-## 来源指针
-
-- `raw/sources/2026-07-02-vercel-konsistent-structural-conventions.md`
-- `https://github.com/vercel-labs/konsistent`
-- `https://vercel.com/changelog/enforce-consistent-code-for-agents-and-humans-with-konsistent`
-- `https://github.com/vercel/ai/issues/15868`

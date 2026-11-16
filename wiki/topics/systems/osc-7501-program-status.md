@@ -20,14 +20,6 @@ source_refs:
   - https://ghostty.org/docs/install/release-notes/1-4-0
   - wiki/topics/systems/terminal.md
   - https://control-codes.page/csi/decrqpsr/
-resource:
-  - raw/sources/osc-7501-program-status.md
-  - https://control-codes.page/proposals/osc-7501/
-  - https://github.com/ghostty-org/ghostty/pull/14560
-  - https://docs.phux.sh/program-protocol
-  - https://ghostty.org/docs/install/release-notes/1-4-0
-  - wiki/topics/systems/terminal.md
-  - https://control-codes.page/csi/decrqpsr/
 ---
 
 # OSC 7501：Program Status Protocol

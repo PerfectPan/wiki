@@ -14,9 +14,6 @@ tags:
 source_refs:
   - raw/sources/2026-05-24-kv-cache-request-cache-conversation.md
   - https://x.com/_avichawla/status/2034902650534187503
-resource:
-  - raw/sources/2026-05-24-kv-cache-request-cache-conversation.md
-  - https://x.com/_avichawla/status/2034902650534187503
 ---
 # KV Cache 与请求缓存的边界
 
@@ -62,8 +59,3 @@ KV Cache 通常放在 GPU 显存里，不是因为“缓存只能放显存”，
 
 - 这页还没有展开不同推理框架如何实现 Prefix Cache。
 - 后续可以补充 vLLM PagedAttention、DeepSeek MLA、GQA/MQA 的具体内存计算方式。
-
-## 来源指针
-
-- `raw/sources/2026-05-24-kv-cache-request-cache-conversation.md`
-- `https://x.com/_avichawla/status/2034902650534187503`

@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/chaiknows-gigabit-network-download-speed.md
   - https://chaiknows.feishu.cn/wiki/JTaWw9wqFiU70fkEpFac9JiKnzg
-resource:
-  - raw/sources/chaiknows-gigabit-network-download-speed.md
-  - https://chaiknows.feishu.cn/wiki/JTaWw9wqFiU70fkEpFac9JiKnzg
 ---
 
 # 千兆宽带下载机制与带宽经济学
@@ -107,8 +104,3 @@ Steam 在千兆网络下能够稳定跑出 100 MB/s 以上的下载速度，其�
 
 - [[wiki/topics/systems/computer-network|Computer Network]]
 - [[raw/sources/chaiknows-gigabit-network-download-speed|柴知道：千兆网下载跑不满分析]]
-
-## 来源指针
-
-- raw/sources/chaiknows-gigabit-network-download-speed.md
-- https://chaiknows.feishu.cn/wiki/JTaWw9wqFiU70fkEpFac9JiKnzg

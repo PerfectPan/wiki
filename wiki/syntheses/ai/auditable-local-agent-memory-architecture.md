@@ -16,10 +16,6 @@ source_refs:
   - https://x.com/asterove_ai/status/2082173389368909931
   - https://github.com/Asterove/AsterMem
   - https://github.com/tommy0103/obelisk
-resource:
-  - https://x.com/asterove_ai/status/2082173389368909931
-  - https://github.com/Asterove/AsterMem
-  - https://github.com/tommy0103/obelisk
 ---
 
 # 可审计的本地 Agent 记忆架构
@@ -105,9 +101,3 @@ AsterMem 是这一架构的早期实现案例：
 - [[rag-qa-pipeline]]
 - [[agent-harness-evolution-paradigm]]
 - [[obelisk]]
-
-## 来源指针
-
-- <https://x.com/asterove_ai/status/2082173389368909931>
-- <https://github.com/Asterove/AsterMem>
-- <https://github.com/tommy0103/obelisk>

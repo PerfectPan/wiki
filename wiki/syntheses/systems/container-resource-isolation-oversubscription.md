@@ -15,9 +15,6 @@ tags:
 source_refs:
   - wiki/topics/systems/sandbox.md
   - wiki/syntheses/systems/serverless-app-layering-isolation.md
-resource:
-  - wiki/topics/systems/sandbox.md
-  - wiki/syntheses/systems/serverless-app-layering-isolation.md
 ---
 
 # 容器资源隔离与超卖机制

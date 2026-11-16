@@ -46,14 +46,3 @@ source_refs:
 2. 静态化做不到、但又需要首屏 HTML 时，用 `SSR`；它解决的是交付时机问题，而不是天然减少 JS。
 3. 当真正的问题变成“哪些组件根本不该进浏览器”时，再引入 `RSC`。它更像服务端边界优化，而不是单独的首屏策略。
 4. 从 `waku.md` 的构建记录看，现实框架经常同时包含三套产物，这说明工程上通常是组合，而不是纯粹替代。
-
-## 来源指针
-
-- `wiki/topics/frontend/ssr.md`
-- `wiki/topics/frontend/ssg.md`
-- `wiki/topics/frontend/rsc.md`
-- `wiki/topics/frontend/waku.md`
-- `wiki/topics/frontend/react.md`
-- `raw/sources/ssr.md`
-- `raw/sources/ssg.md`
-- `raw/sources/rsc.md`

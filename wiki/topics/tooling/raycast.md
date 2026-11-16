@@ -109,9 +109,3 @@ v2 同时在部分场景更快：文件搜索由 Rust indexer 直接支持；AI 
 
 - Raycast AI 和扩展生态可能接触本地文件、剪贴板、应用上下文等敏感信息，应注意权限范围和 key 泄露风险。
 - 自建 hybrid stack 只有在产品确实需要深 OS 集成、强 native feel 和跨平台共享时才值得；普通桌面应用直接用 Electron 往往更稳。
-
-## 来源指针
-
-- `raw/sources/raycast.md`
-- `raw/sources/2026-05-16-raycast-2-technical-deep-dive.md`
-- <https://www.raycast.com/blog/a-technical-deep-dive-into-the-new-raycast>

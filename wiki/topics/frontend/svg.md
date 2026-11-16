@@ -11,8 +11,6 @@ tags:
   - graphics
 source_refs:
   - raw/sources/svg.md
-resource:
-  - raw/sources/svg.md
 ---
 # SVG
 

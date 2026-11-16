@@ -40,8 +40,3 @@ source_refs:
 
 - 当前仓库还没有把 hydration mismatch 的具体类型、风险和常见修复手法系统拆开。
 - 如果后续继续沉淀 SSR 主题，可以把这页和 `React 18 流式 SSR 与渐进式 hydration` 做成更完整的路线图。
-
-## 来源指针
-
-- `wiki/topics/frontend/ssr.md`
-- `wiki/topics/frontend/use-effect.md`

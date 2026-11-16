@@ -22,17 +22,6 @@ source_refs:
   - https://github.com/wso2/agent-manager/pull/1555
   - https://github.com/dependabot/dependabot-core/issues/2270
   - https://github.com/dependabot/dependabot-core/issues/16397
-resource:
-  - raw/sources/rush-vs-pnpm-workspace.md
-  - https://rushjs.io/
-  - https://github.com/microsoft/rushstack/issues/4011
-  - https://pnpm.io/workspaces
-  - https://pnpm.io/versioning
-  - https://github.com/microsoft/typespec/pull/2775
-  - https://github.com/Azure/azure-sdk-for-js/pull/34941
-  - https://github.com/wso2/agent-manager/pull/1555
-  - https://github.com/dependabot/dependabot-core/issues/2270
-  - https://github.com/dependabot/dependabot-core/issues/16397
 ---
 # Rush vs pnpm workspace
 

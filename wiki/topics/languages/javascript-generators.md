@@ -16,11 +16,6 @@ source_refs:
   - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_generators
   - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
   - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*
-resource:
-  - raw/sources/javascript-generators.md
-  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_generators
-  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols
-  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*
 ---
 
 # JavaScript 生成器与 yield 的类型

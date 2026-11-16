@@ -11,9 +11,6 @@ tags:
 source_refs:
   - raw/sources/shell.md
   - https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html
-resource:
-  - raw/sources/shell.md
-  - https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html
 ---
 # Shell
 

@@ -19,13 +19,6 @@ source_refs:
   - https://personalagentprotocol.org/docs/1.0/spec.md
   - https://personalagentprotocol.org/docs/1.0/extensions.md
   - https://personalagentprotocol.org/docs/1.0/extensions/operations.md
-resource:
-  - raw/sources/personal-agent-protocol.md
-  - https://personalagentprotocol.org
-  - https://personalagentprotocol.org/docs/introduction.md
-  - https://personalagentprotocol.org/docs/1.0/spec.md
-  - https://personalagentprotocol.org/docs/1.0/extensions.md
-  - https://personalagentprotocol.org/docs/1.0/extensions/operations.md
 ---
 
 # Personal Agent Protocol（Poppy）

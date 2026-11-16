@@ -18,13 +18,6 @@ source_refs:
   - raw/sources/cloudflare-computer.md
   - raw/sources/layerfs.md
   - raw/sources/perplexity-space.md
-resource:
-  - wiki/topics/ai/cloudflare-computer.md
-  - wiki/topics/ai/layerfs.md
-  - wiki/topics/ai/perplexity-space.md
-  - raw/sources/cloudflare-computer.md
-  - raw/sources/layerfs.md
-  - raw/sources/perplexity-space.md
 ---
 # Cloudflare Computer vs LayerFS vs Perplexity SPACE
 

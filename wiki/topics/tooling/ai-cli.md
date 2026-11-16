@@ -14,9 +14,6 @@ tags:
 source_refs:
   - https://github.com/vercel-labs/ai-cli
   - raw/sources/2026-05-12-ai-cli-skill-review.md
-resource:
-  - https://github.com/vercel-labs/ai-cli
-  - raw/sources/2026-05-12-ai-cli-skill-review.md
 ---
 # ai-cli
 
@@ -50,8 +47,3 @@ resource:
 ## 相关页面
 
 - [[wiki/syntheses/ai/skill-engineering-artifact-protocol|Skill 工程化的产物协议范式]]
-
-## 来源指针
-
-- https://github.com/vercel-labs/ai-cli
-- `raw/sources/2026-05-12-ai-cli-skill-review.md`

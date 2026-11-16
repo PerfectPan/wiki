@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/2026-09-01-details-that-make-interfaces-feel-better.md
   - https://jakub.kr/writing/details-that-make-interfaces-feel-better
-resource:
-  - raw/sources/2026-09-01-details-that-make-interfaces-feel-better.md
-  - https://jakub.kr/writing/details-that-make-interfaces-feel-better
 ---
 
 # 界面质感细节

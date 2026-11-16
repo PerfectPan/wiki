@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/rsc-update-path-local-demos.md
   - wiki/topics/frontend/rsc.md
   - wiki/topics/frontend/tanstack-start.md
-resource:
-  - raw/sources/rsc-update-path-local-demos.md
-  - wiki/topics/frontend/rsc.md
-  - wiki/topics/frontend/tanstack-start.md
 ---
 # RSC 交互后的更新链路：Next 与 TanStack Start
 
@@ -117,7 +113,3 @@ TanStack Start 里路由组件默认是客户端组件，只有 server function 
 - [[wiki/topics/frontend/rsc|RSC]]
 - [[wiki/topics/frontend/tanstack-start|TanStack Start]]
 - [[wiki/syntheses/frontend/rsc-protocol-rendering-mental-model|RSC 的协议与渲染心智模型]]
-
-## 来源指针
-
-- `raw/sources/rsc-update-path-local-demos.md`

@@ -26,20 +26,6 @@ source_refs:
   - https://man7.org/linux/man-pages/man3/wcwidth.3.html
   - https://control-codes.page/csi/decrqpsr/
   - raw/sources/decrqpsr.md
-resource:
-  - raw/sources/terminal-emulator-pty-guide.md
-  - raw/sources/how-terminals-work.md
-  - https://how-terminals-work.vercel.app/
-  - https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap11.html
-  - https://man7.org/linux/man-pages/man7/pty.7.html
-  - https://man7.org/linux/man-pages/man3/termios.3.html
-  - https://invisible-island.net/xterm/ctlseqs/ctlseqs.html
-  - https://www.gnu.org/software/bash/manual/html_node/What-is-a-shell_003f.html
-  - https://www.gnu.org/software/bash/manual/html_node/Readline-Interaction.html
-  - https://man7.org/linux/man-pages/man1/tty.1.html
-  - https://man7.org/linux/man-pages/man3/wcwidth.3.html
-  - https://control-codes.page/csi/decrqpsr/
-  - raw/sources/decrqpsr.md
 ---
 
 # Terminal：终端模拟器、PTY 与程序

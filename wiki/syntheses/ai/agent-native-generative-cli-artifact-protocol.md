@@ -100,9 +100,3 @@ OpenClaw 如果要做类似能力，应该先封装自己的稳定协议，而�
 - 对可复现性要求高但缺少 seed / determinism 的图片生成流程。
 - 不经人工验收直接对外发布的内容链路。
 - 需要强 SLA 的生产链路，除非 provider 故障切换、重试和降级策略已经完善。
-
-## 来源指针
-
-- `raw/sources/2026-05-31-vercel-ai-cli-research.md`
-- `https://github.com/vercel-labs/ai-cli`
-- `https://www.npmjs.com/package/ai-cli`

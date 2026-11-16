@@ -19,15 +19,6 @@ source_refs:
   - https://ocaml.org/manual/5.5/effects.html
   - https://koka-lang.github.io/koka/doc/book.html
   - https://overreacted.io/algebraic-effects-for-the-rest-of-us/
-resource:
-  - raw/sources/algebraic-effects.md
-  - raw/sources/javascript-generators.md
-  - raw/sources/effect-ts.md
-  - https://link.springer.com/chapter/10.1007/978-3-642-00590-9_7
-  - https://en.wikipedia.org/wiki/Effect_system
-  - https://ocaml.org/manual/5.5/effects.html
-  - https://koka-lang.github.io/koka/doc/book.html
-  - https://overreacted.io/algebraic-effects-for-the-rest-of-us/
 ---
 # Algebraic Effects
 

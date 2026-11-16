@@ -14,8 +14,6 @@ tags:
   - svg
 source_refs:
   - raw/sources/2026-08-02-neat-annotations.md
-resource:
-  - raw/sources/2026-08-02-neat-annotations.md
 ---
 
 # 纯 CSS 手绘标注的实现与布局边界

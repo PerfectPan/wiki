@@ -18,14 +18,6 @@ source_refs:
   - https://www.zhihu.com/question/2024177621341075284/answer/2095217865989399922
   - wiki/comparisons/ai/workflow-vs-agent.md
   - wiki/syntheses/ai/llm-structured-output-reliability.md
-resource:
-  - raw/sources/agent.md
-  - https://github.com/Aider-AI/aider
-  - https://github.com/agno-agi/agno
-  - raw/sources/kimmking-agent-engineering.md
-  - https://www.zhihu.com/question/2024177621341075284/answer/2095217865989399922
-  - wiki/comparisons/ai/workflow-vs-agent.md
-  - wiki/syntheses/ai/llm-structured-output-reliability.md
 ---
 # Agent
 

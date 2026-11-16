@@ -16,10 +16,6 @@ source_refs:
   - raw/sources/2026-07-01-openseek-project-architecture-review.md
   - raw/sources/2026-07-01-openseek-shell-git-policy.md
   - https://github.com/moonbitlang/openseek
-resource:
-  - raw/sources/2026-07-01-openseek-project-architecture-review.md
-  - raw/sources/2026-07-01-openseek-shell-git-policy.md
-  - https://github.com/moonbitlang/openseek
 ---
 
 # OpenSeek 工具协议与评测体系
@@ -144,9 +140,3 @@ sequenceDiagram
 - [[coding-agent-shell-git-permissions]]
 - [[agent-native-generative-cli-artifact-protocol]]
 - [[skill-engineering-artifact-protocol]]
-
-## 来源指针
-
-- `raw/sources/2026-07-01-openseek-project-architecture-review.md`
-- `raw/sources/2026-07-01-openseek-shell-git-policy.md`
-- `https://github.com/moonbitlang/openseek`

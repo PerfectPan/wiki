@@ -39,7 +39,3 @@ TypeScript 在控制流里的类型收窄和 IIMT 这类技巧，分别解决什
 
 - 当前仓库还没有单独展开 `discriminated union`、IIMT、条件类型和分布式行为之间的关系。
 - 后续如果继续沉淀 TypeScript 主题，可以把这页拆成更偏“技巧清单”的 comparison 或 patterns 页面。
-
-## 来源指针
-
-- `wiki/topics/languages/typescript.md`

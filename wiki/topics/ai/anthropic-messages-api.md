@@ -14,8 +14,6 @@ tags:
   - tool-calling
 source_refs:
   - raw/sources/2026-08-03-llm-101-conversation.md
-resource:
-  - raw/sources/2026-08-03-llm-101-conversation.md
 ---
 # Anthropic Messages API
 
@@ -51,7 +49,3 @@ Anthropic Messages 是 Claude 官方对话与工具协议。思想仍是「messa
 - [[chat-completions-vs-messages-vs-responses]]
 - [[code-agent]]
 - [[llm-101]]
-
-## 来源指针
-
-- `raw/sources/2026-08-03-llm-101-conversation.md`

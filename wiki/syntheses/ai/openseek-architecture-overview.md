@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/2026-07-01-openseek-project-architecture-review.md
   - raw/sources/2026-07-01-openseek-shell-git-policy.md
   - https://github.com/moonbitlang/openseek
-resource:
-  - raw/sources/2026-07-01-openseek-project-architecture-review.md
-  - raw/sources/2026-07-01-openseek-shell-git-policy.md
-  - https://github.com/moonbitlang/openseek
 ---
 
 # OpenSeek 项目架构总览
@@ -134,9 +130,3 @@ OpenSeek 的关键是每个阶段都落入 session event，而不是只在内存
 - [[coding-agent-shell-git-permissions]]
 - [[code-agent]]
 - [[agent-native-generative-cli-artifact-protocol]]
-
-## 来源指针
-
-- `raw/sources/2026-07-01-openseek-project-architecture-review.md`
-- `raw/sources/2026-07-01-openseek-shell-git-policy.md`
-- `https://github.com/moonbitlang/openseek`

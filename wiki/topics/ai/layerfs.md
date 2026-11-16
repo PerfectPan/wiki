@@ -19,13 +19,6 @@ source_refs:
   - https://github.com/deepseek-ai/deepseek-harness
   - https://github.com/tursodatabase/agentfs/
   - https://turso.tech/blog/agentfs-overlay
-resource:
-  - raw/sources/layerfs.md
-  - https://github.com/Ephemeral-AI-Lab/layerfs
-  - https://learn.layerfs.ai/chapters/01-cas-and-cdc/
-  - https://github.com/deepseek-ai/deepseek-harness
-  - https://github.com/tursodatabase/agentfs/
-  - https://turso.tech/blog/agentfs-overlay
 ---
 # LayerFS
 

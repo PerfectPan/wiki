@@ -15,11 +15,6 @@ source_refs:
   - https://github.com/LodyAI
   - https://github.com/LodyAI/acp-extension-core
   - https://github.com/LodyAI/Lody
-resource:
-  - raw/sources/2026-09-30-lody-acp-extension-research.md
-  - https://github.com/LodyAI
-  - https://github.com/LodyAI/acp-extension-core
-  - https://github.com/LodyAI/Lody
 ---
 
 # Lody 在 ACP 之上的协议扩展

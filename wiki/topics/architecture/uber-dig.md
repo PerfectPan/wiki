@@ -14,10 +14,6 @@ source_refs:
   - https://pkg.go.dev/go.uber.org/dig
   - https://effect.website/docs/requirements-management/services/
   - https://effect.website/docs/requirements-management/layers/
-resource:
-  - https://pkg.go.dev/go.uber.org/dig
-  - https://effect.website/docs/requirements-management/services/
-  - https://effect.website/docs/requirements-management/layers/
 ---
 
 # uber/dig

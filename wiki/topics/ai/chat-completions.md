@@ -13,8 +13,6 @@ tags:
   - tool-calling
 source_refs:
   - raw/sources/2026-08-03-llm-101-conversation.md
-resource:
-  - raw/sources/2026-08-03-llm-101-conversation.md
 ---
 # Chat Completions
 
@@ -42,7 +40,3 @@ Chat Completions 是目前最通用的 LLM HTTP 协议形态：用 `messages` �
 - [[chat-completions-vs-messages-vs-responses]]
 - [[code-agent]]
 - [[llm-101]]
-
-## 来源指针
-
-- `raw/sources/2026-08-03-llm-101-conversation.md`

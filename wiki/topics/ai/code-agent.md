@@ -51,9 +51,3 @@ Code agent 是把大语言模型放进真实工程工作流里的执行体：它
 - [[openseek-architecture-overview]]
 - [[coding-agent-shell-git-permissions]]
 - [[workflow-vs-agent]]
-
-## 来源指针
-
-- `raw/sources/code-agent.md`
-- `raw/sources/2026-05-31-vercel-ai-cli-research.md`
-- `raw/sources/2026-07-01-openseek-shell-git-policy.md`

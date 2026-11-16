@@ -13,9 +13,6 @@ tags:
 source_refs:
   - raw/sources/anthropic-components-of-agent-memory.md
   - https://www.anthropic.com/research/components-of-agent-memory
-resource:
-  - raw/sources/anthropic-components-of-agent-memory.md
-  - https://www.anthropic.com/research/components-of-agent-memory
 ---
 
 # Agent Memory

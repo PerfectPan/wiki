@@ -17,11 +17,6 @@ source_refs:
   - raw/sources/2026-06-21-bmpi-ai-native-investment-system.md
   - https://www.bmpi.dev/dev/agent-native-system-paradigm/
   - https://www.bmpi.dev/dev/ai-native-investment-system/
-resource:
-  - raw/sources/2026-06-21-bmpi-agent-native-system-paradigm.md
-  - raw/sources/2026-06-21-bmpi-ai-native-investment-system.md
-  - https://www.bmpi.dev/dev/agent-native-system-paradigm/
-  - https://www.bmpi.dev/dev/ai-native-investment-system/
 ---
 
 # Agent Native 系统接口设计
@@ -146,10 +141,3 @@ Validation 也不等于真实正确。投资策略通过回测不代表未来有
 - [[llm-structured-output-reliability]]
 - [[agent-harness-evolution-paradigm]]
 - [[agent-native-generative-cli-artifact-protocol]]
-
-## 来源指针
-
-- `raw/sources/2026-06-21-bmpi-agent-native-system-paradigm.md`
-- `raw/sources/2026-06-21-bmpi-ai-native-investment-system.md`
-- https://www.bmpi.dev/dev/agent-native-system-paradigm/
-- https://www.bmpi.dev/dev/ai-native-investment-system/

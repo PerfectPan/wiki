@@ -23,18 +23,6 @@ source_refs:
   - https://www.letta.com/blog/context-repositories/
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
-resource:
-  - raw/sources/gbrain.md
-  - raw/sources/memu.md
-  - raw/sources/agentmemory.md
-  - raw/sources/letta-context-repositories.md
-  - https://github.com/garrytan/gbrain
-  - https://memu.pro/
-  - https://www.agent-memory.dev/
-  - https://github.com/iii-hq/iii
-  - https://www.letta.com/blog/context-repositories/
-  - https://docs.letta.com/concepts/memfs
-  - https://docs.letta.com/configuration/memory
 ---
 
 # Agent 记忆方案对比：gbrain、memU、agentmemory 与 Letta

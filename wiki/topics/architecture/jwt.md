@@ -16,12 +16,6 @@ source_refs:
   - https://www.rfc-editor.org/rfc/rfc7516
   - https://www.rfc-editor.org/rfc/rfc7518
   - https://www.rfc-editor.org/rfc/rfc8725
-resource:
-  - https://www.rfc-editor.org/rfc/rfc7519
-  - https://www.rfc-editor.org/rfc/rfc7515
-  - https://www.rfc-editor.org/rfc/rfc7516
-  - https://www.rfc-editor.org/rfc/rfc7518
-  - https://www.rfc-editor.org/rfc/rfc8725
 ---
 # JWT
 

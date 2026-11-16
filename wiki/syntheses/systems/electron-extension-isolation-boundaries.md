@@ -14,8 +14,6 @@ tags:
   - security
 source_refs:
   - raw/sources/2026-08-02-electron-extension-system.md
-resource:
-  - raw/sources/2026-08-02-electron-extension-system.md
 ---
 
 # Electron 扩展系统的隔离与通信边界

@@ -20,14 +20,6 @@ source_refs:
   - https://developer.salesforce.com/docs/platform/lightning-components-security/guide/lws-architecture.html
   - https://github.com/tc39/proposal-shadowrealm/blob/main/explainer.md
   - https://github.com/nodejs/node/pull/65650
-resource:
-  - raw/sources/near-membrane.md
-  - https://github.com/salesforce/near-membrane
-  - https://github.com/salesforce/near-membrane/commit/19685c36d267071cc70c2876925f8a020361fe3d
-  - https://intel.aikido.dev/cve/AIKIDO-2026-167438
-  - https://developer.salesforce.com/docs/platform/lightning-components-security/guide/lws-architecture.html
-  - https://github.com/tc39/proposal-shadowrealm/blob/main/explainer.md
-  - https://github.com/nodejs/node/pull/65650
 ---
 # near-membrane
 

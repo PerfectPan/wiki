@@ -22,16 +22,6 @@ source_refs:
   - https://www.onorca.dev/docs/remote-servers
   - https://www.onorca.dev/docs/telemetry
   - https://github.com/stablyai/orca
-resource:
-  - raw/sources/2026-07-20-raft-orca-product-research.md
-  - https://raft.build/zh-cn/
-  - https://docs.raft.build/features/server/computers/
-  - https://docs.raft.build/features/agents/external/
-  - https://raft.build/zh-cn/privacy/
-  - https://www.onorca.dev/docs
-  - https://www.onorca.dev/docs/remote-servers
-  - https://www.onorca.dev/docs/telemetry
-  - https://github.com/stablyai/orca
 ---
 
 # Raft vs Orca：多 Agent 协作与本地执行

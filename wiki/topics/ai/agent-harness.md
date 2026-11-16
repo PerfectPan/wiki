@@ -15,11 +15,6 @@ source_refs:
   - https://earendil.com/posts/what-is-a-harness/
   - raw/sources/framer-harness-2.md
   - https://www.framer.com/blog/harness-2/
-resource:
-  - raw/sources/2026-08-20-what-is-a-harness.md
-  - https://earendil.com/posts/what-is-a-harness/
-  - raw/sources/framer-harness-2.md
-  - https://www.framer.com/blog/harness-2/
 ---
 
 # Agent Harness
@@ -83,10 +78,3 @@ Harness 负责**单个 Agent** 的运行循环。像 QM、Raft、Orca 这类产�
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
 - [[wiki/syntheses/ai/agent-team-roles-and-collaboration|Agent 团队的角色分工与协作模式]]
 - [[wiki/syntheses/ai/sandboxed-agent-workflows|动态工作流：用沙箱脚本编排多 Agent]]
-
-## 来源指针
-
-- `raw/sources/2026-08-20-what-is-a-harness.md`
-- https://earendil.com/posts/what-is-a-harness/
-- `raw/sources/framer-harness-2.md`
-- https://www.framer.com/blog/harness-2/

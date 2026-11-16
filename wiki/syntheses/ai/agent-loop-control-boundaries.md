@@ -16,11 +16,6 @@ source_refs:
   - https://x.com/claudedevs/status/2074208949205881033
   - raw/sources/loopx.md
   - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html
-resource:
-  - https://threadnavigator.com/thread/2074208949205881033/
-  - https://x.com/claudedevs/status/2074208949205881033
-  - raw/sources/loopx.md
-  - https://github.com/loopx-project/loopx/blob/4e994b11f83103b99342a3b0e589a93d6b526f5d/apps/presentation/site/public/blog/zh/from-one-shot-agents-to-long-horizon-control/index.html
 ---
 # Agent 循环工作流的控制边界
 

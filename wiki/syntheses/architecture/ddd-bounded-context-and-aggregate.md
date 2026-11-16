@@ -18,14 +18,6 @@ source_refs:
   - https://www.archunit.org/
   - https://github.com/xmolecules/jmolecules
   - https://spring.io/projects/spring-modulith
-resource:
-  - https://martinfowler.com/bliki/BoundedContext.html
-  - https://martinfowler.com/bliki/AnemicDomainModel.html
-  - https://effect.website/docs/requirements-management/services/
-  - https://effect.website/docs/requirements-management/layers/
-  - https://www.archunit.org/
-  - https://github.com/xmolecules/jmolecules
-  - https://spring.io/projects/spring-modulith
 ---
 
 # 限界上下文、聚合与仓储

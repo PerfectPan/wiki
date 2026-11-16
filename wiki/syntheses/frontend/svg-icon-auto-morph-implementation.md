@@ -16,11 +16,6 @@ source_refs:
   - https://www.morphicons.com/#how
   - https://github.com/guillermolg00/morphicons
   - https://github.com/guillermolg00/morphicons/releases/tag/v1.4.1
-resource:
-  - raw/sources/2026-08-05-morphicons-implementation-research.md
-  - https://www.morphicons.com/#how
-  - https://github.com/guillermolg00/morphicons
-  - https://github.com/guillermolg00/morphicons/releases/tag/v1.4.1
 ---
 # SVG 图标自动 Morph 的实现路径
 

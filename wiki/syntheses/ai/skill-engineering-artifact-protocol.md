@@ -29,21 +29,6 @@ source_refs:
   - https://github.com/yang0/handraw-style
   - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
   - https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
-resource:
-  - raw/sources/2026-05-06-codex-pet-skill-article.md
-  - https://mp.weixin.qq.com/s/uH71k1yAoF6xjsOYmVAJBg
-  - raw/sources/2026-05-06-perplexity-agent-skills.md
-  - https://research.perplexity.ai/articles/designing-refining-and-maintaining-agent-skills-at-perplexity
-  - raw/sources/2026-05-12-ai-cli-skill-review.md
-  - https://github.com/vercel-labs/ai-cli/blob/main/skills/ai-cli/SKILL.md
-  - raw/sources/2026-08-06-bento-slides-skill-review.md
-  - https://github.com/nyblnet/bento/blob/main/plugins/bento-slides/skills/bento-slides/SKILL.md
-  - raw/sources/2026-09-01-mono-color-skill-review.md
-  - https://github.com/yanliudesign/mono-color-skill
-  - raw/sources/2026-09-22-handdraw-style-prompter-review.md
-  - https://github.com/yang0/handraw-style
-  - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
-  - https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
 ---
 # Skill 工程化的产物协议范式
 

@@ -55,8 +55,3 @@ AI 设计工具真正的机会可能不只在模型层，而在应用层：把�
 当 AI 让更多人能快速产出“像样”的东西时，平均输出数量会上升，但质量标准可能下降。此时能持续保持审美、编辑和验收能力的人，反而有信号优势。
 
 这个优势不是“拒绝 AI”，而是站在 AI 输出和最终交付之间。好的使用方式是让 AI 扩展能力，差的使用方式是让 AI 暴露自己没有判断。
-
-## 来源指针
-
-- `raw/sources/2026-05-06-ai-design-quality-boundary.md`
-- https://jonnyburch.com/i-love-ai-but-it-still-cant-design-for-shit/

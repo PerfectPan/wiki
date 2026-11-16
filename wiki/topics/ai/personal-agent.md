@@ -20,14 +20,6 @@ source_refs:
   - https://github.com/deepseek-ai/dsh-superagent-prototype
   - raw/sources/personal-agent-protocol.md
   - https://personalagentprotocol.org
-resource:
-  - raw/sources/building-always-on-agents.md
-  - https://claude.com/resources/articles/building-always-on-agents
-  - raw/sources/deepseek-superagent.md
-  - https://x.com/DeepSeekHarness/status/2116857257245987236
-  - https://github.com/deepseek-ai/dsh-superagent-prototype
-  - raw/sources/personal-agent-protocol.md
-  - https://personalagentprotocol.org
 ---
 
 # Personal Agent 与 Super-agent

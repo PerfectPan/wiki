@@ -24,17 +24,6 @@ source_refs:
   - raw/sources/claude-prompt-caching-pricing.md
   - https://code.claude.com/docs/en/prompt-caching
   - https://platform.claude.com/docs/en/about-claude/pricing
-resource:
-  - raw/sources/2026-08-03-llm-101-conversation.md
-  - raw/sources/claude-code-multi-agent-token-audit.md
-  - raw/sources/claude-code-prompt-caching-docs.md
-  - raw/sources/claude-code-model-config-docs.md
-  - raw/sources/claude-code-settings-reference.md
-  - raw/sources/claude-code-idle-compaction.md
-  - raw/sources/claude-code-autocompact-settings.md
-  - raw/sources/claude-prompt-caching-pricing.md
-  - https://code.claude.com/docs/en/prompt-caching
-  - https://platform.claude.com/docs/en/about-claude/pricing
 ---
 # Token 与计费统计标准
 

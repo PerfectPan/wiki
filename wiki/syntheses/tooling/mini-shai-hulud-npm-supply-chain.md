@@ -56,8 +56,3 @@ Mini Shai-Hulud 这类 npm 蠕虫为什么比普通恶意包更危险？它对 n
 - 生态层面如何在不破坏 maintainer 体验的情况下限制 OIDC publishing 被滥用？
 - npm registry 是否应对 tarball size anomaly、根目录额外可执行文件、异常 `github:` dependency 做更强策略拦截？
 - CI runner 是否应默认阻止普通 dependency install 读取 `/proc/*/mem` 或访问 cloud metadata endpoint？
-
-## 来源指针
-
-- `raw/sources/2026-05-12-mini-shai-hulud-npm-supply-chain.md`
-- https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem

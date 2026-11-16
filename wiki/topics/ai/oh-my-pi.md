@@ -14,10 +14,6 @@ source_refs:
   - raw/sources/2026-09-25-ttsr.md
   - https://omp.sh/docs/ttsr
   - https://github.com/can1357/oh-my-pi
-resource:
-  - raw/sources/2026-09-25-ttsr.md
-  - https://omp.sh/docs/ttsr
-  - https://github.com/can1357/oh-my-pi
 ---
 
 # omp（oh-my-pi）

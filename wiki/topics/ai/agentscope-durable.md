@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/agentscope-durable.md
   - https://mp.weixin.qq.com/s/z8JHkCyOVVKrXpKH-vy6tw
-resource:
-  - raw/sources/agentscope-durable.md
-  - https://mp.weixin.qq.com/s/z8JHkCyOVVKrXpKH-vy6tw
 ---
 
 # AgentScope Durable：任务可恢复执行与 Document / Task 分工

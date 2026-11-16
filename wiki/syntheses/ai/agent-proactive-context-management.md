@@ -66,8 +66,3 @@ source_refs:
 - [[agent-native-generative-cli-artifact-protocol]]
 - [[git-agent-collaboration-friction]]
 - [[skill-engineering-artifact-protocol]]
-
-## 来源指针
-
-- `raw/sources/2026-06-28-xlab-agent-context-management.md`
-- <https://blog.xlab.app/p/6a966aeb/>

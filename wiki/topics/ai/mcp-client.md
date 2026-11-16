@@ -32,7 +32,3 @@ MCP Client 是把模型输出接到工具执行链路上的一侧实现。它的
 
 - [[mcp]]
 - [[mcp-remote]]
-
-## 来源指针
-
-- `wiki/topics/ai/mcp.md`

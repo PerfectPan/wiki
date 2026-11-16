@@ -26,20 +26,6 @@ source_refs:
   - https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_snap
   - https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/
   - https://www.w3.org/WAI/ARIA/apg/patterns/carousel/
-resource:
-  - raw/sources/2026-10-02-adrianpunk-web-motion-dictionary.md
-  - https://x.com/AdrianPunk115/status/2099485951701721585
-  - https://x.com/AdrianPunk115/status/2099772129478869309
-  - https://x.com/AdrianPunk115/status/2100209733567430964
-  - https://motion.dev/docs/react-scroll-animations
-  - https://motion.dev/docs/react-layout-animations
-  - https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:hover
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-visible
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Selectors/:focus-within
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Scroll_snap
-  - https://www.w3.org/WAI/ARIA/apg/patterns/tooltip/
-  - https://www.w3.org/WAI/ARIA/apg/patterns/carousel/
 ---
 
 # 网页动效词汇与描述方法

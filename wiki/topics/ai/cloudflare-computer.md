@@ -17,11 +17,6 @@ source_refs:
   - https://github.com/cloudflare/computer
   - https://blog.cloudflare.com/cloudflare-computer/
   - https://www.npmjs.com/package/@cloudflare/computer
-resource:
-  - raw/sources/cloudflare-computer.md
-  - https://github.com/cloudflare/computer
-  - https://blog.cloudflare.com/cloudflare-computer/
-  - https://www.npmjs.com/package/@cloudflare/computer
 ---
 # Cloudflare Computer
 

@@ -14,9 +14,6 @@ tags:
 source_refs:
   - raw/sources/2026-09-23-solid-2-vs-octane.md
   - https://gist.github.com/aleclarson/0f4266d63fd83c7a5ea5512441bbea0c
-resource:
-  - raw/sources/2026-09-23-solid-2-vs-octane.md
-  - https://gist.github.com/aleclarson/0f4266d63fd83c7a5ea5512441bbea0c
 ---
 
 # Reactive Framework 的设计取舍：Solid 2 与 Octane

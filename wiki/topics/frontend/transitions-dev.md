@@ -17,11 +17,6 @@ source_refs:
   - https://transitions.dev/
   - https://transitions.dev/skill.html
   - https://github.com/Jakubantalik/transitions.dev
-resource:
-  - raw/sources/2026-07-26-transitions-dev.md
-  - https://transitions.dev/
-  - https://transitions.dev/skill.html
-  - https://github.com/Jakubantalik/transitions.dev
 ---
 
 # Transitions.dev

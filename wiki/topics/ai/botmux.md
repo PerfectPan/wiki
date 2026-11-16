@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/botmux.md
   - https://github.com/deepcoldy/botmux/tree/a5bff44b7d8676e316d5969d928eb21ee1b48024
   - https://github.com/deepcoldy/botmux/releases/tag/v3.36.0
-resource:
-  - raw/sources/botmux.md
-  - https://github.com/deepcoldy/botmux/tree/a5bff44b7d8676e316d5969d928eb21ee1b48024
-  - https://github.com/deepcoldy/botmux/releases/tag/v3.36.0
 ---
 
 # Botmux：在飞书中使用本地 Coding CLI

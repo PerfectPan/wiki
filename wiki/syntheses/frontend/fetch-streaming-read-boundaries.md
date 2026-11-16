@@ -40,7 +40,3 @@ source_refs:
 
 - 当前仓库还没有把 `ReadableStream`、字符解码、增量 parser 和 UI 刷新节奏放在一页里讲清楚。
 - 如果后续继续积累流式 UI 实践，可以把“字节流 -> 文本块 -> 结构化数据 -> 视图更新”单独拆一页。
-
-## 来源指针
-
-- `wiki/syntheses/frontend/react-18-streaming-ssr-progressive-hydration.md`

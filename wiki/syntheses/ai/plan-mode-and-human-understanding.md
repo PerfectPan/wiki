@@ -16,11 +16,6 @@ source_refs:
   - raw/sources/2026-09-28-zhihu-plan-mode-insights.md
   - https://zhuanlan.zhihu.com/p/2087525914590573749
   - https://www.aymannadeem.com/artificial/intelligence,/developer/tools/2026/09/24/plan-mode-is-dead.html
-resource:
-  - raw/sources/2026-09-27-plan-mode-is-dead.md
-  - raw/sources/2026-09-28-zhihu-plan-mode-insights.md
-  - https://zhuanlan.zhihu.com/p/2087525914590573749
-  - https://www.aymannadeem.com/artificial/intelligence,/developer/tools/2026/09/24/plan-mode-is-dead.html
 ---
 
 # Plan Mode：如何规划，以及哪些决定需要人参与

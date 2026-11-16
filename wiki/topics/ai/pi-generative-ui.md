@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/michael-liv-claude-generative-ui.md
   - https://michaellivs.com/blog/reverse-engineering-claude-generative-ui
   - https://github.com/Michaelliv/pi-generative-ui/releases/tag/v0.3.0
-resource:
-  - raw/sources/michael-liv-claude-generative-ui.md
-  - https://michaellivs.com/blog/reverse-engineering-claude-generative-ui
-  - https://github.com/Michaelliv/pi-generative-ui/releases/tag/v0.3.0
 ---
 
 # pi-generative-ui：read_me 与 show_widget 工具设计

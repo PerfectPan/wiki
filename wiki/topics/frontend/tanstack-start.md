@@ -13,8 +13,6 @@ tags:
   - router
 source_refs:
   - raw/sources/rsc-update-path-local-demos.md
-resource:
-  - raw/sources/rsc-update-path-local-demos.md
 ---
 # TanStack Start
 
@@ -55,7 +53,3 @@ TanStack Start 是基于 TanStack Router 和 Vite 的全栈 React 框架。服�
 
 - [[wiki/topics/frontend/rsc|RSC]]
 - [[wiki/syntheses/frontend/rsc-update-path-next-vs-tanstack|RSC 交互后的更新链路：Next 与 TanStack Start]]
-
-## 来源指针
-
-- `raw/sources/rsc-update-path-local-demos.md`

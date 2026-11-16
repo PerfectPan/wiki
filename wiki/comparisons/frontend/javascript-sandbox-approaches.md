@@ -28,22 +28,6 @@ source_refs:
   - https://github.com/googlearchive/caja
   - https://github.com/Agoric/realms-shim
   - https://github.com/ajvincent/es-membrane
-resource:
-  - wiki/topics/frontend/near-membrane.md
-  - raw/sources/near-membrane.md
-  - https://github.com/endojs/endo/tree/master/packages/ses
-  - https://github.com/tc39/proposal-shadowrealm
-  - https://github.com/umijs/qiankun
-  - https://github.com/jd-opensource/micro-app
-  - https://github.com/Tencent/wujie
-  - https://github.com/patriksimek/vm2
-  - https://github.com/laverdet/isolated-vm
-  - https://github.com/cloudflare/workerd
-  - https://github.com/justjake/quickjs-emscripten
-  - https://www.figma.com/blog/an-update-on-plugin-security/
-  - https://github.com/googlearchive/caja
-  - https://github.com/Agoric/realms-shim
-  - https://github.com/ajvincent/es-membrane
 ---
 # JavaScript 沙箱方案对比
 

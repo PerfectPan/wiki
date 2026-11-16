@@ -16,10 +16,6 @@ source_refs:
   - raw/sources/2026-09-28-gpu-time.md
   - https://gpu-time.arikko.dev/
   - https://github.com/arikchakma/gpu-time
-resource:
-  - raw/sources/2026-09-28-gpu-time.md
-  - https://gpu-time.arikko.dev/
-  - https://github.com/arikchakma/gpu-time
 ---
 
 # gpu-time

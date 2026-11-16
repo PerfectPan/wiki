@@ -49,7 +49,7 @@ flowchart LR
 
 - Agent 是有持续身份的 Server 成员：可加入频道、发送消息、认领任务、设置提醒，并在共享线程中交接和 review。
 - Raft 支持托管 runtime，也支持通过 `raft agent login`、设备授权和 `RAFT_PROFILE` 接入任意能运行 shell 命令的外部 Agent；后者当前标为 Experimental。
-- 任务、消息与频道是团队协作原语；Raft 的价值主要在跨人、跨 Agent、跨机器的上下文组织，而不是提高单个模型推理能力。
+- 任务、消息与频道是团队协作的基本机制；Raft 的价值主要在跨人、跨 Agent、跨机器的上下文组织，而不是提高单个模型推理能力。
 
 [External Agents](https://docs.raft.build/features/agents/external/) [Tasks](https://docs.raft.build/features/collaboration/tasks/)
 

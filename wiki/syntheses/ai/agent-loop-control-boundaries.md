@@ -93,7 +93,7 @@ Agent loop 可以理解为一组逐步上升的自动化交接层：
 - 对外部动作和长期例行任务，auto mode 必须和权限边界绑定。能自动执行不等于应该自动提交、发布或对外回复。
 - 复杂 loop 最好使用第二个 agent 做审查。主 agent 自己推进、自己验收，容易把中间推理当成完成证据。
 
-## 风险和未决问题
+## 风险与还需要确认什么
 
 - ClaudeDevs 的 loop 分类主要基于 Claude Code primitive；迁移到其他 coding agent 或个人助手系统时，需要重新映射对应的 goal、schedule、workflow 和 usage 能力。
 - `/goal` 的 evaluator 本身也可能误判，尤其是目标含糊或依赖主观质量时。

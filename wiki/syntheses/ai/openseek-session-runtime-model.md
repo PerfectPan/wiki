@@ -128,7 +128,7 @@ TUI 自己不跑 agent。它管理一个长生命周期 serve engine，向 stdin
 - serve mode 是把 agent 从“一次性 CLI”推进到“可交互 engine”的关键。TUI 不需要嵌入 agent，只要遵守 JSONL 控制协议。
 - 这个模型的复杂度不低。尤其是 finish 与 steering 竞争、tool call 修复、serve command 排序、engine crash 恢复，都需要明确协议，否则 TUI 很容易出现“看到了但没入会话”的状态错觉。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度 / 限制 |
 | --- | --- | --- | --- |
@@ -140,7 +140,7 @@ TUI 自己不跑 agent。它管理一个长生命周期 serve engine，向 stdin
 | TUI 通过 serve engine 和 JSONL 控制 | 文档/源码 | `cmd/tui/README.md`、`cmd/openseek/serve.mbt`、`cmd/tui/engine_client.mbt` | 高 |
 | 运行验证缺失 | 本地环境限制 | 未安装 `moon` CLI | 中 |
 
-## 当前张力 / 风险 / 未决问题
+## 当前取舍、风险与还需要确认什么
 
 - **事件完整性 vs 上下文成本**：append-only 很利于追踪，但长会话会膨胀。Summary 能缓解，但 summary 质量本身需要评估。
 - **runtime event 有损**：适合进度，不适合关键事实。工具作者必须知道哪些信息必须落 session。

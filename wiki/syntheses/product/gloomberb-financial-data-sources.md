@@ -133,7 +133,7 @@ FRED 官方 API 免费但要 key。Gloomberb 客户端**不直连 stlouisfed**�
 
 架构层最值得抄的其实是**「provider 可替换」**：同一 `DataProvider` 接口 + 优先级路由（命中即止）+ SQLite TTL 缓存（stale/expire 两段式）——这是它敢把身家押在灰色 Yahoo 上还不出事的前提。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度 / 限制 |
 | --- | --- | --- | --- |

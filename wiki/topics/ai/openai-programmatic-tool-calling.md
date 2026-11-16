@@ -132,18 +132,18 @@ PTC 的 hosted runtime 是隔离层，不是业务授权层。即使请求允许
 4. 先以 direct tool calling 为 baseline，再用代表性任务对比；“少进 context”并非自动等于更正确或更便宜。
 5. 评估至少覆盖最终答案正确性/完整性/证据覆盖、输入与总 token、端到端延迟和成本、模型 turn/工具调用/重试恢复、安全结果及实际 route 是否符合预期 stage。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 官方来源位置 | 置信度 / 限制 |
 | --- | --- | --- |
 | PTC 让模型写并运行 JavaScript 协调工具，并可并发、循环和在 runtime 保存中间结果 | “Programmatic Tool Calling” 开头 | 高；以当前指南为准 |
 | runtime 是每次 program 独立的隔离 V8，且不提供 Node、直接网络、通用文件系统和子进程 | “Understand the runtime environment” | 高；不是对任何其他 OpenAI runtime 的结论 |
 | 应用仍执行 client-owned function，必须以原 caller 返回结果才能恢复 program | “Understand program response items” 与 “Continue after client-owned function calls” | 高；适用于该指南描述的 Responses API loop |
-| `allowed_callers` 控制 direct/programmatic 路由，且有六类支持工具 | “Configure…” 与 “Supported tools” | 高；支持矩阵可能随版本改变 |
+| `allowed_callers` 控制 direct/programmatic 路由，且有六类支持工具 | “Configure…” 与 “Supported tools” | 高；支持范围可能随版本改变 |
 | 写入/审批敏感动作和最终验证默认走 direct | “Choose when to use…” | 高；这是官方默认建议，不等于绝对禁止 PTC |
 | 评估需同时考察质量、效率、恢复和安全 | “Evaluate Programmatic Tool Calling” | 高；指标仍应按业务风险扩展 |
 
-## 当前张力 / 风险 / 未决问题
+## 当前取舍、风险与还需要确认什么
 
 - **context 效率与可审计性**：program 归约中间结果可减少模型上下文，但会隐藏原始细节；引用、证据或原生工件需要额外保留与验证机制。
 - **自动编排与授权**：predictable control flow 不等于低风险操作。把写入、付款、权限或外部状态更改交给 program 会模糊审批点；应在应用层保留显式确认。

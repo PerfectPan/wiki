@@ -86,7 +86,7 @@ Lody 将所有扩展集中在 `acp-extension-core` 纯类型库中，保持标�
 #### 案例 5：移动端提问增强（Elicitation Enhancement）
 - **场景**：Agent 遇到歧义向用户发起单选提问（如选择重构方案），用户在移动端操作，既希望点击选择预设方案，又需要随手附带一句补充说明（如“注意保持对外公开接口稳定”），或者当用户长时间离线时自动超时避免阻断无人值守任务。
 - **标准 ACP 空洞**：标准 ACP 的 `elicitation/create` 基于标准 JSON Schema 询问表单。在标准交互中，自定义输入通常是作为“完全替代既有预设选项”的互斥操作（customAnswerFor），无法表达“选中该选项并附带补充说明”的组合输入。
-- **Lody 的补法**：保持对标准 `elicitation/create` 调用的完全复用（`README.md:115`："Both use standard ACP `elicitation/create`; no new RPC is needed"）。在 Schema 属性定义中附加 `_meta.lody.elicitation: { noteFor: "approach" }`，让补充说明字段与主选项解耦关联；同时在元数据中提供 `autoResolveAfterSeconds` 倒计时机制，超时自动裁决以防止移动端用户未及时查看导致任务死锁。
+- **Lody 的补法**：保持对标准 `elicitation/create` 调用的完全复用（`README.md:115`："Both use standard ACP `elicitation/create`; no new RPC is needed"）。在 Schema 属性定义中附加 `_meta.lody.elicitation: { noteFor: "approach" }`，让补充说明字段与主选项解耦关联；同时在元数据中提供 `autoResolveAfterSeconds` 倒计时机制，超时自动决定结果，防止移动端用户未及时查看导致任务死锁。
 - **设计取舍**：完全不增加新 RPC，使用标准 JSON Schema 扩展字段；老客户端由于不认识该元数据，仍可将主选项与备注当作普通表单字段正常提交，保持向前兼容。
 
 ### 5. 反例对照：标准能力不扩展
@@ -118,7 +118,7 @@ Lody 将所有扩展集中在 `acp-extension-core` 纯类型库中，保持标�
 2. **多端协同必须考虑无对应 prompt 的会话约束**：设计 Agent 与客户端之间的控制调用约定，必须明确谁对长任务具有归属权。在任务控制不可达时，需要评估带外 RPC 与带内提示词流的协同方式。
 3. **真实网络下的状态呈现**：分布式或弱网环境下，不要在协议层做出难以兑现的绝对有序承诺。将“未知 / 缺失（unknown / incomplete）”作为一等状态显式建模，优于强行保证一致性导致的界面假死或误判。
 
-## 未决问题
+## 还需要确认什么
 
 - **ACP 官方规范演进的吸收不确定性**：ACP v2 草案已经开始针对会话状态解耦、排队与中途插话（steering）进行铺路，`_lody/*` 命名空间下的部分私有扩展将来是否会被 ACP 官方标准吸收或产生命名冲突，目前尚未确定。
 - **占位适配器的落地节奏**：LodyAI 组织内的 `devin` 与 `omp` 适配器仓库目前仍为纯空壳状态，其实际接入协议的形态尚未落地。

@@ -51,7 +51,7 @@ Mini Shai-Hulud 这类 npm 蠕虫为什么比普通恶意包更危险？它对 n
 - 发现命中版本后，不只升级依赖，还要检查持久化文件、注入 workflow、npm token、GitHub tokens、cloud credentials、SSH key 和开发机本地配置。
 - 不要把 `npm audit signatures` 或 SLSA provenance 当成恶意包检测的充分条件。
 
-## 未决问题
+## 还需要确认什么
 
 - 生态层面如何在不破坏 maintainer 体验的情况下限制 OIDC publishing 被滥用？
 - npm registry 是否应对 tarball size anomaly、根目录额外可执行文件、异常 `github:` dependency 做更强策略拦截？

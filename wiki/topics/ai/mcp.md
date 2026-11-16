@@ -199,7 +199,7 @@ MCP 扩大了 Agent 的行动面，也扩大了风险面。至少要区分四层
 - 先定位 `Mcp-Session-Id`、进程内 session、server-to-client request 和旧 SSE 依赖；
 - 把业务状态与 transport 状态拆开；
 - 将中途确认或补参迁移到 MRTR；
-- 按 SDK 支持矩阵逐步升级，不必为了版本号一次性重写仍在兼容期内的部署。
+- 按 SDK 版本支持表逐步升级，不必为了版本号一次性重写仍在兼容期内的部署。
 
 ## 相关页面
 

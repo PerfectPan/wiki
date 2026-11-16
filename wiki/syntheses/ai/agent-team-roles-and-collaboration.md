@@ -87,7 +87,7 @@ mihomo-rust 的做法是让 agent **通过读写约定好的文件来同步状�
 
 - **ADR（架构决策记录）**：不可协商的架构决策。比如"Transport 层用 `Box<dyn Stream>` 而非泛型"、"gRPC 手写 gun 帧不引入 tonic"。一旦写入，所有角色必须遵守。
 - **spec（技术规格）**：可讨论的实现细节。包括 YAML schema、struct shapes、error types、与上游的分歧。Architect 审查技术内容，PM 控制格式。
-- **测试计划**：验证 spec 的测试矩阵。QA 根据 spec 的 error types 生成测试用例。
+- **测试计划**：验证 spec 的测试对照表。QA 根据 spec 的 error types 生成测试用例。
 
 这三层形成一个单向信息流：ADR 约束 spec，spec 约束测试计划。不需要 agent 之间互相讨论，只需要按层读写。
 

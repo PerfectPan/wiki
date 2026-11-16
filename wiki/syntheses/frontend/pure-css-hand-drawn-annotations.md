@@ -102,7 +102,7 @@ flowchart TB
 
 - `light-dark()` 需要宿主设置 `color-scheme`；否则通常使用 light 分支。
 - OKLCH、relative color、color-mix、`@property` 和 mask 的浏览器基线比普通定位 CSS 更新。
-- 面向旧 WebView / Electron 应准备静态 sRGB fallback，或在支持矩阵中明确最低版本。
+- 面向旧 WebView / Electron 应准备静态 sRGB fallback，或在版本支持列表中明确最低版本。
 - RTL 与 vertical writing mode 需要逻辑方向 API；当前 physical N/E/S/W 不会自动映射。
 
 ### 打印与截图
@@ -142,7 +142,7 @@ flowchart LR
 5. 为关键语义补真实 DOM；
 6. PDF/截图场景验证 print 和裁切。
 
-## 当前张力与未决问题
+## 当前取舍与还需要确认什么
 
 - **零 JS vs 自适应布局**：不测量就无法自动选方向和避碰。
 - **generated content vs 语义**：DOM 极简，但可访问 contract 弱。
@@ -151,7 +151,7 @@ flowchart LR
 - **无构建链 vs 发布治理**：源码易审计，但当前缺版本、CI、测试和稳定分发。
 - 后续需要验证真实 assistive technology、RTL、打印分页和旧 Electron 行为。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据来源 | 证据位置 | 置信度或限制 |
 | --- | --- | --- | --- |

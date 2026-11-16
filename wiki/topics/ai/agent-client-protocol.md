@@ -288,7 +288,7 @@ sequenceDiagram
 | **场景** | Client 要 list / resume / close，不希望每个能力单独 probe |
 | **v1 卡点** | `list` / `resume` / `close` / `loadSession` 等分散 optional marker，行为不一致 |
 | **v2 机制** | 只要广告 `capabilities.session`，**必须** 实现 new/list/resume/close/prompt/cancel/update；delete 等仍 optional |
-| **多出来的能力** | 会话管理 UI 可默认假设基线在；减少「有的 agent 能 resume 不能 list」的矩阵 |
+| **多出来的能力** | 会话管理 UI 可默认假设基线在；减少「有的 agent 能 resume 不能 list」的差异组合 |
 
 #### 协议铺路 vs 仍须产品自建
 
@@ -351,7 +351,7 @@ stdio 仍是主路径；v2 明确 JSON-RPC **batch**，但不要 batch `initiali
 6. 未知 permission outcome **不得**当批准；未知 enum 尽量透传，勿占用无 `_` 前缀值。
 7. Terminal：每 chunk 单独 base64 decode 再 append；后续 snapshot 整段替换。
 
-## 证据矩阵
+## 证据对照表
 
 | 结论 | 证据位置 | 置信度 |
 | --- | --- | --- |
@@ -370,7 +370,7 @@ stdio 仍是主路径；v2 明确 JSON-RPC **batch**，但不要 batch `initiali
 
 完整 URL 与方法对照表见调研笔记。
 
-## 当前张力 / 风险 / 未决
+## 当前取舍、风险与待确认事项
 
 - v2 仍 Draft，无已读文档中的 GA 日期；字段可能变。
 - 双栈与 SDK dual-version 表达成本高。

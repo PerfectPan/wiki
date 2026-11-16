@@ -15,11 +15,6 @@ source_refs:
   - https://github.com/anthropics/prompt-eng-interactive-tutorial
   - prompts/README.md
   - raw/sources/2026-09-22-lenny-world-class-designer.md
-resource:
-  - raw/sources/prompt.md
-  - https://github.com/anthropics/prompt-eng-interactive-tutorial
-  - prompts/README.md
-  - raw/sources/2026-09-22-lenny-world-class-designer.md
 ---
 # Prompt
 

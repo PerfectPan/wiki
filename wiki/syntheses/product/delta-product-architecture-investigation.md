@@ -23,17 +23,6 @@ source_refs:
   - https://zed.dev/blog/agentic-xanadu
   - https://zed.dev/blog/introducing-deltadb
   - https://delta.dev/roadmap
-resource:
-  - raw/sources/2026-09-17-delta-dev.md
-  - https://delta.dev/
-  - https://delta.dev/docs/concepts/core-concepts
-  - https://delta.dev/docs/concepts/delta-and-git
-  - https://delta.dev/docs/privacy-and-security/agentic-safety
-  - https://zed.dev/blog/delta-public-beta
-  - https://zed.dev/blog/introducing-delta
-  - https://zed.dev/blog/agentic-xanadu
-  - https://zed.dev/blog/introducing-deltadb
-  - https://delta.dev/roadmap
 ---
 
 # Delta 产品与架构调研

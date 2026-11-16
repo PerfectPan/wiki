@@ -24,20 +24,6 @@ source_refs:
   - https://livestore.dev/
   - https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell
   - https://github.com/evoluhq/evolu
-resource:
-  - https://martinfowler.com/bliki/Seedwork.html
-  - https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/seedwork-domain-model-base-classes-interfaces
-  - https://github.com/dotnet-architecture/eShopOnContainers/tree/main/src/Services/Ordering/Ordering.Domain/SeedWork
-  - https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider
-  - https://event-driven-io.github.io/emmett/
-  - https://github.com/ThreeDotsLabs/wild-workouts-go-ddd-example
-  - https://www.archunit.org/
-  - https://github.com/xmolecules/jmolecules
-  - https://spring.io/projects/spring-modulith
-  - https://doc.replicache.dev/
-  - https://livestore.dev/
-  - https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell
-  - https://github.com/evoluhq/evolu
 ---
 
 # DDD 的实现方式与取舍

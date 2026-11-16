@@ -22,17 +22,6 @@ source_refs:
   - raw/sources/2026-09-01-hallmark-skill-review.md
   - raw/sources/2026-09-22-handdraw-style-prompter-review.md
   - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
-resource:
-  - https://www.tastelab.xyz/
-  - raw/sources/taste-skill.md
-  - wiki/syntheses/ai/skill-engineering-artifact-protocol.md
-  - raw/sources/2026-08-06-bento-slides-skill-review.md
-  - raw/sources/2026-05-12-ai-cli-skill-review.md
-  - raw/sources/2026-05-06-codex-pet-skill-article.md
-  - raw/sources/2026-09-01-mono-color-skill-review.md
-  - raw/sources/2026-09-01-hallmark-skill-review.md
-  - raw/sources/2026-09-22-handdraw-style-prompter-review.md
-  - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
 ---
 # Awesome Agent Skills
 

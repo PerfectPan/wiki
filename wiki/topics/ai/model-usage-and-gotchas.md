@@ -21,14 +21,6 @@ source_refs:
   - https://code.claude.com/docs/en/hooks
   - raw/sources/claude-code-multi-agent-token-audit.md
   - https://code.claude.com/docs/en/prompt-caching
-resource:
-  - https://github.com/promptfoo/promptfoo
-  - https://www.promptfoo.dev/docs/providers/custom-script/
-  - raw/sources/2026-09-15-googlecloudtech-gemini-flash.md
-  - https://x.com/GoogleCloudTech/article/2099507349828350285
-  - https://code.claude.com/docs/en/hooks
-  - raw/sources/claude-code-multi-agent-token-audit.md
-  - https://code.claude.com/docs/en/prompt-caching
 ---
 
 # 模型使用与常见问题

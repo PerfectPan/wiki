@@ -19,13 +19,6 @@ source_refs:
   - https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/
   - wiki/topics/architecture/oauth.md
   - wiki/topics/ai/botmux-team-federation.md
-resource:
-  - https://www.rfc-editor.org/rfc/rfc8628
-  - https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners
-  - https://kubernetes.io/docs/reference/setup-tools/kubeadm/kubeadm-token/
-  - https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/
-  - wiki/topics/architecture/oauth.md
-  - wiki/topics/ai/botmux-team-federation.md
 ---
 
 # 机器身份与 Agent 节点自举授权范式

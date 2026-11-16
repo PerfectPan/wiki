@@ -16,10 +16,6 @@ source_refs:
   - raw/sources/2026-07-01-openseek-shell-git-policy.md
   - https://github.com/moonbitlang/openseek
   - https://github.com/moonbitlang/openseek/pull/273
-resource:
-  - raw/sources/2026-07-01-openseek-shell-git-policy.md
-  - https://github.com/moonbitlang/openseek
-  - https://github.com/moonbitlang/openseek/pull/273
 ---
 
 # Coding Agent Shell 与 Git 权限边界
@@ -175,9 +171,3 @@ flowchart LR
 - [[git-agent-collaboration-friction]]
 - [[sandbox]]
 - [[shell]]
-
-## 来源指针
-
-- `raw/sources/2026-07-01-openseek-shell-git-policy.md`
-- `https://github.com/moonbitlang/openseek`
-- `https://github.com/moonbitlang/openseek/pull/273`

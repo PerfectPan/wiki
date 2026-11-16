@@ -16,11 +16,6 @@ source_refs:
   - https://effect.website/docs/v4/getting-started/the-effect-type
   - https://github.com/mikearnaldi/effect-ts
   - https://github.com/PerfectPan/agent-kit/blob/e7396c50a7cb50cd8011651d8886b2fe440e8f1c/docs/architecture/authoring.md
-resource:
-  - raw/sources/effect-ts.md
-  - https://effect.website/docs/v4/getting-started/the-effect-type
-  - https://github.com/mikearnaldi/effect-ts
-  - https://github.com/PerfectPan/agent-kit/blob/e7396c50a7cb50cd8011651d8886b2fe440e8f1c/docs/architecture/authoring.md
 ---
 
 # Effect（Effect-TS）

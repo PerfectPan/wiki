@@ -17,11 +17,6 @@ source_refs:
   - https://github.com/apache/thrift/blob/master/doc/specs/thrift-binary-protocol.md
   - https://github.com/cloudwego/kitex
   - https://github.com/cloudwego/thriftgo
-resource:
-  - raw/sources/2026-09-22-thrift-binary-wire-lab.md
-  - https://github.com/apache/thrift/blob/master/doc/specs/thrift-binary-protocol.md
-  - https://github.com/cloudwego/kitex
-  - https://github.com/cloudwego/thriftgo
 ---
 # RPC 框架中代码生成与运行时的边界
 

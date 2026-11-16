@@ -19,13 +19,6 @@ source_refs:
   - https://www.jsonrpc.org/specification
   - https://nodejs.org/api/vm.html
   - https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop
-resource:
-  - https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling
-  - https://www.anthropic.com/engineering/building-effective-agents
-  - https://code.claude.com/docs/en/sub-agents
-  - https://www.jsonrpc.org/specification
-  - https://nodejs.org/api/vm.html
-  - https://nodejs.org/en/learn/asynchronous-work/dont-block-the-event-loop
 ---
 
 # 动态工作流：用沙箱脚本编排多 Agent

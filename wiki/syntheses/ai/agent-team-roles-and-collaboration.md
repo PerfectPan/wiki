@@ -17,10 +17,6 @@ source_refs:
   - raw/sources/2026-08-18-mihomo-rust-agent-team.md
   - https://maxlv.net/blog/porting-mihomo-to-rust-with-claude/
   - https://cursor.com/zh-Hant/blog/agent-swarm-model-economics
-resource:
-  - raw/sources/2026-08-18-mihomo-rust-agent-team.md
-  - https://maxlv.net/blog/porting-mihomo-to-rust-with-claude/
-  - https://cursor.com/zh-Hant/blog/agent-swarm-model-economics
 ---
 
 # Agent 团队的角色分工与协作模式
@@ -172,9 +168,3 @@ Cursor 实验中，agent swarm 的输入是 835 页 SQLite 手册（即规格）
 - [[wiki/syntheses/ai/agent-harness-evolution-paradigm|Agent Harness 演进范式]]
 - [[wiki/syntheses/ai/agent-loop-control-boundaries|Agent 循环工作流的控制边界]]
 - [[wiki/syntheses/ai/agent-driven-wiki-maintenance|Agent 驱动 Wiki 的维护流程]]
-
-## 来源指针
-
-- `raw/sources/2026-08-18-mihomo-rust-agent-team.md`
-- https://maxlv.net/blog/porting-mihomo-to-rust-with-claude/
-- https://cursor.com/zh-Hant/blog/agent-swarm-model-economics

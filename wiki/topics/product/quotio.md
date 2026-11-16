@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/quotio.md
   - https://www.quotio.dev/
   - https://github.com/nguyenphutrong/quotio/tree/71f427f7488e592406104d98936ff142000383d7
-resource:
-  - raw/sources/quotio.md
-  - https://www.quotio.dev/
-  - https://github.com/nguyenphutrong/quotio/tree/71f427f7488e592406104d98936ff142000383d7
 ---
 
 # Quotio：AI 额度监控与统计实现

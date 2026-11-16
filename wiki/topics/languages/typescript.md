@@ -14,11 +14,6 @@ source_refs:
   - raw/sources/reylo-typescript-content-mapper.md
   - https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/
   - https://github.com/microsoft/typescript-go/pull/4712
-resource:
-  - raw/sources/typescript.md
-  - raw/sources/reylo-typescript-content-mapper.md
-  - https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/
-  - https://github.com/microsoft/typescript-go/pull/4712
 ---
 # TypeScript
 

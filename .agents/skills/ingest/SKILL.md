@@ -144,16 +144,13 @@ tags:
 source_refs:
   - raw/sources/example-topic.md
   - https://原始URL
-resource:
-  - raw/sources/example-topic.md
-  - https://原始URL
 ---
 ```
 
 规则：
 - `description`：面向人和 agent 的一句话摘要，必须写
 - `tags`：1-5 个英文小写短词，表达横向主题
-- `source_refs` 和 `resource`：指向实际采用的来源 URL，以及存在的 raw 素材；简短收录可只列来源 URL
+- `source_refs`：1-3 个一级来源入口（`raw/sources/` 素材或主 URL；简短收录可只列来源 URL），细粒度文件/章节定位放正文；普通页面无需再手写 `resource` 镜像
 - `created`/`updated`/`timestamp`：用今天的日期
 
 ## 第六步：写正文
@@ -177,10 +174,9 @@ resource:
 
 - [[相关页面]]
 
-## 来源指针
+## 来源指针（可选）
 
-- raw/sources/...
-- https://...
+仅在需要补充具体源码文件/commit、章节分工或配图说明时保留；若只是重复 `source_refs` 则省略。
 ```
 
 ### synthesis 页面结构
@@ -212,10 +208,9 @@ resource:
 
 - [[相关页面]]
 
-## 来源指针
+## 来源指针（可选）
 
-- raw/sources/...
-- https://...
+仅在需要补充具体源码文件/commit、章节分工或配图说明时保留；若只是重复 `source_refs` 则省略。
 ```
 
 ### comparison 页面结构
@@ -242,10 +237,9 @@ resource:
 
 写清楚当前选择及原因。
 
-## 来源指针
+## 来源指针（可选）
 
-- raw/sources/...
-- https://...
+仅在需要补充具体源码文件/commit、章节分工或配图说明时保留；若只是重复 `source_refs` 则省略。
 ```
 
 ## 第七步：写作规则

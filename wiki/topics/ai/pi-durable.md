@@ -16,10 +16,6 @@ source_refs:
   - raw/sources/2026-10-02-pi-durable.md
   - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
   - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/docs/spec.md
-resource:
-  - raw/sources/2026-10-02-pi-durable.md
-  - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
-  - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/docs/spec.md
 ---
 
 # Pi Durable：可恢复的 Agent 执行库

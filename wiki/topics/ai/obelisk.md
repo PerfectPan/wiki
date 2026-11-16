@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/2026-08-02-obelisk-project-research.md
   - https://github.com/tommy0103/obelisk
-resource:
-  - raw/sources/2026-08-02-obelisk-project-research.md
-  - https://github.com/tommy0103/obelisk
 ---
 
 # Obelisk

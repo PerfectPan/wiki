@@ -17,12 +17,6 @@ source_refs:
   - https://apps.extensions.modelcontextprotocol.io/
   - https://a2ui.org/
   - https://json-render.dev/docs/catalog
-resource:
-  - raw/sources/generative-ui-community-evolution.md
-  - raw/sources/michael-liv-claude-generative-ui.md
-  - https://apps.extensions.modelcontextprotocol.io/
-  - https://a2ui.org/
-  - https://json-render.dev/docs/catalog
 ---
 
 # 生成式 UI 的社区演进与工程边界

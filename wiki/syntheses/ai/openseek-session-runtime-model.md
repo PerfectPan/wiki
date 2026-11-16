@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/2026-07-01-openseek-project-architecture-review.md
   - https://github.com/moonbitlang/openseek
-resource:
-  - raw/sources/2026-07-01-openseek-project-architecture-review.md
-  - https://github.com/moonbitlang/openseek
 ---
 
 # OpenSeek 会话与运行时模型
@@ -158,8 +155,3 @@ TUI 自己不跑 agent。它管理一个长生命周期 serve engine，向 stdin
 - [[coding-agent-shell-git-permissions]]
 - [[agent]]
 - [[code-agent]]
-
-## 来源指针
-
-- `raw/sources/2026-07-01-openseek-project-architecture-review.md`
-- `https://github.com/moonbitlang/openseek`

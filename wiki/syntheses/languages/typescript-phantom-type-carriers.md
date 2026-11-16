@@ -15,10 +15,6 @@ source_refs:
   - better-auth: plugins/additional-fields/client.d.mts, client/types.d.mts, types/helper.d.mts
   - "@tanstack/start-client-core: createServerFn.d.ts, createMiddleware.d.ts"
   - "@tanstack/router-core: link.d.ts, route.d.ts, routeInfo.d.ts"
-resource:
-  - better-auth: plugins/additional-fields/client.d.mts, client/types.d.mts, types/helper.d.mts
-  - "@tanstack/start-client-core: createServerFn.d.ts, createMiddleware.d.ts"
-  - "@tanstack/router-core: link.d.ts, route.d.ts, routeInfo.d.ts"
 timestamp: 2026-07-26
 ---
 

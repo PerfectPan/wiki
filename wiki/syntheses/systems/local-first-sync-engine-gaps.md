@@ -14,9 +14,6 @@ tags:
 source_refs:
   - raw/sources/local-first-sync-engine-talk.md
   - https://www.bilibili.com/video/BV1Myez6LEKc/
-resource:
-  - raw/sources/local-first-sync-engine-talk.md
-  - https://www.bilibili.com/video/BV1Myez6LEKc/
 ---
 
 # Local-first 同步引擎还缺什么

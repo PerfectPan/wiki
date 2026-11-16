@@ -26,20 +26,6 @@ source_refs:
   - wiki/comparisons/frontend/overlayscrollbars-vs-simplebar-vs-perfect-scrollbar.md
   - https://www.rareui.com/
   - https://transitions.dev/
-resource:
-  - https://animejs.com/
-  - wiki/topics/frontend/animejs.md
-  - https://www.itshover.com/icons
-  - raw/sources/its-hover.md
-  - https://corne.rs/
-  - https://modern-css.com/
-  - raw/sources/2026-09-09-rare-ui.md
-  - raw/sources/2026-07-26-transitions-dev.md
-  - raw/sources/2026-05-08-custom-scrollbar-library-source-review.md
-  - wiki/syntheses/frontend/shadcn-registry-component-distribution.md
-  - wiki/comparisons/frontend/overlayscrollbars-vs-simplebar-vs-perfect-scrollbar.md
-  - https://www.rareui.com/
-  - https://transitions.dev/
 ---
 
 # Awesome Component Libraries

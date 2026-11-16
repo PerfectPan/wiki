@@ -21,15 +21,6 @@ source_refs:
   - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/api-client/paths.ts
   - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/plugins/builtin/treasury-auctions/client.ts
   - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/data/fred-series.ts
-resource:
-  - https://github.com/gloom-sh/gloomberb/tree/946ab2cdb4a02b9504de9ef8a596e75957167a09
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/sources/yahoo-finance/http.ts
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/sources/yahoo-finance/requests.ts
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/sources/yahoo-finance.ts
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/sources/sec-edgar.ts
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/api-client/paths.ts
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/plugins/builtin/treasury-auctions/client.ts
-  - https://github.com/gloom-sh/gloomberb/blob/946ab2cdb4a02b9504de9ef8a596e75957167a09/src/data/fred-series.ts
 ---
 
 # Gloomberb 金融数据源

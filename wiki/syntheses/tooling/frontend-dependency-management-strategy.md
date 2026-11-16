@@ -44,7 +44,3 @@ source_refs:
 
 - 当前仓库还没有专门记录 `peerDependencies`、catalogs、trusted publishers`、`supply chain` 等子主题页。
 - `catalogs` 这条思路还没有在真实项目里落成规则文件或插件实践，后续可以补成更具体的 tooling 页面。
-
-## 来源指针
-
-- `wiki/topics/tooling/dependency-resolution.md`

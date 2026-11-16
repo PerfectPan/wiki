@@ -29,23 +29,6 @@ source_refs:
   - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
   - raw/sources/framer-harness-2.md
   - https://www.framer.com/blog/harness-2/
-resource:
-  - raw/sources/2026-09-29-you-said-no-mcp.md
-  - https://earendil.com/posts/you-said-no-mcp/
-  - raw/sources/2026-02-08-why-claude-code-dropped-todos-slash-commands.md
-  - https://tonylee.im/en/blog/why-claude-code-dropped-todos-slash-commands/
-  - raw/sources/2026-04-15-openai-agents-sdk-evolution.md
-  - https://openai.com/zh-Hans-CN/index/the-next-evolution-of-the-agents-sdk/
-  - raw/sources/2026-10-01-claude-code-task-tools-docs.md
-  - https://code.claude.com/docs/en/agent-sdk/todo-tracking
-  - https://code.claude.com/docs/en/tools-reference
-  - https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md
-  - raw/sources/2026-09-06-the-next-scaling-problem.md
-  - https://tetral.ai/blog/the-next-scaling-problem/
-  - raw/sources/2026-10-02-pi-durable.md
-  - https://github.com/earendil-works/pi/blob/9b3c19da5cffc4c5e8b6bd74c45abc1ab6bfcd16/packages/durable/README.md
-  - raw/sources/framer-harness-2.md
-  - https://www.framer.com/blog/harness-2/
 ---
 
 # Agent Harness 运行时架构与演进

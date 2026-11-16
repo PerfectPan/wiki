@@ -40,7 +40,3 @@ source_refs:
 
 - 当前仓库还没有把这条路径和 signal / fine-grained reactivity / virtual DOM 放在一页里比较。
 - 后续如果继续积累渲染模型材料，可以补一页 comparison，专门比较 template cloning、virtual DOM 和 fine-grained DOM updates。
-
-## 来源指针
-
-- `wiki/topics/frontend/lit.md`

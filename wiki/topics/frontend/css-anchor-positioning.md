@@ -16,12 +16,6 @@ source_refs:
   - https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning/Anchored_container_queries
   - https://www.w3.org/TR/css-anchor-position-2/
   - https://caniuse.com/css-anchor-positioning
-resource:
-  - https://www.joshwcomeau.com/css/anchor-positioning/
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning
-  - https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Anchor_positioning/Anchored_container_queries
-  - https://www.w3.org/TR/css-anchor-position-2/
-  - https://caniuse.com/css-anchor-positioning
 ---
 # CSS Anchor Positioning
 

@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/2026-07-25-claude-5-context-engineering.md
   - https://x.com/trq212/status/2080710971228918066
-resource:
-  - raw/sources/2026-07-25-claude-5-context-engineering.md
-  - https://x.com/trq212/status/2080710971228918066
 ---
 
 # Claude 5 时代的上下文工程
@@ -110,8 +107,3 @@ Claude Code 团队披露，面向 Claude Opus 5 和 Claude Fable 5 等新模型�
 - [[agent-harness-evolution-paradigm]]
 - [[prompt]]
 - [[code-agent]]
-
-## 来源指针
-
-- `raw/sources/2026-07-25-claude-5-context-engineering.md`
-- <https://x.com/trq212/status/2080710971228918066>

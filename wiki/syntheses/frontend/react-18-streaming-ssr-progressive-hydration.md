@@ -44,9 +44,3 @@ React 18 相比传统 SSR，到底改进了什么？它为什么能让页面在�
 
 - 这条总结仍然偏 React 机制层，还没有把框架侧实现差异拆开，例如 Next.js、Waku 等在 streaming 和 hydration 调度上的不同细节。
 - 当前仓库还没有单独拆出 `Suspense` 在服务端 streaming 中的工程实践页，后续可以继续补。
-
-## 来源指针
-
-- `wiki/topics/frontend/ssr.md`
-- `wiki/topics/frontend/rsc.md`
-- `wiki/comparisons/frontend/ssr-vs-ssg-vs-rsc.md`

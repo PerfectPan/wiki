@@ -19,14 +19,6 @@ source_refs:
   - https://cli.github.com/manual/gh_auth_setup-git
   - https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
   - https://gnupg.org/documentation/manuals/gnupg/OpenPGP-Key-Management.html
-resource:
-  - raw/sources/git.md
-  - raw/sources/2026-09-16-git-auth-signing.md
-  - https://git-scm.com/docs/gitcredentials
-  - https://git-scm.com/docs/git-config
-  - https://cli.github.com/manual/gh_auth_setup-git
-  - https://docs.github.com/en/authentication/managing-commit-signature-verification/about-commit-signature-verification
-  - https://gnupg.org/documentation/manuals/gnupg/OpenPGP-Key-Management.html
 ---
 # Git
 

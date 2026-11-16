@@ -14,8 +14,6 @@ tags:
   - cli
 source_refs:
   - raw/sources/2026-08-08-cmux-investigation.md
-resource:
-  - raw/sources/2026-08-08-cmux-investigation.md
 ---
 # cmux
 

@@ -22,18 +22,6 @@ source_refs:
   - https://docs.mirage.strukto.ai/home/introduction
   - https://docs.mirage.strukto.ai/home/architecture
   - https://docs.mirage.strukto.ai/home/snapshot
-resource:
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/core/src/workspace/workspace/workspace.ts
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/node/src/workspace.ts
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/typescript/packages/browser/src/workspace.ts
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/dispatcher/dispatcher.py
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/cache/manager.py
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/workspace/snapshot/drift.py
-  - https://github.com/strukto-ai/mirage/blob/95a3a1f447b9f48bc8249069241e0a0fc9a6b723/python/mirage/ops/ops.py
-  - raw/sources/2026-10-07-mirage.md
-  - https://docs.mirage.strukto.ai/home/introduction
-  - https://docs.mirage.strukto.ai/home/architecture
-  - https://docs.mirage.strukto.ai/home/snapshot
 ---
 
 # Mirage：用文件路径访问不同服务

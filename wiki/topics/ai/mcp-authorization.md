@@ -28,23 +28,6 @@ source_refs:
   - https://www.rfc-editor.org/rfc/rfc9207
   - https://www.rfc-editor.org/rfc/rfc9700
   - https://www.rfc-editor.org/rfc/rfc9728
-resource:
-  - raw/sources/mcp.md
-  - https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/index.md
-  - https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/authorization-server-discovery.md
-  - https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/client-registration.md
-  - https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization/security-considerations.md
-  - https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization.md
-  - https://modelcontextprotocol.io/specification/2026-07-28/changelog
-  - https://blog.modelcontextprotocol.io/posts/2026-07-28/
-  - https://www.rfc-editor.org/rfc/rfc6749
-  - https://www.rfc-editor.org/rfc/rfc7636
-  - https://www.rfc-editor.org/rfc/rfc7591
-  - https://www.rfc-editor.org/rfc/rfc8414
-  - https://www.rfc-editor.org/rfc/rfc8707
-  - https://www.rfc-editor.org/rfc/rfc9207
-  - https://www.rfc-editor.org/rfc/rfc9700
-  - https://www.rfc-editor.org/rfc/rfc9728
 ---
 # MCP 授权流程
 

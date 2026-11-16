@@ -31,7 +31,3 @@ source_refs:
 
 - [[typescript]]
 - [[wiki/topics/architecture/opensumi-di|@opensumi/di]]
-
-## 来源指针
-
-- `wiki/topics/architecture/opensumi-di.md`

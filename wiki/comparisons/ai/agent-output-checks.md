@@ -15,11 +15,6 @@ source_refs:
   - https://omp.sh/docs/ttsr
   - https://code.claude.com/docs/en/hooks
   - https://code.claude.com/docs/en/permissions
-resource:
-  - raw/sources/2026-09-25-ttsr.md
-  - https://omp.sh/docs/ttsr
-  - https://code.claude.com/docs/en/hooks
-  - https://code.claude.com/docs/en/permissions
 ---
 
 # Agent 输出检查：TTSR、权限规则与 PreToolUse hooks

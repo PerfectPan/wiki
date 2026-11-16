@@ -19,13 +19,6 @@ source_refs:
   - https://www.onorca.dev/docs/remote-servers
   - https://www.onorca.dev/docs/telemetry
   - https://github.com/stablyai/orca
-resource:
-  - raw/sources/2026-07-20-raft-orca-product-research.md
-  - https://www.onorca.dev/docs
-  - https://www.onorca.dev/docs/agents/supported
-  - https://www.onorca.dev/docs/remote-servers
-  - https://www.onorca.dev/docs/telemetry
-  - https://github.com/stablyai/orca
 ---
 
 # Orca

@@ -17,11 +17,6 @@ source_refs:
   - https://namethatui.com/
   - https://namethatui.com/methodology
   - https://namethatui.com/vs
-resource:
-  - raw/sources/2026-08-13-namethatui.md
-  - https://namethatui.com/
-  - https://namethatui.com/methodology
-  - https://namethatui.com/vs
 ---
 
 # UI 元素命名
@@ -69,10 +64,3 @@ agent 把代价放大了：人还能靠截图和上下文补全歧义，agent �
 
 - [[ui-design-styles]] —— 本页是元素层面的"叫什么"，风格是界面层面的"是什么风"
 - [[wiki/topics/frontend/transitions-dev|Transitions.dev]] —— 动效参考
-
-## 来源指针
-
-- `raw/sources/2026-08-13-namethatui.md`
-- https://namethatui.com/
-- https://namethatui.com/methodology
-- https://namethatui.com/vs

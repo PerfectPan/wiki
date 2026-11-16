@@ -23,19 +23,6 @@ source_refs:
   - https://motion.dev/docs/react-motion-component
   - https://motion.dev/docs/react-layout-animations
   - https://github.com/juliangarnier/anime/blob/master/LICENSE.md
-resource:
-  - raw/sources/animejs.md
-  - https://github.com/juliangarnier/anime/tree/01b81be1df6843ccfe0a71c0699a746bf740dd77
-  - https://animejs.com/documentation/layout/
-  - https://www.itshover.com/icons
-  - https://animejs.com/
-  - https://animejs.com/documentation/getting-started/using-with-react/
-  - https://animejs.com/documentation/web-animation-api/
-  - https://animejs.com/documentation/scope/scope-parameters/mediaqueries/
-  - https://motion.dev/docs/animate
-  - https://motion.dev/docs/react-motion-component
-  - https://motion.dev/docs/react-layout-animations
-  - https://github.com/juliangarnier/anime/blob/master/LICENSE.md
 ---
 
 # Anime.js

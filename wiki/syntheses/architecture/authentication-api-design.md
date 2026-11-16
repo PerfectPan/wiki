@@ -20,14 +20,6 @@ source_refs:
   - https://www.rfc-editor.org/rfc/rfc8725
   - https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies
   - https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
-resource:
-  - https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html
-  - https://www.rfc-editor.org/rfc/rfc6749
-  - https://www.rfc-editor.org/rfc/rfc6750
-  - https://www.rfc-editor.org/rfc/rfc9700
-  - https://www.rfc-editor.org/rfc/rfc8725
-  - https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies
-  - https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html
 ---
 # 登录态的服务端接口设计
 

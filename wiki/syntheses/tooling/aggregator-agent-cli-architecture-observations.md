@@ -14,9 +14,6 @@ tags:
 source_refs:
   - raw/sources/2026-06-30-ketch-cli-review.md
   - https://github.com/1broseidon/ketch
-resource:
-  - raw/sources/2026-06-30-ketch-cli-review.md
-  - https://github.com/1broseidon/ketch
 ---
 # 聚合型 Agent CLI 的架构设计观察
 
@@ -129,8 +126,3 @@ resource:
 这页补充的是工具层设计观察，和 [[wiki/syntheses/ai/agent-native-generative-cli-artifact-protocol|Agent-native 生成型 CLI 的产物协议]] 相邻但不相同。
 
 前者关注生成型 CLI 如何交付文件产物；这里关注聚合型 CLI 如何封装外部查询、网页抽取和不稳定后端。两者共同点是：对 agent 来说，CLI 的价值不在“命令能跑”，而在稳定输入、稳定输出、清楚失败语义和可组合边界。
-
-## 来源指针
-
-- `raw/sources/2026-06-30-ketch-cli-review.md`
-- https://github.com/1broseidon/ketch

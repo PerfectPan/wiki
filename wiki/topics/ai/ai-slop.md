@@ -15,10 +15,6 @@ source_refs:
   - https://github.com/yetone/kill-ai-slop/blob/6bfd693c075d405e2061620ce31b3d8c4eb4b920/skill/references/taxonomy.md
   - https://github.com/yetone/kill-ai-slop/blob/6bfd693c075d405e2061620ce31b3d8c4eb4b920/skill/references/detection.md
   - https://github.com/code-yeongyu/oh-my-openagent/blob/17104e1f6c86a47ab50ab2e1f5b5e0a6603443b8/packages/shared-skills/skills/remove-ai-slops/SKILL.md
-resource:
-  - https://github.com/yetone/kill-ai-slop/blob/6bfd693c075d405e2061620ce31b3d8c4eb4b920/skill/references/taxonomy.md
-  - https://github.com/yetone/kill-ai-slop/blob/6bfd693c075d405e2061620ce31b3d8c4eb4b920/skill/references/detection.md
-  - https://github.com/code-yeongyu/oh-my-openagent/blob/17104e1f6c86a47ab50ab2e1f5b5e0a6603443b8/packages/shared-skills/skills/remove-ai-slops/SKILL.md
 ---
 
 # AI Slop

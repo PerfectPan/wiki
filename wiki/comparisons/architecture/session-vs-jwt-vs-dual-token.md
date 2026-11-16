@@ -18,13 +18,6 @@ source_refs:
   - https://www.rfc-editor.org/rfc/rfc7662
   - https://www.rfc-editor.org/rfc/rfc9700
   - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
-resource:
-  - https://www.rfc-editor.org/rfc/rfc7519
-  - https://www.rfc-editor.org/rfc/rfc8725
-  - https://www.rfc-editor.org/rfc/rfc6749
-  - https://www.rfc-editor.org/rfc/rfc7662
-  - https://www.rfc-editor.org/rfc/rfc9700
-  - https://developer.mozilla.org/en-US/docs/Web/HTTP/Cookies
 ---
 # Session vs JWT vs 双 Token
 

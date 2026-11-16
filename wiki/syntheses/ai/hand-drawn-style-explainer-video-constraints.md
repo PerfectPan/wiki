@@ -17,11 +17,6 @@ source_refs:
   - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
   - https://github.com/yang0/handraw-style
   - https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
-resource:
-  - raw/sources/2026-09-22-handdraw-style-prompter-review.md
-  - raw/sources/2026-09-22-hand-drawn-explainer-video-nikola-review.md
-  - https://github.com/yang0/handraw-style
-  - https://github.com/hi-nikola/hand-drawn-explainer-video-nikola
 ---
 # 手绘风格与讲解视频的工程约束
 

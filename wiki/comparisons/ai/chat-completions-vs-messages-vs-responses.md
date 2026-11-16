@@ -14,8 +14,6 @@ tags:
   - agent
 source_refs:
   - raw/sources/2026-08-03-llm-101-conversation.md
-resource:
-  - raw/sources/2026-08-03-llm-101-conversation.md
 ---
 # LLM API 协议选型
 
@@ -70,7 +68,3 @@ resource:
 - [[responses-api]]
 - [[code-agent]]
 - [[llm-101]]
-
-## 来源指针
-
-- `raw/sources/2026-08-03-llm-101-conversation.md`

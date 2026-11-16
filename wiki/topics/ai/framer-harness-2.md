@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/framer-harness-2.md
   - https://www.framer.com/blog/harness-2/
-resource:
-  - raw/sources/framer-harness-2.md
-  - https://www.framer.com/blog/harness-2/
 ---
 
 # Framer Harness 2
@@ -177,8 +174,3 @@ Framer 在文末说明，写作调研时发现新加坡管理大学和北航作�
 - [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]]
 - [[wiki/topics/ai/openai-programmatic-tool-calling|OpenAI Programmatic Tool Calling]]
 - [[wiki/topics/ai/mcp|MCP]]
-
-## 来源指针
-
-- `raw/sources/framer-harness-2.md`
-- https://www.framer.com/blog/harness-2/

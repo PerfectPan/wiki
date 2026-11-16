@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/effect-ts.md
   - raw/sources/javascript-generators.md
   - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*
-resource:
-  - raw/sources/effect-ts.md
-  - raw/sources/javascript-generators.md
-  - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/yield*
 ---
 
 # Effect.gen 的类型推导

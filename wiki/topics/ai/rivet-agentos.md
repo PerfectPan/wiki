@@ -21,16 +21,6 @@ source_refs:
   - https://rivet.dev/agentos/docs/security-model/
   - https://rivet.dev/agentos/docs/host-functions/
   - https://rivet.dev/agentos/docs/limitations/
-resource:
-  - raw/sources/rivet-agentos.md
-  - https://rivet.dev/agentos/docs/
-  - https://rivet.dev/agentos/docs/architecture/
-  - https://rivet.dev/agentos/docs/quickstart-embedded/
-  - https://rivet.dev/agentos/docs/persistence/
-  - https://rivet.dev/agentos/docs/architecture/sessions-persistence/
-  - https://rivet.dev/agentos/docs/security-model/
-  - https://rivet.dev/agentos/docs/host-functions/
-  - https://rivet.dev/agentos/docs/limitations/
 ---
 
 # Rivet agentOS：执行环境与持久会话

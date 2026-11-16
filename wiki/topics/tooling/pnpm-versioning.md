@@ -17,12 +17,6 @@ source_refs:
   - https://pnpm.io/settings/versioning
   - https://github.com/pnpm/pnpm/releases/tag/v11.13.0
   - https://github.com/pnpm/rfcs/blob/main/text/0006-monorepo-versioning.md
-resource:
-  - raw/sources/rush-vs-pnpm-workspace.md
-  - https://pnpm.io/versioning
-  - https://pnpm.io/settings/versioning
-  - https://github.com/pnpm/pnpm/releases/tag/v11.13.0
-  - https://github.com/pnpm/rfcs/blob/main/text/0006-monorepo-versioning.md
 ---
 # pnpm 原生发版
 

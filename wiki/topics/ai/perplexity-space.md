@@ -16,10 +16,6 @@ source_refs:
   - raw/sources/perplexity-space.md
   - https://github.com/perplexityai/SPACE
   - https://space.docs.perplexity.ai/guide/index.html
-resource:
-  - raw/sources/perplexity-space.md
-  - https://github.com/perplexityai/SPACE
-  - https://space.docs.perplexity.ai/guide/index.html
 ---
 # Perplexity SPACE
 

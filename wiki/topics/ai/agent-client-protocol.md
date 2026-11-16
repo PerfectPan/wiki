@@ -20,14 +20,6 @@ source_refs:
   - https://agentclientprotocol.com/protocol/v1/prompt-turn
   - https://agentclientprotocol.com/protocol/v2/migration
   - https://agentclientprotocol.com/announcements/acp-v2-draft
-resource:
-  - raw/sources/2026-08-06-agent-client-protocol-v1-v2-research.md
-  - https://agentclientprotocol.com/get-started/introduction
-  - https://agentclientprotocol.com/get-started/architecture
-  - https://agentclientprotocol.com/protocol/v1/overview
-  - https://agentclientprotocol.com/protocol/v1/prompt-turn
-  - https://agentclientprotocol.com/protocol/v2/migration
-  - https://agentclientprotocol.com/announcements/acp-v2-draft
 ---
 # Agent Client Protocol
 

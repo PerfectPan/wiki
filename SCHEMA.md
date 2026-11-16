@@ -50,7 +50,6 @@ created: 2026-04-12
 updated: 2026-04-12
 tags: []
 source_refs: []
-resource: []
 timestamp: 2026-04-12
 ---
 ```
@@ -61,8 +60,8 @@ timestamp: 2026-04-12
 - `description`：面向人和 agent 的一句话摘要。新页面应优先补上，避免 agent 必须打开正文才能判断页面是否相关
 - `category`：英文一级分类，例如 `frontend`、`ai`、`systems`
 - `tags`：细粒度英文主题，推荐 1 到 5 个
-- `source_refs`：支持本页内容的相对路径、页面名或 URL
-- `resource`：OKF-compatible 字段，导出时默认镜像 `source_refs`
+- `source_refs`：支持本页内容的一级来源入口（建议 1 到 3 条，如 `raw/sources/` 路径、仓库或规范主 URL）；细粒度文件、commit 或章节对照放正文
+- `resource`：OKF-compatible 可选字段；普通页面无需手写镜像，导出时默认从 `source_refs` 生成，仅在填写 `resource_type` 或需要区分时显式列出
 - `resource_type`：可选字段。只有当页面描述真实外部资源时才填写，例如 `API Endpoint`、`Automation Job`、`Metric`、`BigQuery Table`
 - `timestamp`：OKF-compatible 字段，导出时默认使用 `updated`
 
@@ -75,7 +74,7 @@ timestamp: 2026-04-12
 1. 保留现有 `category`、`source_refs` 等治理字段，不为了兼容 OKF 丢掉本仓库的审阅和来源约束。
 2. 在 frontmatter 中补充 `description`，让 agent 可以在不读取全文的情况下初筛页面。
 3. 内部 `type` 始终表示页面职责，只允许 `topic`、`synthesis`、`comparison`。不要把外部资源类型直接塞进内部 `type`。
-4. 使用 `resource` 作为 OKF-compatible 来源字段。手写页面时可以让它与 `source_refs` 相同；未来导出工具可以自动从 `source_refs` 生成。
+4. `resource` 是 OKF-compatible 来源字段。普通页面无需手写镜像，导出工具自动从 `source_refs` 生成；仅在描述外部资源（带 `resource_type`）或需要与 `source_refs` 区分时显式填写。
 5. 如果页面描述真实外部资源，使用可选 `resource_type` 表达资源对象类型，例如 `API Endpoint`、`Automation Job`、`Metric`、`BigQuery Table`。
 6. 使用 `timestamp` 作为 OKF-compatible 更新时间字段。手写页面时可以与 `updated` 相同；未来导出工具可以自动生成。
 7. 仓库内部可以继续使用 `[[wikilink]]`，但 OKF 导出时应转换为标准 Markdown 链接。
@@ -113,8 +112,6 @@ timestamp: 2026-06-15
 tags:
   - agent
 source_refs:
-  - raw/sources/example.md
-resource:
   - raw/sources/example.md
 ---
 ```
@@ -179,9 +176,9 @@ source_refs:
 
 - [[相关页面]]
 
-## 来源指针
+## 来源指针（可选）
 
-- 来源 1
+仅在需要补充具体源码文件/commit、RFC 章节分工或配图来源说明时保留；若只是重复 `source_refs` 中的路径或 URL，则省略。
 ```
 
 示例：
@@ -222,9 +219,9 @@ source_refs:
 
 写出尚未验证的具体行为，或谁需要决定哪项选择；没有此类内容时省略。
 
-## 来源指针
+## 来源指针（可选）
 
-- 来源 1
+仅在需要补充具体源码文件/commit、RFC 章节分工或配图来源说明时保留；若只是重复 `source_refs` 中的路径或 URL，则省略。
 ```
 
 示例：
@@ -262,9 +259,9 @@ source_refs:
 
 写清楚当前选择及原因。
 
-## 来源指针
+## 来源指针（可选）
 
-- 来源 1
+仅在需要补充具体源码文件/commit、RFC 章节分工或配图来源说明时保留；若只是重复 `source_refs` 中的路径或 URL，则省略。
 ```
 
 示例：
@@ -299,7 +296,6 @@ tags:
   - catalog          # 必含：recall 时先查 catalog + 领域 tag
   - <领域 tag>        # 如 skills / component-library / tooling
 source_refs:          # 对象来源 URL、相关领域知识，以及实际保留的 raw（如有）
-resource:             # 镜像 source_refs
 ```
 
 - 页面标题统一为 `Awesome <领域>`（沿用 awesome 的 curated list 语义）或 `<领域> 收录索引`，方便按标题召回；新增文件名仍遵守「文件命名」。
@@ -314,7 +310,7 @@ resource:             # 镜像 source_refs
 ## 分级        # 简要解释三档含义
 ## 索引        # 按档分组表格：| 对象 | 一句话价值 | 指针 |；指针必须可点，可直接链来源；有独立素材时再链 raw
 ## 相关页面
-## 来源指针
+## 来源指针（可选）  # 有补充定位或说明时保留；仅与 source_refs 重复时省略
 ```
 
 ### 召回与更新约定

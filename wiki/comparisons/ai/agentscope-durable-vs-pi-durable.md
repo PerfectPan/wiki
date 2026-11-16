@@ -18,12 +18,6 @@ source_refs:
   - raw/sources/agentscope-durable.md
   - raw/sources/2026-10-02-pi-durable.md
   - https://mp.weixin.qq.com/s/z8JHkCyOVVKrXpKH-vy6tw
-resource:
-  - wiki/topics/ai/agentscope-durable.md
-  - wiki/topics/ai/pi-durable.md
-  - raw/sources/agentscope-durable.md
-  - raw/sources/2026-10-02-pi-durable.md
-  - https://mp.weixin.qq.com/s/z8JHkCyOVVKrXpKH-vy6tw
 ---
 
 # AgentScope Durable vs Pi Durable

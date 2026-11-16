@@ -15,10 +15,6 @@ source_refs:
   - raw/sources/2026-07-02-harnessx-agent-harness-foundry.md
   - https://arxiv.org/abs/2606.14249
   - https://arxiv.org/pdf/2606.14249
-resource:
-  - raw/sources/2026-07-02-harnessx-agent-harness-foundry.md
-  - https://arxiv.org/abs/2606.14249
-  - https://arxiv.org/pdf/2606.14249
 ---
 
 # Agent Harness 演进范式
@@ -127,9 +123,3 @@ HarnessX 进一步提出 harness-model co-evolution：harness 改进产生 traje
 - [[agent-native-system-interface-design]]
 - [[agent-native-generative-cli-artifact-protocol]]
 - [[llm-structured-output-reliability]]
-
-## 来源指针
-
-- `raw/sources/2026-07-02-harnessx-agent-harness-foundry.md`
-- https://arxiv.org/abs/2606.14249
-- https://arxiv.org/pdf/2606.14249

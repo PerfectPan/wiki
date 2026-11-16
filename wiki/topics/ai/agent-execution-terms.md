@@ -24,20 +24,6 @@ source_refs:
   - https://github.com/open-telemetry/semantic-conventions-genai/issues/332
   - https://github.com/open-telemetry/semantic-conventions-genai/issues/418
   - https://github.com/weave-os/router/blob/424e57b678c05fe61ac8b73c063c1cad20557635/docs/SEMANTICS.md
-resource:
-  - https://github.com/earendil-works/pi/blob/e12dbfc9299049dc2e7a974612fec32001a7ba8a/packages/agent/README.md
-  - https://github.com/deepseek-ai/deepseek-harness/blob/39163dd30f703a79079e2d2446545cff3c453738/docs/glossary.zh.md
-  - https://openai.github.io/openai-agents-python/ref/run/
-  - https://openai.github.io/openai-agents-python/running_agents/
-  - https://developers.openai.com/cookbook/examples/agents_sdk/session_memory
-  - https://code.claude.com/docs/en/agent-sdk/agent-loop
-  - https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools
-  - https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls
-  - https://agentclientprotocol.com/protocol/v1/prompt-turn
-  - https://ai-sdk.dev/docs/ai-sdk-core/tools-and-tool-calling
-  - https://github.com/open-telemetry/semantic-conventions-genai/issues/332
-  - https://github.com/open-telemetry/semantic-conventions-genai/issues/418
-  - https://github.com/weave-os/router/blob/424e57b678c05fe61ac8b73c063c1cad20557635/docs/SEMANTICS.md
 ---
 
 # Agent 执行术语：session、turn、run 与 step

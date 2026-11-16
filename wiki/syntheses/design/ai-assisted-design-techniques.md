@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/2026-09-22-lenny-world-class-designer.md
   - https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
-resource:
-  - raw/sources/2026-09-22-lenny-world-class-designer.md
-  - https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world
 ---
 # 用 AI 做设计的几个技巧
 

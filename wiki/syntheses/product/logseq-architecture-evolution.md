@@ -36,7 +36,3 @@ Logseq 为什么会从“操作字符串”的系统演进到“维护一棵 Blo
 
 - 当前仓库里还没有把 Logseq 的 Block Tree、插件协议和同步模型拆成更细的页面。
 - 如果后续继续沉淀知识工具架构，可以再补一页把 Logseq 和 Obsidian / BlockSuite 放在同一层面对比。
-
-## 来源指针
-
-- `wiki/topics/product/logseq.md`

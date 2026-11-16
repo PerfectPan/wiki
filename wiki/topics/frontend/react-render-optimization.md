@@ -32,7 +32,3 @@ React 渲染优化的关键不是“到处包 `memo`”，而是先识别状态�
 
 - [[react]]
 - React Context 粒度与 Selector 路径（待补页）
-
-## 来源指针
-
-- `raw/sources/react.md`

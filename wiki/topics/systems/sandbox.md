@@ -14,9 +14,6 @@ tags:
 source_refs:
   - raw/sources/sandbox.md
   - wiki/syntheses/systems/container-resource-isolation-oversubscription.md
-resource:
-  - raw/sources/sandbox.md
-  - wiki/syntheses/systems/container-resource-isolation-oversubscription.md
 ---
 
 # Sandbox

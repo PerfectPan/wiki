@@ -13,9 +13,6 @@ tags:
 source_refs:
   - raw/sources/voila-extension-teardown-2026-08.md
   - https://www.withvoila.app/
-resource:
-  - raw/sources/voila-extension-teardown-2026-08.md
-  - https://www.withvoila.app/
 timestamp: 2026-08-13
 ---
 

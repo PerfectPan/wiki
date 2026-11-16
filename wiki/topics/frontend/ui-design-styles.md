@@ -16,10 +16,6 @@ source_refs:
   - raw/sources/2026-08-14-name-that-vibe.md
   - https://namethatui.com/styles
   - https://namethatui.com/styles/glassmorphism
-resource:
-  - raw/sources/2026-08-14-name-that-vibe.md
-  - https://namethatui.com/styles
-  - https://namethatui.com/styles/glassmorphism
 ---
 
 # UI 设计风格

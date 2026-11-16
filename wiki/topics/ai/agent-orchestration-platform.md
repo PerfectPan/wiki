@@ -16,11 +16,6 @@ source_refs:
   - raw/sources/2026-08-26-qm.md
   - https://qm.ycombinator.com/
   - https://github.com/yc-software/qm
-resource:
-  - raw/sources/2026-08-26-yc-qm-agent-harness.md
-  - raw/sources/2026-08-26-qm.md
-  - https://qm.ycombinator.com/
-  - https://github.com/yc-software/qm
 ---
 
 # Agent Orchestration Platform
@@ -185,10 +180,3 @@ MIT 开源的 local-first Agent 开发环境。围绕代码仓库、Git worktree
 - [[agent]]
 - [[code-agent]]
 - [[wiki/comparisons/product/raft-vs-orca|Raft vs Orca]]
-
-## 来源指针
-
-- `raw/sources/2026-08-26-yc-qm-agent-harness.md`
-- `raw/sources/2026-08-26-qm.md`
-- https://qm.ycombinator.com/
-- https://github.com/yc-software/qm

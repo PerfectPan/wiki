@@ -16,10 +16,6 @@ source_refs:
   - wiki/topics/ai/mcp.md
   - https://modelcontextprotocol.io/specification/2026-07-28
   - https://blog.modelcontextprotocol.io/posts/2026-07-28/
-resource:
-  - wiki/topics/ai/mcp.md
-  - https://modelcontextprotocol.io/specification/2026-07-28
-  - https://blog.modelcontextprotocol.io/posts/2026-07-28/
 ---
 # MCP SSE 多实例路由策略
 
@@ -56,9 +52,3 @@ resource:
 
 - 现有 server 中有多少把业务状态错误地绑定在 `Mcp-Session-Id` 上，仍需通过真实迁移案例验证。
 - MRTR、Tasks 和显式 handle 在失败恢复、幂等和超时语义上的最佳实践仍会继续演化。
-
-## 来源指针
-
-- `wiki/topics/ai/mcp.md`
-- <https://modelcontextprotocol.io/specification/2026-07-28>
-- <https://blog.modelcontextprotocol.io/posts/2026-07-28/>

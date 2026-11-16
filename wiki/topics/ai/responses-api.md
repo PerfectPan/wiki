@@ -14,8 +14,6 @@ tags:
   - codex
 source_refs:
   - raw/sources/2026-08-03-llm-101-conversation.md
-resource:
-  - raw/sources/2026-08-03-llm-101-conversation.md
 ---
 # Responses API
 
@@ -47,7 +45,3 @@ Responses API 是 OpenAI 面向 agent 产品线的主协议之一：一次调用
 - [[chat-completions-vs-messages-vs-responses]]
 - [[code-agent]]
 - [[llm-101]]
-
-## 来源指针
-
-- `raw/sources/2026-08-03-llm-101-conversation.md`

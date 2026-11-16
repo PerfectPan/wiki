@@ -15,9 +15,6 @@ tags:
 source_refs:
   - raw/sources/2026-09-06-the-next-scaling-problem.md
   - https://tetral.ai/blog/the-next-scaling-problem/
-resource:
-  - raw/sources/2026-09-06-the-next-scaling-problem.md
-  - https://tetral.ai/blog/the-next-scaling-problem/
 ---
 
 # Tetral

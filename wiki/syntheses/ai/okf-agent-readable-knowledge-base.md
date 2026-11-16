@@ -18,12 +18,6 @@ source_refs:
   - https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing/
   - https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf
   - https://raw.githubusercontent.com/GoogleCloudPlatform/knowledge-catalog/main/okf/SPEC.md
-resource:
-  - raw/sources/2026-06-15-google-cloud-open-knowledge-format.md
-  - raw/sources/2026-06-15-okf-type-resource-type-conversation.md
-  - https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing/
-  - https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf
-  - https://raw.githubusercontent.com/GoogleCloudPlatform/knowledge-catalog/main/okf/SPEC.md
 ---
 # Open Knowledge Format 与 Agent 可读知识库
 
@@ -118,11 +112,3 @@ Google 给的例子偏数据资产和运维知识，例如 `BigQuery Table`、`B
 
 - [[wiki/syntheses/ai/agent-driven-wiki-maintenance|Agent 驱动 Wiki 的维护流程]]
 - [[SCHEMA]]
-
-## 来源指针
-
-- `raw/sources/2026-06-15-google-cloud-open-knowledge-format.md`
-- `raw/sources/2026-06-15-okf-type-resource-type-conversation.md`
-- https://cloud.google.com/blog/products/data-analytics/how-the-open-knowledge-format-can-improve-data-sharing/
-- https://github.com/GoogleCloudPlatform/knowledge-catalog/tree/main/okf
-- https://raw.githubusercontent.com/GoogleCloudPlatform/knowledge-catalog/main/okf/SPEC.md

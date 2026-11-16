@@ -12,11 +12,6 @@ source_refs:
   - https://github.com/KingSora/OverlayScrollbars
   - https://github.com/Grsmto/simplebar
   - https://github.com/mdbootstrap/perfect-scrollbar
-resource:
-  - raw/sources/2026-05-08-custom-scrollbar-library-source-review.md
-  - https://github.com/KingSora/OverlayScrollbars
-  - https://github.com/Grsmto/simplebar
-  - https://github.com/mdbootstrap/perfect-scrollbar
 ---
 
 # 自定义滚动条库选型：OverlayScrollbars vs SimpleBar vs Perfect Scrollbar

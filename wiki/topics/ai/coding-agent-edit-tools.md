@@ -14,9 +14,6 @@ tags:
 source_refs:
   - raw/sources/2026-09-13-codex-apply-patch.md
   - raw/sources/2026-09-15-coding-agent-edit-tools.md
-resource:
-  - raw/sources/2026-09-13-codex-apply-patch.md
-  - raw/sources/2026-09-15-coding-agent-edit-tools.md
 ---
 
 # Coding Agent 编辑工具

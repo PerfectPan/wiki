@@ -21,16 +21,6 @@ source_refs:
   - https://www.anthropic.com/research/components-of-agent-memory
   - https://docs.letta.com/concepts/memfs
   - https://docs.letta.com/configuration/memory
-resource:
-  - raw/sources/gbrain.md
-  - raw/sources/memu.md
-  - raw/sources/agentmemory.md
-  - raw/sources/letta-context-repositories.md
-  - raw/sources/anthropic-components-of-agent-memory.md
-  - wiki/topics/ai/agent-memory.md
-  - https://www.anthropic.com/research/components-of-agent-memory
-  - https://docs.letta.com/concepts/memfs
-  - https://docs.letta.com/configuration/memory
 ---
 
 # 如何实现 Agent Memory

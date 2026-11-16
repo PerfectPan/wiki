@@ -13,8 +13,6 @@ tags:
   - agent
 source_refs:
   - https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling
-resource:
-  - https://developers.openai.com/api/docs/guides/tools-programmatic-tool-calling
 ---
 
 # OpenAI Programmatic Tool Calling

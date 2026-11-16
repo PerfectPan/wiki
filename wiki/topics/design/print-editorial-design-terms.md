@@ -16,10 +16,6 @@ source_refs:
   - https://github.com/yanliudesign/mono-color-skill
   - https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md
   - raw/sources/2026-09-01-mono-color-skill-review.md
-resource:
-  - https://github.com/yanliudesign/mono-color-skill
-  - https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md
-  - raw/sources/2026-09-01-mono-color-skill-review.md
 ---
 
 # 印刷与编辑设计术语
@@ -103,9 +99,3 @@ resource:
 - [[ui-design-styles]] —— 界面侧的风格模型与术语分层方法（本页分层法的出处）
 - [[ai-assisted-design-quality-boundary]] —— AI 生成设计的质量判断
 - [[awesome-agent-skills]] —— 术语来源 skill（mono-color）的收录条目
-
-## 来源指针
-
-- https://github.com/yanliudesign/mono-color-skill
-- https://github.com/yanliudesign/mono-color-skill/blob/main/SKILL.md
-- `raw/sources/2026-09-01-mono-color-skill-review.md`

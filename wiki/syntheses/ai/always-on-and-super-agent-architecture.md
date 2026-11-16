@@ -148,26 +148,7 @@ flowchart LR
 
 要让 Agent 真正做到常驻在线并操作真实工作环境，必须解除本地单机 Agent 将**计算（Agent Loop）**、**持久状态（Session State）**和**执行环境（代码仓、工具链、内网服务）**绑死在同一台机器上的限制：[DeepSeek Super-agent §5][dsh-article]
 
-```mermaid
-flowchart TB
-  subgraph Cloud["云端常驻控制面（计算与状态分离）"]
-    Containers["无状态弹性计算容器：运行 Router / Worker Agent Loop"]
-    DB[("持久化存储（SQLite / PostgreSQL）：Sessions、Tickets、Inbox、Effects")]
-    Watchdog["独立 Watchdog Session（定时消息驱动）：监控进展、修复故障与热修规则"]
-    Containers <--> DB
-    Watchdog -->|检查死循环与目标偏离 / 调整提示词与规则| Containers
-  end
-
-  subgraph Endpoints["执行环境层（计算与重状态环境分离）"]
-    Sandbox["按需创建的云端沙箱 / 容器"]
-    VPC["企业内网 / VPC 资源"]
-    BYOM["个人电脑 / 开发机（BYOM 轻量无状态 Daemon）"]
-  end
-
-  Containers -->|统一命令与上下文读取接口| Sandbox
-  Containers -->|统一命令与上下文读取接口| VPC
-  Containers -->|设备在线时下发命令 / 离线重连后自动续跑| BYOM
-```
+![计算、状态与执行环境的两级解耦：无状态计算容器只跑 Agent Loop，第一级解耦将 Sessions/Tickets/Inbox/Memory 持久化到数据库，第二级解耦按需远程调用云端沙箱、企业 VPC 或个人电脑 BYOM 守护进程](../../../raw/assets/super-agent-compute-state-env-decoupling.png)
 
 1. **第一级解耦（计算与状态分离）**：运行 Agent Loop 的进程保持无状态，随时可扩缩容、重启或替换；所有会话历史、事件收件箱、工单状态与待执行副作用全部持久化到数据库（这与 [[wiki/syntheses/ai/agent-harness-runtime-architecture|Agent Harness 运行时架构与演进]] 中 [[wiki/topics/ai/tetral|Tetral]]、[[wiki/topics/ai/pi-durable|Pi Durable]] 的路线一致）。[Anthropic 指南][always-on]、[DeepSeek Super-agent §5.1][dsh-article]
 2. **第二级解耦（云端 Agent Loop 与重状态执行环境分离，支持 BYOM）**：

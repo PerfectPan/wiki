@@ -61,7 +61,7 @@ sequenceDiagram
   participant C as 企业资源端（Company API / Agent / Web）
   participant AS as 企业授权服务器（OAuth AS）
 
-  rect rgb(245, 247, 250)
+  rect rgba(59, 130, 246, 0.12)
   Note over PA,AS: 阶段一：双向验证发现（Discovery）
   PA->>C: GET /.well-known/poppy.json
   C-->>PA: organization.domain、scopes、agent/apis/web 端点、extensions（operations v3）
@@ -71,7 +71,7 @@ sequenceDiagram
   AS-->>PA: OAuth 端点 + protected_resources（核对包含 organization.domain）
   end
 
-  rect rgb(250, 244, 235)
+  rect rgba(245, 158, 11, 0.12)
   Note over U,C: 阶段二：未登录伪匿名会话 → 触发按需 OAuth 授权（Direct Sign-In）
   PA->>C: POST /poppy/conversations（仅带 Poppy-Session JWT，未登录询问退换政策）
   C-->>PA: 201 Created + authorization 事件（insufficient_scope: orders:read orders:write）
@@ -82,7 +82,7 @@ sequenceDiagram
   AS-->>PA: access_token + refresh_token
   end
 
-  rect rgb(235, 246, 238)
+  rect rgba(16, 185, 129, 0.12)
   Note over U,C: 阶段三：带令牌请求写操作 → Operations v3 精确条款审批与幂等执行
   PA->>C: 发起换货请求（带 Poppy-Session 含 ath + Authorization + Poppy-Extensions operations v3）
   C-->>PA: 拒绝直接执行，返回 operation（operation_id、revision、summary、terms 补差价 70 美元、expires_at）

@@ -71,4 +71,5 @@ note: X article 2116829218935857152 + prototype repo deepseek-ai/dsh-superagent-
 - 已通过 API 获取 X 长文完整结构化正文、配图说明与实验表格数据，并读取 `deepseek-ai/dsh-superagent-prototype`（`8c32a9dc5d72c033816c6a8110b37f40cf94fba4`）的 `README.md` 及 `docs/000-philosophy.md` 至 `docs/008-cookbook.md`。
 - 本次未在本地安装 DeepSeek Harness 运行 `dsh-superagent-prototype`，未复现长文中的合成负载消融实验与批处理压测。
 - 手绘配图 `raw/assets/super-agent-two-level-architecture.png` 根据长文 §2–§3 的两级过滤、Router/Worker 两层架构与 Thread 订阅直通（Fast/Slow Path）绘制，已逐项核对中英文标签与箭头方向。
+- 手绘配图 `raw/assets/super-agent-compute-state-env-decoupling.png` 根据长文 §5 的计算/状态/BYOM 执行环境两级解耦绘制，已逐项核对中英文标签与箭头方向。
 - 整理页：[[wiki/topics/ai/personal-agent|Personal Agent 与 Super-agent]]、[[wiki/syntheses/ai/always-on-and-super-agent-architecture|常驻型 Agent（Always-on / Super-agent）的系统架构]]。

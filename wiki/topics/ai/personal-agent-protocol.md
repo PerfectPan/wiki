@@ -56,17 +56,17 @@ Poppy 将**请求身份识别**、**跨通道会话连续性（Sessions）**与*
 ```mermaid
 sequenceDiagram
   autonumber
-  participant U as 用户 (User)
-  participant PA as 个人 Agent (Atlas)
-  participant C as 企业资源端 (Company API / Agent / Web)
-  participant AS as 企业授权服务器 (OAuth AS)
+  participant U as 用户（User）
+  participant PA as 个人 Agent（Atlas）
+  participant C as 企业资源端（Company API / Agent / Web）
+  participant AS as 企业授权服务器（OAuth AS）
 
   rect rgb(245, 247, 250)
   Note over PA,AS: 阶段一：双向验证发现（Discovery）
   PA->>C: GET /.well-known/poppy.json
-  C-->>PA: organization.domain、scopes、agent/apis/web 端点、extensions(operations v3)
+  C-->>PA: organization.domain、scopes、agent/apis/web 端点、extensions（operations v3）
   PA->>C: GET /.well-known/oauth-protected-resource
-  C-->>PA: resource + authorization_servers([issuer])
+  C-->>PA: resource + authorization_servers（issuer 列表）
   PA->>AS: GET /.well-known/oauth-authorization-server
   AS-->>PA: OAuth 端点 + protected_resources（核对包含 organization.domain）
   end
@@ -84,8 +84,8 @@ sequenceDiagram
 
   rect rgb(235, 246, 238)
   Note over U,C: 阶段三：带令牌请求写操作 → Operations v3 精确条款审批与幂等执行
-  PA->>C: 发起换货请求（带 Poppy-Session[含 ath] + Authorization + Poppy-Extensions: "operations";v="3"）
-  C-->>PA: 拒绝直接执行，返回 operation（operation_id、revision、summary、terms: 补差价 $70、expires_at）
+  PA->>C: 发起换货请求（带 Poppy-Session 含 ath + Authorization + Poppy-Extensions operations v3）
+  C-->>PA: 拒绝直接执行，返回 operation（operation_id、revision、summary、terms 补差价 70 美元、expires_at）
   PA->>U: 展示条款摘要与结构化金额，请求确认
   U->>PA: 批准该笔换货条款
   PA->>C: 重发换货请求 + approval（绑定 operation_id 与 revision）
@@ -114,20 +114,20 @@ Poppy 没有要求个人 Agent 事先去每家企业后台手动注册 OAuth 客
 ```mermaid
 flowchart LR
   subgraph AgentKeys["Personal Agent 密钥与身份层"]
-    CIMD["client_id（HTTPS 元数据文档 URL）<br/>暴露 jwks_uri 主公钥"]
+    CIMD["client_id（HTTPS 元数据文档 URL，暴露 jwks_uri 主公钥）"]
     MasterKey["jwks_uri 主私钥（ES256 / PS384）"]
-    DlgKey["短期委托密钥（Delegated Key，ES256）<br/>每个 User ID 独立、每企业隔离"]
+    DlgKey["短期委托密钥（Delegated Key，ES256，按 User ID 与企业隔离）"]
     CIMD --- MasterKey
-    MasterKey -->|签发 ≤24h 委托凭证<br/>poppy-delegation+jwt（不含用户与企业信息）| DlgKey
+    MasterKey -->|"签发 ≤24h 委托凭证 poppy-delegation+jwt（不含用户与企业信息）"| DlgKey
   end
 
   subgraph Targets["发往企业的两类签名凭证"]
-    Assertion["OAuth 客户端断言（private_key_jwt）<br/>aud = 企业 issuer，exp ≤ 5min"]
-    SessJWT["Poppy-Session 请求头（poppy-session+jwt）<br/>含 poppy_dlg、sid、pairwise sub、htm/htu/ath"]
+    Assertion["OAuth 客户端断言（private_key_jwt，aud = 企业 issuer，exp ≤ 5min）"]
+    SessJWT["Poppy-Session 请求头（poppy-session+jwt，含 poppy_dlg、sid、pairwise sub、htm/htu/ath）"]
   end
 
-  MasterKey -->|仅在 /token、/revoke 等 OAuth 端点使用| Assertion
-  DlgKey -->|随每个业务请求逐次签发| SessJWT
+  MasterKey -->|"仅在 /token、/revoke 等 OAuth 端点使用"| Assertion
+  DlgKey -->|"随每个业务请求逐次签发"| SessJWT
 ```
 
 - **按企业隔离的伪匿名 `User ID`（Pairwise `sub`）**：Personal Agent 为每个用户在每家企业生成一个稳定、不透明且互不相同的 `User ID`（严禁包含或由邮箱、手机号、姓名做哈希派生）。这样企业在未登录状态下也能跨会话识别回访用户，但**不同企业之间无法通过 `User ID` 串通比对出同一个自然人**。Agent 也可在隐私浏览模式下为单次匿名会话生成用完即弃的临时 `User ID`。[Spec §5.1][spec]

@@ -4,8 +4,8 @@ description: Agent 的自主决策与工具调用循环，以及效果评测、�
 type: topic
 category: ai
 created: 2026-04-12
-updated: 2026-11-14
-timestamp: 2026-11-14
+updated: 2026-11-16
+timestamp: 2026-11-16
 tags:
   - agent
   - coding-agent
@@ -37,7 +37,7 @@ Agent 指的是能基于当前上下文自主决定下一步动作，并通过�
 
 - 和普通问答式 AI 相比，agent 的区别不在于“模型更强”，而在于它会把观察、决策、执行、再观察串成循环。
 - 2024-12-24 的一条观察里把一个关键边界说得很清楚：如果流程本身已经能被人稳定写出来，那更接近 workflow；只有当下一步依赖模型持续判断时，才更像 agent。
-- 工程上常见的 agent 既可以是通用执行体，也可以是更窄的 [[code-agent]]。
+- 工程上常见的 agent 既可以是单次对话驱动的 [[code-agent]]，也可以是脱离单次会话、跨渠道常驻运行并响应环境事件的 [[wiki/topics/ai/personal-agent|Personal Agent 与 Super-agent]]（系统架构见 [[wiki/syntheses/ai/always-on-and-super-agent-architecture|常驻型 Agent（Always-on / Super-agent）的系统架构]]，对外商业交互协议见 [[wiki/topics/ai/personal-agent-protocol|Personal Agent Protocol（Poppy）]]）。
 - 现有记录里的两个入口分别代表不同层级：
   - `aider` 更像直接可用的 coding agent；
   - `agno` 更像搭 agent 的框架层。
@@ -63,6 +63,9 @@ Agent 引入模型后，同一任务可能得到不同方案，因此需要对�
 
 ## 相关页面
 
+- [[wiki/topics/ai/personal-agent|Personal Agent 与 Super-agent]]
+- [[wiki/syntheses/ai/always-on-and-super-agent-architecture|常驻型 Agent（Always-on / Super-agent）的系统架构]]
+- [[wiki/topics/ai/personal-agent-protocol|Personal Agent Protocol（Poppy）]]
 - [[wiki/topics/ai/agent-execution-terms|Agent 执行术语：session、turn、run 与 step]]
 - [[code-agent]]
 - [[workflow-vs-agent]]

@@ -42,9 +42,11 @@ description: 围绕主题开展深度调研并沉淀为可审阅的 Wiki 页面�
 - 为 PR 写出简短摘要，说明调研范围、来源、图表、验证方式和剩余风险
 
 验证要求：
+- 运行 `bin/wiki check` 与 `bin/wiki check-jargon --base origin/main`
 - 运行 `git diff --check`
 - 运行 `bash tests/wiki-cli.sh`
-- 对新增 Mermaid fence 做成对检查；如果无法渲染，至少确认 Markdown fence 没有破坏页面结构
+- 对新增 Mermaid fence 做成对与语法检查（注意 `sequenceDiagram` 禁用未转义 `;` 等规则，见 `../ingest/references/page-writing.md#配图选择与核对`）；生成图片须逐张读图核对文字与箭头
+- 创建或修改 PR 前运行 `PR_TITLE="..." PR_BODY="..." node tests/pr-metadata.mjs` 预检 PR 标题与正文格式
 
 目标目录：
 - topics：`{{TOPICS}}`

@@ -296,7 +296,6 @@ tags:
   - catalog          # 必含：recall 时先查 catalog + 领域 tag
   - <领域 tag>        # 如 skills / component-library / tooling
 source_refs:          # 对象来源 URL、相关领域知识，以及实际保留的 raw（如有）
-resource:             # 镜像 source_refs
 ```
 
 - 页面标题统一为 `Awesome <领域>`（沿用 awesome 的 curated list 语义）或 `<领域> 收录索引`，方便按标题召回；新增文件名仍遵守「文件命名」。
@@ -311,7 +310,7 @@ resource:             # 镜像 source_refs
 ## 分级        # 简要解释三档含义
 ## 索引        # 按档分组表格：| 对象 | 一句话价值 | 指针 |；指针必须可点，可直接链来源；有独立素材时再链 raw
 ## 相关页面
-## 来源指针
+## 来源指针（可选）  # 有补充定位或说明时保留；仅与 source_refs 重复时省略
 ```
 
 ### 召回与更新约定

@@ -30,7 +30,7 @@ source_refs:
 ## 相关页面
 
 - [[typescript]]
-- [[@opensumi/di]]
+- [[wiki/topics/architecture/opensumi-di|@opensumi/di]]
 
 ## 来源指针
 

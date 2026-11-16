@@ -23,8 +23,8 @@
 每个来源至少存一层，建议存两层：
 
 ```
-raw/sources/YYYY-MM-DD-主题.html    # 原始格式（HTML/PDF 等），忠实存档
-raw/sources/YYYY-MM-DD-主题.md      # 提取后的可读格式，方便引用
+raw/sources/<对象或主题名>.html    # 原始格式（HTML/PDF 等），忠实存档
+raw/sources/<对象或主题名>.md      # 提取后的可读格式，方便引用
 ```
 
 为什么存两层：
@@ -77,17 +77,17 @@ fetched: 2026-08-18
 ## 4. 文件命名规范
 
 ```
-YYYY-MM-DD-主题名.md
-YYYY-MM-DD-主题名.html
+<对象或主题名>.md
+<对象或主题名>.html
 ```
 
-- 日期：抓取日期或发布日期，优先用发布日期
-- 主题名：英文或拼音，小写，连字符分隔
+- 使用稳定的英文小写 kebab-case 对象或主题名，不自动加发布日期或抓取日期前缀（发布日期、抓取日期写在来源头；详见 `SCHEMA.md` 的「原始素材命名」）
 - 同一来源的不同格式用相同的文件名前缀，只改扩展名
+- 历史已合入的 `YYYY-MM-DD-主题名.md` 保持原名不批量重命名
 
 示例：
-- `2026-08-18-mihomo-rust-agent-team.md`
-- `2026-08-18-mihomo-rust-agent-team.html`
+- `gbrain.md`
+- `letta-context-repositories.md`
 
 ## 5. 提取规范
 

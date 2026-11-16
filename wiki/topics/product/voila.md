@@ -17,6 +17,7 @@ source_refs:
 resource:
   - raw/sources/voila-extension-teardown-2026-08.md
   - https://www.withvoila.app/
+  - https://chromewebstore.google.com/detail/voila/jpomhonnigcdannbfdjjnaaglldbdgjb
 resource_type: Browser Extension
 timestamp: 2026-08-13
 ---

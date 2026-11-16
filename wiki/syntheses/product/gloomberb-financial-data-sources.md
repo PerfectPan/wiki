@@ -154,10 +154,6 @@ FRED 官方 API 免费但要 key。Gloomberb 客户端**不直连 stlouisfed**�
 | Cloud Free=15min 延迟、Pro=实时 | 客户端常量 + `effectivePlan` 服务端下发 | `plan-access.ts`、`api-client` | 中；延迟数值是 2026-09 时点，随计划变更 |
 | broker 数据只存本机不进云 sync | README 声明 + sync sanitize | `README.md`、`src/sync/core-contributors.ts` | 高 |
 
-## 相关页面
-
-- [[wiki/syntheses/product/Gloomberb 调研|Gloomberb 调研]]
-
 ## 来源指针
 
 - `gloom-sh/gloomberb@946ab2cdb4a02b9504de9ef8a596e75957167a09`（2026-09-07 读取）

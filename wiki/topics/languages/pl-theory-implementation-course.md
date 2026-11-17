@@ -45,7 +45,7 @@ source_refs:
   ```
 - [[lambda-calculus|Lambda 演算]]足够小，可以来做形式化的证明
 - TODO Programming languages and lambda calculi #Reading
-- [[draws/2022-11-24-13-20-57.excalidraw]]
+- （原 Logseq 手绘图 `draws/2022-11-24-13-20-57.excalidraw` 未迁入）
 - 类似 $\beta$ reduction 的替换方式常用于编译器优化，本身效率不高
 - 用环境存储上下文变量用于高效的解释器实现
 - 德布朗指数表示变量

@@ -1,5 +1,6 @@
 ---
 title: Algorithm
+description: 汇总动态规划、贪心、图论、字符串等算法专题索引及题目查重工具链接。
 type: topic
 category: algorithms
 created: 2026-04-12

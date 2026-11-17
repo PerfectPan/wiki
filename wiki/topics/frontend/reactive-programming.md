@@ -1,5 +1,6 @@
 ---
 title: 响应式
+description: 梳理响应式编程的求值模型与 Glitch avoidance 机制，解释延迟副作用与惰性计算如何避免中间态闪烁。
 type: topic
 category: frontend
 created: 2026-04-12

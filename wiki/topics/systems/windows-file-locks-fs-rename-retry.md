@@ -1,5 +1,6 @@
 ---
 title: Windows 文件锁与 fs.rename 重试
+description: 说明 Windows 文件锁导致 fs.rename 报 EACCES 或 EPERM 时的带退避重试处理策略。
 type: topic
 category: systems
 created: 2026-04-25

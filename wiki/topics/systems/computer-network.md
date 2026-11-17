@@ -1,5 +1,6 @@
 ---
 title: Computer Network
+description: 梳理 CA 证书签名、系统代理与正反向代理的区别，以及 HTTPS 代理和 TLS 的验证机制。
 type: topic
 category: systems
 created: 2026-04-12

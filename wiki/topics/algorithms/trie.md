@@ -1,5 +1,6 @@
 ---
 title: Trie
+description: 介绍字典树（Trie）与 0-1 Trie 的结构性质及其在前缀查询和最大异或和问题中的应用。
 type: topic
 category: algorithms
 created: 2026-04-12

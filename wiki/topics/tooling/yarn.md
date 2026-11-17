@@ -1,5 +1,6 @@
 ---
 title: Yarn
+description: 记录 Yarn 生命周期脚本环境变量及通过插件强制校验 Node 版本的用法。
 type: topic
 category: tooling
 created: 2026-04-12

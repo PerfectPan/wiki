@@ -1,5 +1,6 @@
 ---
 title: useEffect
+description: 总结 useEffect 用于同步外部系统的定位、响应式依赖规则以及消除多余依赖的写法。
 type: topic
 category: frontend
 created: 2026-04-12

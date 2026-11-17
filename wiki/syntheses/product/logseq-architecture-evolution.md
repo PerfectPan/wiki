@@ -1,5 +1,6 @@
 ---
 title: Logseq 架构演进脉络
+description: 梳理 Logseq 从字符串操作演进为 Block Tree 模型、插件化宿主及多端构建架构的原因。
 type: synthesis
 category: product
 created: 2026-04-25

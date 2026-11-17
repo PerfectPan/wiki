@@ -1,5 +1,6 @@
 ---
 title: CTF
+description: 记录 Web 类 CTF 题目在浏览器 Network 面板快速检索 flag 的实战技巧。
 type: topic
 category: tooling
 created: 2026-04-12

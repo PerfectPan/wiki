@@ -1,5 +1,6 @@
 ---
 title: 结构化面试与行为追问
+description: 总结如何通过结构化流程、行为面试追问与标准化面评框架开展可比较的面试评估。
 type: synthesis
 category: career
 created: 2026-04-25

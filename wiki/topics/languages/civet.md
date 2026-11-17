@@ -1,5 +1,6 @@
 ---
 title: Civet
+description: 介绍编译到 TypeScript/JavaScript 的语法前端语言 Civet 的定位与特征。
 type: topic
 category: languages
 created: 2026-04-25

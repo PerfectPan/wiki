@@ -1,5 +1,6 @@
 ---
 title: Bundle
+description: 整理前端打包构建耗时排查思路，以及依赖图构建与 tree shaking 阶段对 HMR 的影响。
 type: topic
 category: tooling
 created: 2026-04-12

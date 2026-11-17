@@ -1,5 +1,6 @@
 ---
 title: Git 与 Agent 协作的摩擦点和演进方向
+description: 分析 Git 交互层在 agent 协作中的摩擦点，指出在 Git 之上构建并行隔离与过程元数据层的演进方向。
 type: synthesis
 category: ai
 created: 2026-04-23

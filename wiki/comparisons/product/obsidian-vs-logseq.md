@@ -1,5 +1,6 @@
 ---
 title: Obsidian vs Logseq
+description: 从文件优先、纯 Markdown 兼容性与 agent 协作工作流角度对比 Obsidian 与 Logseq 的主库选型。
 type: comparison
 category: product
 created: 2026-04-19

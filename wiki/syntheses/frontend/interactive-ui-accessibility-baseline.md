@@ -1,5 +1,6 @@
 ---
 title: 交互式 UI 的可访问性基线
+description: 总结交互式 Web UI 应默认纳入的键盘操作、焦点管理、表单输入、URL 状态与动画性能基线。
 type: synthesis
 category: frontend
 created: 2026-04-25

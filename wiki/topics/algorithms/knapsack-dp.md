@@ -1,5 +1,6 @@
 ---
 title: Knapsack DP
+description: 总结背包 DP 的上界优化与多重背包方案数前缀和优化方法及例题实现。
 type: topic
 category: algorithms
 created: 2026-04-12

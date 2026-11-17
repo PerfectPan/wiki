@@ -1,5 +1,6 @@
 ---
 title: Base64
+description: 解释 Base64 编码在纯文本系统传输二进制数据的作用及其 6 位分组编解码算法。
 type: topic
 category: systems
 created: 2026-04-12

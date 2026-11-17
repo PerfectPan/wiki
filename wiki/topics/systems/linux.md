@@ -1,5 +1,6 @@
 ---
 title: Linux
+description: 记录向 Linux 内核提交补丁的官方指南与流程参考。
 type: topic
 category: systems
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: Lambda 演算
+description: 整理 Lambda 演算的 beta 归约、Church 编码基础函数及递归不动点推导。
 type: topic
 category: languages
 created: 2026-04-12

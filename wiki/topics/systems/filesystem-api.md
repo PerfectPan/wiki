@@ -1,5 +1,6 @@
 ---
 title: 文件系统 API
+description: 介绍文件系统的隔离与数据共享目标、目录挂载机制，以及硬链接与软链接的区别。
 type: topic
 category: systems
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: Status Page
+description: 说明服务状态页（Status Page）作为对外健康度沟通层的核心价值与品牌作用。
 type: topic
 category: product
 created: 2026-04-25

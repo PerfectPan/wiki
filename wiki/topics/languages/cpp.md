@@ -1,5 +1,6 @@
 ---
 title: C++
+description: 记录 C++ 常用标准库函数、编译宏参数及输入输出流同步优化写法。
 type: topic
 category: languages
 created: 2026-04-12

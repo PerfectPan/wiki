@@ -1,5 +1,6 @@
 ---
 title: Lit
+description: 拆解 Lit 基于 Web Component 的 Reactivity Element、lit-html 动态节点局部更新引擎与 directive 扩展机制。
 type: topic
 category: frontend
 created: 2026-04-12

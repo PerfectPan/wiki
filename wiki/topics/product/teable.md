@@ -1,5 +1,6 @@
 ---
 title: Teable
+description: 分析多维表格数据库产品 Teable 的核心产品心智与自动生成 OpenAPI 的能力价值。
 type: topic
 category: product
 created: 2026-04-25

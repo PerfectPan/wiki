@@ -1,5 +1,6 @@
 ---
 title: Dependency Resolution
+description: 解析包管理器依赖版本选择的约束求解思路，以及单版本假设与多版本共存的工程差异。
 type: topic
 category: tooling
 created: 2026-04-22

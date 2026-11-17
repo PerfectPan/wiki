@@ -1,5 +1,6 @@
 ---
 title: Graph Theory
+description: 记录图论典型题解（如三元环最小度数）及算法笔记。
 type: topic
 category: algorithms
 created: 2026-04-12

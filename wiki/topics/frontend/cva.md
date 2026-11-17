@@ -1,5 +1,6 @@
 ---
 title: CVA
+description: 介绍 CVA（class-variance-authority）如何用声明式、带类型约束的接口替代样式条件分支拼接。
 type: topic
 category: frontend
 created: 2026-04-25

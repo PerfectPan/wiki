@@ -1,5 +1,6 @@
 ---
 title: Monotonic Stack
+description: 收集单调栈在求解区间最值贡献与下第二个更大元素问题中的例题与代码实现。
 type: topic
 category: algorithms
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: Suspense
+description: 解析 React Suspense 通过抛出 Promise 暂停渲染的机制，以及 Remix 在服务端与浏览器间同步 Promise 状态的做法。
 type: topic
 category: frontend
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: 小程序运行时架构思路
+description: 解释小程序运行时如何通过定制浏览器内核与拆分线程模型，在 Web 开发体验与原生能力控制间取得平衡。
 type: synthesis
 category: frontend
 created: 2026-04-25

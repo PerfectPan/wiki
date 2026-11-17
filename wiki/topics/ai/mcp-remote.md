@@ -1,5 +1,6 @@
 ---
 title: mcp-remote
+description: 说明 mcp-remote 如何把远端 MCP Server 代理为本地 stdio server 并兼容认证场景。
 type: topic
 category: ai
 created: 2026-04-25

@@ -1,5 +1,6 @@
 ---
 title: Shortest Path
+description: 记录最短路算法（如动态加边 Floyd）的例题索引。
 type: topic
 category: algorithms
 created: 2026-04-12

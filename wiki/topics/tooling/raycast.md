@@ -1,5 +1,6 @@
 ---
 title: Raycast
+description: 介绍桌面效率工具 Raycast 的常用功能及 Raycast 2.0 跨平台混合桌面架构。
 type: topic
 category: tooling
 created: 2026-04-12

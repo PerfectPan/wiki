@@ -1,5 +1,6 @@
 ---
 title: Next.js Middleware Auth Bypass
+description: 解释 Next.js middleware 因内部调用链头部可被伪造而导致鉴权被绕过的机制与部署边界。
 type: topic
 category: frontend
 created: 2026-04-25

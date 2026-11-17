@@ -1,5 +1,6 @@
 ---
 title: Claude Code 质量退化事故的产品与工程教训
+description: 复盘 Claude Code 质量退化事故，总结推理强度、上下文保留与输出约束改动对 Agent 稳定性的影响。
 type: synthesis
 category: ai
 created: 2026-04-24

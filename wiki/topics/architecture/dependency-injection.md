@@ -1,5 +1,6 @@
 ---
 title: Dependency Injection
+description: 介绍依赖注入的核心思想、适合抽离为依赖的判断启发与集中式容器初始化流程。
 type: topic
 category: architecture
 created: 2026-04-12

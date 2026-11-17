@@ -1,5 +1,6 @@
 ---
 title: SSR vs SSG vs RSC
+description: 区分 SSR、SSG 与 RSC 的职责层级，说明 React 应用中应如何组合使用而非三选一。
 type: comparison
 category: frontend
 created: 2026-04-19

@@ -1,5 +1,6 @@
 ---
 title: Electron
+description: 记录 Electron 自动更新、自定义协议拉起、asar 打包限制与原生模块编译的实践要点。
 type: topic
 category: systems
 created: 2026-04-12

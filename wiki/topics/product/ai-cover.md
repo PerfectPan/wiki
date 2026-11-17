@@ -1,5 +1,6 @@
 ---
 title: AI Cover
+description: 分析 AI 红包封面产品如何结合平台审核规则与分发入口形成传播和交易路径。
 type: topic
 category: product
 created: 2026-04-25

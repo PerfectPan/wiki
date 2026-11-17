@@ -1,5 +1,6 @@
 ---
 title: MCP Client
+description: 解释 MCP Client 如何将模型输出解析为工具调用并将执行结果回传给模型。
 type: topic
 category: ai
 created: 2026-04-25

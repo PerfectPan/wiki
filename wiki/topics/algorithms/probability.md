@@ -1,5 +1,6 @@
 ---
 title: Probability
+description: 记录 Hacker Cup 概率期望题的递推建模与求解过程。
 type: topic
 category: algorithms
 created: 2026-04-12

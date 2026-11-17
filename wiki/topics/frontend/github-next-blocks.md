@@ -1,5 +1,6 @@
 ---
 title: GithubNext-Blocks
+description: 记录 GitHub Next Blocks 基于 iframe 与全局脚本加载的区块运行时通信协议及渲染机制。
 type: topic
 category: frontend
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: opensumi
+description: 概述 OpenSumi 的模块划分、贡献点扩展机制与基于依赖注入的前后端服务解耦方式。
 type: topic
 category: tooling
 created: 2026-04-12

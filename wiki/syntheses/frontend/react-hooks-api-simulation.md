@@ -1,5 +1,6 @@
 ---
 title: React Hooks API 模拟实现
+description: 通过外部按调用顺序索引的状态槽位模型，解释 React Hooks 跨渲染保持状态的原理与调用顺序约束。
 type: synthesis
 category: frontend
 created: 2026-04-25

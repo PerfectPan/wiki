@@ -1,5 +1,6 @@
 ---
 title: 同源 iframe 沙箱设计
+description: 梳理同源 iframe 沙箱需要补齐的脚本执行、资源请求、DOM 挂载与路由跳转四类控制边界。
 type: synthesis
 category: frontend
 created: 2026-04-25

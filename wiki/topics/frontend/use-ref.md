@@ -1,5 +1,6 @@
 ---
 title: useRef
+description: 解释 useRef 在跨渲染周期保持对象引用稳定、且修改不触发重渲染的特性。
 type: topic
 category: frontend
 created: 2026-04-12

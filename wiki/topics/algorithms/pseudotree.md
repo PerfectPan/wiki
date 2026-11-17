@@ -1,5 +1,6 @@
 ---
 title: 基环树
+description: 介绍内向基环树的结构特点，以及通过拓扑排序分离基环与树枝的通用处理方法。
 type: topic
 category: algorithms
 created: 2026-04-12

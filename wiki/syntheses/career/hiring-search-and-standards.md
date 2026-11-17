@@ -1,5 +1,6 @@
 ---
 title: 招聘中的搜索问题与用人标准
+description: 将招聘拆解为带约束的搜索问题，说明如何在招聘速度与用人标准之间做出有意识的取舍。
 type: synthesis
 category: career
 created: 2026-04-25

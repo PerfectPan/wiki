@@ -1,5 +1,6 @@
 ---
 title: 模板克隆与 DOM 渲染路径
+description: 解释前端框架如何通过预解析静态模板与克隆填洞来降低重复 DOM 创建和解析成本。
 type: synthesis
 category: frontend
 created: 2026-04-25

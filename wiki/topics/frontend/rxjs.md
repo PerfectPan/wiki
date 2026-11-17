@@ -1,5 +1,6 @@
 ---
 title: RxJS
+description: 解释 RxJS Observable 的惰性 Push 模型、Push 与 Pull 协议差异及相关学习资源。
 type: topic
 category: frontend
 created: 2026-04-12

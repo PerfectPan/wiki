@@ -1,5 +1,6 @@
 ---
 title: Border Tree
+description: 介绍字符串 Border 树的构造方式及其在查询前缀公共 Border 等问题中的性质。
 type: topic
 category: algorithms
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: npm 包发布与发布链路实践
+description: 总结前端 npm 包从产物格式选择、发布前元数据校验到版本与 changelog 发布的实用实践。
 type: synthesis
 category: tooling
 created: 2026-04-25

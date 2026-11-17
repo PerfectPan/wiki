@@ -1,5 +1,6 @@
 ---
 title: 程序语言理论与实现公开课
+description: 记录程序语言编译与实现公开课关于 IR 线性化、栈式虚拟机、作用域与 Lambda 演算的笔记。
 type: topic
 category: languages
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: FLIP 布局动画的心智模型
+description: 阐述 FLIP 如何通过先切目标布局再用 transform 反向补偿的方式，避免高频触发重排以实现流畅布局动画。
 type: synthesis
 category: frontend
 created: 2026-04-20

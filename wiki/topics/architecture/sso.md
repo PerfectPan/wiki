@@ -1,5 +1,6 @@
 ---
 title: SSO
+description: 说明单点登录（SSO）的跨域认证问题及 CAS 基于 Service Ticket 的多应用登录流程。
 type: topic
 category: architecture
 created: 2026-04-12

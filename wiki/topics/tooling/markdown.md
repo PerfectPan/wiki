@@ -1,5 +1,6 @@
 ---
 title: Markdown
+description: 收集 Markdown 编辑器实现、MDX、CommonMark 规范及解析器性能相关的参考链接。
 type: topic
 category: tooling
 created: 2026-04-12

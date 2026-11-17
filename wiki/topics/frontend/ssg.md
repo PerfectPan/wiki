@@ -1,5 +1,6 @@
 ---
 title: SSG
+description: 说明静态站点生成（SSG）在无交互场景下可省略 hydration 的原因与边界。
 type: topic
 category: frontend
 created: 2026-04-12

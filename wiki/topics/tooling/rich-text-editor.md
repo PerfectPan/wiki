@@ -1,5 +1,6 @@
 ---
 title: 富文本编辑器
+description: 记录富文本编辑器框架 ProseKit 的参考入口。
 type: topic
 category: tooling
 created: 2026-04-12

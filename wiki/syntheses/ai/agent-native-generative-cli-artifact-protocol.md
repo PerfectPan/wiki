@@ -1,5 +1,6 @@
 ---
 title: Agent-native 生成型 CLI 的产物协议
+description: 总结面向 agent 的生成型 CLI 在窄命令面、文件产物优先、JSON 元数据与输出分离上的协议要求。
 type: synthesis
 category: ai
 created: 2026-05-31

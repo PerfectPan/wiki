@@ -1,5 +1,6 @@
 ---
 title: RSC
+description: 说明 React Server Components 的流式协议格式、服务端与客户端组件嵌套规则及最小实现示例。
 type: topic
 category: frontend
 created: 2026-04-12

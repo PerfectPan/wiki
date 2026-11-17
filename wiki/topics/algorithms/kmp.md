@@ -1,5 +1,6 @@
 ---
 title: KMP
+description: 解释 KMP 字符串匹配算法中 next 数组（最大 Border）的定义与失配跳转原理。
 type: topic
 category: algorithms
 created: 2026-04-12

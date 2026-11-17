@@ -1,5 +1,6 @@
 ---
 title: CSS
+description: 汇总现代 CSS 参考资源及 Portal 样式作用域、transition 触发 reflow 与 flex 子项收缩的工程结论。
 type: topic
 category: frontend
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: Software Design
+description: 阐述软件架构设计中控制复杂度、划分模块稳定性层次及引入依赖注入的原则。
 type: topic
 category: architecture
 created: 2026-04-12

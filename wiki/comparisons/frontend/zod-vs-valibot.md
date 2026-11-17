@@ -1,5 +1,6 @@
 ---
 title: Zod vs Valibot
+description: 对比 Zod 与 Valibot 在生态成熟度、API 设计及构建体积和 tree shaking 上的核心取舍。
 type: comparison
 category: frontend
 created: 2026-04-25

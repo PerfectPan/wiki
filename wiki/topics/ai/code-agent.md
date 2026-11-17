@@ -1,5 +1,6 @@
 ---
 title: Code Agent
+description: 概述 Code Agent 在工程工作流中的职责、仓库规则约束、CLI 协议与权限边界。
 type: topic
 category: ai
 created: 2026-04-12

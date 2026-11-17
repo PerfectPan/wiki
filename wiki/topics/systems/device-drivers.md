@@ -1,5 +1,6 @@
 ---
 title: 设备驱动程序
+description: 说明设备驱动程序如何将 read、write、ioctl 系统调用翻译为设备寄存器交互。
 type: topic
 category: systems
 created: 2026-04-12

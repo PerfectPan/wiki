@@ -1,5 +1,6 @@
 ---
 title: Two Pointer
+description: 收集双指针与滑动窗口算法例题及 C++ 实现笔记。
 type: topic
 category: algorithms
 created: 2026-04-12

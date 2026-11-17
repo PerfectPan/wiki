@@ -1,5 +1,6 @@
 ---
 title: Secure ECMAScript
+description: 整理 JavaScript 供应链攻击防护方案与基于能力的安全模型（ShadowRealm、Compartment）。
 type: topic
 category: languages
 created: 2026-04-12

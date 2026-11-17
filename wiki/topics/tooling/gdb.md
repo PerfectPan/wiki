@@ -1,5 +1,6 @@
 ---
 title: GDB
+description: 汇总 GDB 常用调试命令、汇编视图、硬件断点及扩展工具参考。
 type: topic
 category: tooling
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: RSC 与 CSS-in-JS 的兼容性约束
+description: 解释为何依赖运行时上下文的 CSS-in-JS 与 RSC 存在冲突，以及编译时样式方案的适配优势。
 type: synthesis
 category: frontend
 created: 2026-04-25

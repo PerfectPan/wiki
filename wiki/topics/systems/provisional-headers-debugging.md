@@ -1,5 +1,6 @@
 ---
 title: Provisional headers 调试路径
+description: 提供 Chrome DevTools 出现 Provisional headers 提示时结合网络日志与端口连接排查的方法。
 type: topic
 category: systems
 created: 2026-04-25

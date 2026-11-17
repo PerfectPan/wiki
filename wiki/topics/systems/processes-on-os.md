@@ -1,5 +1,6 @@
 ---
 title: 操作系统上的进程
+description: 梳理 Linux 从引导、initrd 加载到第一个用户态进程启动的流程与操作系统核心 API。
 type: topic
 category: systems
 created: 2026-04-12

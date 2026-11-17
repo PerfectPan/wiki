@@ -1,5 +1,6 @@
 ---
 title: 2022 南京大学「操作系统」
+description: 索引 2022 年南京大学操作系统课程各讲关联主题页面。
 type: topic
 category: systems
 created: 2026-04-12

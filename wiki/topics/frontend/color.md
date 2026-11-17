@@ -1,5 +1,6 @@
 ---
 title: 颜色
+description: 梳理色彩空间（CIE XYZ、Oklab、OKLCH）的感知均匀性、色域差异与 CSS Color 4 广色域支持。
 type: topic
 category: frontend
 created: 2026-04-12

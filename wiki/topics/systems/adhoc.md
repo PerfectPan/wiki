@@ -1,5 +1,6 @@
 ---
 title: AdHoc
+description: 记录 LeetCode 2003 题每棵子树内缺失的最小基因值的 C++ 解题实现。
 type: topic
 category: systems
 created: 2026-04-12

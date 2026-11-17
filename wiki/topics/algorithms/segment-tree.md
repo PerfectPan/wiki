@@ -1,5 +1,6 @@
 ---
 title: 线段树
+description: 记录利用线段树维护区间元素计数与逆序对数以支持区间映射更新的解题思路。
 type: topic
 category: algorithms
 created: 2026-04-12

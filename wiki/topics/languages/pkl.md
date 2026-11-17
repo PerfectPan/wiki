@@ -1,5 +1,6 @@
 ---
 title: Pkl
+description: 介绍配置语言 Pkl 如何通过抽象、组合与多格式导出来替代重复的静态配置文件。
 type: topic
 category: languages
 created: 2026-04-25

@@ -1,5 +1,6 @@
 ---
 title: 解题思路
+description: 汇总算法题常用切入思路，包括暴力模拟、贡献拆解、环状 DP、前后缀分解与终局枚举。
 type: topic
 category: algorithms
 created: 2026-04-12

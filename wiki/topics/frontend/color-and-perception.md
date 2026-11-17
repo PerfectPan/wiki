@@ -1,5 +1,6 @@
 ---
 title: Color and Perception
+description: 从光谱功率密度与人眼视锥细胞感光原理出发，解释颜色作为主观感知的生理基础。
 type: topic
 category: frontend
 created: 2026-04-12

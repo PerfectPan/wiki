@@ -1,5 +1,6 @@
 ---
 title: Chrome DevTools
+description: 记录 Chrome DevTools 远程调试端口 /json 接口格式及 CDP 与前端实现参考资料。
 type: topic
 category: tooling
 created: 2026-04-12

@@ -1,5 +1,6 @@
 ---
 title: UTF-8 Overlong Encoding
+description: 解释 UTF-8 Overlong Encoding 的概念及其因解码语义不一致导致安全绕过的原因。
 type: topic
 category: languages
 created: 2026-04-25

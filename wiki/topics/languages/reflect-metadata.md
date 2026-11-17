@@ -1,5 +1,6 @@
 ---
 title: reflect-metadata
+description: 说明 TypeScript 生态中 reflect-metadata 在装饰器与依赖注入中承载运行时类型信息的历史作用。
 type: topic
 category: languages
 created: 2026-04-25

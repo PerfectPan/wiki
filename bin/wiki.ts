@@ -5,6 +5,7 @@ import { dirname, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { execFileSync } from "node:child_process";
 import { runJargonCheck } from "./check-jargon.ts";
+import { runLinksCheck } from "./check-links.ts";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -17,12 +18,14 @@ const HELP_TEXT = `wiki CLI
   bin/wiki ingest <url> [--name <slug>] [--file <path>] [--author <name>] [--published <date>]
   bin/wiki ingest <B站视频 URL> [--capture <json>] [--cookies-from-browser chrome] [--slides] [--frames 330,570] [--no-subs]
   bin/wiki check [path]
+  bin/wiki check-links [path] [--errors-only]
   bin/wiki check-jargon [path | --staged | --base <ref>]
   bin/wiki prompts <list|search|show|check> [...]
 
 命令:
   ingest    抓取来源并存入 raw/sources/；--file 喂入预抓正文；B 站视频优先用字幕，必要时本地转录（见 bin/README.md）
-  check     校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+  check       校验 Markdown 文件的 frontmatter 是否符合 SCHEMA 规范
+  check-links 校验 wikilink、图片资源、index.md 覆盖率与本地 source_refs
   check-jargon  检查 Wiki 用词，报告位置与修改建议
   prompts   提示词库：列表、搜索、打印原文、校验（见 prompts/README.md）
 
@@ -702,6 +705,11 @@ function main(argv: string[]): void {
 
   if (command === "check-jargon") {
     runJargonCheck(ROOT, rest);
+    return;
+  }
+
+  if (command === "check-links") {
+    runLinksCheck(ROOT, rest);
     return;
   }
 

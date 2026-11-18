@@ -65,6 +65,7 @@
   - [[wiki/topics/architecture/oauth|OAuth]]
   - [[wiki/topics/architecture/otp|OTP]]
   - [[wiki/topics/architecture/software-design|Software Design]]
+  - [[wiki/topics/architecture/software-engineering|软件工程]]
   - [[wiki/topics/architecture/sso|SSO]]
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]
@@ -145,6 +146,7 @@
   - [[wiki/topics/tooling/yarn|Yarn]]
   - [[wiki/topics/tooling/rich-text-editor|富文本编辑器]]
 - `languages`
+  - [[wiki/topics/languages/formal-verification|形式化验证]]
   - [[wiki/topics/languages/concurrency-control-mutex|并发控制：互斥]]
   - [[wiki/topics/languages/pl-theory-implementation-course|程序语言理论与实现公开课]]
   - [[wiki/topics/languages/algebraic-effects|Algebraic Effects]]

@@ -4,8 +4,8 @@ description: Chat Completions、Anthropic Messages、Responses 三种主流插�
 type: comparison
 category: ai
 created: 2026-08-03
-updated: 2026-08-03
-timestamp: 2026-08-03
+updated: 2026-11-18
+timestamp: 2026-11-18
 tags:
   - llm
   - api
@@ -37,9 +37,12 @@ source_refs:
 | 多类型怎么放 | message 上挂 `content`/`tool_calls`/私有 reasoning | `content[]` 类型块 | `output[]` 异构 item |
 | 工具结果角色 | `role: tool` | user + `tool_result` | function_call_output 等 item |
 | 续聊 | 客户端重传全历史 | 客户端重传全历史 | 可 `previous_response_id` |
+| 临时开发者指令 | 由客户端随消息列表组织 | 支持的模型可用 `role: "system"` 加 `clear_at`（Beta），遇到下一条 `user` 消息失效 | 顶层 `instructions` 仅用于当前请求，GPT‑6.2 放在 `input` 之后 |
 | 状态机 | 弱 | 弱（靠 stop_reason） | response `status` 一等 |
 | 托管工具 | 弱/旁路 | 有限 | 主协议内更完整 |
 | 本地 coding 工具 | 客户端执行 | 客户端执行 | 客户端执行（同） |
+
+如果临时要求应覆盖整轮用户交互，回传客户端工具结果时也要重新提供该要求，或把规则保存为可续接的历史消息。两种协议的触发条件和同一个订单查询示例见 [[responses-api#请求级指令与会话历史]] 和 [[anthropic-messages-api#中途追加与仅当轮生效的系统消息]]。
 
 ## 客户端默认插头
 

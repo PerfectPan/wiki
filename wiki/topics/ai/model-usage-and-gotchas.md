@@ -4,8 +4,8 @@ description: 记录模型使用中的具体问题、处理技巧和适用范围�
 type: topic
 category: ai
 created: 2026-09-15
-updated: 2026-10-08
-timestamp: 2026-10-08
+updated: 2026-11-18
+timestamp: 2026-11-18
 tags:
   - llm
   - agent
@@ -21,6 +21,7 @@ source_refs:
   - https://code.claude.com/docs/en/hooks
   - raw/sources/claude-code-multi-agent-token-audit.md
   - https://code.claude.com/docs/en/prompt-caching
+  - https://developers.openai.com/api/docs/guides/latest-model
 ---
 
 # 模型使用与常见问题
@@ -190,11 +191,30 @@ Promptfoo 的 [自定义脚本接口](https://www.promptfoo.dev/docs/providers/c
 - **控制复审轮次**：只在阻止合入的问题修复后复审，复审只核对这些修复，每轮新开 reviewer。这次任务里有个 reviewer 被同一会话叫回 7 轮，写缓存占它输入花费的一半以上。
 - **不急着把 TTL 改成 1 小时**：社区实测把所有 subagent 改成 1 小时后总花费上升 8.6%。按这次的数据估算，全部改成 1 小时净省约 7%，只改 reviewer 约 2%，都不如改用法；确实需要隔一段时间再叫回的 agent，可在它的定义里单独设置 `experimental.cacheTtl`。
 
+## GPT‑6.2 与 Codex
+
+### 提示词写清交付范围
+
+OpenAI 将 Astra 用于要求最高的任务，将 Sol 用于对成本更敏感的复杂任务。指南记录了 Astra 默认写作较简洁、意图不清时可能给出计划后停下来等确认的行为。长任务要写清可验证的交付物、哪些可逆决定允许模型自行处理，以及何时需要用户确认。写作时给出受众和必要背景，让最终回复可独立阅读。编码时说明要保留的调用行为与仓库约定。前端有视觉要求时提供字体、图片风格或设计参考，再核对渲染结果。[GPT‑6.2 提示词指南](https://developers.openai.com/api/docs/guides/latest-model#prompting-best-practices)
+
+### 采样温度按模型和接口判断
+
+`temperature` 改变下一个 token 的采样概率。较低的值能降低输出波动，较高的值可用于发散候选。全局采样设置也可能改变中间推理路径。Google 明确指出 Gemini 3 将温度调低于默认值可能引发重复或推理质量下降。OpenAI 的 GPT‑6.2 指南要求省略温度字段，但未说明具体移除原因。调整推理投入时使用 `reasoning.effort`，需要多种候选时在提示中说明所需差异。[Gemini 3 默认温度](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/start/get-started-with-gemini-3?hl=en) · [GPT‑6.2 迁移清单](https://developers.openai.com/api/docs/guides/latest-model#migration-quickstart)
+
+跨厂商的调用方要区分三种情况。GPT‑6.2 要求省略。Anthropic 的 `2026-10-21` API 版本对携带此字段的请求返回 400。Gemini 4 / 3.6+ 忽略自定义值并返回弃用提示。DeepSeek 在思考模式下忽略它，关闭思考时仍可调。自托管推理框架 vLLM 仍提供温度控制。不能仅凭 SDK 类型判断某个模型是否支持该字段。[Claude API 迁移](https://platform.claude.com/docs/en/api/migration-2026-10-21) · [Gemini API](https://ai.google.dev/gemini-api/docs/troubleshooting) · [DeepSeek 思考模式](https://api-docs.deepseek.com/guides/thinking_mode/) · [vLLM 采样参数](https://docs.vllm.ai/en/latest/api/vllm/sampling_params/)
+
+迁移到 Astra 或 Sol 时，需要工具调用的应用使用 [[responses-api]]。新接入的推理强度可从 `medium` 起步，旧请求用 `none` 或 `minimal` 时迁到 `low`。按迁移清单移除所用端点不支持的其它采样和概率参数。缓存配置、命中与推理记录的排查见 [[kv-cache-vs-request-cache#GPT‑6.2：指令位置、缓存断点与推理记录]]。[GPT‑6.2 迁移清单](https://developers.openai.com/api/docs/guides/latest-model#migration-quickstart)
+
+### Codex 生图入口与 API 模型选择
+
+OpenAI 的 Images 2.6 公告将 Codex 列为可用入口。同一时期的 Codex 生图使用指南仍标注 `gpt-image-2`，所以产品上线公告与具体会话里工具实际调用的型号需要分别核对。要指定高细节、精细编辑的 Sunburst，可以通过 Image API 显式选择 `gpt-image-2.6-sunburst`，按 API 用量计费。[Images 2.6 发布公告](https://openai.com/index/introducing-images-2-6/) · [Codex 生图指南](https://learn.chatgpt.com/docs/image-generation) · [Sunburst 模型文档](https://developers.openai.com/api/docs/models/gpt-image-2.6-sunburst)
+
 ## 相关页面
 
 - [[agent-harness]]
 - [[code-agent]]
 - [[token-usage-and-billing]]
+- [[responses-api]]
 
 ## 来源指针
 

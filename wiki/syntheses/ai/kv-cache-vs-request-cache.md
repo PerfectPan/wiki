@@ -1,11 +1,11 @@
 ---
 title: KV Cache 与请求缓存的边界
-description: 区分 KV Cache、Prompt Cache、请求缓存和普通结果缓存的作用范围、缓存对象和成本边界。
+description: 区分单次生成的 KV Cache、跨请求的前缀缓存与结果缓存，并说明 GPT‑6.2 的匹配、计费与排查方式。
 type: synthesis
 category: ai
 created: 2026-05-24
-updated: 2026-05-24
-timestamp: 2026-05-24
+updated: 2026-11-18
+timestamp: 2026-11-18
 tags:
   - llm
   - inference
@@ -14,6 +14,7 @@ tags:
 source_refs:
   - raw/sources/2026-05-24-kv-cache-request-cache-conversation.md
   - https://x.com/_avichawla/status/2034902650534187503
+  - https://developers.openai.com/api/docs/guides/prompt-caching
 ---
 # KV Cache 与请求缓存的边界
 
@@ -54,6 +55,36 @@ KV Cache 通常放在 GPU 显存里，不是因为“缓存只能放显存”，
 - GQA、MQA、PagedAttention、MLA 等优化方向，本质上都在减少或更有效管理 KV Cache 的显存压力。
 - 线上推理成本不能只看模型参数量，还要看上下文长度、并发、首 token 延迟、decode 速度和缓存管理策略。
 - 判断“缓存有没有命中”时，需要先问清楚是哪一种缓存：单次推理内部的 KV Cache、跨请求的前缀缓存，还是最终结果缓存。
+
+## GPT‑6.2：指令位置、缓存断点与推理记录
+
+假设两次独立请求都要总结同一份长文，第一次用中文，第二次用英文。6.2 把 Responses API 的顶层 `instructions` 移到了 `input` 后面：
+
+```text
+旧版    [用中文总结] [长文]
+        [用英文总结] [长文]
+
+GPT‑6.2 [长文] [用中文总结]
+        [长文] [用英文总结]
+```
+
+提示缓存匹配的是模型实际接到的前缀。处理长文时，每个 token 的中间状态依赖前文。旧版两份请求在读到长文之前就发生了分歧，6.2 可以共享前面长文的计算。这个区别对独立请求和同会话的续接请求都成立。工具定义、顺序和输出格式等设置也可能改变前缀。[GPT‑6.2 变化](https://developers.openai.com/api/docs/guides/latest-model) · [缓存匹配与请求设置](https://developers.openai.com/api/docs/guides/prompt-caching#which-settings-affect-the-cached-prefix)
+
+### 缓存断点与费用
+
+断点标记一段可复用前缀的结尾。GPT‑5.5 已有按固定 token 间隔生成的自动断点。GPT‑5.6 起支持显式断点，自动模式也改为按合格消息的结尾选点。6.2 沿用这一机制，断点前需要至少 1,024 个可见输入 token。多轮 Agent 可以用自动模式延长前缀。重复处理不同文档时，可在固定规则后加 `prompt_cache_breakpoint: { "mode": "explicit" }`，并将 `prompt_cache_options.mode` 设为 `"explicit"`，这样每次的新文档按普通输入价处理。顶部的工具定义、规则和示例应保持一致，变化频繁的内容放在后面。[各代模型的缓存差异](https://developers.openai.com/api/docs/guides/prompt-caching#summary-of-model-differences)
+
+以 GPT‑6.2 Astra / Sol 的普通输入单价为 1 倍，读缓存为 0.05 倍。写入默认的 30 分钟缓存为 1.25 倍，写入 12 小时缓存为 2.5 倍。两档都是最短保留时间，使用 `prompt_cache_options.ttl` 选择。从 GPT‑5.5 或更早版本迁移时，用该字段代替 `prompt_cache_retention`。如果固定前缀长 2,000 token，写入一次 30 分钟缓存并完整命中一次，前缀的两次总费用相当于 2,600 个普通输入 token，较两次普通输入省 35%。95% 的折扣只适用于命中部分的读取。[保留时间与费率](https://developers.openai.com/api/docs/guides/prompt-caching#cache-lifetime)
+
+### 怎样判断哪里出了问题
+
+| 想确认什么 | 看哪里 | 如何解释 |
+| --- | --- | --- |
+| 这次复用了多少前缀 | `usage.input_tokens_details.cached_tokens` 与 `cache_write_tokens` | 分别是按缓存读取和写入计费的 token 数。读取折扣与实际延迟分开测。 |
+| 为什么突然少命中 | `prompt_cache_options.comparison_response_id` | 指定一条可对比的旧响应，诊断信息会尽力定位第一个差异。 |
+| 旧推理条目是否被移除 | `input_transformations` 中的 `prefix_mismatch` | 在 6.2 中，改写早期消息或工具结果可能同时失去缓存与后续推理条目。缓存到期时，仍可用保存下来的推理条目续接。 |
+
+所以维护长会话时，固定早期消息和工具定义，新增结果往后追加。需要调整推理强度时可追加 `configuration_update`，保留原来的顶层 `reasoning.effort`。顶层临时指令的作用范围见 [[responses-api#请求级指令与会话历史]]。[保持前缀不变](https://developers.openai.com/api/docs/guides/keep-prefix-unchanged) · [缓存诊断](https://developers.openai.com/api/docs/guides/prompt-caching/diagnostics)
 
 ## 还需要确认什么
 

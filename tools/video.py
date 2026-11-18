@@ -346,6 +346,15 @@ def looks_like_risk_control(text: str) -> bool:
     return "412" in text or "风控" in text or "risk" in lowered or "precondition failed" in lowered
 
 
+def looks_like_local_error(text: str) -> bool:
+    """判断 yt-dlp 报错是不是本地环境/权限问题（重试或换 uvx 也解决不了）。"""
+    lowered = text.lower()
+    return (
+        ("could not find" in lowered and "cookies database" in lowered)
+        or "operation not permitted" in lowered
+    )
+
+
 def run_ytdlp(
     arguments: list[str],
     *,
@@ -373,6 +382,9 @@ def run_ytdlp(
                 _PREFERRED_YTDLP = list(base)
                 return result
             tail = (result.stderr or "").strip()
+            if looks_like_local_error(tail):
+                short_tail = "\n".join(tail.split("\n")[-3:])
+                raise FetchBlocked(f"yt-dlp 失败：{short_tail}")
             if looks_like_risk_control(tail):
                 break
             if attempt + 1 < attempts:
@@ -534,7 +546,7 @@ def whisper_command() -> list[str]:
     if shutil.which("mlx_whisper"):
         return ["mlx_whisper"]
     if shutil.which("uvx"):
-        return ["uvx", "--from", "mlx-whisper", "mlx_whisper"]
+        return ["uvx", "--with", "socksio", "--from", "mlx-whisper", "mlx_whisper"]
     raise FetchBlocked(
         "没有找到 mlx_whisper 或 uvx。macOS 上可以 pip install mlx-whisper，"
         "或安装 uv 后用 uvx --from mlx-whisper 运行。"

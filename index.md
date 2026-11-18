@@ -146,6 +146,7 @@
   - [[wiki/topics/tooling/yarn|Yarn]]
   - [[wiki/topics/tooling/rich-text-editor|富文本编辑器]]
 - `languages`
+  - [[wiki/topics/languages/formal-verification|形式化验证]]
   - [[wiki/topics/languages/concurrency-control-mutex|并发控制：互斥]]
   - [[wiki/topics/languages/pl-theory-implementation-course|程序语言理论与实现公开课]]
   - [[wiki/topics/languages/algebraic-effects|Algebraic Effects]]

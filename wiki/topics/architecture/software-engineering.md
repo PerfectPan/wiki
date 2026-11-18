@@ -1,6 +1,6 @@
 ---
 title: 软件工程
-description: 软件工程中的核心矛盾、调试理论（Fault-Error-Failure）、可测性架构、软件测试与形式化验证方法。
+description: 软件工程中的调试理论、可测性架构设计与软件测试方法。
 type: topic
 category: architecture
 created: 2026-11-18
@@ -9,7 +9,6 @@ timestamp: 2026-11-18
 tags:
   - software-engineering
   - software-testing
-  - formal-verification
   - ai-coding
 source_refs:
   - raw/sources/nju-se-software-quality-1.md
@@ -52,7 +51,7 @@ flowchart LR
 
 ## 软件测试
 
-测试的目标是用有限的成本，尽可能暴露 `Fault → Error → Failure` 链条上的问题。按惯例（如 Dijkstra 所言），**测试只能证明 Bug 存在，不能证明没有 Bug**，但因为正常代码具有泛化性，系统化的测试能持续建立对软件的信心。
+测试的目标是用有限的成本，尽可能暴露 `Fault → Error → Failure` 链条上的问题。按 Dijkstra 所言，**测试只能证明 Bug 存在，不能证明没有 Bug**，但因为正常代码具有泛化性，系统化的测试能持续建立对软件的信心。
 
 ### 常见测试分层与工程手段
 
@@ -66,24 +65,11 @@ flowchart LR
 - **Differential Testing（差分测试）**：把同一份输入或状态同时送入被测程序和参考实现（Golden Version，如自研 CPU 对比 QEMU），直接比对内部状态或输出差异，专门抓那些不会 crash 的静默错误。
 - **Fuzzing（模糊测试）**：把命令行参数、文件或网络包编码成字节流，以代码覆盖率为反馈不断做变异与交叉（如 Linux 内核的 Syzkaller、开源项目常用的 OSS-Fuzz），自动搜出人工想不到的异常输入。
 
-## 形式化验证与 AI 时代的拐点
-
-当测试无法穷举所有路径时，形式化方法试图在数学意义上证明程序满足规约：
-
-| 路线 | 代表工具 / 案例 | 核心做法 | 代价与限制 |
-| --- | --- | --- | --- |
-| **定理证明（Hoare 逻辑）** | `{P} C {Q}`、循环不变式 | 从前置条件出发，用公理规则推导程序终止后必满足后置条件 | 人工构造复杂数据结构/算法的不变式难度极高 |
-| **Model-Based** | TLA+（如 2PC 共识建模） | 抽取出几十到数百状态的简化状态机模型，穷举所有路径验证无死锁/不变量成立 | 模型正确不代表代码正确，需通过 **Refinement Mapping**（运行日志对齐模型，或从模型采样生成用例）衔接真实代码 |
-| **Path-Based** | KLEE（符号执行） | 把程序指令与分支条件列成数学方程，交给 SMT 求解器解出能触发 `assert` 失败的输入 | 依赖中间表示建模，容易遭遇路径爆炸 |
-| **Proof-Based** | CompCert、seL4、Lean / Coq | 直接对真实代码或编译器写出机器可检验的数学证明 | 传统模式成本极高（seL4 耗费 25 人年、20 万行证明脚本） |
-
-### AI 改变了什么，没改变什么
-
-1. **`Impl ↔ Spec` 正在变便宜**：Proof Assistant（如 Lean、Coq）是一个没有容错的确定性裁判——每一步推导只认公理，逐字核对，适合作为强化学习反馈。在 Lean 4 中，基于 Curry-Howard 同构（命题即类型，证明即程序），开发者可以同时写可执行函数（`def`）和性质证明（`theorem`）；编译成 C 代码时，证明项会被擦除（Proof Erasure），只留下经过校验的计算逻辑。大模型大幅压低了编写数万行证明脚本的人力成本，也让类似 Proof-Carrying Code（代码自带编译期可校验的证明）的思路重新具备工程可行性。
-2. **`Intent ↔ Spec` 依然没有银弹**：AI 能帮人把给定规约证死，但把模糊人类意图翻译成精确规约（Autoformalization）仍然是瓶颈。依赖主观感受的需求（如动效是否自然、系统是否好用）极难形式化；而且模型在翻译目标时可能偷偷弱化条件再把弱化版证出来，因此**仍需保留可执行的测试来反向校验形式化定义是否偏离原意**。
+当需要比测试更强的保证（例如证明并发协议不死锁、或代码满足特定数学性质）时，可以进一步引入 [[wiki/topics/languages/formal-verification|形式化验证]]。
 
 ## 相关页面与来源
 
 - [[wiki/topics/architecture/software-design|Software Design]]
+- [[wiki/topics/languages/formal-verification|形式化验证]]
 - [nju-se-software-quality-1.md](raw/sources/nju-se-software-quality-1.md)
 - [nju-se-software-quality-2.md](raw/sources/nju-se-software-quality-2.md)

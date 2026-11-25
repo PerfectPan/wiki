@@ -52,7 +52,7 @@ flowchart LR
 
 数字签名不隐藏内容，而是证明「内容确实由私钥持有人签发，且签发后未被修改」：
 
-- **HTTPS 网站证书（CA 签发）**：CA（Certificate Authority，证书颁发机构）用自己的私钥给网站证书签名；浏览器与操作系统出厂内置受信任 CA 的公钥，访问网站时用 CA 公钥验签，确认目标网站不是假冒站点（见 [[wiki/topics/systems/SSL 与 TLS 握手|SSL 与 TLS 握手]]）。
+- **HTTPS 网站证书（CA 签发）**：CA（Certificate Authority，证书颁发机构）用自己的私钥给网站证书签名；浏览器与操作系统出厂内置受信任 CA 的公钥，访问网站时用 CA 公钥验签，确认目标网站不是假冒站点。
 - **JWT 与 DPoP**：授权服务器用服务端私钥签发 [[wiki/topics/architecture/jwt|JWT]] `access_token`，多个业务网关用服务端公钥各自验签，避免把签发权限暴露给每个业务服务；[[wiki/topics/architecture/dpop|DPoP]] 则反过来由客户端用本地私钥对单次请求签名，服务端用客户端公钥验签，防止 token 被复制后异地盗用。
 - **Git Commit 签名（GitHub `Verified` 标识）**：开发者用本地 GPG 或 SSH 私钥给每次提交签名；代码托管平台用开发者上传的公钥验签，确认提交确实来自本人。
 - **软件安装包代码签名（macOS / iOS / Windows）**：开发者或应用商店用私钥对安装包签名；操作系统在安装或运行前用对应公钥验签，防止软件包在分发过程中被植入恶意代码。
@@ -83,6 +83,5 @@ flowchart LR
 - RFC 8446（The Transport Layer Security (TLS) Protocol Version 1.3）：https://www.rfc-editor.org/rfc/rfc8446
 - RFC 7515（JSON Web Signature (JWS)）：https://www.rfc-editor.org/rfc/rfc7515
 - NIST FIPS 186-5（Digital Signature Standard）：https://csrc.nist.gov/pubs/fips/186-5/final
-- [[wiki/topics/systems/SSL 与 TLS 握手|SSL 与 TLS 握手]]
 - [[wiki/topics/architecture/jwt|JWT]]
 - [[wiki/topics/architecture/dpop|DPoP]]

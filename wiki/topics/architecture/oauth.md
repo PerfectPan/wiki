@@ -476,7 +476,7 @@ state=c71e…  →  { issuer: B, code_verifier: v2, redirect_uri, resource, 发�
 ## 进一步加固：PAR、DPoP 与 OAuth 2.1
 
 - **PAR（RFC 9126，Pushed Authorization Requests）**：客户端先在后台把授权参数 POST 给 AS（机密客户端可以顺便做客户端认证），拿回一个短期的 `request_uri`，浏览器只带 `client_id` 和 `request_uri` 去授权页，参数不会在浏览器里被篡改或泄露。RFC 9126 的示例响应是 `{"request_uri": "urn:example:bwc4JK-ESC0w8acc191e-Y1LTC2", "expires_in": 90}`。
-- **DPoP（RFC 9449）**：把 token 绑到客户端持有的一把私钥上，每次请求附带一个用私钥签名的 `DPoP` 头，只偷到 token、没有私钥就用不了。它是下文「refresh_token 的安全要求」里「绑定发送方」的一种做法，另一种是 RFC 8705 的 mTLS。
+- **DPoP（RFC 9449）**：把 token 绑到客户端持有的一把私钥上，每次请求附带一个用私钥签名的 `DPoP` 头，只偷到 token、没有私钥就用不了，详见 [[wiki/topics/architecture/dpop|DPoP]]。它是下文「refresh_token 的安全要求」里「绑定发送方」的一种做法，另一种是 RFC 8705 的 mTLS。
 - **OAuth 2.1（`draft-ietf-oauth-v2-1`，本次核对时是 -16，仍是草案）**：把 RFC 6749、6750、7636、8252 和 RFC 9700 的主要结论合成一份：所有客户端都要用 PKCE，删掉隐式模式和密码模式，回调地址精确匹配，token 不能放在 URL 查询参数里，公开客户端的 refresh_token 要么绑定发送方要么一次性使用。
 
 ## access_token 的三种实现
@@ -540,6 +540,7 @@ flowchart TB
 ## 相关页面
 
 - [[wiki/topics/architecture/jwt|JWT]]
+- [[wiki/topics/architecture/dpop|DPoP]]
 - [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
 - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]
 - [[sso]]

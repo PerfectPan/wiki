@@ -65,11 +65,12 @@ flowchart LR
 - **Differential Testing（差分测试）**：把同一份输入或状态同时送入被测程序和参考实现（Golden Version，如自研 CPU 对比 QEMU），直接比对内部状态或输出差异，专门抓那些不会 crash 的静默错误。
 - **Fuzzing（模糊测试）**：把命令行参数、文件或网络包编码成字节流，以代码覆盖率为反馈不断做变异与交叉（如 Linux 内核的 Syzkaller、开源项目常用的 OSS-Fuzz），自动搜出人工想不到的异常输入。
 
-当需要比测试更强的保证（例如证明并发协议不死锁、或代码满足特定数学性质）时，可以进一步引入 [[wiki/topics/languages/formal-verification|形式化验证]]。
+当需要比测试更强的保证（例如证明并发协议不死锁、或代码满足特定数学性质）时，可以进一步引入 [[wiki/topics/languages/formal-verification|形式化验证]]。软件通过测试与验证后，跨环境分发、零停机升级与线上稳定性保障见 [[wiki/topics/architecture/software-release-and-ops|软件发布与运维]]。
 
 ## 相关页面与来源
 
 - [[wiki/topics/architecture/software-design|Software Design]]
+- [[wiki/topics/architecture/software-release-and-ops|软件发布与运维]]
 - [[wiki/topics/languages/formal-verification|形式化验证]]
 - [nju-se-software-quality-1.md](raw/sources/nju-se-software-quality-1.md)
 - [nju-se-software-quality-2.md](raw/sources/nju-se-software-quality-2.md)

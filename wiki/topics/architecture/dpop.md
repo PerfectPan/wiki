@@ -50,21 +50,7 @@ DPoP 的思路是把「只认凭证本身」改成「**凭证 + 每次请求现�
 
 ### 1. 签名/验签 vs 加密/解密
 
-一对非对称密钥（公钥 + 私钥）有两种方向完全相反的用法，核心区分标准是「**只能由持有者本人做的操作用私钥，任何人都能做的操作用公钥**」：
-
-| 用途 | 操作方向 | 为什么是这个方向 | 解决什么问题 |
-| --- | --- | --- | --- |
-| **加密 / 解密** | 公钥加密 → 私钥解密 | 任何人都可以加密发消息给你（公钥），但只能由你本人解开看（私钥）；反过来则人人都能解密，失去保密性 | **防偷看** |
-| **签名 / 验签** | 私钥签名 → 公钥验签 | 只能由你本人盖出有效签名（私钥），但任何人都可以验证真伪（公钥）；反过来则人人都能冒充签名，失去防伪性 | **防冒充、防篡改** |
-
-除了 JWT（RS256/ES256）和 DPoP，开发与日常中常见的「私钥签名 → 公钥验签」例子还包括：
-
-- **HTTPS 网站证书（CA 签发）**：CA 机构用自己的私钥给网站证书签名，浏览器内置 CA 公钥验签，确认访问的不是假冒网站。
-- **Git Commit 签名（GitHub `Verified` 标识）**：开发者用本地 GPG/SSH 私钥给提交签名，GitHub 用上传的公钥验签，确认提交出自本人。
-- **软件安装包代码签名（macOS / iOS / Windows）**：开发者或平台用私钥给安装包签名，操作系统用公钥验签，防止下载链路被篡改。
-- **区块链转账交易**：用户用钱包私钥给转账交易签名，全网节点用对应的公钥（地址）验签，确认资金确实由账户持有人授权转出。
-
-普通 JWS 形式的 [[wiki/topics/architecture/jwt|JWT]] 和 DPoP 做的都是**签名 / 验签**，而不是加密：前两段只是 Base64URL 编码，谁都能解码看到原文，靠第三段签名保证原文未被改动且确实出自对应私钥。
+普通 JWS 形式的 [[wiki/topics/architecture/jwt|JWT]] 和 DPoP 做的都是**签名 / 验签（私钥签名 → 公钥验签）**，而不是加密（公钥加密 → 私钥解密）：前两段只是 Base64URL 编码，谁都能解码看到原文，靠第三段签名保证原文未被改动且确实出自对应私钥。关于两种方向为何相反及常见工程实例，见 [[wiki/topics/systems/asymmetric-cryptography|非对称加密与数字签名]]。
 
 ### 2. JWT、JWK 与 jkt 的关系
 
@@ -271,4 +257,5 @@ const accessToken = await new SignJWT({ sub: userId, cnf: { jkt } })
 - `raw/assets/dpop-bearer-vs-dpop.png`、`raw/assets/dpop-dual-verification.png`：根据 RFC 9449 绘制的概念与校验流程示意图
 - [[wiki/topics/architecture/oauth|OAuth]]
 - [[wiki/topics/architecture/jwt|JWT]]
+- [[wiki/topics/systems/asymmetric-cryptography|非对称加密与数字签名]]
 - [[wiki/comparisons/architecture/session-vs-jwt-vs-dual-token|Session vs JWT vs 双 Token]]

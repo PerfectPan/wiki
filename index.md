@@ -183,6 +183,7 @@
   - [[wiki/topics/systems/syscalls-and-shell|系统调用和 Shell]]
   - [[wiki/topics/systems/a-fork-in-the-road|A fork() in the road]]
   - [[wiki/topics/systems/adhoc|AdHoc]]
+  - [[wiki/topics/systems/asymmetric-cryptography|非对称加密与数字签名]]
   - [[wiki/topics/systems/base64|Base64]]
   - [[wiki/topics/systems/c|C]]
   - [[wiki/topics/systems/computer-network|Computer Network]]

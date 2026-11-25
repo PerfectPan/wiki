@@ -63,6 +63,7 @@
   - [[wiki/topics/architecture/uber-dig|uber/dig]]
   - [[wiki/topics/architecture/jwt|JWT]]
   - [[wiki/topics/architecture/oauth|OAuth]]
+  - [[wiki/topics/architecture/dpop|DPoP]]
   - [[wiki/topics/architecture/otp|OTP]]
   - [[wiki/topics/architecture/software-design|Software Design]]
   - [[wiki/topics/architecture/sso|SSO]]

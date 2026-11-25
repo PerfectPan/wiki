@@ -66,6 +66,7 @@
   - [[wiki/topics/architecture/otp|OTP]]
   - [[wiki/topics/architecture/software-design|Software Design]]
   - [[wiki/topics/architecture/software-engineering|软件工程]]
+  - [[wiki/topics/architecture/software-release-and-ops|软件发布与运维]]
   - [[wiki/topics/architecture/sso|SSO]]
 - `ai`
   - [[wiki/topics/ai/model-usage-and-gotchas|模型使用与常见问题]]

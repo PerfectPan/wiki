@@ -4,8 +4,8 @@ description: 区分一轮用户交互、一次运行、一次模型迭代和消�
 type: topic
 category: ai
 created: 2026-11-14
-updated: 2026-11-14
-timestamp: 2026-11-14
+updated: 2026-11-18
+timestamp: 2026-11-18
 tags:
   - agent
   - harness
@@ -92,6 +92,7 @@ OpenTelemetry 的 [#332][otel-turn] 最初按完整用户交互描述 turn，作
 2. **区分运行结束和任务完成。** pi 的 `agent_end` 是最后一个循环事件，取消和错误也会结束运行；等待中的事件监听器处理完毕后才会空闲。业务成功仍需检查结果和验收条件。[pi 生命周期][pi-readme]
 3. **不强行把 run 和用户交互一一对应。** pi 的 steering 会在运行中注入输入，follow-up 可让同一次 run 继续处理下一项请求；DSH 的自动输入也可开启新的 turn。[pi 队列][pi-readme]、[DSH 交互段][dsh-glossary]
 4. **裁剪历史时说明分组方法。** “保留最近 N 个用户轮次”和“保留最近 N 个模型步骤”保留的内容不同；先确定分组，再遵守所用模型协议的消息与工具结果配对要求。[会话记忆示例][openai-memory]、[Claude 工具结果格式][claude-tool-results]
+5. **写清临时指令的失效条件。** 一条指令的角色决定它的优先级，接口定义决定它在哪些请求中出现。一次用户交互可能包含多次模型请求，应用回传的工具结果也可能占用一条 `user` 消息。见 [[chat-completions-vs-messages-vs-responses]]。
 
 ## 相关页面
 

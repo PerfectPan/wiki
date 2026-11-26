@@ -4,8 +4,8 @@ description: Model Context Protocol 从本地上下文连接协议演进为远�
 type: topic
 category: ai
 created: 2026-04-12
-updated: 2026-10-20
-timestamp: 2026-10-20
+updated: 2026-11-26
+timestamp: 2026-11-26
 tags:
   - mcp
   - agent
@@ -14,14 +14,12 @@ tags:
   - security
 source_refs:
   - raw/sources/mcp.md
+  - raw/sources/claude-skills-over-mcp-tasks-and-more.md
   - https://www.anthropic.com/news/model-context-protocol
-  - https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
-  - https://blog.modelcontextprotocol.io/posts/2025-09-26-mcp-next-version-update/
-  - https://blog.modelcontextprotocol.io/posts/2025-09-08-mcp-registry-preview/
-  - https://blog.modelcontextprotocol.io/posts/2025-11-25-first-mcp-anniversary/
-  - https://blog.modelcontextprotocol.io/posts/2025-12-19-mcp-transport-future/
   - https://modelcontextprotocol.io/specification/2026-07-28
-  - https://blog.modelcontextprotocol.io/posts/2026-07-28/
+  - https://modelcontextprotocol.io/extensions/overview
+  - https://blog.modelcontextprotocol.io/posts/mcp-turns-two
+  - https://claude.com/resources/articles/skills-over-mcp-tasks-and-more
 ---
 # MCP
 
@@ -148,6 +146,24 @@ Anthropic 在 2024-11-25 开源 MCP，希望用一套协议替代每个 AI 应�
 
 协议无状态不等于业务不能保存状态。跨调用状态应由工具显式签发 handle，并由 Client 或模型在后续参数中带回。状态因此成为调用数据的一部分，而不是藏在 transport session 中。
 
+### 2026-11：两周年与扩展生态进入生产
+
+MCP 在 2026-11 迎来开源两周年，已转入 Linux Foundation 旗下的 Agentic AI Foundation 托管。据官方两周年回顾与 Anthropic 2026-11-24 公告，MCP SDK 累计下载超过 50 亿次（月下载超 7 亿次），Claude 生态已有超过 10,000 个连接器。
+
+在无状态核心之上，MCP 通过 SEP-3392 确立了扩展生命周期（**Experimental → Beta → Stable**，或经 Standards Track SEP 晋升为核心规范），所有扩展均默认关闭、需客户端在每条请求的 `_meta["io.modelcontextprotocol/clientCapabilities"].extensions` 与服务端在 `server/discover` 中显式协商：
+
+| 扩展 | 标识符 | 规范阶段（2026-11） | 用途与 Claude 落地状态 |
+| --- | --- | --- | --- |
+| MCP Apps | `io.modelcontextprotocol/ui` | Stable | 在对话内嵌隔离 iframe 交互界面；Claude 已支持 |
+| 认证扩展 | `io.modelcontextprotocol/enterprise-managed-authorization`、`oauth-client-credentials` | Stable | 企业 IdP 统一授权与 M2M 认证；Claude 已支持 Enterprise Managed Auth |
+| MCP Tasks | `io.modelcontextprotocol/tasks` | Beta（目标晋升 Core） | 异步长任务句柄与轮询；2026-11-24 在 Claude / Claude Code 进入 GA |
+| Skills over MCP | `io.modelcontextprotocol/skills` | Beta（SEP-2640 Final） | 随工具分发 `SKILL.md` 及辅助文件，按需读取并做摘要校验；2026-11-24 在 Claude / Claude Code 进入公开 Beta，详见 [[wiki/topics/ai/skills-over-mcp\|Skills over MCP]] |
+| MCP Events | `io.modelcontextprotocol/events` | Beta | 上游系统事件订阅（轮询、推送或 Webhook） |
+| Server Cards | `ext-server-card`（SEP-2127） | Beta | 连接前通过 HTTP 发现服务器元数据 |
+| File Uploads | `io.modelcontextprotocol/files` | Experimental 草案 | 通过 `upload_required` 与 `_meta.downloads` 带外收发大文件，不经模型上下文；2026-11-24 起在 Claude / Claude Code 逐步推出，详见 [[wiki/topics/ai/mcp-file-uploads\|MCP 文件传输（File Uploads）]] |
+
+同一时期，核心规范中的 Elicitation（表单与 URL 确认）也在 Claude 与 Claude Code 进入 GA；客户端侧通过 Tool Search 延迟加载工具定义，在多服务器场景下可将工具定义上下文开销降低 85% 以上。总体上看，MCP 已从「单次同步工具调用通道」扩展为支持方法论分发（Skills）、后台长任务（Tasks）、中途确认（Elicitation）与带外大文件交换（File Uploads）的远程能力层。
+
 ## 为什么 MCP 能成立
 
 MCP 并没有发明工具调用。它解决的是更上层的组合爆炸：
@@ -205,6 +221,8 @@ MCP 扩大了 Agent 的行动面，也扩大了风险面。至少要区分四层
 
 - [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
 - [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
+- [[wiki/topics/ai/skills-over-mcp|Skills over MCP]]
+- [[wiki/topics/ai/mcp-file-uploads|MCP 文件传输（File Uploads）]]
 - [[mcp-client]]
 - [[mcp-sse-multi-instance-routing]]
 - [[mcp-remote]]
@@ -220,4 +238,7 @@ MCP 扩大了 Agent 的行动面，也扩大了风险面。至少要区分四层
 - [MCP Transport 演进路线](https://blog.modelcontextprotocol.io/posts/2025-12-19-mcp-transport-future/)
 - [MCP 2026-07-28 规范](https://modelcontextprotocol.io/specification/2026-07-28)
 - [MCP 2026-07-28 发布说明](https://blog.modelcontextprotocol.io/posts/2026-07-28/)
-- `raw/sources/mcp.md`
+- [MCP Extensions Overview（SEP-3392 生命周期与扩展列表）](https://modelcontextprotocol.io/extensions/overview)
+- [MCP 两周年博客：Two Years of MCP Builders](https://blog.modelcontextprotocol.io/posts/mcp-turns-two)
+- [Anthropic：MCP servers can now ship skills, run tasks, and more with Claude](https://claude.com/resources/articles/skills-over-mcp-tasks-and-more)
+- `raw/sources/mcp.md`、`raw/sources/claude-skills-over-mcp-tasks-and-more.md`

@@ -72,14 +72,14 @@ MCP is an open standard, hosted by the [Agentic AI Foundation](https://aaif.io/)
 
 ## 扩展规范与文档核查记录（2026-11-26）
 
-- **用途**：支撑 `wiki/topics/ai/skills-over-mcp.md`、`wiki/topics/ai/mcp-file-uploads.md`，以及 `wiki/topics/ai/mcp.md` 与 `wiki/topics/ai/mcp-2026-07-28.md` 的补充更新。
+- **用途**：支撑 `wiki/topics/ai/skills-over-mcp.md`、`wiki/topics/ai/mcp-tasks.md`、`wiki/topics/ai/mcp-file-uploads.md`，以及 `wiki/topics/ai/mcp.md` 与 `wiki/topics/ai/mcp-2026-07-28.md` 的补充更新。
 - **访问日期**：2026-11-26。
 - **已读一手资料**：
   - Anthropic 产品更新公告：<https://claude.com/resources/articles/skills-over-mcp-tasks-and-more>（发布日期 2026-11-24；上面正文已剔除页尾“Related articles”导航链接和分隔噪音）。
   - MCP 两周年官方博客：<https://blog.modelcontextprotocol.io/posts/mcp-turns-two>（发布日期 2026-11-24；记录 Agentic AI Foundation 托管于 Linux Foundation、SDK 累计下载超 50 亿次且过去一年占超 45 亿次、Events 扩展进入 Beta、Skills over MCP 进入 Beta、File Uploads 处于草案原型、Enterprise-Managed Authorization 为 Stable）。
   - MCP 扩展总览与客户端支持表：<https://modelcontextprotocol.io/extensions/overview.md>、<https://modelcontextprotocol.io/extensions/client-matrix.md>（核对 SEP-3392 扩展生命周期 Experimental / Beta / Stable / Core 及各扩展当前阶段）。
   - Skills over MCP 概览与 Beta 规范：<https://modelcontextprotocol.io/extensions/skills/overview.md>、<https://raw.githubusercontent.com/modelcontextprotocol/ext-skills/main/specification/beta/skills.mdx>（核对 `io.modelcontextprotocol/skills`、SEP-2640 Final、`skills/list`、`skills/get`、`resources/directory/read`、manifest SHA-256 摘要校验、`"resources": "dynamic"`、512 文件 / 16 MiB 建议规模及 Security Considerations 全部条款）。
-  - Tasks 扩展概览：<https://modelcontextprotocol.io/extensions/tasks/overview.md>（核对 `io.modelcontextprotocol/tasks` 当前阶段为 Beta, to Core，以及状态流转与 `tasks/get` / `tasks/update` / `tasks/cancel` / `notifications/tasks`）。
+  - Tasks 扩展概览、SEP-2663 与稳定 Schema：<https://modelcontextprotocol.io/extensions/tasks/overview.md>、<https://modelcontextprotocol.io/seps/2663-tasks-extension.md>、<https://raw.githubusercontent.com/modelcontextprotocol/ext-tasks/main/schema/2026-07-28/schema.ts>（核对 `io.modelcontextprotocol/tasks` 处于 Beta, to Core 阶段、强一致创建、读写分离 `tasks/get` / `tasks/update`、协作式取消 `tasks/cancel`、终态与 `isError: true` / `failed` 边界、与 `2025-11-25` 不兼容对照、HTTP `Mcp-Name: taskId` 路由头及安全条款）。
   - File Uploads and Downloads 草案规范：<https://raw.githubusercontent.com/modelcontextprotocol/experimental-ext-file-uploads/main/README.md>、<https://raw.githubusercontent.com/modelcontextprotocol/experimental-ext-file-uploads/main/specification/draft/file-uploads.md>（核对 `io.modelcontextprotocol/files` 草案状态、`x-mcp-file`、`FileInput`、内联与 `upload_required` 两步带外上传、`requestState` 五步校验、`_meta["io.modelcontextprotocol/files"].downloads` 下载流程、目标安全校验、`omit`/`include` 凭据规则、网关中继规则、Security Implications 与 Open Questions）。
   - Claude Code MCP 官方文档：<https://code.claude.com/docs/en/mcp.md>（核对「MCP tasks that run on the server」「MCP tasks for server authors」「Respond to MCP elicitation requests」「Use skills from MCP servers」「Scale with MCP tool search」各章节的具体版本号、轮询区间、审批规则、扫描限制、不支持环境与组织策略）。
   - Claude 连接器文件传输文档：<https://claude.com/docs/connectors/building/files.md>（核对 Directory listing 要求、主机审批上限 50 个、`include` 限制、SDK 实测版本 `@modelcontextprotocol/server` 2.4.0 / `mcp` 2.3.0 / `fastmcp` 4.0.10 不兼容说明、文件数/响应时间/传输时长上限以及组织合规排除项）。

@@ -139,6 +139,7 @@ sequenceDiagram
 
 - [[wiki/topics/ai/mcp|MCP]]
 - [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
+- [[wiki/topics/ai/mcp-tasks|MCP Tasks]]
 - [[wiki/topics/ai/mcp-file-uploads|MCP 文件传输（File Uploads）]]
 - [[wiki/syntheses/ai/skill-engineering-artifact-protocol|Skill 工程化的产物协议范式]]
 - [[wiki/topics/ai/awesome-agent-skills|Awesome Agent Skills]]

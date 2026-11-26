@@ -156,7 +156,7 @@ MCP 在 2026-11 迎来开源两周年，已转入 Linux Foundation 旗下的 Age
 | --- | --- | --- | --- |
 | MCP Apps | `io.modelcontextprotocol/ui` | Stable | 在对话内嵌隔离 iframe 交互界面；Claude 已支持 |
 | 认证扩展 | `io.modelcontextprotocol/enterprise-managed-authorization`、`oauth-client-credentials` | Stable | 企业 IdP 统一授权与 M2M 认证；Claude 已支持 Enterprise Managed Auth |
-| MCP Tasks | `io.modelcontextprotocol/tasks` | Beta（目标晋升 Core） | 异步长任务句柄与轮询；2026-11-24 在 Claude / Claude Code 进入 GA |
+| MCP Tasks | `io.modelcontextprotocol/tasks` | Beta（目标晋升 Core） | 异步长任务句柄与轮询；2026-11-24 在 Claude / Claude Code 进入 GA，详见 [[wiki/topics/ai/mcp-tasks\|MCP Tasks]] |
 | Skills over MCP | `io.modelcontextprotocol/skills` | Beta（SEP-2640 Final） | 随工具分发 `SKILL.md` 及辅助文件，按需读取并做摘要校验；2026-11-24 在 Claude / Claude Code 进入公开 Beta，详见 [[wiki/topics/ai/skills-over-mcp\|Skills over MCP]] |
 | MCP Events | `io.modelcontextprotocol/events` | Beta | 上游系统事件订阅（轮询、推送或 Webhook） |
 | Server Cards | `ext-server-card`（SEP-2127） | Beta | 连接前通过 HTTP 发现服务器元数据 |
@@ -221,6 +221,7 @@ MCP 扩大了 Agent 的行动面，也扩大了风险面。至少要区分四层
 
 - [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
 - [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
+- [[wiki/topics/ai/mcp-tasks|MCP Tasks]]
 - [[wiki/topics/ai/skills-over-mcp|Skills over MCP]]
 - [[wiki/topics/ai/mcp-file-uploads|MCP 文件传输（File Uploads）]]
 - [[mcp-client]]

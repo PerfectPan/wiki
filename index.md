@@ -108,6 +108,7 @@
   - [[wiki/topics/ai/mcp-client|MCP Client]]
   - [[wiki/topics/ai/mcp-file-uploads|MCP 文件传输（File Uploads）]]
   - [[wiki/topics/ai/mcp-remote|mcp-remote]]
+  - [[wiki/topics/ai/mcp-tasks|MCP Tasks]]
   - [[wiki/topics/ai/skills-over-mcp|Skills over MCP]]
   - [[wiki/topics/ai/prompt|Prompt]]
   - [[wiki/topics/ai/responses-api|Responses API]]

@@ -88,7 +88,7 @@ sequenceDiagram
   3. 向存储端独立确认每个目标文件已到达（如 `HEAD`），重检字节数、内容类型与 SHA-256 摘要（若目标仍可被覆写，须先复制到目标不可写的暂存路径再验摘要，防止校验后被替换）。
   4. 若工具不可安全重复执行，须在所有实例共享存储中原子的标记该 `requestState` 为已消费（避免并发重放导致重复执行）。
   5. 将确认后的文件从暂存区提交到最终位置，执行工具（或创建 MCP Task）并返回结果。若某一步失败或上传未到达，返回 `isError: true` 且不得运行工具。
-- **与 Tasks 组合的顺序**：若工具耗时较长需返回 MCP Task，服务端必须在创建 Task 之前先完成 `upload_required` 上传流程。
+- **与 Tasks 组合的顺序**：若工具耗时较长需返回 [[wiki/topics/ai/mcp-tasks|MCP Tasks]]，服务端必须在创建 Task 之前先完成 `upload_required` 上传流程。
 - **失败与「结果未知」边界**：第 1 步传输中若有任一目标未返回 `2xx`，客户端不得发起第 2 次调用，并告知用户工具未执行（但不能断言远端没有残留字节，暂存区清理依赖服务端在 `requestState` 过期后回收）。第 2 次调用发出后若超时未获响应或收到 `-32602`，工具可能已经执行，客户端与网关**不得**自动重发或重启调用，必须向用户/模型明确报告结果未知；不可重复执行的工具应通过业务参数支持幂等键。
 
 ### 下载关键规则
@@ -136,6 +136,7 @@ sequenceDiagram
 
 - [[wiki/topics/ai/mcp|MCP]]
 - [[wiki/topics/ai/mcp-2026-07-28|MCP 2026-07-28 规范变更]]
+- [[wiki/topics/ai/mcp-tasks|MCP Tasks]]
 - [[wiki/topics/ai/skills-over-mcp|Skills over MCP]]
 - [[wiki/topics/ai/mcp-authorization|MCP 授权流程]]
 

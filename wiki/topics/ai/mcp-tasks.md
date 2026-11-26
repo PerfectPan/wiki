@@ -21,9 +21,9 @@ source_refs:
 
 ## 摘要
 
-MCP Tasks 是 MCP（Model Context Protocol）的官方异步执行扩展（扩展标识符 `io.modelcontextprotocol/tasks`，对应 SEP-2663 Final，规范当前处于 Beta、计划晋升核心协议，已发布 `2026-07-28` 稳定 schema）。它让 MCP 服务器在面对耗时的 `tools/call`（如 CI 流水线、批量数据导出、多步研究或人工审批）时，立即返回一个持久化任务句柄（`resultType: "task"` 与 `taskId`），而无需长时间阻塞 HTTP 连接或挂起对话。
+MCP Tasks 是 MCP（Model Context Protocol）的官方异步执行扩展（扩展标识符 `io.modelcontextprotocol/tasks`，对应 SEP-2663 Final）。它让 MCP 服务器在面对耗时的 `tools/call`（如 CI 流水线、批量数据导出、多步研究或人工审批）时，立即返回一个持久化任务句柄（`resultType: "task"` 与 `taskId`），而无需长时间阻塞 HTTP 连接或挂起对话。
 
-客户端拿到句柄后通过 `tasks/get` 轮询状态（或可选订阅 `notifications/tasks`），在任务中途需要输入时通过 `tasks/update` 提交响应，并在断线或重启后凭 `taskId` 继续获取最终结果。2026-11-24，Anthropic 宣布 MCP Tasks 在 Claude 与 Claude Code 中进入 GA（全面可用）。
+客户端拿到句柄后通过 `tasks/get` 轮询状态（或可选订阅 `notifications/tasks`），在任务中途需要输入时通过 `tasks/update` 提交响应，并在断线或重启后凭 `taskId` 继续获取最终结果。需要注意**产品落地状态与协议治理阶段的区别**：2026-11-24，Anthropic 已宣布 MCP Tasks 在 Claude 与 Claude Code 中进入 **GA（全面可用）**；而在 MCP 官方扩展生命周期（SEP-3392）中，该扩展当前仍标为 `Beta, to Core`（计划经后续 SEP 晋升进核心规范，其 `2026-07-28` schema 快照已标为 Stable）。
 
 ## 协议机制与核心数据流
 
@@ -108,6 +108,7 @@ sequenceDiagram
 
 ### 支持范围与前置条件
 
+- **订阅计划**：Pro、Max、Ultra 计划已 GA；Team 与 Enterprise 组织正在逐步开放。
 - **协议与版本**：仅在 MCP `2026-07-28` 连接上启用（设置 `MCP_SDK_GENERATION=v1` 或 `MCP_PROTOCOL_NEGOTIATION=legacy` 会关闭任务能力）。终端 CLI、Agent SDK、GitHub Actions 需 Claude Code v2.1.304+（关闭 feature flag 拉取如 Bedrock 或关闭遥测时，仅交互式终端 v2.1.317+ 可用）；VS Code 扩展与 Desktop App 本地会话需 v2.1.331+ 且开启 feature flag 拉取。
 - **调用来源与会话形态**：
   - 支持主会话，以及主会话启动的非 fork subagent（本地需 v2.1.331+ 且服务器不能定义在 subagent 自己的文件中；云端若任务在 2 分钟内结束则交回 subagent，超过 2 分钟由主会话接手）。

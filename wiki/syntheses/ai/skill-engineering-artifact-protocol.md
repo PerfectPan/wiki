@@ -4,8 +4,8 @@ description: 成熟 Agent Skill 的判据：产物协议、路由、gotcha、man
 type: synthesis
 category: ai
 created: 2026-05-06
-updated: 2026-09-22
-timestamp: 2026-09-22
+updated: 2026-11-26
+timestamp: 2026-11-26
 tags:
   - agent
   - skills
@@ -183,6 +183,7 @@ intent
 ## 相关页面
 
 - [[awesome-agent-skills]] — 过线条目的薄索引（Awesome）
+- [[wiki/topics/ai/skills-over-mcp|Skills over MCP]] — 通过 MCP 扩展分发 Skill、清单摘要校验与宿主安全边界
 - [[hand-drawn-style-explainer-video-constraints]] — 手绘类两个案例的域内综合
 - [[bento]]
 - [[ai-cli]]

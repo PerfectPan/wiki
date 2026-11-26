@@ -32,5 +32,6 @@
   { "term": "活库", "suggestion": "按语境用「开发库」或「可连的开发库」", "exceptions": [] },
   { "term": "硬上限", "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制", "exceptions": [] },
   { "term": "硬限制", "suggestion": "按语境用「固定上限」「不可放宽的上限」或写明具体字节/数量限制", "exceptions": [] },
-  { "term": "算法族", "suggestion": "直接写「常见算法」「算法类型」或具体算法名（如 RSA、ECDSA）", "exceptions": [] }
+  { "term": "算法族", "suggestion": "直接写「常见算法」「算法类型」或具体算法名（如 RSA、ECDSA）", "exceptions": [] },
+  { "term": "信任根", "suggestion": "写明具体依据，例如签名公钥、证书链起点或内容是否可信", "exceptions": [] }
 ]

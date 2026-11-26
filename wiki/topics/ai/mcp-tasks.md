@@ -58,7 +58,7 @@ sequenceDiagram
         end
         C->>S: tasks/get（taskId）
         S-->>C: GetTaskResult（status: input_required、inputRequests）
-        Note over C: 对相同键去重，按独立请求信任模型收集输入
+        Note over C: 对相同键去重，按普通确认流程收集输入
         C->>S: tasks/update（taskId、inputResponses）
         S-->>C: UpdateTaskResult（空确认，最终一致）
     end
@@ -100,7 +100,7 @@ sequenceDiagram
 - **任务 ID 不可猜测**：服务端可能把 `taskId` 当作访问后台状态的凭据，必须使用足够高熵值生成，防止第三方枚举或撞库。
 - **逐请求鉴权**：每次 `tasks/get`、`tasks/update`、`tasks/cancel` 都必须独立校验身份与访问权限，确保调用方只能操作自己的任务。
 - **移除列表接口减少信息泄露**：去掉 `tasks/list` 后，无会话模型下服务端不会因权限边界不清把一个调用方的任务列表暴露给其他调用方。
-- **中途输入不提升信任级别**：经 `inputRequests` 传回客户端的 `elicitation/create` 等请求，宿主必须沿用与独立请求相同的安全校验与用户确认界面，不得因为处于已批准的后台任务中就跳过检查。
+- **任务内的提问不跳过确认**：经 `inputRequests` 传回客户端的 `elicitation/create` 等请求，宿主必须沿用与独立请求相同的安全校验与用户确认界面，不得因为处于已批准的后台任务中就跳过检查。
 
 ## Claude 与 Claude Code（GA）的落地行为与工程限制
 
